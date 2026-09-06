@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "============================================"
-echo " RESET LOCALE FILES (BUILD)"
+echo " RESET LOCALE FILES + COLLECT STATIC"
 echo "============================================"
 
 cd "$(dirname "$0")"
@@ -16,7 +16,7 @@ if [ -d "locale/" ]; then
     rm -rf locale/
 fi
 
-# Kreye nouvo locale (sèlman pou pwojè ou)
+# Kreye nouvo locale
 python manage.py makemessages -l ht -l fr --ignore=.venv --ignore=node_modules --ignore=staticfiles
 
 # Korije Plural-Forms
@@ -30,7 +30,11 @@ if [ -f "locale/fr/LC_MESSAGES/django.po" ]; then
     echo "✅ fr korije"
 fi
 
-# Konpile
+# Konpile messages
 python manage.py compilemessages --ignore=.venv --ignore=node_modules --ignore=staticfiles
 
-echo "✅ FINI! Locale pare."
+# KOLEKTE FICHIE STATIK YO
+echo "Kolekte fichye statik..."
+python manage.py collectstatic --noinput
+
+echo "✅ FINI! Locale ak statik pare."
