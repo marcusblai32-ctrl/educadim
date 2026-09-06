@@ -6,23 +6,19 @@ echo "============================================"
 
 cd "$(dirname "$0")"
 
-# Verifye si token disponib
-if [ -z "$GITHUB_TOKEN" ]; then
-    echo "❌ GITHUB_TOKEN pa defini nan environment variables"
-    echo "Sote pouse GitHub..."
-    exit 1
-fi
+# ENSTALE DJANGO AK GUNICORN DIRÈKTEMAN
+echo "[0/6] Enstale Django ak Gunicorn..."
+pip install Django gunicorn
+
+# Verifye enstalasyon
+python -c "import django; print(f'Django {django.__version__} enstale')"
 
 # Git config
-git config user.email "render@example.com"
-git config user.name "Render Bot"
-
-# Configure remote
-git remote set-url origin https://${GITHUB_USERNAME}:${GITHUB_TOKEN}@github.com/${GITHUB_USERNAME}/${GITHUB_REPO}.git
-
-# Verifye branch
-BRANCH=$(git rev-parse --abbrev-ref HEAD)
-echo "Branch aktyèl: $BRANCH"
+if [ ! -z "$GITHUB_TOKEN" ]; then
+    git config user.email "render@example.com"
+    git config user.name "Render Bot"
+    git remote set-url origin https://${GITHUB_USERNAME}:${GITHUB_TOKEN}@github.com/${GITHUB_USERNAME}/${GITHUB_REPO}.git
+fi
 
 # Kreye locale
 python manage.py makemessages -l ht -l fr --ignore=.venv --ignore=node_modules
@@ -43,13 +39,14 @@ python manage.py compilemessages --ignore=.venv --ignore=node_modules
 python manage.py collectstatic --noinput
 
 # Pouse sou GitHub
-git add locale/ staticfiles/
-if git diff --cached --quiet; then
-    echo "✅ Pa gen chanjman pou pouse"
-else
-    git commit -m "Auto-generate locale files [skip ci]"
-    git push origin $BRANCH
-    echo "✅ Pouse sou GitHub reyisi"
+if [ ! -z "$GITHUB_TOKEN" ]; then
+    git add locale/ staticfiles/
+    if git diff --cached --quiet; then
+        echo "✅ Pa gen chanjman"
+    else
+        git commit -m "Auto-generate locale files [skip ci]"
+        git push origin main
+    fi
 fi
 
 echo "✅ FINI!"
