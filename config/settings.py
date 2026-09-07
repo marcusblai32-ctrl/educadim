@@ -76,6 +76,12 @@ else:
     DEFAULT_FROM_EMAIL = 'no-reply@educdim.com'
 
 # ============================================
+# TELERIVET (SMS)
+# ============================================
+TELERIVET_API_KEY = env('TELERIVET_API_KEY', default='')
+TELERIVET_PROJECT_ID = env('TELERIVET_PROJECT_ID', default='')
+
+# ============================================
 # SECURE SETTINGS
 # ============================================
 if not DEBUG:

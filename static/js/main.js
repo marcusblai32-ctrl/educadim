@@ -3,6 +3,60 @@
  * Complete JavaScript for navigation, dropdowns, animations
  * Version 4.0 - Final
  */
+
+/* ============================================
+ * DARK / LIGHT THEME TOGGLE
+ * Persists via localStorage, syncs across tabs.
+ * ============================================ */
+(function () {
+  "use strict";
+
+  var STORAGE_KEY = "educdim-theme";
+  var root = document.documentElement;
+
+  function currentTheme() {
+    return root.getAttribute("data-theme") === "dark" ? "dark" : "light";
+  }
+
+  function syncButtons(theme) {
+    var buttons = document.querySelectorAll("#themeToggle, .theme-toggle");
+    buttons.forEach(function (btn) {
+      var icon = btn.querySelector("i");
+      if (icon) {
+        icon.className = theme === "dark" ? "fas fa-sun" : "fas fa-moon";
+      }
+      btn.setAttribute("aria-pressed", String(theme === "dark"));
+    });
+  }
+
+  function applyTheme(theme) {
+    root.setAttribute("data-theme", theme);
+    try {
+      localStorage.setItem(STORAGE_KEY, theme);
+    } catch (e) {}
+    syncButtons(theme);
+  }
+
+  function toggleTheme() {
+    applyTheme(currentTheme() === "dark" ? "light" : "dark");
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    syncButtons(currentTheme());
+    document.querySelectorAll("#themeToggle, .theme-toggle").forEach(function (btn) {
+      btn.addEventListener("click", toggleTheme);
+    });
+  });
+
+  // Keep multiple open tabs in sync.
+  window.addEventListener("storage", function (e) {
+    if (e.key === STORAGE_KEY && (e.newValue === "dark" || e.newValue === "light")) {
+      root.setAttribute("data-theme", e.newValue);
+      syncButtons(e.newValue);
+    }
+  });
+})();
+
 (function () {
   "use strict";
 

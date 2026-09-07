@@ -3,11 +3,59 @@
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE|default:'fr' }}">
 <head>
+    {# ===== THEME BOOT (avoid flash of wrong theme) ===== #}
+    <script>
+        (function () {
+            try {
+                var stored = localStorage.getItem('educdim-theme');
+                if (stored !== 'dark' && stored !== 'light') {
+                    stored = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+                }
+                document.documentElement.setAttribute('data-theme', stored);
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% if theme %}{{ theme.site_name|default:'EducDim' }}{% else %}EducDim{% endif %}{% endblock %}</title>
-    <meta name="description" content="{{ meta_description|default:theme.site_description|default:'' }}">
-    <meta name="keywords" content="{{ meta_keywords|default:'e-learning, cours en ligne, éducation' }}">
+    <meta name="description" content="{{ meta_description|default:theme.site_description|default:'EducDim — plateforme e-learning : cours en ligne, quiz, badges et suivi de progression.' }}">
+    <meta name="keywords" content="{{ meta_keywords|default:'e-learning, cours en ligne, éducation, EducDim, formation, quiz' }}">
+
+    {# ===== TECHNICAL SEO ===== #}
+    {% block meta_robots %}<meta name="robots" content="index, follow">{% endblock %}
+    <link rel="canonical" href="{% block canonical_url %}{{ request.scheme }}://{{ request.get_host }}{{ request.path }}{% endblock %}">
+    <meta name="theme-color" content="#5b76f7" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0a0f22" media="(prefers-color-scheme: dark)">
+
+    {# ===== OPEN GRAPH ===== #}
+    <meta property="og:site_name" content="{% if theme %}{{ theme.site_name|default:'EducDim' }}{% else %}EducDim{% endif %}">
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}{% if theme %}{{ theme.site_name|default:'EducDim' }}{% else %}EducDim{% endif %}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{{ meta_description|default:theme.site_description|default:'EducDim — plateforme e-learning.' }}{% endblock %}">
+    <meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
+    <meta property="og:locale" content="{{ LANGUAGE_CODE|default:'fr' }}">
+    {% block og_image %}{% if theme and theme.get_logo %}<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ theme.get_logo }}">{% endif %}{% endblock %}
+
+    {# ===== TWITTER CARD ===== #}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}{% if theme %}{{ theme.site_name|default:'EducDim' }}{% else %}EducDim{% endif %}{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}{{ meta_description|default:theme.site_description|default:'EducDim — plateforme e-learning.' }}{% endblock %}">
+
+    {# ===== JSON-LD (site-wide, real data only) ===== #}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "EducationalOrganization",
+        "name": "{% if theme %}{{ theme.site_name|default:'EducDim' }}{% else %}EducDim{% endif %}",
+        "url": "{{ request.scheme }}://{{ request.get_host }}/"{% if theme and theme.get_logo %},
+        "logo": "{{ request.scheme }}://{{ request.get_host }}{{ theme.get_logo }}"{% endif %}{% if theme and theme.contact_email %},
+        "email": "{{ theme.contact_email }}"{% endif %}
+    }
+    </script>
+    {% block extra_jsonld %}{% endblock %}
 
     {# ===== FAVICON ===== #}
     {% if theme and theme.get_favicon %}
@@ -250,6 +298,13 @@
                     </a>
                 {% endif %}
             </nav>
+
+            {# ===== THEME TOGGLE ===== #}
+            <button type="button" class="theme-toggle" id="themeToggle"
+                    aria-label="{% trans 'Basculer le thème clair/sombre' %}"
+                    title="{% trans 'Basculer le thème clair/sombre' %}" aria-pressed="false">
+                <i class="fas fa-moon" aria-hidden="true"></i>
+            </button>
 
             {# ===== SWITCH LANG (MANYÈL) ===== #}
             {% get_current_language as CURRENT_LANGUAGE %}
