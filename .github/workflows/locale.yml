@@ -1,4 +1,4 @@
-name: Create Locale Files FR and HT
+name: Compile Locale and Verify
 
 on:
   workflow_dispatch:
@@ -7,7 +7,7 @@ permissions:
   contents: write
 
 jobs:
-  create-locale:
+  compile-locale:
     runs-on: ubuntu-latest
     
     steps:
@@ -17,12 +17,10 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         fetch-depth: 0
     
-    - name: Install system dependencies
+    - name: Install gettext
       run: |
         sudo apt-get update
         sudo apt-get install -y gettext
-        echo "✅ gettext installed"
-        msgfmt --version
     
     - name: Setup Python
       uses: actions/setup-python@v4
@@ -31,41 +29,26 @@ jobs:
     
     - name: Install Django
       run: |
-        python -m pip install --upgrade pip
         pip install django
         pip install -r requirements.txt 2>/dev/null || true
     
-    - name: Create FR locale (French - Default)
+    - name: Compile all messages
       run: |
-        echo "🔄 Creating French locale files..."
-        mkdir -p locale/fr/LC_MESSAGES
-        python manage.py makemessages -l fr --no-obsolete 2>&1 || echo "makemessages fr failed"
-        echo "✅ French locale created"
-    
-    - name: Create HT locale (Haitian Creole)
-      run: |
-        echo "🔄 Creating Haitian Creole locale files..."
-        mkdir -p locale/ht/LC_MESSAGES
-        python manage.py makemessages -l ht --no-obsolete 2>&1 || echo "makemessages ht failed"
-        echo "✅ Haitian Creole locale created"
-    
-    - name: Verify files
-      run: |
-        echo "=== FR files ==="
-        find locale/fr -type f 2>/dev/null
-        echo "=== HT files ==="
-        find locale/ht -type f 2>/dev/null
-        echo "=== All locale files ==="
-        find locale -type f
-    
-    - name: Compile messages
-      run: |
-        python manage.py compilemessages 2>&1 || echo "compilemessages failed"
-    
-    - name: List compiled files
-      run: |
-        echo "=== Compiled .mo files ==="
+        # Konpile tout .po fichye yo
+        find locale -name "*.po" -exec msgfmt {} -o {}.mo \; 2>/dev/null
+        # Oswa si Django mache
+        python manage.py compilemessages 2>&1 || true
+        echo "=== .mo files created ==="
         find locale -name "*.mo" -type f
+    
+    - name: Verify translations
+      run: |
+        # Verifye si .mo files yo gen kontni
+        for mo_file in $(find locale -name "*.mo"); do
+          echo "--- $mo_file ---"
+          strings "$mo_file" | head -20
+          echo ""
+        done
     
     - name: Commit and push
       run: |
@@ -73,5 +56,5 @@ jobs:
         git config user.email "actions@github.com"
         git add locale/
         git status
-        git commit -m "Create locale files: fr (default) and ht" || echo "No changes"
+        git commit -m "Compile locale files (.mo)" || echo "No changes"
         git push origin HEAD:main
