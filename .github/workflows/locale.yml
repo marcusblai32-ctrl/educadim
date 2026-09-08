@@ -1,4 +1,4 @@
-name: Compile Locale and Verify
+name: Create Locale Files FR and HT
 
 on:
   workflow_dispatch:
@@ -7,7 +7,7 @@ permissions:
   contents: write
 
 jobs:
-  compile-locale:
+  create-locale:
     runs-on: ubuntu-latest
     
     steps:
@@ -17,10 +17,12 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         fetch-depth: 0
     
-    - name: Install gettext
+    - name: Install system dependencies
       run: |
         sudo apt-get update
         sudo apt-get install -y gettext
+        echo "✅ gettext installed"
+        msgfmt --version
     
     - name: Setup Python
       uses: actions/setup-python@v4
@@ -29,32 +31,208 @@ jobs:
     
     - name: Install Django
       run: |
+        python -m pip install --upgrade pip
         pip install django
         pip install -r requirements.txt 2>/dev/null || true
     
-    - name: Compile all messages
+    - name: Clean existing locale files
       run: |
-        # Konpile tout .po fichye yo
-        find locale -name "*.po" -exec msgfmt {} -o {}.mo \; 2>/dev/null
-        # Oswa si Django mache
-        python manage.py compilemessages 2>&1 || true
-        echo "=== .mo files created ==="
-        find locale -name "*.mo" -type f
+        echo "🧹 Cleaning existing locale files..."
+        
+        # Remove old locale directories
+        if [ -d "locale" ]; then
+          echo "Removing old locale directory..."
+          rm -rf locale/
+        fi
+        
+        # Remove any other locale directories in project
+        find . -type d -name "locale" -not -path "./locale" -exec rm -rf {} + 2>/dev/null || true
+        
+        # Remove .mo files that might be compiled
+        find . -name "*.mo" -type f -delete 2>/dev/null || true
+        
+        echo "✅ Cleanup complete"
     
-    - name: Verify translations
+    - name: Create fresh FR locale (French)
       run: |
-        # Verifye si .mo files yo gen kontni
-        for mo_file in $(find locale -name "*.mo"); do
-          echo "--- $mo_file ---"
-          strings "$mo_file" | head -20
-          echo ""
+        echo "🔄 Creating fresh French locale files..."
+        mkdir -p locale/fr/LC_MESSAGES
+        python manage.py makemessages -l fr --no-obsolete 2>&1
+        echo "✅ French locale created"
+    
+    - name: Create fresh HT locale (Haitian Creole)
+      run: |
+        echo "🔄 Creating fresh Haitian Creole locale files..."
+        mkdir -p locale/ht/LC_MESSAGES
+        python manage.py makemessages -l ht --no-obsolete 2>&1
+        echo "✅ Haitian Creole locale created"
+    
+    - name: Verify .po files
+      run: |
+        echo "=== Checking .po files ==="
+        for lang in fr ht; do
+          if [ -f "locale/$lang/LC_MESSAGES/django.po" ]; then
+            echo "✅ locale/$lang/LC_MESSAGES/django.po exists"
+            echo "📊 Message count for $lang:"
+            grep -c "^msgid" "locale/$lang/LC_MESSAGES/django.po" || echo "0"
+          else
+            echo "❌ locale/$lang/LC_MESSAGES/django.po NOT found"
+            exit 1
+          fi
         done
     
+    - name: Compile messages
+      run: |
+        echo "🔄 Compiling messages..."
+        python manage.py compilemessages --verbosity=2 2>&1
+        echo "✅ Compilation complete"
+    
+    - name: Verify .mo files
+      run: |
+        echo "=== Checking .mo files ==="
+        for lang in fr ht; do
+          if [ -f "locale/$lang/LC_MESSAGES/django.mo" ]; then
+            echo "✅ locale/$lang/LC_MESSAGES/django.mo exists"
+            echo "📊 File size:"
+            ls -lh "locale/$lang/LC_MESSAGES/django.mo"
+          else
+            echo "❌ locale/$lang/LC_MESSAGES/django.mo NOT found"
+            exit 1
+          fi
+        done
+    
+    - name: Check translation coverage
+      run: |
+        echo "=== Translation Coverage ==="
+        for lang in fr ht; do
+          if [ -f "locale/$lang/LC_MESSAGES/django.po" ]; then
+            total=$(grep -c "^msgid" "locale/$lang/LC_MESSAGES/django.po" || echo "0")
+            translated=$(grep -c "^msgstr" "locale/$lang/LC_MESSAGES/django.po" | grep -v '""' || echo "0")
+            fuzzy=$(grep -c "^#, fuzzy" "locale/$lang/LC_MESSAGES/django.po" || echo "0")
+            empty=$(grep -A1 "^msgid" "locale/$lang/LC_MESSAGES/django.po" | grep "^msgstr \"\"$" | wc -l)
+            
+            echo "📊 $lang:"
+            echo "  - Total messages: $total"
+            echo "  - Translated: $translated"
+            echo "  - Fuzzy: $fuzzy"
+            echo "  - Empty: $empty"
+            
+            if [ $total -gt 0 ]; then
+              pct=$((translated * 100 / total))
+              echo "  - Coverage: $pct%"
+              
+              if [ $pct -eq 100 ] && [ $empty -eq 0 ]; then
+                echo "  ✅ 100% translated!"
+              else
+                echo "  ⚠️ Only $pct% translated ($empty empty)"
+              fi
+            fi
+          fi
+        done
+    
+    - name: Validate translations
+      run: |
+        echo "=== Validating translations ==="
+        for lang in fr ht; do
+          if [ -f "locale/$lang/LC_MESSAGES/django.po" ]; then
+            echo "🔍 Validating $lang with msgfmt..."
+            msgfmt --check-format "locale/$lang/LC_MESSAGES/django.po" -o /dev/null 2>&1 || {
+              echo "❌ $lang has validation errors"
+              msgfmt --check-format "locale/$lang/LC_MESSAGES/django.po" -o /dev/null 2>&1
+              exit 1
+            }
+            echo "✅ $lang validation passed"
+          fi
+        done
+    
+    - name: Check if all translations are complete
+      id: check_translations
+      run: |
+        all_complete=true
+        for lang in fr ht; do
+          if [ -f "locale/$lang/LC_MESSAGES/django.po" ]; then
+            total=$(grep -c "^msgid" "locale/$lang/LC_MESSAGES/django.po" || echo "0")
+            translated=$(grep -c "^msgstr" "locale/$lang/LC_MESSAGES/django.po" | grep -v '""' || echo "0")
+            empty=$(grep -A1 "^msgid" "locale/$lang/LC_MESSAGES/django.po" | grep "^msgstr \"\"$" | wc -l)
+            
+            if [ $total -gt 0 ]; then
+              pct=$((translated * 100 / total))
+              if [ $pct -lt 100 ] || [ $empty -gt 0 ]; then
+                all_complete=false
+                echo "⚠️ $lang incomplete: $pct% translated, $empty empty messages"
+              fi
+            fi
+          else
+            all_complete=false
+            echo "❌ $lang missing"
+          fi
+        done
+        
+        if [ "$all_complete" = true ]; then
+          echo "✅ ALL translations are 100% complete!"
+          echo "complete=true" >> $GITHUB_OUTPUT
+        else
+          echo "⚠️ Some translations are incomplete"
+          echo "complete=false" >> $GITHUB_OUTPUT
+        fi
+    
+    - name: Create summary
+      run: |
+        echo "## Translation Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "| Language | Status | Coverage | Empty | Fuzzy |" >> $GITHUB_STEP_SUMMARY
+        echo "|----------|--------|----------|-------|-------|" >> $GITHUB_STEP_SUMMARY
+        
+        for lang in fr ht; do
+          if [ -f "locale/$lang/LC_MESSAGES/django.po" ]; then
+            total=$(grep -c "^msgid" "locale/$lang/LC_MESSAGES/django.po" || echo "0")
+            translated=$(grep -c "^msgstr" "locale/$lang/LC_MESSAGES/django.po" | grep -v '""' || echo "0")
+            fuzzy=$(grep -c "^#, fuzzy" "locale/$lang/LC_MESSAGES/django.po" || echo "0")
+            empty=$(grep -A1 "^msgid" "locale/$lang/LC_MESSAGES/django.po" | grep "^msgstr \"\"$" | wc -l)
+            
+            if [ $total -gt 0 ]; then
+              pct=$((translated * 100 / total))
+              if [ $pct -eq 100 ] && [ $empty -eq 0 ]; then
+                status="✅ Complete"
+              else
+                status="⚠️ Incomplete"
+              fi
+              echo "| $lang | $status | $pct% | $empty | $fuzzy |" >> $GITHUB_STEP_SUMMARY
+            fi
+          else
+            echo "| $lang | ❌ Missing | 0% | - | - |" >> $GITHUB_STEP_SUMMARY
+          fi
+        done
+        
+        echo "" >> $GITHUB_STEP_SUMMARY
+        if [ "${{ steps.check_translations.outputs.complete }}" = "true" ]; then
+          echo "🎉 **All translations are 100% complete!**" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "⚠️ **Some translations need attention**" >> $GITHUB_STEP_SUMMARY
+        fi
+    
     - name: Commit and push
+      if: success()
       run: |
         git config user.name "GitHub Actions"
         git config user.email "actions@github.com"
+        
+        # Add all locale files
         git add locale/
         git status
-        git commit -m "Compile locale files (.mo)" || echo "No changes"
-        git push origin HEAD:main
+        
+        # Check if there are changes
+        if git diff --staged --quiet; then
+          echo "No changes to commit"
+        else
+          git commit -m "Update locale files: fr and ht (fresh generation)"
+          git push origin HEAD:main
+          echo "✅ Changes pushed to repository"
+        fi
+    
+    - name: Fail if translations incomplete
+      if: steps.check_translations.outputs.complete == 'false'
+      run: |
+        echo "❌ Workflow failed because translations are not 100% complete"
+        echo "Please complete all translations before merging"
+        exit 1
