@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-08 04:25-0400\n"
+"POT-Creation-Date: 2026-09-08 04:46-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -106,7 +106,7 @@ msgstr ""
 #: templates/attendance/student_list.html:15
 #: templates/badges/badge_detail.html:13
 #: templates/courses/learning_path_detail.html:45
-#: templates/enrollments/admin_pending.html:19 templates/home.html:44
+#: templates/enrollments/admin_pending.html:19 templates/home.html:65
 #: templates/progress/dashboard.html:34 templates/quiz/detail.html:13
 #: templates/quiz/list.html:24 templates/quiz/quiz_detail.html:13
 #: templates/quiz/quiz_list.html:24 theme_manager/context_processors.py:61
@@ -1016,7 +1016,7 @@ msgstr ""
 msgid "Mes salons"
 msgstr ""
 
-#: templates/base.html:131 templates/base_chat.html:131 templates/home.html:50
+#: templates/base.html:131 templates/base_chat.html:131 templates/home.html:71
 msgid "Étudiants"
 msgstr ""
 
@@ -1049,7 +1049,7 @@ msgid "Basculer le thème clair/sombre"
 msgstr ""
 
 #: templates/base.html:268 templates/base_chat.html:268
-#: templates/courses/learning_path_detail.html:11 templates/home.html:4
+#: templates/courses/learning_path_detail.html:11
 msgid "Accueil"
 msgstr ""
 
@@ -1101,7 +1101,7 @@ msgstr ""
 
 #: templates/chat/etudiants_list.html:72
 #: templates/enrollments/enrollment_list.html:11
-#: templates/enrollments/enrollment_list.html:44 templates/home.html:29
+#: templates/enrollments/enrollment_list.html:44 templates/home.html:45
 #: templates/progress/dashboard.html:110 templates/quiz/list.html:38
 #: templates/quiz/quiz_list.html:38
 msgid "Explorer les cours"
@@ -1737,146 +1737,307 @@ msgstr ""
 msgid "Vous n'êtes inscrit à aucun cours."
 msgstr ""
 
-#: templates/home.html:12
+#: templates/home.html:5
+#, python-format
+msgid ""
+"\n"
+"        Accueil - %(site_name)s\n"
+"    "
+msgstr ""
+
+#: templates/home.html:17
 msgid "Plateforme e-learning"
 msgstr ""
 
 #: templates/home.html:17
+#, python-format
+msgid ""
+"\n"
+"                %(badge)s\n"
+"            "
+msgstr ""
+
+#: templates/home.html:24
 msgid "Apprenez sans limites"
 msgstr ""
 
-#: templates/home.html:18
+#: templates/home.html:24 templates/home.html:148 templates/home.html:230
+#: templates/home.html:262
+#, python-format
+msgid ""
+"\n"
+"                %(title)s\n"
+"            "
+msgstr ""
+
+#: templates/home.html:28
 msgid "Où que vous soyez"
 msgstr ""
 
-#: templates/home.html:23
+#: templates/home.html:28
+#, python-format
+msgid ""
+"\n"
+"                    %(subtitle)s\n"
+"                "
+msgstr ""
+
+#: templates/home.html:36
 msgid "Des cours de qualité pour développer vos compétences à votre rythme."
 msgstr ""
 
-#: templates/home.html:33
+#: templates/home.html:36
+#, python-format
+msgid ""
+"\n"
+"                %(subtitle)s\n"
+"            "
+msgstr ""
+
+#: templates/home.html:45
+#, python-format
+msgid ""
+"\n"
+"                    %(btn)s\n"
+"                "
+msgstr ""
+
+#: templates/home.html:52
 msgid "Commencer gratuitement"
 msgstr ""
 
-#: templates/home.html:56
+#: templates/home.html:52
+#, python-format
+msgid ""
+"\n"
+"                        %(btn)s\n"
+"                    "
+msgstr ""
+
+#: templates/home.html:77
 msgid "Satisfaction"
 msgstr ""
 
-#: templates/home.html:71
+#: templates/home.html:93
 msgid "Formation en ligne"
 msgstr ""
 
-#: templates/home.html:72
+#: templates/home.html:93 templates/home.html:109 templates/home.html:125
+#, python-format
+msgid ""
+"\n"
+"                        %(title)s\n"
+"                    "
+msgstr ""
+
+#: templates/home.html:98
 msgid "+1000 étudiants"
 msgstr ""
 
-#: templates/home.html:79
+#: templates/home.html:98 templates/home.html:114 templates/home.html:130
+#, python-format
+msgid ""
+"\n"
+"                        %(desc)s\n"
+"                    "
+msgstr ""
+
+#: templates/home.html:109
 msgid "Certifiés"
 msgstr ""
 
-#: templates/home.html:80
+#: templates/home.html:114
 msgid "Reconnus par l'État"
 msgstr ""
 
-#: templates/home.html:87
+#: templates/home.html:125
 msgid "+50 cours"
 msgstr ""
 
-#: templates/home.html:88
+#: templates/home.html:130
 msgid "Disponibles"
 msgstr ""
 
-#: templates/home.html:97
+#: templates/home.html:143
 msgid "Pourquoi nous choisir ?"
 msgstr ""
 
-#: templates/home.html:98
+#: templates/home.html:143 templates/home.html:257
+#, python-format
+msgid ""
+"\n"
+"                %(tag)s\n"
+"            "
+msgstr ""
+
+#: templates/home.html:148
 msgid "Une expérience d'apprentissage"
 msgstr ""
 
-#: templates/home.html:98
+#: templates/home.html:152
 msgid "unique"
 msgstr ""
 
-#: templates/home.html:107
+#: templates/home.html:152 templates/home.html:234 templates/home.html:266
+#, python-format
+msgid ""
+"\n"
+"                    %(highlight)s\n"
+"                "
+msgstr ""
+
+#: templates/home.html:166
 msgid "Cours interactifs"
 msgstr ""
 
-#: templates/home.html:108
+#: templates/home.html:166 templates/home.html:187 templates/home.html:208
+#, python-format
+msgid ""
+"\n"
+"                    %(title)s\n"
+"                "
+msgstr ""
+
+#: templates/home.html:171
 msgid "Apprenez avec des vidéos, quiz et exercices pratiques conçus pour vous."
 msgstr ""
 
-#: templates/home.html:110 templates/home.html:121 templates/home.html:132
+#: templates/home.html:171 templates/home.html:192 templates/home.html:213
+#, python-format
+msgid ""
+"\n"
+"                    %(desc)s\n"
+"                "
+msgstr ""
+
+#: templates/home.html:176 templates/home.html:197 templates/home.html:218
 msgid "En savoir plus"
 msgstr ""
 
-#: templates/home.html:118
+#: templates/home.html:176 templates/home.html:197 templates/home.html:218
+#, python-format
+msgid ""
+"\n"
+"                    %(link)s\n"
+"                "
+msgstr ""
+
+#: templates/home.html:187
 msgid "Certificats vérifiés"
 msgstr ""
 
-#: templates/home.html:119
+#: templates/home.html:192
 msgid ""
 "Recevez des certificats reconnus après chaque cours complété avec succès."
 msgstr ""
 
-#: templates/home.html:129
+#: templates/home.html:208
 msgid "Classement & Badges"
 msgstr ""
 
-#: templates/home.html:130
+#: templates/home.html:213
 msgid "Gagnez des points, débloquez des badges et grimpez dans le classement."
 msgstr ""
 
-#: templates/home.html:141
+#: templates/home.html:230
 msgid "Prêt à commencer votre"
 msgstr ""
 
-#: templates/home.html:141
+#: templates/home.html:234
 msgid "aventure"
 msgstr ""
 
-#: templates/home.html:142
+#: templates/home.html:240
 msgid ""
 "Rejoignez des milliers d'apprenants et transformez votre avenir dès "
 "aujourd'hui."
 msgstr ""
 
-#: templates/home.html:144
+#: templates/home.html:240
+#, python-format
+msgid ""
+"\n"
+"                %(desc)s\n"
+"            "
+msgstr ""
+
+#: templates/home.html:246
 msgid "Créer un compte gratuit"
 msgstr ""
 
-#: templates/home.html:152
+#: templates/home.html:246
+#, python-format
+msgid ""
+"\n"
+"                %(btn)s\n"
+"            "
+msgstr ""
+
+#: templates/home.html:257
 msgid "Ce que nos étudiants disent"
 msgstr ""
 
-#: templates/home.html:153
+#: templates/home.html:262
 msgid "Ils ont"
 msgstr ""
 
-#: templates/home.html:153
+#: templates/home.html:266
 msgid "réussi"
 msgstr ""
 
-#: templates/home.html:153
+#: templates/home.html:270
 msgid "grâce à nous"
 msgstr ""
 
-#: templates/home.html:168
+#: templates/home.html:270
+#, python-format
+msgid ""
+"\n"
+"                %(end)s\n"
+"            "
+msgstr ""
+
+#: templates/home.html:289
 msgid ""
 "Grâce à EduPlatform, j'ai appris le développement web en 3 mois. Aujourd'hui "
 "je travaille comme freelance."
 msgstr ""
 
-#: templates/home.html:177
+#: templates/home.html:289 templates/home.html:325
+#, python-format
+msgid ""
+"\n"
+"                    %(text)s\n"
+"                "
+msgstr ""
+
+#: templates/home.html:301 templates/home.html:337
+#, python-format
+msgid ""
+"\n"
+"                            %(name)s\n"
+"                        "
+msgstr ""
+
+#: templates/home.html:306
 msgid "Développeur Web"
 msgstr ""
 
-#: templates/home.html:192
+#: templates/home.html:306 templates/home.html:342
+#, python-format
+msgid ""
+"\n"
+"                            %(job)s\n"
+"                        "
+msgstr ""
+
+#: templates/home.html:325
 msgid ""
 "Les cours sont bien structurés et les professeurs sont très compétents. Je "
 "recommande à 100%."
 msgstr ""
 
-#: templates/home.html:201
+#: templates/home.html:342
 msgid "Data Analyst"
 msgstr ""
 
