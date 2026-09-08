@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{{ title|default:_("Nouvelle tâche") }}{% endblock %}
+
+{% block content %}
+<main class="todo-form-page page-container">
+    <a class="back-link" href="{% url 'todo:todo_list' %}"><i class="fas fa-arrow-left" aria-hidden="true"></i> {% trans "Retour aux tâches" %}</a>
+    <section class="todo-form-card">
+        <div class="todo-form-heading">
+            <span class="todo-empty-icon"><i class="fas fa-pen-to-square" aria-hidden="true"></i></span>
+            <div>
+                <span class="eyebrow">{% trans "Organisation" %}</span>
+                <h1>{{ title|default:_("Nouvelle tâche") }}</h1>
+                <p>{% trans "Définissez une prochaine étape claire pour avancer dans votre apprentissage." %}</p>
+            </div>
+        </div>
+        <form method="post" class="stacked-form">
+            {% csrf_token %}
+            {% if form.non_field_errors %}<div class="form-error">{{ form.non_field_errors }}</div>{% endif %}
+            {% for field in form %}
+                <div class="form-field">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.help_text %}<small>{{ field.help_text }}</small>{% endif %}
+                    {% for error in field.errors %}<div class="form-error">{{ error }}</div>{% endfor %}
+                </div>
+            {% endfor %}
+            <div class="form-actions">
+                <a class="btn btn-outline" href="{% url 'todo:todo_list' %}">{% trans "Annuler" %}</a>
+                <button class="btn btn-primary" type="submit"><i class="fas fa-check" aria-hidden="true"></i> {% trans "Enregistrer" %}</button>
+            </div>
+        </form>
+    </section>
+</main>
+{% endblock %}
