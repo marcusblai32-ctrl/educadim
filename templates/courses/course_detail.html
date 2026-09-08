@@ -47,55 +47,55 @@
 }
 
 /* ============================================================
-   BADGES
+   BADGES - AUGMENTE TAILLE
    ============================================================ */
 .course-detail-badges {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
-    gap: .55rem;
-    margin-bottom: 1.35rem;
+    gap: .7rem;
+    margin-bottom: 1.5rem;
 }
 .course-detail-badges .badge {
     display: inline-flex;
     align-items: center;
-    gap: .35rem;
-    padding: .42rem .8rem;
+    gap: .4rem;
+    padding: .55rem 1rem;
     border-radius: 999px;
-    font-size: .78rem;
+    font-size: .9rem;
     font-weight: 700;
-    line-height: 1;
+    line-height: 1.2;
 }
 
 /* ============================================================
-   TITLE
+   TITLE - AUGMENTE TAILLE
    ============================================================ */
 .course-detail-title {
     max-width: 900px;
     margin: 0 auto .75rem;
     text-align: center;
     font-family: var(--font-display, Inter, sans-serif);
-    font-size: clamp(2rem, 4vw, 3rem);
-    line-height: 1.12;
+    font-size: clamp(2.4rem, 5vw, 3.4rem);
+    line-height: 1.15;
     font-weight: 800;
     letter-spacing: -.035em;
     color: var(--text, #171717);
 }
 
 /* ============================================================
-   LEARNING PATH POSITION
+   LEARNING PATH POSITION - AUGMENTE TAILLE
    ============================================================ */
 .course-detail-position {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
-    gap: .4rem;
+    gap: .5rem;
     margin: 0 auto 1.5rem;
     color: var(--text-muted, #6b7280);
-    font-size: .92rem;
-    line-height: 1.5;
+    font-size: 1.05rem;
+    line-height: 1.6;
     text-align: center;
 }
 .course-detail-position i {
@@ -105,36 +105,39 @@
     color: var(--primary, #5624d0);
     font-weight: 700;
     text-decoration: none;
+    font-size: 1.05rem;
 }
 .course-detail-link:hover {
     text-decoration: underline;
 }
 
 /* ============================================================
-   DESCRIPTION
+   DESCRIPTION - AUGMENTE TAILLE
    ============================================================ */
 .course-detail-description {
     max-width: 820px;
     margin: 0 auto;
     color: var(--text, #333);
-    font-size: 1rem;
-    line-height: 1.85;
+    font-size: 1.1rem;
+    line-height: 1.9;
     text-align: left;
 }
 .course-detail-description p {
     margin: 0 0 1rem;
+    font-size: 1.1rem;
+    line-height: 1.9;
 }
 .course-detail-description p:last-child {
     margin-bottom: 0;
 }
 
 /* ============================================================
-   PREREQUISITES
+   PREREQUISITES - AUGMENTE TAILLE
    ============================================================ */
 .prerequisites-box {
     max-width: 820px;
     margin: 2rem auto 0;
-    padding: 1.25rem 1.4rem;
+    padding: 1.5rem 1.8rem;
     border-radius: 16px;
     background: var(--glass-soft, rgba(86,36,208,.05));
     border: 1px solid var(--glass-brd-soft, rgba(86,36,208,.12));
@@ -142,10 +145,10 @@
 .prerequisites-box h4 {
     display: flex;
     align-items: center;
-    gap: .55rem;
+    gap: .6rem;
     margin: 0 0 1rem;
     font-family: var(--font-display, Inter, sans-serif);
-    font-size: 1rem;
+    font-size: 1.15rem;
     font-weight: 750;
     color: var(--text, #222);
 }
@@ -160,24 +163,25 @@
 .prerequisites-list li {
     display: flex;
     align-items: center;
-    gap: .55rem;
-    min-height: 42px;
-    padding: .55rem .65rem;
-    margin-bottom: .4rem;
+    gap: .6rem;
+    min-height: 48px;
+    padding: .6rem .8rem;
+    margin-bottom: .5rem;
     border-radius: 10px;
     background: rgba(255,255,255,.45);
+    font-size: 1rem;
 }
 .prerequisites-list li:last-child {
     margin-bottom: 0;
 }
-.prereq-missing { color: var(--danger, #dc3545); }
-.prereq-success { color: var(--success, #198754); }
-.prereq-title { color: var(--text, #222); font-weight: 600; }
-.prereq-title-muted { color: var(--text-muted, #777); }
+.prereq-missing { color: var(--danger, #dc3545); font-size: 1rem; }
+.prereq-success { color: var(--success, #198754); font-size: 1rem; }
+.prereq-title { color: var(--text, #222); font-weight: 600; font-size: 1rem; }
+.prereq-title-muted { color: var(--text-muted, #777); font-size: 1rem; }
 .prereq-link {
     margin-left: auto;
     color: var(--primary, #5624d0);
-    font-size: .8rem;
+    font-size: .9rem;
     font-weight: 700;
     text-decoration: none;
 }
@@ -193,6 +197,7 @@
     color: var(--success, #198754);
     background: rgba(25,135,84,.08);
     font-weight: 650;
+    font-size: 1rem;
 }
 
 /* ============================================================
@@ -211,6 +216,8 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    font-size: .95rem !important;
+    padding: .6rem 1.2rem !important;
 }
 
 /* ============================================================
@@ -232,24 +239,24 @@
     justify-content: center;
     gap: .45rem;
     min-width: 150px;
-    padding: .7rem 1.15rem;
+    padding: .8rem 1.3rem;
     border-radius: 10px;
-    font-size: .85rem;
+    font-size: .95rem;
     font-weight: 700;
 }
 
 /* ============================================================
-   SECTION CARD
+   SECTION CARD - AUGMENTE TAILLE
    ============================================================ */
 .section-card-title {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: .6rem;
+    gap: .7rem;
     margin: 0;
     padding: 1.5rem 1.5rem 1.2rem;
     font-family: var(--font-display, Inter, sans-serif);
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     font-weight: 800;
     color: var(--text, #222);
 }
@@ -268,7 +275,7 @@
 }
 
 /* ============================================================
-   UNITS
+   UNITS - AUGMENTE TAILLE
    ============================================================ */
 .units-list {
     max-width: 900px;
@@ -276,8 +283,8 @@
 }
 .unit-card {
     position: relative;
-    padding: 1.2rem 1.35rem;
-    margin-bottom: .8rem;
+    padding: 1.4rem 1.6rem;
+    margin-bottom: 1rem;
     border-radius: 14px;
     background: rgba(255,255,255,.55);
     border: 1px solid var(--glass-brd, rgba(0,0,0,.08));
@@ -293,26 +300,27 @@
 }
 .unit-card h3 {
     margin: 0 0 .45rem;
-    font-size: 1rem;
+    font-size: 1.15rem;
     font-weight: 750;
 }
 .unit-card h3 a {
     color: var(--text, #222);
     text-decoration: none;
+    font-size: 1.15rem;
 }
 .unit-card h3 a:hover { color: var(--primary, #5624d0); }
 .unit-card p {
     margin: 0 0 .7rem;
     color: var(--text-muted, #6b7280);
-    font-size: .88rem;
-    line-height: 1.55;
+    font-size: 1rem;
+    line-height: 1.7;
 }
 .unit-modules {
     display: inline-flex;
     align-items: center;
     gap: .4rem;
     color: var(--text-muted, #6b7280);
-    font-size: .78rem;
+    font-size: .9rem;
     font-weight: 600;
 }
 .unit-modules i { color: var(--primary, #5624d0); }
@@ -328,20 +336,21 @@
     color: var(--text-muted, #6b7280);
     border: 1px dashed var(--glass-brd, rgba(0,0,0,.15));
     border-radius: 14px;
+    font-size: 1rem;
 }
 
 /* ============================================================
-   COURSE ACTIONS BOTTOM (anba card-body ak border ble)
+   COURSE ACTIONS BOTTOM
    ============================================================ */
 .course-actions-bottom {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
-    gap: .5rem;                   /* redwi gap pou akomode margin */
+    gap: .6rem;
     max-width: 900px;
     margin: 1.5rem auto 0;
-    padding: 1rem;                /* yon ti kras pi piti */
+    padding: 1.2rem;
     border: 1px solid var(--primary, #5624d0);
     border-radius: 14px;
     background: rgba(86, 36, 208, 0.03);
@@ -352,13 +361,13 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: .45rem;
-    min-width: 160px;             /* pi piti */
-    padding: .6rem 1.2rem;        /* pi piti */
-    margin: .2rem;                /* ti margin */
+    gap: .5rem;
+    min-width: 180px;
+    padding: .8rem 1.5rem;
+    margin: .2rem;
     border-radius: 10px;
     font-weight: 700;
-    font-size: .85rem;            /* pi piti */
+    font-size: 1rem;
     transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
     text-decoration: none;
     border: none;
@@ -366,10 +375,10 @@
     overflow: hidden;
 }
 
-/* Surcharge pou btn-lg (bouton gen klas btn-lg) */
+/* Surcharge pou btn-lg */
 .course-actions-bottom .btn.btn-lg {
-    padding: .6rem 1.2rem;
-    font-size: .85rem;
+    padding: .8rem 1.5rem;
+    font-size: 1rem;
 }
 
 /* Efè hover: liy ble anba bouton */
@@ -388,7 +397,6 @@
     width: 80%;
 }
 
-/* Pou bouton "Commencer" ki vèt, fè l vin ble tankou quiz */
 .course-actions-bottom .btn-success {
     background: var(--primary, #5624d0);
     color: #fff;
@@ -400,7 +408,6 @@
     transform: translateY(-2px);
 }
 
-/* Pou bouton "S'inscrire" (primary) deja ble, asire li byen */
 .course-actions-bottom .btn-primary {
     background: var(--primary, #5624d0);
     color: #fff;
@@ -412,7 +419,6 @@
     transform: translateY(-2px);
 }
 
-/* Pou bouton disabled (Prérequis manquants, etc.) */
 .course-actions-bottom .btn-secondary:disabled {
     background: #e9ecef;
     color: #6c757d;
@@ -420,18 +426,19 @@
     box-shadow: none;
     transform: none;
     cursor: not-allowed;
+    font-size: 1rem;
 }
 .course-actions-bottom .btn-secondary:disabled::after {
     display: none;
 }
 
 /* ============================================================
-   QUIZ
+   QUIZ - AUGMENTE TAILLE (PI IMPORTAN)
    ============================================================ */
 .quiz-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.2rem;
     max-width: 1000px;
     margin: 0 auto;
     padding: 0 1.5rem 1.7rem;
@@ -439,8 +446,8 @@
 .quiz-card {
     display: flex;
     flex-direction: column;
-    min-height: 175px;
-    padding: 1.3rem;
+    min-height: 200px;
+    padding: 1.5rem;
     border-radius: 15px;
     background: rgba(255,255,255,.55);
     border: 1px solid var(--glass-brd, rgba(0,0,0,.08));
@@ -452,42 +459,49 @@
     box-shadow: 0 10px 28px rgba(0,0,0,.08);
 }
 .quiz-card h3 {
-    margin: 0 0 .55rem;
-    font-size: 1rem;
+    margin: 0 0 .6rem;
+    font-size: 1.2rem;
     font-weight: 750;
-    line-height: 1.35;
+    line-height: 1.4;
 }
-.quiz-card h3 a { color: var(--text, #222); text-decoration: none; }
+.quiz-card h3 a {
+    color: var(--text, #222);
+    text-decoration: none;
+    font-size: 1.2rem;
+}
 .quiz-card h3 a:hover { color: var(--primary, #5624d0); }
 .quiz-card p {
     margin: 0 0 1rem;
     color: var(--text-muted, #6b7280);
-    font-size: .85rem;
-    line-height: 1.55;
+    font-size: 1rem;
+    line-height: 1.7;
 }
 .quiz-card-footer {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
-    gap: .6rem;
+    gap: .7rem;
     margin-top: auto;
 }
 .quiz-percent {
     display: inline-flex;
     align-items: center;
-    gap: .35rem;
+    gap: .4rem;
     color: var(--text-muted, #6b7280);
-    font-size: .78rem;
+    font-size: .95rem;
     font-weight: 650;
 }
 .quiz-percent i { color: var(--primary, #5624d0); }
 
 /* ============================================================
-   BUTTONS
+   BUTTONS - AUGMENTE TAILLE
    ============================================================ */
 .course-detail-container .btn { text-decoration: none; }
-.course-detail-container .btn-sm { font-size: .78rem; }
+.course-detail-container .btn-sm {
+    font-size: .9rem !important;
+    padding: .5rem 1rem !important;
+}
 .course-detail-container .btn-primary {
     box-shadow: 0 5px 16px rgba(86,36,208,.18);
 }
@@ -496,7 +510,267 @@
 }
 
 /* ============================================================
-   RESPONSIVE
+   DARK MODE FIXES
+   ============================================================ */
+html[data-theme="dark"] .course-detail-container > .card {
+    background: rgba(26, 33, 58, 0.62);
+    border-color: rgba(255,255,255,.14);
+}
+
+html[data-theme="dark"] .course-detail-header {
+    background:
+        radial-gradient(circle at top right, rgba(86,36,208,.15), transparent 35%),
+        radial-gradient(circle at bottom left, rgba(37,99,235,.1), transparent 30%);
+}
+
+html[data-theme="dark"] .course-detail-title {
+    color: #e7ecfb;
+}
+
+html[data-theme="dark"] .course-detail-description {
+    color: #e7ecfb;
+}
+
+html[data-theme="dark"] .course-detail-description p {
+    color: #e7ecfb;
+}
+
+html[data-theme="dark"] .course-detail-position {
+    color: #9aa6c8;
+}
+
+html[data-theme="dark"] .course-detail-link {
+    color: #8aa0ff;
+}
+
+html[data-theme="dark"] .course-detail-link:hover {
+    color: #5b76f7;
+}
+
+html[data-theme="dark"] .course-detail-badges .badge {
+    color: #e7ecfb;
+}
+
+html[data-theme="dark"] .course-detail-badges .badge-primary {
+    background: rgba(91, 118, 247, 0.25);
+    color: #8aa0ff;
+}
+
+html[data-theme="dark"] .course-detail-badges .badge-secondary {
+    background: rgba(255,255,255,.08);
+    color: #9aa6c8;
+}
+
+html[data-theme="dark"] .course-detail-badges .badge-success {
+    background: rgba(34, 197, 94, 0.2);
+    color: #6ee7a5;
+}
+
+html[data-theme="dark"] .course-detail-badges .badge-warning {
+    background: rgba(245, 158, 11, 0.2);
+    color: #fcd34d;
+}
+
+html[data-theme="dark"] .course-detail-badges .badge-danger {
+    background: rgba(244, 63, 94, 0.2);
+    color: #fda4b4;
+}
+
+html[data-theme="dark"] .prerequisites-box {
+    background: rgba(86,36,208,.12);
+    border-color: rgba(255,255,255,.08);
+}
+
+html[data-theme="dark"] .prerequisites-box h4 {
+    color: #e7ecfb;
+}
+
+html[data-theme="dark"] .prerequisites-list li {
+    background: rgba(255,255,255,.06);
+}
+
+html[data-theme="dark"] .prereq-title {
+    color: #e7ecfb;
+}
+
+html[data-theme="dark"] .prereq-title-muted {
+    color: #9aa6c8;
+}
+
+html[data-theme="dark"] .prereq-missing {
+    color: #fda4b4;
+}
+
+html[data-theme="dark"] .prereq-success {
+    color: #6ee7a5;
+}
+
+html[data-theme="dark"] .prereq-link {
+    color: #8aa0ff;
+}
+
+html[data-theme="dark"] .prereq-link:hover {
+    color: #5b76f7;
+}
+
+html[data-theme="dark"] .prerequisites-completed {
+    background: rgba(34, 197, 94, 0.15);
+    color: #6ee7a5;
+}
+
+html[data-theme="dark"] .section-card-title {
+    color: #e7ecfb;
+}
+
+html[data-theme="dark"] .section-card-title i {
+    color: #8aa0ff;
+}
+
+html[data-theme="dark"] .unit-card {
+    background: rgba(255,255,255,.06);
+    border-color: rgba(255,255,255,.08);
+}
+
+html[data-theme="dark"] .unit-card:hover {
+    border-color: rgba(86,36,208,.35);
+    box-shadow: 0 8px 24px rgba(0,0,0,.3);
+}
+
+html[data-theme="dark"] .unit-card h3 a {
+    color: #e7ecfb;
+}
+
+html[data-theme="dark"] .unit-card h3 a:hover {
+    color: #8aa0ff;
+}
+
+html[data-theme="dark"] .unit-card p {
+    color: #9aa6c8;
+}
+
+html[data-theme="dark"] .unit-modules {
+    color: #9aa6c8;
+}
+
+html[data-theme="dark"] .unit-modules i {
+    color: #8aa0ff;
+}
+
+html[data-theme="dark"] .empty-units {
+    color: #9aa6c8;
+    border-color: rgba(255,255,255,.08);
+}
+
+html[data-theme="dark"] .empty-units i {
+    color: #9aa6c8;
+}
+
+html[data-theme="dark"] .quiz-card {
+    background: rgba(255,255,255,.06);
+    border-color: rgba(255,255,255,.08);
+}
+
+html[data-theme="dark"] .quiz-card:hover {
+    border-color: rgba(86,36,208,.35);
+    box-shadow: 0 10px 28px rgba(0,0,0,.3);
+}
+
+html[data-theme="dark"] .quiz-card h3 a {
+    color: #e7ecfb;
+}
+
+html[data-theme="dark"] .quiz-card h3 a:hover {
+    color: #8aa0ff;
+}
+
+html[data-theme="dark"] .quiz-card p {
+    color: #9aa6c8;
+}
+
+html[data-theme="dark"] .quiz-percent {
+    color: #9aa6c8;
+}
+
+html[data-theme="dark"] .quiz-percent i {
+    color: #8aa0ff;
+}
+
+html[data-theme="dark"] .quiz-card .badge-success {
+    background: rgba(34, 197, 94, 0.2);
+    color: #6ee7a5;
+}
+
+html[data-theme="dark"] .quiz-card .badge-danger {
+    background: rgba(244, 63, 94, 0.2);
+    color: #fda4b4;
+}
+
+html[data-theme="dark"] .course-actions-bottom {
+    background: rgba(86, 36, 208, .08);
+    border-color: rgba(86, 36, 208, .3);
+}
+
+html[data-theme="dark"] .course-actions-bottom .btn-secondary:disabled {
+    background: rgba(255,255,255,.08);
+    color: #9aa6c8;
+    border-color: rgba(255,255,255,.1);
+}
+
+html[data-theme="dark"] .course-actions-bottom .btn-success {
+    background: #5624d0;
+    color: #fff;
+}
+
+html[data-theme="dark"] .course-actions-bottom .btn-success:hover {
+    background: #4520a8;
+}
+
+html[data-theme="dark"] .course-actions-bottom .btn-primary {
+    background: #5624d0;
+    color: #fff;
+}
+
+html[data-theme="dark"] .course-actions-bottom .btn-primary:hover {
+    background: #4520a8;
+}
+
+html[data-theme="dark"] .course-actions-top {
+    border-top-color: rgba(255,255,255,.08);
+}
+
+html[data-theme="dark"] .course-actions-top .btn-secondary {
+    background: rgba(255,255,255,.08);
+    color: #e7ecfb;
+    border-color: rgba(255,255,255,.1);
+}
+
+html[data-theme="dark"] .course-actions-top .btn-secondary:hover {
+    background: rgba(255,255,255,.15);
+}
+
+html[data-theme="dark"] .course-actions-top .btn-danger {
+    background: rgba(244, 63, 94, 0.2);
+    color: #fda4b4;
+}
+
+html[data-theme="dark"] .course-actions-top .btn-danger:hover {
+    background: rgba(244, 63, 94, 0.35);
+}
+
+html[data-theme="dark"] .course-navigation .btn-outline {
+    background: transparent;
+    color: #e7ecfb;
+    border-color: rgba(255,255,255,.15);
+}
+
+html[data-theme="dark"] .course-navigation .btn-outline:hover {
+    background: rgba(255,255,255,.08);
+    color: #8aa0ff;
+    border-color: rgba(86,36,208,.3);
+}
+
+/* ============================================================
+   RESPONSIVE - AUGMENTE TAILLE SOU MOBIL
    ============================================================ */
 @media (max-width: 768px) {
     .course-detail-container {
@@ -511,36 +785,44 @@
         padding: 1.7rem 1.15rem 1.5rem;
     }
     .course-detail-badges {
-        gap: .4rem;
+        gap: .5rem;
         margin-bottom: 1rem;
     }
     .course-detail-badges .badge {
-        padding: .35rem .6rem;
-        font-size: .68rem;
+        padding: .4rem .7rem;
+        font-size: .78rem;
     }
     .course-detail-title {
-        font-size: 1.55rem;
+        font-size: 1.8rem;
         line-height: 1.25;
         letter-spacing: -.02em;
     }
     .course-detail-position {
-        font-size: .78rem;
+        font-size: .9rem;
         margin-bottom: 1.1rem;
     }
     .course-detail-description {
-        font-size: .88rem;
-        line-height: 1.7;
+        font-size: 1rem;
+        line-height: 1.8;
+    }
+    .course-detail-description p {
+        font-size: 1rem;
+        line-height: 1.8;
     }
     .prerequisites-box {
         margin-top: 1.4rem;
         padding: 1rem;
     }
-    .prerequisites-box h4 { font-size: .9rem; }
+    .prerequisites-box h4 { font-size: 1rem; }
     .prerequisites-list li {
         align-items: flex-start;
-        font-size: .8rem;
+        font-size: .9rem;
     }
-    .prereq-link { font-size: .72rem; }
+    .prereq-link { font-size: .85rem; }
+    .prereq-title { font-size: .9rem; }
+    .prereq-title-muted { font-size: .9rem; }
+    .prereq-missing { font-size: .9rem; }
+    .prereq-success { font-size: .9rem; }
     .course-navigation {
         flex-direction: column;
         gap: .6rem;
@@ -550,6 +832,7 @@
     .course-navigation .btn {
         width: 100%;
         max-width: 100%;
+        font-size: .9rem !important;
     }
     .course-actions-top {
         flex-direction: column;
@@ -558,10 +841,13 @@
         margin-top: 1.4rem;
         padding-top: 1.2rem;
     }
-    .course-actions-top .btn { width: 100%; }
+    .course-actions-top .btn { 
+        width: 100%;
+        font-size: .9rem;
+    }
     .section-card-title {
         padding: 1.15rem 1rem 1rem;
-        font-size: 1rem;
+        font-size: 1.2rem;
     }
     .course-detail-container .card-body {
         padding: 0 .9rem 1rem;
@@ -577,27 +863,55 @@
         width: 100%;
         min-width: 0;
         margin: .1rem 0;
+        font-size: .95rem !important;
+        padding: .7rem 1.2rem !important;
     }
-    .unit-card { padding: 1rem; }
-    .unit-card h3 { font-size: .9rem; }
-    .unit-card p { font-size: .78rem; }
-    .unit-modules { font-size: .7rem; }
+    .unit-card { 
+        padding: 1rem; 
+    }
+    .unit-card h3 { 
+        font-size: 1.05rem; 
+    }
+    .unit-card h3 a { 
+        font-size: 1.05rem; 
+    }
+    .unit-card p { 
+        font-size: .92rem; 
+        line-height: 1.6;
+    }
+    .unit-modules { 
+        font-size: .85rem; 
+    }
     .quiz-grid {
         grid-template-columns: 1fr;
         gap: .75rem;
         padding: 0 .9rem 1rem;
     }
     .quiz-card {
-        min-height: 145px;
-        padding: 1rem;
+        min-height: 160px;
+        padding: 1.1rem;
     }
-    .quiz-card h3 { font-size: .9rem; }
-    .quiz-card p { font-size: .76rem; }
+    .quiz-card h3 { 
+        font-size: 1.05rem; 
+    }
+    .quiz-card h3 a { 
+        font-size: 1.05rem; 
+    }
+    .quiz-card p { 
+        font-size: .92rem; 
+        line-height: 1.6;
+    }
     .quiz-card-footer {
         align-items: flex-start;
         justify-content: center;
     }
-    .quiz-percent { font-size: .7rem; }
+    .quiz-percent { 
+        font-size: .88rem; 
+    }
+    .course-detail-container .btn-sm {
+        font-size: .85rem !important;
+        padding: .4rem .8rem !important;
+    }
 }
 
 @media (max-width: 480px) {
@@ -607,16 +921,79 @@
     .course-detail-header {
         padding: 1.35rem .85rem 1.2rem;
     }
-    .course-detail-title { font-size: 1.3rem; }
-    .course-detail-description { font-size: .8rem; }
-    .prerequisites-box { padding: .8rem; }
-    .prerequisites-list li { font-size: .72rem; }
-    .section-card-title { font-size: .9rem; }
-    .unit-card { padding: .85rem; }
-    .quiz-card { padding: .85rem; }
+    .course-detail-title { 
+        font-size: 1.5rem; 
+    }
+    .course-detail-description { 
+        font-size: .92rem; 
+        line-height: 1.7;
+    }
+    .course-detail-description p { 
+        font-size: .92rem; 
+        line-height: 1.7;
+    }
+    .course-detail-badges .badge {
+        padding: .3rem .6rem;
+        font-size: .7rem;
+    }
+    .prerequisites-box { 
+        padding: .8rem; 
+    }
+    .prerequisites-list li { 
+        font-size: .82rem; 
+    }
+    .prereq-title { font-size: .82rem; }
+    .prereq-title-muted { font-size: .82rem; }
+    .prereq-missing { font-size: .82rem; }
+    .prereq-success { font-size: .82rem; }
+    .prereq-link { font-size: .78rem; }
+    .section-card-title { 
+        font-size: 1.05rem; 
+    }
+    .unit-card { 
+        padding: .85rem; 
+    }
+    .unit-card h3 { 
+        font-size: .95rem; 
+    }
+    .unit-card h3 a { 
+        font-size: .95rem; 
+    }
+    .unit-card p { 
+        font-size: .85rem; 
+    }
+    .unit-modules { 
+        font-size: .78rem; 
+    }
+    .quiz-card { 
+        padding: .85rem; 
+    }
+    .quiz-card h3 { 
+        font-size: .95rem; 
+    }
+    .quiz-card h3 a { 
+        font-size: .95rem; 
+    }
+    .quiz-card p { 
+        font-size: .85rem; 
+    }
+    .quiz-percent { 
+        font-size: .8rem; 
+    }
+    .course-actions-bottom .btn {
+        font-size: .88rem !important;
+        padding: .6rem 1rem !important;
+    }
     .course-actions-bottom .btn-lg {
-        padding: .55rem 1rem;
-        font-size: .8rem;
+        font-size: .88rem !important;
+        padding: .6rem 1rem !important;
+    }
+    .course-detail-container .btn-sm {
+        font-size: .8rem !important;
+        padding: .35rem .7rem !important;
+    }
+    .empty-units {
+        font-size: .88rem;
     }
 }
 </style>
@@ -736,7 +1113,7 @@
     </div>
 
     <!-- ======================================================
-         CARD 2: CONTENU DU COURS (bouton anba)
+         CARD 2: CONTENU DU COURS
          ====================================================== -->
     <div class="card">
         <div class="card-body">
@@ -765,7 +1142,7 @@
             </p>
             {% endif %}
 
-            <!-- Bouton aksyon (Commencer / S'inscrire / Se connecter) -->
+            <!-- Bouton aksyon -->
             <div class="course-actions-bottom">
                 {% if user.is_authenticated %}
                     {% if inscription_approuvee or a_acces_abonnement %}
@@ -849,7 +1226,7 @@
                 </div>
             </div>
             {% endfor %}
-        </div>
+            </div>
     </div>
     {% endif %}
 
