@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+
+{% block title %}{% trans "Mes tâches" %}{% endblock %}
+
+{% block content %}
+<main class="todo-page page-container">
+    <header class="todo-header">
+        <div>
+            <span class="eyebrow"><i class="fas fa-list-check" aria-hidden="true"></i> {% trans "Organisation" %}</span>
+            <h1>{% trans "Mes tâches" %}</h1>
+            <p>{% trans "Planifiez vos prochaines étapes et gardez votre apprentissage sur la bonne voie." %}</p>
+        </div>
+        <a class="btn btn-primary" href="{% url 'todo:create_todo' %}">
+            <i class="fas fa-plus" aria-hidden="true"></i> {% trans "Nouvelle tâche" %}
+        </a>
+    </header>
+
+    <section class="todo-stats" aria-label="{% trans 'Résumé des tâches' %}">
+        <div class="todo-stat">
+            <span class="todo-stat-icon"><i class="fas fa-layer-group" aria-hidden="true"></i></span>
+            <span><strong>{{ stats.total }}</strong><small>{% trans "Toutes" %}</small></span>
+        </div>
+        <div class="todo-stat">
+            <span class="todo-stat-icon todo-stat-pending"><i class="fas fa-clock" aria-hidden="true"></i></span>
+            <span><strong>{{ stats.pending }}</strong><small>{% trans "À faire" %}</small></span>
+        </div>
+        <div class="todo-stat">
+            <span class="todo-stat-icon todo-stat-progress"><i class="fas fa-spinner" aria-hidden="true"></i></span>
+            <span><strong>{{ stats.in_progress }}</strong><small>{% trans "En cours" %}</small></span>
+        </div>
+        <div class="todo-stat">
+            <span class="todo-stat-icon todo-stat-complete"><i class="fas fa-check" aria-hidden="true"></i></span>
+            <span><strong>{{ stats.completed }}</strong><small>{% trans "Terminées" %}</small></span>
+        </div>
+    </section>
+
+    <section class="todo-panel" aria-labelledby="todo-filter-title">
+        <div class="todo-panel-title">
+            <h2 id="todo-filter-title">{% trans "Filtrer vos tâches" %}</h2>
+            {% if search_query or request.GET.status != 'all' or request.GET.priority != 'all' %}
+                <a class="text-link" href="{% url 'todo:todo_list' %}">{% trans "Réinitialiser" %}</a>
+            {% endif %}
+        </div>
+        <form class="todo-filter-bar" method="get">
+            <label class="todo-search">
+                <span class="sr-only">{% trans "Rechercher" %}</span>
+                <i class="fas fa-search" aria-hidden="true"></i>
+                <input type="search" name="search" value="{{ search_query }}" placeholder="{% trans 'Rechercher une tâche' %}">
+            </label>
+            <label>
+                <span>{% trans "Statut" %}</span>
+                <select name="status">
+                    <option value="all" {% if request.GET.status == 'all' or not request.GET.status %}selected{% endif %}>{% trans "Tous les statuts" %}</option>
+                    <option value="pending" {% if request.GET.status == 'pending' %}selected{% endif %}>{% trans "À faire" %}</option>
+                    <option value="in_progress" {% if request.GET.status == 'in_progress' %}selected{% endif %}>{% trans "En cours" %}</option>
+                    <option value="completed" {% if request.GET.status == 'completed' %}selected{% endif %}>{% trans "Terminées" %}</option>
+                </select>
+            </label>
+            <label>
+                <span>{% trans "Priorité" %}</span>
+                <select name="priority">
+                    <option value="all" {% if request.GET.priority == 'all' or not request.GET.priority %}selected{% endif %}>{% trans "Toutes les priorités" %}</option>
+                    <option value="high" {% if request.GET.priority == 'high' %}selected{% endif %}>{% trans "Haute" %}</option>
+                    <option value="medium" {% if request.GET.priority == 'medium' %}selected{% endif %}>{% trans "Moyenne" %}</option>
+                    <option value="low" {% if request.GET.priority == 'low' %}selected{% endif %}>{% trans "Basse" %}</option>
+                </select>
+            </label>
+            <button class="btn btn-secondary" type="submit"><i class="fas fa-filter" aria-hidden="true"></i> {% trans "Appliquer" %}</button>
+        </form>
+    </section>
+
+    <section class="todo-list" aria-live="polite" aria-label="{% trans 'Liste des tâches' %}">
+        {% for todo in todos %}
+            <article class="todo-card todo-status-{{ todo.status }}" data-todo-card="{{ todo.pk }}">
+                <div class="todo-card-main">
+                    <button type="button" class="todo-toggle" data-toggle-url="{% url 'todo:toggle_todo' todo.pk %}"
+                            aria-label="{% trans 'Changer le statut de la tâche' %}: {{ todo.title }}"
+                            title="{% trans 'Changer le statut' %}">
+                        <span class="todo-checkmark" aria-hidden="true"><i class="fas fa-check"></i></span>
+                    </button>
+                    <div class="todo-card-copy">
+                        <h2>{{ todo.title }}</h2>
+                        {% if todo.description %}<p>{{ todo.description|truncatechars:180 }}</p>{% endif %}
+                        <div class="todo-meta">
+                            <span class="todo-priority todo-priority-{{ todo.priority }}">{{ todo.get_priority_display }}</span>
+                            <span class="todo-status-label">{{ todo.get_status_display }}</span>
+                            {% if todo.due_date %}<span><i class="far fa-calendar" aria-hidden="true"></i> {{ todo.due_date|date:"d/m/Y H:i" }}</span>{% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="todo-card-actions">
+                    <a href="{% url 'todo:update_todo' todo.pk %}" class="icon-action" aria-label="{% trans 'Modifier' %}">
+                        <i class="fas fa-pen" aria-hidden="true"></i>
+                    </a>
+                    <a href="{% url 'todo:delete_todo' todo.pk %}" class="icon-action icon-action-danger" aria-label="{% trans 'Supprimer' %}">
+                        <i class="fas fa-trash" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </article>
+        {% empty %}
+            <div class="todo-empty">
+                <span class="todo-empty-icon"><i class="fas fa-clipboard-check" aria-hidden="true"></i></span>
+                <h2>{% trans "Votre liste est vide" %}</h2>
+                <p>{% trans "Ajoutez une tâche pour transformer votre prochain objectif en action concrète." %}</p>
+                <a class="btn btn-primary" href="{% url 'todo:create_todo' %}"><i class="fas fa-plus" aria-hidden="true"></i> {% trans "Créer une tâche" %}</a>
+            </div>
+        {% endfor %}
+    </section>
+</main>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/todo.js' %}"></script>
+{% endblock %}
