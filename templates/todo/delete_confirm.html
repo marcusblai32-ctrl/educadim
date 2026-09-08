@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Supprimer la tâche" %}{% endblock %}
+
+{% block content %}
+<main class="todo-form-page page-container">
+    <section class="todo-form-card todo-danger-card">
+        <span class="todo-empty-icon"><i class="fas fa-trash-can" aria-hidden="true"></i></span>
+        <h1>{% trans "Supprimer cette tâche ?" %}</h1>
+        <p>{% blocktrans with title=todo.title %}La tâche « {{ title }} » sera définitivement supprimée.{% endblocktrans %}</p>
+        <form method="post" class="form-actions">
+            {% csrf_token %}
+            <a class="btn btn-outline" href="{% url 'todo:todo_list' %}">{% trans "Annuler" %}</a>
+            <button class="btn btn-danger" type="submit"><i class="fas fa-trash" aria-hidden="true"></i> {% trans "Supprimer" %}</button>
+        </form>
+    </section>
+</main>
+{% endblock %}
