@@ -1,0 +1,176 @@
+# Haitian Creole translations for EducDim
+msgid ""
+msgstr ""
+"Language: ht\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Connexion"
+msgstr "Koneksyon"
+
+msgid "Inscription"
+msgstr "Enskripsyon"
+
+msgid "Profil"
+msgstr "Pwofil"
+
+msgid "Deconnexion"
+msgstr "Dekoneksyon"
+
+msgid "Cours"
+msgstr "Kou"
+
+msgid "Quiz"
+msgstr "Kiz"
+
+msgid "Dashboard"
+msgstr "Tablo"
+
+msgid "Notifications"
+msgstr "Notifikasyon"
+
+msgid "Accueil"
+msgstr "Akèy"
+
+msgid "Abonnements"
+msgstr "Abònman"
+
+msgid "Progression"
+msgstr "Pwogresyon"
+
+msgid "Explorer les cours"
+msgstr "Eksplore kou yo"
+
+msgid "Commencer le quiz"
+msgstr "Kòmanse kiz la"
+
+msgid "Voir details"
+msgstr "Gade detay"
+
+msgid "Sauvegarder"
+msgstr "Sove"
+
+msgid "Annuler"
+msgstr "Anile"
+
+msgid "Supprimer"
+msgstr "Efase"
+
+msgid "Editer"
+msgstr "Edite"
+
+msgid "Oui"
+msgstr "Wi"
+
+msgid "Non"
+msgstr "Non"
+
+msgid "Email"
+msgstr "Imèl"
+
+msgid "Mot de passe"
+msgstr "Modpas"
+
+msgid "Prenom"
+msgstr "Pwenom"
+
+msgid "Nom"
+msgstr "Non"
+
+msgid "Categorie"
+msgstr "Kategori"
+
+msgid "Niveau"
+msgstr "Nivo"
+
+msgid "Prix"
+msgstr "Pri"
+
+msgid "Gratuit"
+msgstr "Gratis"
+
+msgid "Reussi"
+msgstr "Siksè"
+
+msgid "A faire"
+msgstr "Pou fè"
+
+msgid "Utilisateurs"
+msgstr "Itilizatè"
+
+msgid "Revenu total"
+msgstr "Revni total"
+
+msgid "Admin"
+msgstr "Adminystratè"
+
+msgid "Ajouter"
+msgstr "Ajoute"
+
+msgid "Modifier"
+msgstr "Modifye"
+
+msgid "Chercher"
+msgstr "Chèche"
+
+msgid "Filtrer"
+msgstr "Filtre"
+
+msgid "Reinitialiser"
+msgstr "Reinisyalize"
+
+msgid "Telecharger"
+msgstr "Telechaje"
+
+msgid "Envoyer"
+msgstr "Voye"
+
+msgid "Repondre"
+msgstr "Reponn"
+
+msgid "Confirmer"
+msgstr "Konfime"
+
+msgid "Erreur"
+msgstr "Erè"
+
+msgid "Succes"
+msgstr "Siksè"
+
+msgid "Attention"
+msgstr "Atansyon"
+
+msgid "Information"
+msgstr "Enfòmasyon"
+
+msgid "Chargement..."
+msgstr "Chajman..."
+
+msgid "Aucune donnee"
+msgstr "Pa gen done"
+
+msgid "Etes-vous sur ?"
+msgstr "Èske ou sèten?"
+
+msgid "Cette action ne peut pas etre annulee."
+msgstr "Aksyon sa a pa ka anile."
+
+msgid "A propos"
+msgstr "Sou"
+
+msgid "Contact"
+msgstr "Kontak"
+
+msgid "Confidentialite"
+msgstr "Konfidansyalite"
+
+msgid "Conditions"
+msgstr "Kondisyon"
+
+msgid "FAQ"
+msgstr "FAQ"
+
+msgid "Tous droits reserves"
+msgstr "Tout dwa rezève"
+
+msgid "Basculer le theme clair/sombre"
+msgstr "Basile tèm klè/fon"
