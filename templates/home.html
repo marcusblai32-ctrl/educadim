@@ -61,28 +61,28 @@
     <!-- ===== HERO VISUAL ===== -->
     <div class="hero-visual">
         {% if theme.hero_image %}
-            <img src="{{ theme.hero_image.url }}" alt="{{ theme.hero_title }}" class="hero-main-image" style="width: 100%; border-radius: var(--radius); box-shadow: var(--shadow);">
+            <img src="{{ theme.hero_image.url }}" alt="{{ theme.hero_title }}" class="hero-main-image">
         {% else %}
             <!-- Carte 1 -->
             <div class="hero-card animate-float">
-                <div class="feature-icon-wrapper" style="width: 55px; height: 55px; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.8rem; background: var(--grad-brand);">
-                    <i class="{{ theme.hero_card1_icon|default:'fas fa-laptop-code' }}" style="color: #fff; font-size: 1.5rem;"></i>
+                <div class="feature-icon-wrapper hero-card-icon">
+                    <i class="{{ theme.hero_card1_icon|default:'fas fa-laptop-code' }}"></i>
                 </div>
                 <h3>{{ theme.hero_card1_title|default:_("Formation en ligne") }}</h3>
                 <p>{{ theme.hero_card1_desc|default:_("+1000 étudiants") }}</p>
             </div>
             <!-- Carte 2 -->
             <div class="hero-card animate-float delay-1">
-                <div class="feature-icon-wrapper" style="width: 55px; height: 55px; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.8rem; background: var(--grad-brand);">
-                    <i class="{{ theme.hero_card2_icon|default:'fas fa-certificate' }}" style="color: #fff; font-size: 1.5rem;"></i>
+                <div class="feature-icon-wrapper hero-card-icon">
+                    <i class="{{ theme.hero_card2_icon|default:'fas fa-certificate' }}"></i>
                 </div>
                 <h3>{{ theme.hero_card2_title|default:_("Certifiés") }}</h3>
                 <p>{{ theme.hero_card2_desc|default:_("Reconnus par l'État") }}</p>
             </div>
             <!-- Carte 3 -->
             <div class="hero-card animate-float delay-2">
-                <div class="feature-icon-wrapper" style="width: 55px; height: 55px; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.8rem; background: var(--grad-brand);">
-                    <i class="{{ theme.hero_card3_icon|default:'fas fa-users' }}" style="color: #fff; font-size: 1.5rem;"></i>
+                <div class="feature-icon-wrapper hero-card-icon">
+                    <i class="{{ theme.hero_card3_icon|default:'fas fa-users' }}"></i>
                 </div>
                 <h3>{{ theme.hero_card3_title|default:_("+50 cours") }}</h3>
                 <p>{{ theme.hero_card3_desc|default:_("Disponibles") }}</p>
@@ -138,9 +138,9 @@
 <!-- ===== CTA SECTION ===== -->
 <section class="cta-section">
     <div class="cta-content">
-        <h2>{{ theme.cta_title|default:_("Prêt à commencer votre") }} <span style="text-decoration: underline; text-decoration-color: var(--secondary);">{{ theme.cta_highlight|default:_("aventure") }}</span> ?</h2>
+        <h2>{{ theme.cta_title|default:_("Prêt à commencer votre") }} <span class="cta-highlight">{{ theme.cta_highlight|default:_("aventure") }}</span> ?</h2>
         <p>{{ theme.cta_desc|default:_("Rejoignez des milliers d'apprenants et transformez votre avenir dès aujourd'hui.") }}</p>
-        <a href="{% url 'accounts:signup' %}" class="btn btn-lg" style="background: #fff; color: var(--primary);">
+        <a href="{% url 'accounts:signup' %}" class="btn btn-lg cta-button">
             <i class="fas fa-rocket"></i> {{ theme.cta_btn|default:_("Créer un compte gratuit") }}
         </a>
     </div>
