@@ -7,7 +7,7 @@
 <div class="card">
     <div style="display:flex; justify-content:space-between; align-items:start; flex-wrap:wrap;">
         <div>
-            <h1 style="color:var(--text);">{{ inscription.cours.titre }}</h1>
+            <h1 style="color:var(--text);">{{ inscription.cours.display_titre }}</h1>
             <p style="color:var(--text-muted);"><i class="fas fa-calendar"></i> {% trans "Demande" %}: {{ inscription.date_demande|date:"d/m/Y H:i" }}</p>
         </div>
         <span class="badge

@@ -31,7 +31,7 @@
                     <strong>{{ inscription.utilisateur.get_full_name }}</strong><br>
                     <small style="color:var(--text-muted);">{{ inscription.utilisateur.email }}</small>
                 </td>
-                <td style="padding:0.8rem; color:var(--text);">{{ inscription.cours.titre }}</td>
+                <td style="padding:0.8rem; color:var(--text);">{{ inscription.cours.display_titre }}</td>
                 <td style="padding:0.8rem; color:var(--text);">{{ inscription.get_methode_paiement_display }}</td>
                 <td style="padding:0.8rem; color:var(--text);"><code style="background:var(--body-bg); padding:0.2rem 0.5rem; border-radius:4px;">{{ inscription.id_transaction }}</code></td>
                 <td style="padding:0.8rem; color:var(--text);">

@@ -72,6 +72,11 @@
     var closeAlerts = document.querySelectorAll(".close-alert");
     var revealItems = document.querySelectorAll(".animate-on-scroll, .reveal, .reveal-two, .reveal-three");
     var statNumbers = document.querySelectorAll(".stat-number");
+    document.querySelectorAll("[data-submit-on-change]").forEach(function (control) {
+      control.addEventListener("change", function () {
+        if (control.form) control.form.submit();
+      });
+    });
 
     function isMobile() {
       return window.matchMedia("(max-width: 768px)").matches;

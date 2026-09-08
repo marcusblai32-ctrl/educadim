@@ -102,6 +102,8 @@ class Promotions(models.Model):
 class Course(models.Model):
     titre = models.CharField(max_length=255, verbose_name="Titre")
     description = models.TextField(blank=True, verbose_name="Description")
+    titre_ht = models.CharField(max_length=255, blank=True, verbose_name="Titre (HT)")
+    description_ht = models.TextField(blank=True, verbose_name="Description (HT)")
     image_url = models.URLField(blank=True, verbose_name="URL de l'image (recommandée)")
     image = models.ImageField(upload_to='cours/images/', blank=True, null=True, verbose_name="Image (téléchargée)")
     prix = models.DecimalField(max_digits=8, decimal_places=2, default=0.00, verbose_name="Prix (0 = gratuit)")
@@ -143,6 +145,24 @@ class Course(models.Model):
 
     def __str__(self):
         return self.titre
+
+    def get_titre(self, lang=None):
+        """Return the course title for the active language with a safe fallback."""
+        lang = lang or get_language()
+        return self.titre_ht or self.titre if lang == 'ht' else self.titre
+
+    def get_description(self, lang=None):
+        """Return the course description for the active language with a safe fallback."""
+        lang = lang or get_language()
+        return self.description_ht or self.description if lang == 'ht' else self.description
+
+    @property
+    def display_titre(self):
+        return self.get_titre()
+
+    @property
+    def display_description(self):
+        return self.get_description()
 
     def get_image(self):
         if self.image_url:
@@ -256,6 +276,8 @@ class Lecon(models.Model):
     module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='lecons', verbose_name="Module")
     titre = models.CharField(max_length=255, verbose_name="Titre")
     description = models.TextField(blank=True, verbose_name="Description")
+    titre_ht = models.CharField(max_length=255, blank=True, verbose_name="Titre (HT)")
+    description_ht = models.TextField(blank=True, verbose_name="Description (HT)")
     contenu = models.TextField(blank=True, verbose_name="Contenu texte")
     ordre = models.PositiveIntegerField(default=1, verbose_name="Ordre")
     actif = models.BooleanField(default=True, verbose_name="Actif")
@@ -267,6 +289,22 @@ class Lecon(models.Model):
 
     def __str__(self):
         return f"{self.module} - Leçon {self.ordre}: {self.titre}"
+
+    def get_titre(self, lang=None):
+        lang = lang or get_language()
+        return self.titre_ht or self.titre if lang == 'ht' else self.titre
+
+    def get_description(self, lang=None):
+        lang = lang or get_language()
+        return self.description_ht or self.description if lang == 'ht' else self.description
+
+    @property
+    def display_titre(self):
+        return self.get_titre()
+
+    @property
+    def display_description(self):
+        return self.get_description()
 
 
 # ============================================

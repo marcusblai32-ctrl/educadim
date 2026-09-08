@@ -100,6 +100,9 @@ class CourseAdmin(admin.ModelAdmin):
         ('Informations générales', {
             'fields': ('titre', 'description', 'image_url', 'image', 'prix', 'publie', 'created_by')
         }),
+        ('Version créole', {
+            'fields': ('titre_ht', 'description_ht'),
+        }),
         ('Catégorisation', {
             'fields': ('categorie', 'nivo', 'duree')
         }),
@@ -150,6 +153,10 @@ class LeconAdmin(admin.ModelAdmin):
     list_filter = ('actif',)
     search_fields = ('titre', 'module__titre')
     inlines = [SectionInline]
+    fieldsets = (
+        ('Version française', {'fields': ('module', 'titre', 'description', 'contenu', 'ordre', 'actif')}),
+        ('Version créole', {'fields': ('titre_ht', 'description_ht')}),
+    )
 
 
 # ============================================

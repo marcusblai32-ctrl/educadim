@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 {% load i18n %}
 
-{% block title %}{% trans "Inscription" %} - {{ cours.titre }}{% endblock %}
+{% block title %}{% trans "Inscription" %} - {{ cours.display_titre }}{% endblock %}
 
 {% block content %}
 <div class="card" style="max-width:600px; margin:0 auto;">
-    <h1 style="color:var(--text);"><i class="fas fa-user-graduate" style="color:var(--primary);"></i> {% trans "Inscription" %} : {{ cours.titre }}</h1>
+    <h1 style="color:var(--text);"><i class="fas fa-user-graduate" style="color:var(--primary);"></i> {% trans "Inscription" %} : {{ cours.display_titre }}</h1>
 
     {% if cours.est_payant %}
     <div class="alert alert-info" style="background:rgba(6,182,212,0.1); color:var(--info); padding:1rem; border-radius:var(--radius); border-left:4px solid var(--info);">

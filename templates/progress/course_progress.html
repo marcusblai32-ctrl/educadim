@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 {% load i18n %}
 
-{% block title %}{% trans "Progression" %} - {{ cours.titre }}{% endblock %}
+{% block title %}{% trans "Progression" %} - {{ cours.display_titre }}{% endblock %}
 
 {% block content %}
 <div class="card" style="max-width: 900px; margin: 0 auto; padding: 2rem;">
     <div class="course-progress-header" style="margin-bottom: 2rem;">
         <h1 style="font-size: 2rem; font-weight: 700; color: var(--text, #212529);">
             <i class="fas fa-chart-line" style="color: var(--primary, #1a1a2e);"></i>
-            {{ cours.titre }}
+            {{ cours.display_titre }}
         </h1>
         <p style="color: var(--text-muted, #6c757d);">
             {% trans "Suivez votre progression dans ce cours" %}
@@ -68,7 +68,7 @@
                 
                 <div>
                     <h4 style="margin: 0; font-size: 1rem; font-weight: 500;">
-                        {{ item.lecon.titre }}
+                        {{ item.lecon.display_titre }}
                     </h4>
                     <span style="font-size: 0.8rem; color: var(--text-muted, #6c757d);">
                         {{ item.lecon.module.unite.titre }} - {{ item.lecon.module.titre }}

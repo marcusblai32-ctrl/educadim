@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load i18n %}
 
-{% block title %}{{ lecon.titre }}{% endblock %}
+{% block title %}{{ lecon.display_titre }}{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -399,11 +399,11 @@
 
         <!-- ===== HEADER ===== -->
         <div class="lesson-header">
-            <h1>{{ lecon.titre }} <span style="font-size: 0.9rem; font-weight: 400; color: var(--text-muted, #6c757d);">({% trans "Leçon" %} {{ lecon.ordre }})</span></h1>
+            <h1>{{ lecon.display_titre }} <span class="lesson-order">({% trans "Leçon" %} {{ lecon.ordre }})</span></h1>
   
         </div>
 
-        <p class="lesson-description">{{ lecon.description }}</p>
+        <p class="lesson-description">{{ lecon.display_description }}</p>
 
         <!-- ===== CONTENU ===== -->
         {% if lecon.contenu %}

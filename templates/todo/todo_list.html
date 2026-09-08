@@ -19,21 +19,22 @@
     <section class="todo-stats" aria-label="{% trans 'Résumé des tâches' %}">
         <div class="todo-stat">
             <span class="todo-stat-icon"><i class="fas fa-layer-group" aria-hidden="true"></i></span>
-            <span><strong>{{ stats.total }}</strong><small>{% trans "Toutes" %}</small></span>
+            <span><strong data-todo-stat="total">{{ stats.total }}</strong><small>{% trans "Toutes" %}</small></span>
         </div>
         <div class="todo-stat">
             <span class="todo-stat-icon todo-stat-pending"><i class="fas fa-clock" aria-hidden="true"></i></span>
-            <span><strong>{{ stats.pending }}</strong><small>{% trans "À faire" %}</small></span>
+            <span><strong data-todo-stat="pending">{{ stats.pending }}</strong><small>{% trans "À faire" %}</small></span>
         </div>
         <div class="todo-stat">
             <span class="todo-stat-icon todo-stat-progress"><i class="fas fa-spinner" aria-hidden="true"></i></span>
-            <span><strong>{{ stats.in_progress }}</strong><small>{% trans "En cours" %}</small></span>
+            <span><strong data-todo-stat="in_progress">{{ stats.in_progress }}</strong><small>{% trans "En cours" %}</small></span>
         </div>
         <div class="todo-stat">
             <span class="todo-stat-icon todo-stat-complete"><i class="fas fa-check" aria-hidden="true"></i></span>
-            <span><strong>{{ stats.completed }}</strong><small>{% trans "Terminées" %}</small></span>
+            <span><strong data-todo-stat="completed">{{ stats.completed }}</strong><small>{% trans "Terminées" %}</small></span>
         </div>
     </section>
+    <p class="todo-feedback" data-todo-feedback role="status" aria-live="polite"></p>
 
     <section class="todo-panel" aria-labelledby="todo-filter-title">
         <div class="todo-panel-title">
@@ -72,7 +73,7 @@
 
     <section class="todo-list" aria-live="polite" aria-label="{% trans 'Liste des tâches' %}">
         {% for todo in todos %}
-            <article class="todo-card todo-status-{{ todo.status }}" data-todo-card="{{ todo.pk }}">
+            <article class="todo-card todo-status-{{ todo.status }}" data-todo-card="{{ todo.pk }}" data-todo-status="{{ todo.status }}">
                 <div class="todo-card-main">
                     <button type="button" class="todo-toggle" data-toggle-url="{% url 'todo:toggle_todo' todo.pk %}"
                             aria-label="{% trans 'Changer le statut de la tâche' %}: {{ todo.title }}"

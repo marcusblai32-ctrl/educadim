@@ -18,7 +18,7 @@
         <div style="display:flex; justify-content:space-between; align-items:center; padding:1rem; border:1px solid var(--border); border-radius:var(--radius); background:var(--white); transition:all 0.3s;"
              onmouseover="this.style.transform='translateX(5px)'" onmouseout="this.style.transform='translateX(0)'">
             <div>
-                <h3 style="margin-bottom:0.2rem; color:var(--text);">{{ inscription.cours.titre }}</h3>
+                <h3 style="margin-bottom:0.2rem; color:var(--text);">{{ inscription.cours.display_titre }}</h3>
                 <p style="color:var(--text-muted); font-size:0.9rem;"><i class="fas fa-calendar"></i> {{ inscription.date_demande|date:"d/m/Y" }}</p>
             </div>
             <div style="display:flex; align-items:center; gap:1rem;">

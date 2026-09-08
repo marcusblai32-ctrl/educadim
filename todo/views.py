@@ -2,10 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
-from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
-from datetime import datetime
-import json
+from django.utils import timezone
 
 from .models import TodoItem, TodoCategory, TodoTag
 from .forms import TodoItemForm, TodoCategoryForm, TodoFilterForm
@@ -123,7 +121,7 @@ def toggle_todo_status(request, pk):
     todo.status = status_cycle.get(todo.status, 'pending')
     
     if todo.status == 'completed':
-        todo.completed_at = datetime.now()
+        todo.completed_at = timezone.now()
     else:
         todo.completed_at = None
     
@@ -131,6 +129,7 @@ def toggle_todo_status(request, pk):
     
     return JsonResponse({
         'success': True,
+        'status_key': todo.status,
         'status': todo.get_status_display(),
         'completed_at': todo.completed_at.isoformat() if todo.completed_at else None,
     })
@@ -186,6 +185,6 @@ def export_todos_json(request):
     
     return JsonResponse({
         'user': request.user.username,
-        'exported_at': datetime.now().isoformat(),
+        'exported_at': timezone.now().isoformat(),
         'todos': todos_data,
     })

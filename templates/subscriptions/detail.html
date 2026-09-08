@@ -61,7 +61,7 @@
     <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(250px, 1fr)); gap:1rem;">
         {% for access in accesses %}
         <div style="padding:0.8rem 1rem; background:var(--glass-soft); border-radius:var(--radius-sm); border:1px solid var(--glass-brd-soft);">
-            <strong>{{ access.cours.titre }}</strong>
+            <strong>{{ access.cours.display_titre }}</strong>
             {% if access.date_expiration %}
             <p style="margin:0.3rem 0 0; font-size:0.8rem; color:var(--text-muted);">
                 {% trans "Expire" %}: {{ access.date_expiration|date:"d/m/Y" }}

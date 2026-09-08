@@ -2238,6 +2238,17 @@ html[data-theme="dark"] .lang-switcher select {
     transition: var(--transition);
 }
 
+.todo-feedback {
+  min-height: 1.25rem;
+  margin: 0.75rem 0;
+  color: var(--success);
+  font-size: 0.9rem;
+}
+
+.todo-feedback-error {
+  color: var(--danger);
+}
+
 .todo-card:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-hover);

@@ -12,11 +12,11 @@
     <!-- ===== KORIJE: Afiche non kou a si li egziste ===== -->
     <p><strong>{% trans "Cours" %} :</strong>
         {% if quiz.cours %}
-            {{ quiz.cours.titre }}
+            {{ quiz.cours.display_titre }}
         {% elif quiz.module %}
             {{ quiz.module.titre }}
         {% elif quiz.lecon %}
-            {{ quiz.lecon.titre }}
+            {{ quiz.lecon.display_titre }}
         {% else %}
             <span style="color: var(--text-muted, #6c757d);">{% trans "Indépendant" %}</span>
         {% endif %}

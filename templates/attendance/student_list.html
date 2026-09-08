@@ -22,7 +22,7 @@
             {% for fiche in fiches %}
             <tr>
                 <td>{{ fiche.session.date|date:"d/m/Y" }}</td>
-                <td>{{ fiche.session.cours.titre }}</td>
+                <td>{{ fiche.session.cours.display_titre }}</td>
                 <td>{{ fiche.session.titre }}</td>
                 <td><span class="badge {% if fiche.statut == 'present' %}badge-success{% elif fiche.statut == 'retard' %}badge-warning{% else %}badge-danger{% endif %}">{{ fiche.get_statut_display }}</span></td>
                 <td>

@@ -99,7 +99,12 @@ def course_list(request):
     cours = Course.objects.filter(publie=True)
     search_query = request.GET.get('search', '')
     if search_query:
-        cours = cours.filter(Q(titre__icontains=search_query) | Q(description__icontains=search_query))
+        cours = cours.filter(
+            Q(titre__icontains=search_query)
+            | Q(description__icontains=search_query)
+            | Q(titre_ht__icontains=search_query)
+            | Q(description_ht__icontains=search_query)
+        )
 
     category_id = request.GET.get('category')
     if category_id:

@@ -56,7 +56,7 @@
                 <div>
                     <h3 style="margin: 0; font-size: 1.1rem; font-weight: 600;">
                         <a href="{% url 'progress:course_progress' pc.cours.pk %}" style="color: var(--text, #212529); text-decoration: none;">
-                            {{ pc.cours.titre }}
+                            {{ pc.cours.display_titre }}
                         </a>
                     </h3>
                     {% if pc.cours.categorie %}

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load i18n static %}
 
-{% block title %}{{ cours.titre }} - {{ theme.site_name|default:'EducDim' }}{% endblock %}
+{% block title %}{{ cours.display_titre }} - {{ theme.site_name|default:'EducDim' }}{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -653,7 +653,7 @@
                 </div>
 
                 <!-- Titre -->
-                <h1 class="course-detail-title">{{ cours.titre }}</h1>
+                <h1 class="course-detail-title">{{ cours.display_titre }}</h1>
 
                 <!-- Position learning path -->
                 {% if position_display %}
@@ -668,7 +668,7 @@
 
                 <!-- Description -->
                 <div class="course-detail-description">
-                    {{ cours.description|linebreaks }}
+                    {{ cours.display_description|linebreaks }}
                 </div>
 
                 <!-- Prérequis -->

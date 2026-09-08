@@ -21,7 +21,7 @@
               {% endif %}
             </span>
       </div>
-      <p><strong>{% trans "Cours" %} :</strong> {{ quiz.cours.titre }}</p>
+      <p><strong>{% trans "Cours" %} :</strong> {{ quiz.cours.display_titre }}</p>
       <p>{% trans "Score requis" %} : {{ quiz.pourcentage_reussite }}%</p>
       <p><small>{{ quiz.questions.count }} {% trans "questions" %}</small></p>
       <a href="{% url 'quiz:detail' quiz.pk %}" class="btn btn-primary">

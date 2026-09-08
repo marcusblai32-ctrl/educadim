@@ -1,21 +1,17 @@
+import logging
+
 import sib_api_v3_sdk
 from sib_api_v3_sdk.rest import ApiException
 
-# Eseye import Telerivet
+logger = logging.getLogger(__name__)
+
 try:
     from telerivet import APIClient
 except ImportError:
     try:
         from telerivet import Client as APIClient
     except ImportError:
-        # Si telerivet pa enstale, kreye yon klas fake
-        class APIClient:
-            def __init__(self, *args, **kwargs):
-                pass
-            def init_project_by_id(self, *args, **kwargs):
-                return self
-            def send_message(self, *args, **kwargs):
-                return type('obj', (object,), {'id': 'fake'})
+        APIClient = None
 
 from django.conf import settings
 from django.template.loader import render_to_string
@@ -30,6 +26,17 @@ from django.utils import timezone
 def send_brevo_email(to_email, subject, template_name, context=None, from_email=None):
     if context is None:
         context = {}
+
+    if not to_email:
+        return {'success': False, 'error_code': 'missing_recipient', 'error': 'Recipient email is required.'}
+
+    if not settings.BREVO_API_KEY:
+        logger.error("Brevo delivery skipped: BREVO_API_KEY is not configured.")
+        return {
+            'success': False,
+            'error_code': 'brevo_not_configured',
+            'error': 'Email delivery is not configured.',
+        }
 
     context.update({
         'site_name': settings.SITE_NAME,
@@ -63,22 +70,28 @@ def send_brevo_email(to_email, subject, template_name, context=None, from_email=
         )
 
         api_response = api_instance.send_transac_email(send_smtp_email)
+        message_id = getattr(api_response, 'message_id', None)
+        logger.info("Brevo email delivered template=%s message_id=%s", template_name, message_id)
 
         return {
             'success': True,
-            'message_id': api_response.message_id,
+            'message_id': message_id,
             'response': api_response
         }
 
     except ApiException as e:
+        logger.exception("Brevo API delivery failed template=%s status=%s", template_name, getattr(e, 'status', None))
         return {
             'success': False,
-            'error': f"Erè Brevo API: {e.body if hasattr(e, 'body') else str(e)}"
+            'error_code': 'brevo_api_error',
+            'error': 'Email provider rejected the message.',
         }
     except Exception as e:
+        logger.exception("Brevo email delivery failed template=%s", template_name)
         return {
             'success': False,
-            'error': f"Erè: {str(e)}"
+            'error_code': 'brevo_delivery_error',
+            'error': 'Email delivery failed.',
         }
 
 
@@ -87,6 +100,25 @@ def send_brevo_email(to_email, subject, template_name, context=None, from_email=
 # ============================================
 
 def send_telerivet_sms(to_number, message_text):
+    if not to_number:
+        return {'success': False, 'error_code': 'missing_recipient', 'error': 'Recipient phone number is required.'}
+
+    if not settings.TELERIVET_API_KEY or not settings.TELERIVET_PROJECT_ID:
+        logger.error("Telerivet delivery skipped: required settings are not configured.")
+        return {
+            'success': False,
+            'error_code': 'telerivet_not_configured',
+            'error': 'SMS delivery is not configured.',
+        }
+
+    if APIClient is None:
+        logger.error("Telerivet delivery skipped: SDK is not installed.")
+        return {
+            'success': False,
+            'error_code': 'telerivet_sdk_missing',
+            'error': 'SMS delivery is unavailable.',
+        }
+
     try:
         client = APIClient(settings.TELERIVET_API_KEY)
         project = client.init_project_by_id(settings.TELERIVET_PROJECT_ID)
@@ -99,17 +131,21 @@ def send_telerivet_sms(to_number, message_text):
             to_number=to_number,
             content=message_text
         )
+        message_id = getattr(result, 'id', None)
+        logger.info("Telerivet SMS delivered message_id=%s", message_id)
 
         return {
             'success': True,
-            'message_id': result.id,
+            'message_id': message_id,
             'response': result
         }
 
     except Exception as e:
+        logger.exception("Telerivet SMS delivery failed")
         return {
             'success': False,
-            'error': f"Erè Telerivet: {str(e)}"
+            'error_code': 'telerivet_delivery_error',
+            'error': 'SMS delivery failed.',
         }
 
 
@@ -135,7 +171,8 @@ def send_enrollment_confirmation_email(user, enrollment, course_details=None):
     if course_details is None:
         course_details = {}
 
-    subject = f"Inscription confirmée - {enrollment.cours.titre}"
+    course_name = enrollment.cours.get_titre()
+    subject = f"Inscription confirmée - {course_name}"
 
     context = {
         'user': user,
@@ -145,7 +182,7 @@ def send_enrollment_confirmation_email(user, enrollment, course_details=None):
         'username': user.email,
         'user_id': user.user_id,
         'enrollment': enrollment,
-        'course_name': enrollment.cours.titre,
+        'course_name': course_name,
         'course_link': course_details.get('course_link', ''),
         'course_slug': enrollment.cours.slug,
         'instructor': enrollment.cours.instructor.get_full_name() if hasattr(enrollment.cours, 'instructor') and enrollment.cours.instructor else 'Notre équipe',
@@ -173,7 +210,7 @@ def send_enrollment_confirmation_email(user, enrollment, course_details=None):
 
 def send_enrollment_confirmation_sms(user, enrollment):
     first_name = get_user_first_name(user)
-    course_name = enrollment.cours.titre
+    course_name = enrollment.cours.get_titre()
 
     if enrollment.methode_paiement == 'subscription':
         message = f"{settings.SITE_NAME}: {first_name}, votre abonnement vous donne accès à {course_name}. Bon apprentissage!"
@@ -205,7 +242,8 @@ def send_enrollment_confirmation(user, enrollment, course_details=None, send_ema
 # ============================================
 
 def send_enrollment_approved_email(user, enrollment, admin_note=None):
-    subject = f"Inscription approuvée - {enrollment.cours.titre}"
+    course_name = enrollment.cours.get_titre()
+    subject = f"Inscription approuvée - {course_name}"
 
     context = {
         'user': user,
@@ -215,7 +253,7 @@ def send_enrollment_approved_email(user, enrollment, admin_note=None):
         'username': user.email,
         'user_id': user.user_id,
         'enrollment': enrollment,
-        'course_name': enrollment.cours.titre,
+        'course_name': course_name,
         'course_link': '',
         'instructor': enrollment.cours.instructor.get_full_name() if hasattr(enrollment.cours, 'instructor') and enrollment.cours.instructor else 'Notre équipe',
         'start_date': enrollment.cours.start_date.strftime('%d/%m/%Y') if hasattr(enrollment.cours, 'start_date') and enrollment.cours.start_date else 'Immédiat',
@@ -237,7 +275,7 @@ def send_enrollment_approved_email(user, enrollment, admin_note=None):
 
 def send_enrollment_approved_sms(user, enrollment):
     first_name = get_user_first_name(user)
-    course_name = enrollment.cours.titre
+    course_name = enrollment.cours.get_titre()
     message = f"{settings.SITE_NAME}: {first_name}, votre inscription pour {course_name} a été approuvée. Accédez au cours maintenant!"
     return send_telerivet_sms(
         to_number=user.phone_number,
@@ -262,7 +300,8 @@ def send_enrollment_approved(user, enrollment, admin_note=None, send_email=True,
 # ============================================
 
 def send_enrollment_rejected_email(user, enrollment, admin_note=None):
-    subject = f"Inscription refusée - {enrollment.cours.titre}"
+    course_name = enrollment.cours.get_titre()
+    subject = f"Inscription refusée - {course_name}"
 
     context = {
         'user': user,
@@ -272,7 +311,7 @@ def send_enrollment_rejected_email(user, enrollment, admin_note=None):
         'username': user.email,
         'user_id': user.user_id,
         'enrollment': enrollment,
-        'course_name': enrollment.cours.titre,
+        'course_name': course_name,
         'enrollment_date': enrollment.date_demande.strftime('%d/%m/%Y à %H:%M'),
         'verification_date': enrollment.date_verification.strftime('%d/%m/%Y à %H:%M') if enrollment.date_verification else '',
         'verified_by': enrollment.verifie_par.get_full_name() if enrollment.verifie_par else 'Admin',
@@ -290,7 +329,7 @@ def send_enrollment_rejected_email(user, enrollment, admin_note=None):
 
 def send_enrollment_rejected_sms(user, enrollment):
     first_name = get_user_first_name(user)
-    course_name = enrollment.cours.titre
+    course_name = enrollment.cours.get_titre()
     message = f"{settings.SITE_NAME}: {first_name}, votre inscription pour {course_name} a été refusée. Consultez vos emails pour plus d'informations."
     return send_telerivet_sms(
         to_number=user.phone_number,

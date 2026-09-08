@@ -6,7 +6,7 @@
 {% block content %}
 <div class="card">
   <h1>{{ session.titre }}</h1>
-  <p><strong>{% trans "Cours" %} :</strong> {{ session.cours.titre }}</p>
+  <p><strong>{% trans "Cours" %} :</strong> {{ session.cours.display_titre }}</p>
   <p><strong>{% trans "Date" %} :</strong> {{ session.date|date:"d/m/Y" }}</p>
   <p><strong>{% trans "Horaire" %} :</strong> {{ session.heure_debut }} - {{ session.heure_fin|default:_("Fin") }}</p>
 

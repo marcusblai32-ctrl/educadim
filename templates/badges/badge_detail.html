@@ -10,7 +10,7 @@
   <p>{{ badge.description }}</p>
   <p><strong>{% trans "Condition" %} :</strong> {{ badge.get_condition_type_display }}</p>
   {% if badge.valeur_cible %}<p><strong>{% trans "Objectif" %} :</strong> {{ badge.valeur_cible }}</p>{% endif %}
-  {% if badge.cours %}<p><strong>{% trans "Cours" %} :</strong> {{ badge.cours.titre }}</p>{% endif %}
+  {% if badge.cours %}<p><strong>{% trans "Cours" %} :</strong> {{ badge.cours.display_titre }}</p>{% endif %}
   <a href="{% url 'badges:list' %}" class="btn btn-secondary">{% trans "Retour aux badges" %}</a>
 </div>
 {% endblock %}

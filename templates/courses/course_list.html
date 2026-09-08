@@ -472,7 +472,7 @@
                 <button type="submit"><i class="fas fa-search"></i></button>
             </div>
             <div class="filter-group">
-                <select name="category" onchange="this.form.submit()">
+                        <select name="category" data-submit-on-change>
                     <option value="">{% trans "Toutes les catégories" %}</option>
                     {% for cat in categories %}
                     <option value="{{ cat.id }}" {% if selected_category == cat.id|stringformat:'s' %}selected{% endif %}>
@@ -482,7 +482,7 @@
                 </select>
             </div>
             <div class="filter-group">
-                <select name="niveau" onchange="this.form.submit()">
+                <select name="niveau" data-submit-on-change>
                     <option value="">{% trans "Tous les niveaux" %}</option>
                     {% for niv in niveaux %}
                     <option value="{{ niv.id }}" {% if selected_niveau == niv.id|stringformat:'s' %}selected{% endif %}>
@@ -492,7 +492,7 @@
                 </select>
             </div>
             <div class="filter-group">
-                <select name="learning_path" onchange="this.form.submit()">
+                <select name="learning_path" data-submit-on-change>
                     <option value="">{% trans "Tous les Learning Paths" %}</option>
                     {% for lp in learning_paths %}
                     <option value="{{ lp.id }}" {% if selected_learning_path == lp.id|stringformat:'s' %}selected{% endif %}>
@@ -502,7 +502,7 @@
                 </select>
             </div>
             <div class="filter-group">
-                <select name="prix" onchange="this.form.submit()">
+                <select name="prix" data-submit-on-change>
                     <option value="">{% trans "Tous les prix" %}</option>
                     <option value="gratuit" {% if selected_prix == 'gratuit' %}selected{% endif %}>{% trans "Gratuit" %}</option>
                     <option value="payant" {% if selected_prix == 'payant' %}selected{% endif %}>{% trans "Payant" %}</option>
@@ -522,7 +522,7 @@
         <div class="course-card">
             {% with img=item.cours.get_image %}
             {% if img %}
-            <img src="{{ img }}" alt="{{ item.cours.titre }}" class="course-img">
+            <img src="{{ img }}" alt="{{ item.cours.display_titre }}" class="course-img">
             {% else %}
             <div class="no-image"><i class="fas fa-book"></i></div>
             {% endif %}
@@ -549,8 +549,8 @@
                     <span class="badge badge-secondary"><i class="fas fa-road"></i> {{ item.cours.learning_path.nom }}</span>
                     {% endif %}
                 </div>
-                <h3><a href="{% url 'courses:course_detail' item.cours.pk %}">{{ item.cours.titre }}</a></h3>
-                <p class="course-description">{{ item.cours.description|truncatechars:100 }}</p>
+                <h3><a href="{% url 'courses:course_detail' item.cours.pk %}">{{ item.cours.display_titre }}</a></h3>
+                <p class="course-description">{{ item.cours.display_description|truncatechars:100 }}</p>
                 <div class="course-meta">
                     <span class="price {% if not item.cours.est_payant %}free{% endif %}">
                         {% if item.cours.est_payant %}{{ item.cours.prix }} HTG{% else %}{% trans "Gratuit" %}{% endif %}
