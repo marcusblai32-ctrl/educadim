@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 {% load i18n static %}
 
-{% block title %}{% trans "Accueil" %} - {{ theme.site_name|default:'EducDim' }}{% endblock %}
+{% block title %}
+    {% blocktrans with site_name=theme.site_name|default:'EducDim' %}
+        Accueil - {{ site_name }}
+    {% endblocktrans %}
+{% endblock %}
 
 {% block content %}
 
@@ -9,33 +13,50 @@
 <section class="hero">
     <div class="hero-content">
         <span class="hero-badge">
-            <i class="fas fa-sparkles"></i> {{ theme.hero_badge|default:_("Plateforme e-learning") }}
+            <i class="fas fa-sparkles"></i> 
+            {% blocktrans with badge=theme.hero_badge|default:_("Plateforme e-learning") %}
+                {{ badge }}
+            {% endblocktrans %}
         </span>
 
         <!-- Titre -->
         <h1>
-            {{ theme.hero_title|default:_("Apprenez sans limites") }}<br>
-            <span class="highlight">{{ theme.hero_subtitle_line2|default:_("Où que vous soyez") }}</span>
+            {% blocktrans with title=theme.hero_title|default:_("Apprenez sans limites") %}
+                {{ title }}
+            {% endblocktrans %}<br>
+            <span class="highlight">
+                {% blocktrans with subtitle=theme.hero_subtitle_line2|default:_("Où que vous soyez") %}
+                    {{ subtitle }}
+                {% endblocktrans %}
+            </span>
         </h1>
 
         <!-- Sous-titre -->
         <p class="hero-description">
-            {{ theme.hero_subtitle|default:_("Des cours de qualité pour développer vos compétences à votre rythme.") }}
+            {% blocktrans with subtitle=theme.hero_subtitle|default:_("Des cours de qualité pour développer vos compétences à votre rythme.") %}
+                {{ subtitle }}
+            {% endblocktrans %}
         </p>
 
         <!-- Boutons -->
         <div class="hero-actions">
             <a href="{% url 'courses:course_list' %}" class="btn btn-primary btn-lg">
-                <i class="fas fa-graduation-cap"></i> {{ theme.btn_explore|default:_("Explorer les cours") }}
+                <i class="fas fa-graduation-cap"></i> 
+                {% blocktrans with btn=theme.btn_explore|default:_("Explorer les cours") %}
+                    {{ btn }}
+                {% endblocktrans %}
             </a>
             {% if not user.is_authenticated %}
                 <a href="{% url 'accounts:signup' %}" class="btn btn-outline btn-lg">
-                    <i class="fas fa-user-plus"></i> {{ theme.btn_start|default:_("Commencer gratuitement") }}
+                    <i class="fas fa-user-plus"></i> 
+                    {% blocktrans with btn=theme.btn_start|default:_("Commencer gratuitement") %}
+                        {{ btn }}
+                    {% endblocktrans %}
                 </a>
             {% endif %}
         </div>
 
-        <!-- ===== STATS - KORIJE ===== -->
+        <!-- ===== STATS ===== -->
         <div class="hero-stats">
             <div class="stat-item">
                 <span class="stat-number">
@@ -68,24 +89,48 @@
                 <div class="feature-icon-wrapper hero-card-icon">
                     <i class="{{ theme.hero_card1_icon|default:'fas fa-laptop-code' }}"></i>
                 </div>
-                <h3>{{ theme.hero_card1_title|default:_("Formation en ligne") }}</h3>
-                <p>{{ theme.hero_card1_desc|default:_("+1000 étudiants") }}</p>
+                <h3>
+                    {% blocktrans with title=theme.hero_card1_title|default:_("Formation en ligne") %}
+                        {{ title }}
+                    {% endblocktrans %}
+                </h3>
+                <p>
+                    {% blocktrans with desc=theme.hero_card1_desc|default:_("+1000 étudiants") %}
+                        {{ desc }}
+                    {% endblocktrans %}
+                </p>
             </div>
             <!-- Carte 2 -->
             <div class="hero-card animate-float delay-1">
                 <div class="feature-icon-wrapper hero-card-icon">
                     <i class="{{ theme.hero_card2_icon|default:'fas fa-certificate' }}"></i>
                 </div>
-                <h3>{{ theme.hero_card2_title|default:_("Certifiés") }}</h3>
-                <p>{{ theme.hero_card2_desc|default:_("Reconnus par l'État") }}</p>
+                <h3>
+                    {% blocktrans with title=theme.hero_card2_title|default:_("Certifiés") %}
+                        {{ title }}
+                    {% endblocktrans %}
+                </h3>
+                <p>
+                    {% blocktrans with desc=theme.hero_card2_desc|default:_("Reconnus par l'État") %}
+                        {{ desc }}
+                    {% endblocktrans %}
+                </p>
             </div>
             <!-- Carte 3 -->
             <div class="hero-card animate-float delay-2">
                 <div class="feature-icon-wrapper hero-card-icon">
                     <i class="{{ theme.hero_card3_icon|default:'fas fa-users' }}"></i>
                 </div>
-                <h3>{{ theme.hero_card3_title|default:_("+50 cours") }}</h3>
-                <p>{{ theme.hero_card3_desc|default:_("Disponibles") }}</p>
+                <h3>
+                    {% blocktrans with title=theme.hero_card3_title|default:_("+50 cours") %}
+                        {{ title }}
+                    {% endblocktrans %}
+                </h3>
+                <p>
+                    {% blocktrans with desc=theme.hero_card3_desc|default:_("Disponibles") %}
+                        {{ desc }}
+                    {% endblocktrans %}
+                </p>
             </div>
         {% endif %}
     </div>
@@ -94,8 +139,21 @@
 <!-- ===== FEATURES SECTION ===== -->
 <section class="features-section">
     <div class="section-header">
-        <span class="section-tag">{{ theme.features_tag|default:_("Pourquoi nous choisir ?") }}</span>
-        <h2>{{ theme.features_title|default:_("Une expérience d'apprentissage") }} <span class="highlight">{{ theme.features_highlight|default:_("unique") }}</span></h2>
+        <span class="section-tag">
+            {% blocktrans with tag=theme.features_tag|default:_("Pourquoi nous choisir ?") %}
+                {{ tag }}
+            {% endblocktrans %}
+        </span>
+        <h2>
+            {% blocktrans with title=theme.features_title|default:_("Une expérience d'apprentissage") %}
+                {{ title }}
+            {% endblocktrans %} 
+            <span class="highlight">
+                {% blocktrans with highlight=theme.features_highlight|default:_("unique") %}
+                    {{ highlight }}
+                {% endblocktrans %}
+            </span>
+        </h2>
     </div>
 
     <div class="features-grid">
@@ -104,10 +162,20 @@
             <div class="feature-icon-wrapper">
                 <i class="{{ theme.feature1_icon|default:'fas fa-laptop-code' }} feature-icon"></i>
             </div>
-            <h3>{{ theme.feature1_title|default:_("Cours interactifs") }}</h3>
-            <p>{{ theme.feature1_desc|default:_("Apprenez avec des vidéos, quiz et exercices pratiques conçus pour vous.") }}</p>
+            <h3>
+                {% blocktrans with title=theme.feature1_title|default:_("Cours interactifs") %}
+                    {{ title }}
+                {% endblocktrans %}
+            </h3>
+            <p>
+                {% blocktrans with desc=theme.feature1_desc|default:_("Apprenez avec des vidéos, quiz et exercices pratiques conçus pour vous.") %}
+                    {{ desc }}
+                {% endblocktrans %}
+            </p>
             <a href="{% url 'courses:course_list' %}" class="feature-link">
-                {{ theme.feature_link_text|default:_("En savoir plus") }} <i class="fas fa-arrow-right"></i>
+                {% blocktrans with link=theme.feature_link_text|default:_("En savoir plus") %}
+                    {{ link }}
+                {% endblocktrans %} <i class="fas fa-arrow-right"></i>
             </a>
         </div>
         <!-- Feature 2 -->
@@ -115,10 +183,20 @@
             <div class="feature-icon-wrapper">
                 <i class="{{ theme.feature2_icon|default:'fas fa-certificate' }} feature-icon"></i>
             </div>
-            <h3>{{ theme.feature2_title|default:_("Certificats vérifiés") }}</h3>
-            <p>{{ theme.feature2_desc|default:_("Recevez des certificats reconnus après chaque cours complété avec succès.") }}</p>
+            <h3>
+                {% blocktrans with title=theme.feature2_title|default:_("Certificats vérifiés") %}
+                    {{ title }}
+                {% endblocktrans %}
+            </h3>
+            <p>
+                {% blocktrans with desc=theme.feature2_desc|default:_("Recevez des certificats reconnus après chaque cours complété avec succès.") %}
+                    {{ desc }}
+                {% endblocktrans %}
+            </p>
             <a href="{% url 'courses:course_list' %}" class="feature-link">
-                {{ theme.feature_link_text|default:_("En savoir plus") }} <i class="fas fa-arrow-right"></i>
+                {% blocktrans with link=theme.feature_link_text|default:_("En savoir plus") %}
+                    {{ link }}
+                {% endblocktrans %} <i class="fas fa-arrow-right"></i>
             </a>
         </div>
         <!-- Feature 3 -->
@@ -126,10 +204,20 @@
             <div class="feature-icon-wrapper">
                 <i class="{{ theme.feature3_icon|default:'fas fa-trophy' }} feature-icon"></i>
             </div>
-            <h3>{{ theme.feature3_title|default:_("Classement & Badges") }}</h3>
-            <p>{{ theme.feature3_desc|default:_("Gagnez des points, débloquez des badges et grimpez dans le classement.") }}</p>
+            <h3>
+                {% blocktrans with title=theme.feature3_title|default:_("Classement & Badges") %}
+                    {{ title }}
+                {% endblocktrans %}
+            </h3>
+            <p>
+                {% blocktrans with desc=theme.feature3_desc|default:_("Gagnez des points, débloquez des badges et grimpez dans le classement.") %}
+                    {{ desc }}
+                {% endblocktrans %}
+            </p>
             <a href="{% url 'courses:course_list' %}" class="feature-link">
-                {{ theme.feature_link_text|default:_("En savoir plus") }} <i class="fas fa-arrow-right"></i>
+                {% blocktrans with link=theme.feature_link_text|default:_("En savoir plus") %}
+                    {{ link }}
+                {% endblocktrans %} <i class="fas fa-arrow-right"></i>
             </a>
         </div>
     </div>
@@ -138,10 +226,26 @@
 <!-- ===== CTA SECTION ===== -->
 <section class="cta-section">
     <div class="cta-content">
-        <h2>{{ theme.cta_title|default:_("Prêt à commencer votre") }} <span class="cta-highlight">{{ theme.cta_highlight|default:_("aventure") }}</span> ?</h2>
-        <p>{{ theme.cta_desc|default:_("Rejoignez des milliers d'apprenants et transformez votre avenir dès aujourd'hui.") }}</p>
+        <h2>
+            {% blocktrans with title=theme.cta_title|default:_("Prêt à commencer votre") %}
+                {{ title }}
+            {% endblocktrans %} 
+            <span class="cta-highlight">
+                {% blocktrans with highlight=theme.cta_highlight|default:_("aventure") %}
+                    {{ highlight }}
+                {% endblocktrans %}
+            </span> ?
+        </h2>
+        <p>
+            {% blocktrans with desc=theme.cta_desc|default:_("Rejoignez des milliers d'apprenants et transformez votre avenir dès aujourd'hui.") %}
+                {{ desc }}
+            {% endblocktrans %}
+        </p>
         <a href="{% url 'accounts:signup' %}" class="btn btn-lg cta-button">
-            <i class="fas fa-rocket"></i> {{ theme.cta_btn|default:_("Créer un compte gratuit") }}
+            <i class="fas fa-rocket"></i> 
+            {% blocktrans with btn=theme.cta_btn|default:_("Créer un compte gratuit") %}
+                {{ btn }}
+            {% endblocktrans %}
         </a>
     </div>
 </section>
@@ -149,8 +253,24 @@
 <!-- ===== TESTIMONIALS SECTION ===== -->
 <section class="testimonials-section">
     <div class="section-header">
-        <span class="section-tag">{{ theme.testimonials_tag|default:_("Ce que nos étudiants disent") }}</span>
-        <h2>{{ theme.testimonials_title|default:_("Ils ont") }} <span class="highlight">{{ theme.testimonials_highlight|default:_("réussi") }}</span> {{ theme.testimonials_end|default:_("grâce à nous") }}</h2>
+        <span class="section-tag">
+            {% blocktrans with tag=theme.testimonials_tag|default:_("Ce que nos étudiants disent") %}
+                {{ tag }}
+            {% endblocktrans %}
+        </span>
+        <h2>
+            {% blocktrans with title=theme.testimonials_title|default:_("Ils ont") %}
+                {{ title }}
+            {% endblocktrans %} 
+            <span class="highlight">
+                {% blocktrans with highlight=theme.testimonials_highlight|default:_("réussi") %}
+                    {{ highlight }}
+                {% endblocktrans %}
+            </span> 
+            {% blocktrans with end=theme.testimonials_end|default:_("grâce à nous") %}
+                {{ end }}
+            {% endblocktrans %}
+        </h2>
     </div>
 
     <div class="testimonials-grid">
@@ -165,7 +285,11 @@
                     {% endif %}
                 {% endfor %}
             </div>
-            <p>"{{ theme.testimonial1_text|default:_("Grâce à EduPlatform, j'ai appris le développement web en 3 mois. Aujourd'hui je travaille comme freelance.") }}"</p>
+            <p>
+                "{% blocktrans with text=theme.testimonial1_text|default:_("Grâce à EduPlatform, j'ai appris le développement web en 3 mois. Aujourd'hui je travaille comme freelance.") %}
+                    {{ text }}
+                {% endblocktrans %}"
+            </p>
             <div class="testimonial-author">
                 {% if theme.testimonial1_avatar %}
                     <img src="{{ theme.testimonial1_avatar }}" alt="{{ theme.testimonial1_name|default:'Jean Dupont' }}">
@@ -173,8 +297,16 @@
                     <img src="https://ui-avatars.com/api/?name={{ theme.testimonial1_name|default:'Jean+Dupont' }}&background=2563eb&color=fff&size=50" alt="{{ theme.testimonial1_name|default:'Jean Dupont' }}">
                 {% endif %}
                 <div>
-                    <h4>{{ theme.testimonial1_name|default:"Jean Dupont" }}</h4>
-                    <span>{{ theme.testimonial1_job|default:_("Développeur Web") }}</span>
+                    <h4>
+                        {% blocktrans with name=theme.testimonial1_name|default:"Jean Dupont" %}
+                            {{ name }}
+                        {% endblocktrans %}
+                    </h4>
+                    <span>
+                        {% blocktrans with job=theme.testimonial1_job|default:_("Développeur Web") %}
+                            {{ job }}
+                        {% endblocktrans %}
+                    </span>
                 </div>
             </div>
         </div>
@@ -189,7 +321,11 @@
                     {% endif %}
                 {% endfor %}
             </div>
-            <p>"{{ theme.testimonial2_text|default:_("Les cours sont bien structurés et les professeurs sont très compétents. Je recommande à 100%.") }}"</p>
+            <p>
+                "{% blocktrans with text=theme.testimonial2_text|default:_("Les cours sont bien structurés et les professeurs sont très compétents. Je recommande à 100%.") %}
+                    {{ text }}
+                {% endblocktrans %}"
+            </p>
             <div class="testimonial-author">
                 {% if theme.testimonial2_avatar %}
                     <img src="{{ theme.testimonial2_avatar }}" alt="{{ theme.testimonial2_name|default:'Marie Paul' }}">
@@ -197,8 +333,16 @@
                     <img src="https://ui-avatars.com/api/?name={{ theme.testimonial2_name|default:'Marie+Paul' }}&background=10b981&color=fff&size=50" alt="{{ theme.testimonial2_name|default:'Marie Paul' }}">
                 {% endif %}
                 <div>
-                    <h4>{{ theme.testimonial2_name|default:"Marie Paul" }}</h4>
-                    <span>{{ theme.testimonial2_job|default:_("Data Analyst") }}</span>
+                    <h4>
+                        {% blocktrans with name=theme.testimonial2_name|default:"Marie Paul" %}
+                            {{ name }}
+                        {% endblocktrans %}
+                    </h4>
+                    <span>
+                        {% blocktrans with job=theme.testimonial2_job|default:_("Data Analyst") %}
+                            {{ job }}
+                        {% endblocktrans %}
+                    </span>
                 </div>
             </div>
         </div>
