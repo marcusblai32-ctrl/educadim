@@ -1,68 +1,358 @@
-{% load static i18n %}
+{% load static i18n ads_tags %}
+
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE|default:'fr' }}">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>{% block title %}Chat{% endblock %}</title>
+    {# ===== THEME BOOT (avoid flash of wrong theme) ===== #}
+    <script src="{% static 'js/theme-init.js' %}"></script>
 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% if theme %}{{ theme.site_name|default:'EducDim' }}{% else %}EducDim{% endif %}{% endblock %}</title>
+    <meta name="description" content="{% if meta_description %}{{ meta_description }}{% elif theme and theme.site_description %}{{ theme.site_description }}{% else %}EducDim — plateforme e-learning : cours en ligne, quiz, badges et suivi de progression.{% endif %}">
+    <meta name="keywords" content="{{ meta_keywords|default:'e-learning, cours en ligne, éducation, EducDim, formation, quiz' }}">
+
+    {# ===== TECHNICAL SEO ===== #}
+    {% block meta_robots %}<meta name="robots" content="index, follow">{% endblock %}
+    <link rel="canonical" href="{% block canonical_url %}{{ request.scheme }}://{{ request.get_host }}{{ request.path }}{% endblock %}">
+    <meta name="theme-color" content="#5b76f7" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0a0f22" media="(prefers-color-scheme: dark)">
+
+    {# ===== OPEN GRAPH ===== #}
+    <meta property="og:site_name" content="{% if theme %}{{ theme.site_name|default:'EducDim' }}{% else %}EducDim{% endif %}">
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}{% if theme %}{{ theme.site_name|default:'EducDim' }}{% else %}EducDim{% endif %}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{% if meta_description %}{{ meta_description }}{% elif theme and theme.site_description %}{{ theme.site_description }}{% else %}EducDim — plateforme e-learning.{% endif %}{% endblock %}">
+    <meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
+    <meta property="og:locale" content="{{ LANGUAGE_CODE|default:'fr' }}">
+    {% block og_image %}{% if theme and theme.get_logo %}<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ theme.get_logo }}">{% endif %}{% endblock %}
+
+    {# ===== TWITTER CARD ===== #}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}{% if theme %}{{ theme.site_name|default:'EducDim' }}{% else %}EducDim{% endif %}{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}{% if meta_description %}{{ meta_description }}{% elif theme and theme.site_description %}{{ theme.site_description }}{% else %}EducDim — plateforme e-learning.{% endif %}{% endblock %}">
+
+    {# ===== JSON-LD (site-wide, real data only) ===== #}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "EducationalOrganization",
+        "name": "{% if theme %}{{ theme.site_name|default:'EducDim' }}{% else %}EducDim{% endif %}",
+        "url": "{{ request.scheme }}://{{ request.get_host }}/"{% if theme and theme.get_logo %},
+        "logo": "{{ request.scheme }}://{{ request.get_host }}{{ theme.get_logo }}"{% endif %}{% if theme and theme.contact_email %},
+        "email": "{{ theme.contact_email }}"{% endif %}
+    }
+    </script>
+    {% block extra_jsonld %}{% endblock %}
+
+    {# ===== FAVICON ===== #}
+    {% if theme and theme.get_favicon %}
+        <link rel="icon" type="image/x-icon" href="{{ theme.get_favicon }}">
+        <link rel="shortcut icon" type="image/x-icon" href="{{ theme.get_favicon }}">
+    {% elif theme and theme.favicon %}
+        <link rel="icon" type="image/x-icon" href="{{ theme.favicon.url }}">
+        <link rel="shortcut icon" type="image/x-icon" href="{{ theme.favicon.url }}">
+    {% endif %}
+
+    {# ===== CSS ===== #}
+    <link rel="stylesheet" href="{% static 'css/variables.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% url 'theme_manager:dynamic_css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <style>
-        /* Fòse tout espas yo 0 */
-        * { margin:0; padding:0; box-sizing:border-box; }
-        html, body {
-            margin:0 !important;
-            padding:0 !important;
-            width:100% !important;
-            height:100% !important;
-            overflow:hidden !important;
-            background:#ECE5DD !important;
-            font-family:'Inter',sans-serif !important;
-        }
-        main {
-            margin:0 !important;
-            padding:0 !important;
-            width:100% !important;
-            height:100vh !important;
-            height:100dvh !important;
-            display:flex !important;
-            align-items:center !important;
-            justify-content:center !important;
-            background:#ECE5DD !important;
-            overflow:hidden !important;
-        }
-        .chat-fullscreen {
-            width:100% !important;
-            height:100vh !important;
-            height:100dvh !important;
-            margin:0 !important;
-            padding:0 !important;
-            border-radius:0 !important;
-            border:none !important;
-            overflow:hidden !important;
-            display:flex;
-            flex-direction:column;
-            background:#ECE5DD;
-        }
-        /* Kache tout scrollbar inutile */
-        ::-webkit-scrollbar { width:4px; }
-        ::-webkit-scrollbar-track { background:transparent; }
-        ::-webkit-scrollbar-thumb { background:rgba(0,0,0,0.15); border-radius:10px; }
-    </style>
-
     {% block extra_head %}{% endblock %}
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
-<main>
-    {% block content %}{% endblock %}
-</main>
 
-<script src="https://unpkg.com/htmx.org@1.9.10"></script>
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-<script src="{% static 'js/main.js' %}"></script>
-{% block extra_js %}{% endblock %}
+    {# ===== LOADING OVERLAY ===== #}
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    {# ===== HEADER ===== #}
+    <header class="main-header" id="mainHeader">
+        <div class="header-container">
+            <a href="{% url 'home' %}" class="logo">
+                {% if theme and theme.get_logo %}
+                    <img src="{{ theme.get_logo }}" alt="{{ theme.site_name|default:'EducDim' }}">
+                    <span>{{ theme.site_name|default:'EducDim' }}</span>
+                {% elif theme and theme.logo %}
+                    <img src="{{ theme.logo.url }}" alt="{{ theme.site_name|default:'EducDim' }}">
+                    <span>{{ theme.site_name|default:'EducDim' }}</span>
+                {% else %}
+                    <span>EducDim</span>
+                {% endif %}
+            </a>
+
+            <button class="menu-toggle" id="menuToggle" type="button"
+                    aria-label="{% trans 'Ouvrir le menu' %}" aria-controls="mainNav" aria-expanded="false">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <nav id="mainNav" class="main-nav" aria-label="{% trans 'Navigation principale' %}">
+                <form class="nav-search" action="{% url 'courses:course_list' %}" method="get" role="search">
+                    <label class="sr-only" for="navSearch">{% trans "Rechercher un cours" %}</label>
+                    <input id="navSearch" name="search" type="search"
+                           placeholder="{% trans 'Rechercher un cours' %}"
+                           autocomplete="off">
+                    <button type="submit" aria-label="{% trans 'Lancer la recherche' %}">
+                        <i class="fas fa-search" aria-hidden="true"></i>
+                    </button>
+                </form>
+                <a href="{% url 'courses:course_list' %}" class="nav-link">
+                    <i class="fas fa-book"></i>
+                    <span>{% trans "Explorer" %}</span>
+                </a>
+
+                {% if user.is_authenticated %}
+                    <a href="{% url 'progress:dashboard' %}" class="nav-link">
+                        <i class="fas fa-chart-line"></i>
+                        <span>{% trans "Progression" %}</span>
+                    </a>
+                    <a href="{% url 'todo:todo_list' %}" class="nav-link">
+                        <i class="fas fa-list-check"></i>
+                        <span>{% trans "Mes tâches" %}</span>
+                    </a>
+
+                    <div class="nav-dropdown">
+                        <button type="button" class="nav-dropdown-btn" id="chatDropdownBtn"
+                                aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-comments"></i>
+                            <span>{% trans "Chat" %}</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="nav-dropdown-content" id="chatDropdownContent">
+                            <a href="{% url 'chat:liste_salons' %}">
+                                <i class="fas fa-comment-dots"></i> {% trans "Mes salons" %}
+                            </a>
+                            <a href="{% url 'chat:liste_etudiants' %}">
+                                <i class="fas fa-user-friends"></i> {% trans "Étudiants" %}
+                            </a>
+                        </div>
+                    </div>
+
+                    <a href="{% url 'notifications:list' %}" class="nav-link notification-link">
+                        <i class="fas fa-bell"></i>
+                        <span>{% trans "Notifications" %}</span>
+                        {% if unread_notifications > 0 %}
+                            <span class="badge badge-danger badge-pulse">{{ unread_notifications }}</span>
+                        {% endif %}
+                    </a>
+
+                    {% if user.is_staff %}
+                        <a href="{% url 'dashboard:admin_dashboard' %}" class="nav-link">
+                            <i class="fas fa-chart-pie"></i>
+                            <span>{% trans "Dashboard" %}</span>
+                        </a>
+                        <a href="{% url 'admin:index' %}" class="nav-link">
+                            <i class="fas fa-cog"></i>
+                            <span>{% trans "Admin" %}</span>
+                        </a>
+                    {% endif %}
+
+                    <div class="user-dropdown">
+                        <button type="button" class="dropbtn" id="userDropdownBtn"
+                                aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-user-circle"></i>
+                            <span>{{ user.first_name|default:user.email }}</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="dropdown-content" id="userDropdownContent">
+                            <a href="{% url 'accounts:profile' %}">
+                                <i class="fas fa-id-card"></i> {% trans "Profil" %}
+                            </a>
+                            <a href="{% url 'subscriptions:my_subscriptions' %}">
+                                <i class="fas fa-crown"></i> {% trans "Abonnements" %}
+                            </a>
+                            <a href="{% url 'enrollments:list' %}">
+                                <i class="fas fa-list-check"></i> {% trans "Inscriptions" %}
+                            </a>
+                            <a href="{% url 'todo:todo_list' %}">
+                                <i class="fas fa-tasks"></i> {% trans "Mes tâches" %}
+                            </a>
+                            <a href="{% url 'ranking:my_rank' %}">
+                                <i class="fas fa-trophy"></i> {% trans "Classement" %}
+                            </a>
+                            <a href="{% url 'badges:my_badges' %}">
+                                <i class="fas fa-medal"></i> {% trans "Badges" %}
+                            </a>
+                            <hr>
+                            <form method="post" action="{% url 'accounts:logout' %}" id="logoutForm">
+                                {% csrf_token %}
+                                <button type="submit" class="logout-btn">
+                                    <i class="fas fa-sign-out-alt"></i> {% trans "Déconnexion" %}
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                {% else %}
+                    <a href="{% url 'accounts:login' %}" class="nav-link">
+                        <i class="fas fa-sign-in-alt"></i>
+                        <span>{% trans "Connexion" %}</span>
+                    </a>
+                    <a href="{% url 'accounts:signup' %}" class="nav-link btn-nav-primary">
+                        <i class="fas fa-user-plus"></i>
+                        <span>{% trans "S'inscrire" %}</span>
+                    </a>
+                {% endif %}
+            </nav>
+
+            {# ===== THEME TOGGLE ===== #}
+            <button type="button" class="theme-toggle" id="themeToggle"
+                    aria-label="{% trans 'Basculer le thème clair/sombre' %}"
+                    title="{% trans 'Basculer le thème clair/sombre' %}" aria-pressed="false">
+                <i class="fas fa-moon" aria-hidden="true"></i>
+            </button>
+
+            {# ===== SWITCH LANG (MANYÈL) ===== #}
+            {% get_current_language as CURRENT_LANGUAGE %}
+            <div class="lang-switcher">
+                <form action="{% url 'set_language' %}" method="post">
+                    {% csrf_token %}
+                    <input name="next" type="hidden" value="{{ request.path }}">
+                    <select name="language" onchange="this.form.submit()">
+                        <option value="fr" {% if CURRENT_LANGUAGE == 'fr' %}selected{% endif %}>Français</option>
+                        <option value="ht" {% if CURRENT_LANGUAGE == 'ht' %}selected{% endif %}>Kreyòl</option>
+                    </select>
+                </form>
+            </div>
+        </div>
+    </header>
+
+    {# ===== BANNIERES HEADER ===== #}
+    {% if banners_header %}
+    <div class="banner-container banner-header">
+        {% for banner in banners_header %}
+                <a href="{{ banner.lien }}" class="banner" {% if banner.lien %}target="_blank" rel="noopener noreferrer"{% endif %}>
+                <img src="{{ banner.image.url }}" alt="{{ banner.titre }}" class="banner-image">
+            </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {# ===== EVENEMENT BANNER ===== #}
+    {% if theme and theme.evenement_actif %}
+    <div class="evenement-banner">
+        {% if theme.get_evenement_banner %}
+            <img src="{{ theme.get_evenement_banner }}" alt="{{ theme.evenement_nom }}" class="event-banner-image">
+        {% endif %}
+
+        <h2 class="evenement-glow">
+            {% if theme.get_evenement_logo %}
+                <img src="{{ theme.get_evenement_logo }}" alt="{{ theme.evenement_nom }}" class="event-logo">
+            {% endif %}
+            {{ theme.evenement_nom|default:"Évènement spécial" }}
+        </h2>
+
+        {% if theme.evenement_message %}
+        <p class="event-message">
+            {{ theme.evenement_message }}
+        </p>
+        {% endif %}
+
+        {% if theme.evenement_hashtag %}
+            <div class="hashtag">
+                #{{ theme.evenement_hashtag }}
+            </div>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    {# ===== BREADCRUMB ===== #}
+    {% if request.path != '/' and request.path != '/fr/' and request.path != '/ht/' %}
+        <nav class="breadcrumb">
+            <div>
+                <a href="{% url 'home' %}"><i class="fas fa-home"></i> {% trans "Accueil" %}</a>
+                {% for crumb in breadcrumbs %}
+                    <span class="separator"> &gt; </span>
+                    {% if crumb.url and not forloop.last %}
+                        <a href="{{ crumb.url }}">{{ crumb.name }}</a>
+                    {% else %}
+                        <span>{{ crumb.name }}</span>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </nav>
+    {% endif %}
+
+    {# ===== MAIN CONTENT WITH SIDEBAR ===== #}
+    <div class="main-with-sidebar">
+        {% if banners_sidebar %}
+        <aside class="sidebar">
+            <div class="banner-container banner-sidebar">
+                {% for banner in banners_sidebar %}
+                    <a href="{{ banner.lien }}" class="banner" {% if banner.lien %}target="_blank" rel="noopener noreferrer"{% endif %}>
+                        <img src="{{ banner.image.url }}" alt="{{ banner.titre }}" class="banner-image">
+                    </a>
+                {% endfor %}
+            </div>
+        </aside>
+        {% endif %}
+
+        <main class="main-content">
+            {% block messages %}
+                {% if messages %}
+                    <div class="messages-container">
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+                                <span>{{ message }}</span>
+                                <button type="button" class="close-alert" aria-label="Close">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endblock %}
+
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    {# ===== BANNIERES FOOTER ===== #}
+    {% if banners_footer %}
+    <div class="banner-container banner-footer">
+        {% for banner in banners_footer %}
+            <a href="{{ banner.lien }}" class="banner" {% if banner.lien %}target="_blank" rel="noopener noreferrer"{% endif %}>
+                <img src="{{ banner.image.url }}" alt="{{ banner.titre }}" class="banner-image">
+            </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <footer>
+        <div class="footer-container">
+            <nav>
+                <a href="{% url 'about' %}">
+                    <i class="fas fa-info-circle"></i> {% trans "À propos" %}
+                </a>
+                <a href="{% url 'contact' %}">
+                    <i class="fas fa-envelope"></i> {% trans "Contact" %}
+                </a>
+                <a href="{% url 'privacy' %}">
+                    <i class="fas fa-shield-alt"></i> {% trans "Confidentialité" %}
+                </a>
+                <a href="{% url 'conditions' %}">
+                    <i class="fas fa-file-contract"></i> {% trans "Conditions" %}
+                </a>
+                <a href="{% url 'faq' %}">
+                    <i class="fas fa-question-circle"></i> {% trans "FAQ" %}
+                </a>
+            </nav>
+            <p>
+                &copy; {% if theme %}{{ theme.site_name|default:'EducDim' }}{% else %}EducDim{% endif %} - 
+                {% if theme %}{{ theme.footer_text|default:_('Tous droits réservés') }}{% else %}{% trans "Tous droits réservés" %}{% endif %}
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+
+    {% block extra_js %}{% endblock %}
 </body>
 </html>
