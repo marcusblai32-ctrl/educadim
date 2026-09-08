@@ -2847,3 +2847,317 @@ html[data-theme="dark"] .lang-switcher select {
         transition-duration: 0.01ms !important;
     }
 }
+
+/* ============================================================
+   COURSE DETAIL - DARK MODE FIXES
+   Koreksyon pou tout tèks yo parèt byen nan dark mode
+   ============================================================ */
+
+/* === CARDS === */
+html[data-theme="dark"] .course-detail-container > .card {
+    background: rgba(26, 33, 58, 0.62);
+    border-color: rgba(255, 255, 255, 0.14);
+}
+
+/* === HEADER === */
+html[data-theme="dark"] .course-detail-header {
+    background:
+        radial-gradient(circle at top right, rgba(86, 36, 208, 0.15), transparent 35%),
+        radial-gradient(circle at bottom left, rgba(37, 99, 235, 0.1), transparent 30%);
+}
+
+/* === TITRE === */
+html[data-theme="dark"] .course-detail-title {
+    color: #e7ecfb;
+}
+
+/* === POSITION === */
+html[data-theme="dark"] .course-detail-position {
+    color: #9aa6c8;
+}
+
+html[data-theme="dark"] .course-detail-link {
+    color: #8aa0ff;
+}
+
+html[data-theme="dark"] .course-detail-link:hover {
+    color: #5b76f7;
+}
+
+/* === DESCRIPTION === */
+html[data-theme="dark"] .course-detail-description {
+    color: #e7ecfb;
+}
+
+html[data-theme="dark"] .course-detail-description p {
+    color: #e7ecfb;
+}
+
+/* === BADGES === */
+html[data-theme="dark"] .course-detail-badges .badge {
+    color: #e7ecfb;
+}
+
+html[data-theme="dark"] .course-detail-badges .badge-primary {
+    background: rgba(91, 118, 247, 0.25);
+    color: #8aa0ff;
+}
+
+html[data-theme="dark"] .course-detail-badges .badge-secondary {
+    background: rgba(255, 255, 255, 0.08);
+    color: #9aa6c8;
+}
+
+html[data-theme="dark"] .course-detail-badges .badge-success {
+    background: rgba(34, 197, 94, 0.2);
+    color: #6ee7a5;
+}
+
+html[data-theme="dark"] .course-detail-badges .badge-warning {
+    background: rgba(245, 158, 11, 0.2);
+    color: #fcd34d;
+}
+
+html[data-theme="dark"] .course-detail-badges .badge-danger {
+    background: rgba(244, 63, 94, 0.2);
+    color: #fda4b4;
+}
+
+/* === PREREQUISITES === */
+html[data-theme="dark"] .prerequisites-box {
+    background: rgba(86, 36, 208, 0.12);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+html[data-theme="dark"] .prerequisites-box h4 {
+    color: #e7ecfb;
+}
+
+html[data-theme="dark"] .prerequisites-list li {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+html[data-theme="dark"] .prereq-title {
+    color: #e7ecfb;
+}
+
+html[data-theme="dark"] .prereq-title-muted {
+    color: #9aa6c8;
+}
+
+html[data-theme="dark"] .prereq-missing {
+    color: #fda4b4;
+}
+
+html[data-theme="dark"] .prereq-success {
+    color: #6ee7a5;
+}
+
+html[data-theme="dark"] .prereq-link {
+    color: #8aa0ff;
+}
+
+html[data-theme="dark"] .prereq-link:hover {
+    color: #5b76f7;
+}
+
+html[data-theme="dark"] .prerequisites-completed {
+    background: rgba(34, 197, 94, 0.15);
+    color: #6ee7a5;
+}
+
+/* === SECTION TITLE === */
+html[data-theme="dark"] .section-card-title {
+    color: #e7ecfb;
+}
+
+html[data-theme="dark"] .section-card-title i {
+    color: #8aa0ff;
+}
+
+/* === UNITS === */
+html[data-theme="dark"] .unit-card {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+html[data-theme="dark"] .unit-card:hover {
+    border-color: rgba(86, 36, 208, 0.35);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+html[data-theme="dark"] .unit-card h3 a {
+    color: #e7ecfb;
+}
+
+html[data-theme="dark"] .unit-card h3 a:hover {
+    color: #8aa0ff;
+}
+
+html[data-theme="dark"] .unit-card p {
+    color: #9aa6c8;
+}
+
+html[data-theme="dark"] .unit-modules {
+    color: #9aa6c8;
+}
+
+html[data-theme="dark"] .unit-modules i {
+    color: #8aa0ff;
+}
+
+html[data-theme="dark"] .empty-units {
+    color: #9aa6c8;
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+html[data-theme="dark"] .empty-units i {
+    color: #9aa6c8;
+}
+
+/* === QUIZ === */
+html[data-theme="dark"] .quiz-card {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+html[data-theme="dark"] .quiz-card:hover {
+    border-color: rgba(86, 36, 208, 0.35);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.3);
+}
+
+html[data-theme="dark"] .quiz-card h3 a {
+    color: #e7ecfb;
+}
+
+html[data-theme="dark"] .quiz-card h3 a:hover {
+    color: #8aa0ff;
+}
+
+html[data-theme="dark"] .quiz-card p {
+    color: #9aa6c8;
+}
+
+html[data-theme="dark"] .quiz-percent {
+    color: #9aa6c8;
+}
+
+html[data-theme="dark"] .quiz-percent i {
+    color: #8aa0ff;
+}
+
+html[data-theme="dark"] .quiz-card .badge-success {
+    background: rgba(34, 197, 94, 0.2);
+    color: #6ee7a5;
+}
+
+html[data-theme="dark"] .quiz-card .badge-danger {
+    background: rgba(244, 63, 94, 0.2);
+    color: #fda4b4;
+}
+
+/* === COURSE ACTIONS BOTTOM === */
+html[data-theme="dark"] .course-actions-bottom {
+    background: rgba(86, 36, 208, 0.08);
+    border-color: rgba(86, 36, 208, 0.3);
+}
+
+html[data-theme="dark"] .course-actions-bottom .btn-secondary:disabled {
+    background: rgba(255, 255, 255, 0.08);
+    color: #9aa6c8;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+html[data-theme="dark"] .course-actions-bottom .btn-success {
+    background: #5624d0;
+    color: #fff;
+}
+
+html[data-theme="dark"] .course-actions-bottom .btn-success:hover {
+    background: #4520a8;
+}
+
+html[data-theme="dark"] .course-actions-bottom .btn-primary {
+    background: #5624d0;
+    color: #fff;
+}
+
+html[data-theme="dark"] .course-actions-bottom .btn-primary:hover {
+    background: #4520a8;
+}
+
+/* === COURSE ACTIONS TOP (Admin) === */
+html[data-theme="dark"] .course-actions-top {
+    border-top-color: rgba(255, 255, 255, 0.08);
+}
+
+html[data-theme="dark"] .course-actions-top .btn-secondary {
+    background: rgba(255, 255, 255, 0.08);
+    color: #e7ecfb;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+html[data-theme="dark"] .course-actions-top .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+html[data-theme="dark"] .course-actions-top .btn-danger {
+    background: rgba(244, 63, 94, 0.2);
+    color: #fda4b4;
+}
+
+html[data-theme="dark"] .course-actions-top .btn-danger:hover {
+    background: rgba(244, 63, 94, 0.35);
+}
+
+/* === COURSE NAVIGATION === */
+html[data-theme="dark"] .course-navigation .btn-outline {
+    background: transparent;
+    color: #e7ecfb;
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+html[data-theme="dark"] .course-navigation .btn-outline:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #8aa0ff;
+    border-color: rgba(86, 36, 208, 0.3);
+}
+
+/* === RESPONSIVE DARK MODE FIXES === */
+@media (max-width: 768px) {
+    html[data-theme="dark"] .main-nav {
+        background: rgba(15, 20, 40, 0.95) !important;
+        border-color: rgba(255, 255, 255, 0.14) !important;
+    }
+
+    html[data-theme="dark"] .main-nav .nav-link,
+    html[data-theme="dark"] .main-nav .nav-dropdown-btn,
+    html[data-theme="dark"] .main-nav .dropbtn {
+        color: #e7ecfb;
+    }
+
+    html[data-theme="dark"] .main-nav .nav-link:hover,
+    html[data-theme="dark"] .main-nav .nav-dropdown-btn:hover,
+    html[data-theme="dark"] .main-nav .dropbtn:hover {
+        background: rgba(91, 118, 247, 0.15);
+        color: #8aa0ff;
+    }
+
+    html[data-theme="dark"] .nav-dropdown-content,
+    html[data-theme="dark"] .dropdown-content {
+        background: rgba(15, 20, 40, 0.95) !important;
+    }
+
+    html[data-theme="dark"] .nav-dropdown-content a,
+    html[data-theme="dark"] .dropdown-content a,
+    html[data-theme="dark"] .dropdown-content button {
+        color: #e7ecfb;
+    }
+
+    html[data-theme="dark"] .nav-dropdown-content a:hover,
+    html[data-theme="dark"] .dropdown-content a:hover,
+    html[data-theme="dark"] .dropdown-content button:hover {
+        background: rgba(91, 118, 247, 0.15);
+        color: #8aa0ff;
+    }
+}
