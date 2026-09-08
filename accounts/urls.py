@@ -1,62 +1,42 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth import login, logout
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from django.utils import timezone
-from django.utils.translation import gettext as _
-from .forms import CustomUserCreationForm
-from .models import CustomUser
-from django.contrib.auth import authenticate
+from django.urls import path
+from django.contrib.auth import views as auth_views
+from . import views
 
+app_name = 'accounts'
 
-def signup_view(request):
-    if request.user.is_authenticated:
-        return redirect('accounts:profile')
-    if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            messages.success(request, _("Compte cree avec succes ! Votre ID est : ") + user.user_id)
-            return redirect('accounts:login')
-    else:
-        form = CustomUserCreationForm()
-    return render(request, 'accounts/signup.html', {'form': form})
+urlpatterns = [
+    path('inscription/', views.signup_view, name='signup'),
+    path('connexion/', views.login_view, name='login'),
+    path('deconnexion/', views.logout_view, name='logout'),
+    path('profil/', views.profile_view, name='profile'),
+    path('supprimer/', views.delete_account, name='delete_account'),
 
-def login_view(request):
-    if request.user.is_authenticated:
-        return redirect('accounts:profile')
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            user.update_activity()
-            login(request, user)
-            return redirect('accounts:profile')
-        else:
-            messages.error(request, _("Email/ID ou mot de passe incorrect."))
-    return render(request, 'accounts/login.html')
+    # Password Reset - AVEC success_url
+    path('mot-de-passe-oublie/',
+         auth_views.PasswordResetView.as_view(
+             template_name='accounts/password_reset.html',
+             email_template_name='accounts/password_reset_email.html',
+             subject_template_name='accounts/password_reset_subject.txt',
+             success_url='done/',  # <-- AJOUTE SA
+         ),
+         name='password_reset'),
 
-def logout_view(request):
-    logout(request)
-    # Koreksyon: itilize 'accounts:login' olye de 'login'
-    return redirect('accounts:login')
+    path('mot-de-passe-oublie/done/',  # <-- AJOUTE SLASH LA
+         auth_views.PasswordResetDoneView.as_view(
+             template_name='accounts/password_reset_done.html'
+         ),
+         name='password_reset_done'),
 
-@login_required
-def profile_view(request):
-    request.user.update_activity()
-    return render(request, 'accounts/profile.html', {'user': request.user})
+    path('reinitialiser/<uidb64>/<token>/',
+         auth_views.PasswordResetConfirmView.as_view(
+             template_name='accounts/password_reset_confirm.html',
+             success_url='complete/',  # <-- AJOUTE SA
+         ),
+         name='password_reset_confirm'),
 
-@login_required
-def delete_account(request):
-    if request.method == 'POST':
-        password = request.POST.get('password')
-        if request.user.check_password(password):
-            request.user.delete()
-            logout(request)
-            messages.success(request, "Votre compte a été supprimé avec succès.")
-            return redirect('home')
-        else:
-            messages.error(request, "Mot de passe incorrect.")
-            return redirect('accounts:profile')
-    return render(request, 'accounts/delete_account.html')
+    path('reinitialiser/complete/',  # <-- AJOUTE SLASH LA
+         auth_views.PasswordResetCompleteView.as_view(
+             template_name='accounts/password_reset_complete.html'
+         ),
+         name='password_reset_complete'),
+]
