@@ -1,176 +1,2866 @@
 # Haitian Creole translations for EducDim
 msgid ""
 msgstr ""
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-08 00:36-0400\n"
 "Language: ht\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-msgid "Connexion"
-msgstr "Koneksyon"
+#: accounts/validators.py:8
+msgid "Le mot de passe doit contenir au moins 8 caractères."
+msgstr ""
 
-msgid "Inscription"
-msgstr "Enskripsyon"
+#: accounts/validators.py:10
+msgid "Le mot de passe doit contenir au moins une majuscule."
+msgstr ""
 
-msgid "Profil"
-msgstr "Pwofil"
+#: accounts/validators.py:12
+msgid "Le mot de passe doit contenir au moins une minuscule."
+msgstr ""
 
-msgid "Deconnexion"
-msgstr "Dekoneksyon"
+#: accounts/validators.py:14
+msgid "Le mot de passe doit contenir au moins un chiffre."
+msgstr ""
 
+#: accounts/validators.py:16
+msgid "Le mot de passe doit contenir au moins un caractère spécial."
+msgstr ""
+
+#: accounts/validators.py:19
+msgid ""
+"Votre mot de passe doit contenir au moins 8 caractères, une majuscule, une "
+"minuscule, un chiffre et un caractère spécial."
+msgstr ""
+
+#: accounts/views.py:19
+msgid "Compte cree avec succes ! Votre ID est : "
+msgstr ""
+
+#: accounts/views.py:37 templates/accounts/login.html:53
+msgid "Email/ID ou mot de passe incorrect."
+msgstr ""
+
+#: attendance/views.py:29
+msgid "Une justification existe déjà."
+msgstr ""
+
+#: attendance/views.py:35
+msgid "Justification soumise avec succès."
+msgstr ""
+
+#: attendance/views.py:47
+msgid "Justification révisée."
+msgstr ""
+
+#: chat/views.py:23
+msgid "Vous n'avez pas acces a ce salon."
+msgstr ""
+
+#: chat/views.py:44
+msgid "Message supprime."
+msgstr ""
+
+#: chat/views.py:46
+msgid "Vous n'etes pas autorise a supprimer ce message."
+msgstr ""
+
+#: chat/views.py:150
+msgid "Vous devez partager un cours pour creer un chat prive."
+msgstr ""
+
+#: chat/views.py:169
+msgid "Salon prive cree avec {}."
+msgstr ""
+
+#: chat/views.py:176
+msgid "Vous n'etes pas inscrit a ce cours."
+msgstr ""
+
+#: chat/views.py:193
+msgid "Salon de groupe cree."
+msgstr ""
+
+#: chat/views.py:199
+msgid "Seuls les administrateurs peuvent creer un salon de feedback."
+msgstr ""
+
+#: chat/views.py:212
+msgid "Salon de feedback cree."
+msgstr ""
+
+#: enrollments/theme_manager/context_processors.py:31
+#: templates/admin/dashboard.html:341
+#: templates/attendance/session_detail.html:9
+#: templates/attendance/student_list.html:15
+#: templates/badges/badge_detail.html:13
+#: templates/courses/learning_path_detail.html:45
+#: templates/enrollments/admin_pending.html:19 templates/home.html:44
+#: templates/progress/dashboard.html:34 templates/quiz/detail.html:13
+#: templates/quiz/list.html:24 templates/quiz/quiz_detail.html:13
+#: templates/quiz/quiz_list.html:24 theme_manager/context_processors.py:61
 msgid "Cours"
 msgstr "Kou"
 
-msgid "Quiz"
-msgstr "Kiz"
+#: enrollments/theme_manager/context_processors.py:32 templates/base.html:170
+#: theme_manager/context_processors.py:62
+#, fuzzy
+#| msgid "Inscription"
+msgid "Inscriptions"
+msgstr "Enskripsyon"
 
-msgid "Dashboard"
-msgstr "Tablo"
-
-msgid "Notifications"
-msgstr "Notifikasyon"
-
-msgid "Accueil"
-msgstr "Akèy"
-
-msgid "Abonnements"
-msgstr "Abònman"
-
+#: enrollments/theme_manager/context_processors.py:33 templates/base.html:112
+#: templates/progress/course_progress.html:4
+#: theme_manager/context_processors.py:63
 msgid "Progression"
 msgstr "Pwogresyon"
 
-msgid "Explorer les cours"
-msgstr "Eksplore kou yo"
+#: enrollments/theme_manager/context_processors.py:34
+#: templates/courses/lesson_detail.html:453
+#: templates/courses/module_detail.html:64
+#: templates/quiz/correction/corriger_tentative.html:7
+#: templates/quiz/correction/tentative_list.html:13 templates/quiz/list.html:8
+#: templates/quiz/quiz_list.html:8 templates/quiz/take_quiz.html:4
+#: theme_manager/context_processors.py:64
+msgid "Quiz"
+msgstr "Kiz"
 
-msgid "Commencer le quiz"
-msgstr "Kòmanse kiz la"
+#: enrollments/theme_manager/context_processors.py:35
+#: theme_manager/context_processors.py:65
+msgid "Présences"
+msgstr ""
 
-msgid "Voir details"
-msgstr "Gade detay"
+#: enrollments/theme_manager/context_processors.py:36 templates/base.html:179
+#: templates/theme_manager/theme_preview.html:29
+#: theme_manager/context_processors.py:66
+msgid "Badges"
+msgstr ""
 
-msgid "Sauvegarder"
-msgstr "Sove"
-
-msgid "Annuler"
-msgstr "Anile"
-
-msgid "Supprimer"
-msgstr "Efase"
-
-msgid "Editer"
-msgstr "Edite"
-
-msgid "Oui"
-msgstr "Wi"
-
-msgid "Non"
-msgstr "Non"
-
-msgid "Email"
-msgstr "Imèl"
-
-msgid "Mot de passe"
-msgstr "Modpas"
-
-msgid "Prenom"
-msgstr "Pwenom"
-
-msgid "Nom"
-msgstr "Non"
-
-msgid "Categorie"
-msgstr "Kategori"
-
-msgid "Niveau"
-msgstr "Nivo"
-
-msgid "Prix"
-msgstr "Pri"
-
-msgid "Gratuit"
-msgstr "Gratis"
-
-msgid "Reussi"
-msgstr "Siksè"
-
-msgid "A faire"
-msgstr "Pou fè"
-
-msgid "Utilisateurs"
-msgstr "Itilizatè"
-
-msgid "Revenu total"
-msgstr "Revni total"
-
-msgid "Admin"
-msgstr "Adminystratè"
-
-msgid "Ajouter"
-msgstr "Ajoute"
-
-msgid "Modifier"
-msgstr "Modifye"
-
-msgid "Chercher"
-msgstr "Chèche"
-
-msgid "Filtrer"
-msgstr "Filtre"
-
-msgid "Reinitialiser"
-msgstr "Reinisyalize"
-
-msgid "Telecharger"
-msgstr "Telechaje"
-
-msgid "Envoyer"
-msgstr "Voye"
-
-msgid "Repondre"
-msgstr "Reponn"
-
-msgid "Confirmer"
-msgstr "Konfime"
-
-msgid "Erreur"
-msgstr "Erè"
-
-msgid "Succes"
-msgstr "Siksè"
-
-msgid "Attention"
-msgstr "Atansyon"
-
-msgid "Information"
-msgstr "Enfòmasyon"
-
-msgid "Chargement..."
+#: enrollments/theme_manager/context_processors.py:37 templates/base.html:176
+#: templates/ranking/leaderboard.html:4 theme_manager/context_processors.py:67
+#, fuzzy
+#| msgid "Chargement..."
+msgid "Classement"
 msgstr "Chajman..."
 
-msgid "Aucune donnee"
-msgstr "Pa gen done"
+#: enrollments/theme_manager/context_processors.py:38 templates/base.html:123
+#: templates/chat/etudiants_list.html:49 theme_manager/context_processors.py:68
+msgid "Chat"
+msgstr ""
 
-msgid "Etes-vous sur ?"
-msgstr "Èske ou sèten?"
+#: enrollments/theme_manager/context_processors.py:39 templates/base.html:138
+#: templates/notifications/list.html:4 templates/notifications/list.html:9
+#: theme_manager/context_processors.py:69
+msgid "Notifications"
+msgstr "Notifikasyon"
 
-msgid "Cette action ne peut pas etre annulee."
-msgstr "Aksyon sa a pa ka anile."
-
-msgid "A propos"
-msgstr "Sou"
-
+#: enrollments/theme_manager/context_processors.py:40 templates/base.html:333
+#: templates/maintenance.html:27 theme_manager/context_processors.py:70
 msgid "Contact"
 msgstr "Kontak"
 
-msgid "Confidentialite"
-msgstr "Konfidansyalite"
+#: enrollments/theme_manager/context_processors.py:41 templates/base.html:330
+#: templates/pages/about.html:4 templates/pages/about.html:61
+#: templates/pages/about.html:63 theme_manager/context_processors.py:71
+#, fuzzy
+#| msgid "A propos"
+msgid "À propos"
+msgstr "Sou"
 
+#: enrollments/theme_manager/context_processors.py:42 templates/base.html:339
+#: theme_manager/context_processors.py:72
 msgid "Conditions"
 msgstr "Kondisyon"
 
+#: enrollments/theme_manager/context_processors.py:43 templates/base.html:336
+#: templates/pages/privacy.html:4 theme_manager/context_processors.py:73
+#, fuzzy
+#| msgid "Confidentialite"
+msgid "Confidentialité"
+msgstr "Konfidansyalite"
+
+#: enrollments/theme_manager/context_processors.py:44 templates/base.html:342
+#: templates/pages/faq.html:4 theme_manager/context_processors.py:74
 msgid "FAQ"
 msgstr "FAQ"
 
-msgid "Tous droits reserves"
+#: enrollments/theme_manager/context_processors.py:45
+#: theme_manager/context_processors.py:75
+msgid "Tableau de bord"
+msgstr ""
+
+#: enrollments/theme_manager/context_processors.py:46
+#: theme_manager/context_processors.py:76
+msgid "Todo"
+msgstr ""
+
+#: enrollments/theme_manager/context_processors.py:47
+#: theme_manager/context_processors.py:77 theme_manager/models.py:187
+msgid "Thème"
+msgstr ""
+
+#: enrollments/theme_manager/context_processors.py:48
+#: theme_manager/context_processors.py:78
+msgid "Annonces"
+msgstr ""
+
+#: enrollments/theme_manager/context_processors.py:50
+#: templates/accounts/login.html:4 templates/accounts/login.html:14
+#: templates/base.html:194 theme_manager/context_processors.py:79
+msgid "Connexion"
+msgstr "Koneksyon"
+
+#: enrollments/theme_manager/context_processors.py:51
+#: templates/accounts/signup.html:4 templates/enrollments/enroll_form.html:4
+#: templates/enrollments/enroll_form.html:8
+#: theme_manager/context_processors.py:80
+msgid "Inscription"
+msgstr "Enskripsyon"
+
+#: enrollments/theme_manager/context_processors.py:52 templates/base.html:164
+#: theme_manager/context_processors.py:81
+msgid "Profil"
+msgstr "Pwofil"
+
+#: enrollments/theme_manager/context_processors.py:53
+#: templates/courses/course_confirm_delete.html:4
+#: templates/courses/course_detail.html:726
+#: templates/notifications/list.html:38 templates/todo/delete_confirm.html:15
+#: templates/todo/todo_list.html:96 theme_manager/context_processors.py:82
+msgid "Supprimer"
+msgstr "Efase"
+
+#: enrollments/theme_manager/context_processors.py:54
+#: templates/accounts/password_reset.html:4
+#: templates/accounts/password_reset.html:13
+#: theme_manager/context_processors.py:83
+#, fuzzy
+#| msgid "Mot de passe"
+msgid "Mot de passe oublié"
+msgstr "Modpas"
+
+#: enrollments/theme_manager/context_processors.py:55
+#: templates/courses/course_list.html:513 templates/todo/todo_list.html:42
+#: theme_manager/context_processors.py:84
+#, fuzzy
+#| msgid "Reinitialiser"
+msgid "Réinitialiser"
+msgstr "Reinisyalize"
+
+#: enrollments/theme_manager/context_processors.py:56
+#: templates/courses/course_detail.html:723
+#: templates/courses/course_form.html:10 templates/todo/todo_list.html:93
+#: theme_manager/context_processors.py:85
+msgid "Modifier"
+msgstr "Modifye"
+
+#: enrollments/theme_manager/context_processors.py:57
+#: theme_manager/context_processors.py:86
+msgid "Ajouter"
+msgstr "Ajoute"
+
+#: enrollments/theme_manager/context_processors.py:58
+#: theme_manager/context_processors.py:87
+msgid "Liste"
+msgstr ""
+
+#: enrollments/theme_manager/context_processors.py:59
+#: templates/subscriptions/detail.html:4 theme_manager/context_processors.py:88
+msgid "Détail"
+msgstr ""
+
+#: enrollments/views.py:25
+msgid "Vous n'avez pas accès à cette inscription."
+msgstr ""
+
+#: enrollments/views.py:40
+msgid "Vous êtes déjà inscrit à ce cours."
+msgstr ""
+
+#: enrollments/views.py:62
+msgid "Inscription réussie via votre abonnement !"
+msgstr ""
+
+#: enrollments/views.py:91
+msgid "Votre abonnement vous donne accès à ce cours !"
+msgstr ""
+
+#: enrollments/views.py:103
+msgid "Inscription réussie au cours '{}'."
+msgstr ""
+
+#: enrollments/views.py:129 subscriptions/views.py:112
+msgid ""
+"Votre demande a été envoyée. Un administrateur vérifiera votre paiement."
+msgstr ""
+
+#: notifications/views.py:50
+#, fuzzy
+#| msgid "Notifications"
+msgid "Notification supprimée."
+msgstr "Notifikasyon"
+
+#: notifications/views.py:56
+msgid "Toutes les notifications ont été supprimées."
+msgstr ""
+
+#: progress/views.py:124
+msgid "Cette leçon est déjà terminée."
+msgstr ""
+
+#: progress/views.py:144
+msgid "Vous devez réussir tous les quiz de cette leçon avant de la terminer."
+msgstr ""
+
+#: progress/views.py:160
+msgid "Félicitations! Leçon terminée avec succès."
+msgstr ""
+
+#: quiz/views.py:38 quiz/views.py:62
+msgid "Ce quiz a déjà été soumis."
+msgstr ""
+
+#: quiz/views.py:104
+msgid "Quiz soumis avec succès!"
+msgstr ""
+
+#: quiz/views.py:113
+msgid "Vous n'avez pas encore soumis ce quiz."
+msgstr ""
+
+#: quiz/views.py:154
+msgid "Koreksyon anrejistre epi nòt rekalkile."
+msgstr ""
+
+#: subscriptions/admin.py:45
+#, fuzzy
+#| msgid "Cours"
+msgid "Nb cours"
+msgstr "Kou"
+
+#: subscriptions/admin.py:132
+msgid "Approuver le paiement"
+msgstr ""
+
+#: subscriptions/admin.py:156
+msgid "Rejeter le paiement"
+msgstr ""
+
+#: subscriptions/admin.py:175
+msgid "Réactiver les accès"
+msgstr ""
+
+#: subscriptions/admin.py:191
+msgid "Actif"
+msgstr ""
+
+#: subscriptions/forms.py:30
+msgid "L'ID de transaction est requis pour MonCash."
+msgstr ""
+
+#: subscriptions/forms.py:32
+msgid "Le numéro de téléphone est requis pour MonCash."
+msgstr ""
+
+#: subscriptions/forms.py:35
+msgid "La photo de paiement est requise pour NatCash."
+msgstr ""
+
+#: subscriptions/forms.py:68 templates/subscriptions/select_courses.html:110
+msgid "Veuillez sélectionner au moins un cours."
+msgstr ""
+
+#: subscriptions/views.py:29
+msgid "Ce plan d'abonnement n'existe pas ou n'est plus disponible."
+msgstr ""
+
+#: subscriptions/views.py:38
+msgid "Vous avez déjà une demande pour ce plan."
+msgstr ""
+
+#: subscriptions/views.py:60
+msgid "Abonnement gratuit activé ! Veuillez choisir vos cours."
+msgstr ""
+
+#: subscriptions/views.py:71
+msgid "Abonnement gratuit activé ! Tous les cours sont accessibles."
+msgstr ""
+
+#: subscriptions/views.py:96
+msgid "Abonnement activé ! Veuillez choisir vos cours ({} maximum)."
+msgstr ""
+
+#: subscriptions/views.py:107
+msgid "Abonnement activé ! Tous les cours sont accessibles."
+msgstr ""
+
+#: subscriptions/views.py:160
+msgid "Veuillez choisir vos cours pour activer votre abonnement."
+msgstr ""
+
+#: subscriptions/views.py:207
+msgid "Ce plan donne accès à tous les cours automatiquement."
+msgstr ""
+
+#: subscriptions/views.py:213
+msgid "Vous avez déjà sélectionné tous vos cours."
+msgstr ""
+
+#: subscriptions/views.py:222
+msgid "Vous ne pouvez sélectionner que {} cours maximum."
+msgstr ""
+
+#: subscriptions/views.py:242
+msgid "Félicitations ! Tous vos cours ont été activés."
+msgstr ""
+
+#: subscriptions/views.py:247
+msgid "{} cours sélectionnés. Il vous reste {} place(s)."
+msgstr ""
+
+#: subscriptions/views.py:254
+msgid "Erreur lors de la sélection des cours: {}"
+msgstr ""
+
+#: subscriptions/views.py:278
+msgid "Cet abonnement est déjà actif."
+msgstr ""
+
+#: subscriptions/views.py:294
+msgid "Abonnement activé. L'utilisateur doit maintenant choisir ses cours."
+msgstr ""
+
+#: subscriptions/views.py:306
+msgid "Abonnement activé et accès créés."
+msgstr ""
+
+#: templates/accounts/delete_account.html:4
+#: templates/accounts/delete_account.html:11 templates/accounts/profile.html:43
+#, fuzzy
+#| msgid "Supprimer"
+msgid "Supprimer mon compte"
+msgstr "Efase"
+
+#: templates/accounts/delete_account.html:14
+msgid "Cette action est irréversible. Toutes vos données seront supprimées."
+msgstr ""
+
+#: templates/accounts/delete_account.html:20
+msgid "En supprimant votre compte, vous perdrez :"
+msgstr ""
+
+#: templates/accounts/delete_account.html:22
+msgid "Tous vos cours et inscriptions"
+msgstr ""
+
+#: templates/accounts/delete_account.html:23
+#: templates/courses/learning_path_detail.html:67
+#, fuzzy
+#| msgid "Progression"
+msgid "Votre progression"
+msgstr "Pwogresyon"
+
+#: templates/accounts/delete_account.html:24
+msgid "Vos badges et points"
+msgstr ""
+
+#: templates/accounts/delete_account.html:25
+#, fuzzy
+#| msgid "Tous droits reserves"
+msgid "Tous vos messages"
 msgstr "Tout dwa rezève"
 
-msgid "Basculer le theme clair/sombre"
+#: templates/accounts/delete_account.html:32
+msgid "Entrez votre mot de passe pour confirmer"
+msgstr ""
+
+#: templates/accounts/delete_account.html:35
+msgid "Êtes-vous sûr de vouloir supprimer votre compte ?"
+msgstr ""
+
+#: templates/accounts/delete_account.html:36
+msgid "Supprimer définitivement"
+msgstr ""
+
+#: templates/accounts/delete_account.html:39
+#: templates/attendance/justification_form.html:16
+#: templates/attendance/review_justification.html:25
+#: templates/courses/course_confirm_delete.html:13
+#: templates/courses/course_form.html:101
+#: templates/enrollments/enroll_form.html:113
+#: templates/todo/create_todo.html:30 templates/todo/delete_confirm.html:14
+msgid "Annuler"
+msgstr "Anile"
+
+#: templates/accounts/login.html:15
+msgid "Connectez-vous pour acceder a vos cours"
+msgstr ""
+
+#: templates/accounts/login.html:24
+msgid "Email ou ID utilisateur"
+msgstr ""
+
+#: templates/accounts/login.html:30 templates/accounts/signup.html:53
+msgid "Mot de passe"
+msgstr "Modpas"
+
+#: templates/accounts/login.html:32
+#, fuzzy
+#| msgid "Mot de passe"
+msgid "Votre mot de passe"
+msgstr "Modpas"
+
+#: templates/accounts/login.html:43
+msgid "Se souvenir de moi"
+msgstr ""
+
+#: templates/accounts/login.html:46
+#, fuzzy
+#| msgid "Mot de passe"
+msgid "Mot de passe oublie ?"
+msgstr "Modpas"
+
+#: templates/accounts/login.html:59 templates/accounts/password_reset.html:35
+#: templates/accounts/password_reset_complete.html:25
+#: templates/accounts/signup.html:86 templates/courses/course_detail.html:846
+msgid "Se connecter"
+msgstr ""
+
+#: templates/accounts/login.html:65
+msgid "Pas encore de compte ?"
+msgstr ""
+
+#: templates/accounts/login.html:65 templates/accounts/signup.html:14
+msgid "Creer un compte"
+msgstr ""
+
+#: templates/accounts/password_reset.html:14
+msgid "Entrez votre adresse email pour recevoir un lien de réinitialisation"
+msgstr ""
+
+#: templates/accounts/password_reset.html:21 templates/accounts/signup.html:25
+#: templates/pages/contact.html:41
+msgid "Email"
+msgstr "Imèl"
+
+#: templates/accounts/password_reset.html:23
+msgid "Votre adresse email"
+msgstr ""
+
+#: templates/accounts/password_reset.html:30
+#, fuzzy
+#| msgid "Envoyer"
+msgid "Envoyer le lien"
+msgstr "Voye"
+
+#: templates/accounts/password_reset.html:34
+msgid "Vous vous souvenez de votre mot de passe ?"
+msgstr ""
+
+#: templates/accounts/password_reset_complete.html:4
+#, fuzzy
+#| msgid "Mot de passe"
+msgid "Mot de passe réinitialisé"
+msgstr "Modpas"
+
+#: templates/accounts/password_reset_complete.html:13
+msgid "Mot de passe réinitialisé !"
+msgstr ""
+
+#: templates/accounts/password_reset_complete.html:14
+msgid "Votre mot de passe a été modifié avec succès."
+msgstr ""
+
+#: templates/accounts/password_reset_complete.html:20
+msgid "Vous pouvez maintenant vous connecter avec votre nouveau mot de passe."
+msgstr ""
+
+#: templates/accounts/password_reset_confirm.html:4
+#: templates/accounts/password_reset_confirm.html:13
+#: templates/accounts/password_reset_confirm.html:22
+#, fuzzy
+#| msgid "Mot de passe"
+msgid "Nouveau mot de passe"
+msgstr "Modpas"
+
+#: templates/accounts/password_reset_confirm.html:14
+msgid "Entrez votre nouveau mot de passe"
+msgstr ""
+
+#: templates/accounts/password_reset_confirm.html:24
+msgid "Minimum 8 caractères"
+msgstr ""
+
+#: templates/accounts/password_reset_confirm.html:28
+msgid "Votre mot de passe doit contenir au moins 8 caractères."
+msgstr ""
+
+#: templates/accounts/password_reset_confirm.html:32
+#: templates/accounts/signup.html:68
+msgid "Confirmer le mot de passe"
+msgstr ""
+
+#: templates/accounts/password_reset_confirm.html:34
+msgid "Confirmez votre mot de passe"
+msgstr ""
+
+#: templates/accounts/password_reset_confirm.html:41
+#: templates/accounts/password_reset_email.html:76
+msgid "Réinitialiser mon mot de passe"
+msgstr ""
+
+#: templates/accounts/password_reset_confirm.html:48
+msgid "Le lien de réinitialisation est invalide ou a expiré."
+msgstr ""
+
+#: templates/accounts/password_reset_confirm.html:53
+msgid "Demander un nouveau lien"
+msgstr ""
+
+#: templates/accounts/password_reset_done.html:4
+msgid "Email envoyé"
+msgstr ""
+
+#: templates/accounts/password_reset_done.html:13
+msgid "Email envoyé !"
+msgstr ""
+
+#: templates/accounts/password_reset_done.html:14
+msgid "Un lien de réinitialisation vous a été envoyé par email."
+msgstr ""
+
+#: templates/accounts/password_reset_done.html:20
+msgid ""
+"Veuillez vérifier votre boîte de réception et suivre les instructions pour "
+"réinitialiser votre mot de passe."
+msgstr ""
+
+#: templates/accounts/password_reset_done.html:27
+msgid ""
+"Si vous ne recevez pas l'email dans quelques minutes, vérifiez vos spams ou "
+"réessayez."
+msgstr ""
+
+#: templates/accounts/password_reset_done.html:33
+#, fuzzy
+#| msgid "Deconnexion"
+msgid "Retour à la connexion"
+msgstr "Dekoneksyon"
+
+#: templates/accounts/password_reset_email.html:8
+#: templates/accounts/password_reset_subject.txt:1
+msgid "Réinitialisation de votre mot de passe"
+msgstr ""
+
+#: templates/accounts/password_reset_email.html:69
+msgid "Bonjour"
+msgstr ""
+
+#: templates/accounts/password_reset_email.html:71
+msgid "Nous avons reçu une demande de réinitialisation de votre mot de passe."
+msgstr ""
+
+#: templates/accounts/password_reset_email.html:73
+msgid ""
+"Cliquez sur le bouton ci-dessous pour réinitialiser votre mot de passe :"
+msgstr ""
+
+#: templates/accounts/password_reset_email.html:80
+msgid "Ce lien expire dans 24 heures."
+msgstr ""
+
+#: templates/accounts/password_reset_email.html:83
+msgid ""
+"Si vous n'avez pas demandé cette réinitialisation, ignorez simplement cet "
+"email."
+msgstr ""
+
+#: templates/accounts/password_reset_email.html:85
+msgid "L'équipe"
+msgstr ""
+
+#: templates/accounts/password_reset_email.html:88 templates/base.html:347
+#, fuzzy
+#| msgid "Tous droits reserves"
+msgid "Tous droits réservés"
+msgstr "Tout dwa rezève"
+
+#: templates/accounts/profile.html:4
+#, fuzzy
+#| msgid "Profil"
+msgid "Mon profil"
+msgstr "Pwofil"
+
+#: templates/accounts/profile.html:20 templates/accounts/signup.html:46
+msgid "Annee de naissance"
+msgstr ""
+
+#: templates/accounts/profile.html:21
+msgid "Membre depuis"
+msgstr ""
+
+#: templates/accounts/profile.html:29 templates/progress/dashboard.html:4
+#: templates/progress/dashboard.html:13
+#, fuzzy
+#| msgid "Progression"
+msgid "Ma progression"
+msgstr "Pwogresyon"
+
+#: templates/accounts/profile.html:30
+#: templates/enrollments/enrollment_list.html:4
+#: templates/enrollments/enrollment_list.html:9
+#, fuzzy
+#| msgid "Inscription"
+msgid "Mes inscriptions"
+msgstr "Enskripsyon"
+
+#: templates/accounts/profile.html:31 templates/ranking/my_rank.html:4
+#: templates/ranking/my_rank.html:8
+msgid "Mon classement"
+msgstr ""
+
+#: templates/accounts/profile.html:32 templates/badges/my_badges.html:4
+#: templates/badges/my_badges.html:8
+msgid "Mes badges"
+msgstr ""
+
+#: templates/accounts/profile.html:42
+msgid ""
+"Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est "
+"irréversible."
+msgstr ""
+
+#: templates/accounts/signup.html:15
+msgid "Rejoignez notre communaute d'apprenants"
+msgstr ""
+
+#: templates/accounts/signup.html:33
+msgid "Prenom"
+msgstr "Pwenom"
+
+#: templates/accounts/signup.html:38
+msgid "Nom"
+msgstr "Non"
+
+#: templates/accounts/signup.html:55
+msgid "Min 8 caracteres..."
+msgstr ""
+
+#: templates/accounts/signup.html:61
+msgid ""
+"Minimum 8 caracteres, une majuscule, une minuscule, un chiffre et un "
+"caractere special"
+msgstr ""
+
+#: templates/accounts/signup.html:70
+#, fuzzy
+#| msgid "Mot de passe"
+msgid "Repetez le mot de passe"
+msgstr "Modpas"
+
+#: templates/accounts/signup.html:80
+msgid "Creer mon compte"
+msgstr ""
+
+#: templates/accounts/signup.html:86
+msgid "Deja un compte ?"
+msgstr ""
+
+#: templates/admin/dashboard.html:4 templates/admin/dashboard.html:318
+msgid "Tableau de bord EducDim"
+msgstr ""
+
+#: templates/admin/dashboard.html:321
+#, fuzzy
+#| msgid "Reinitialiser"
+msgid "Actualiser"
+msgstr "Reinisyalize"
+
+#: templates/admin/dashboard.html:331
+msgid "Utilisateurs"
+msgstr "Itilizatè"
+
+#: templates/admin/dashboard.html:333
+msgid "aujourd'hui"
+msgstr ""
+
+#: templates/admin/dashboard.html:343 templates/courses/module_detail.html:19
+msgid "leçons"
+msgstr ""
+
+#: templates/admin/dashboard.html:351
+msgid "Revenu total"
+msgstr "Revni total"
+
+#: templates/admin/dashboard.html:353
+msgid "ce mois"
+msgstr ""
+
+#: templates/admin/dashboard.html:361
+#, fuzzy
+#| msgid "Abonnements"
+msgid "Abonnements actifs"
+msgstr "Abònman"
+
+#: templates/admin/dashboard.html:363
+msgid "croissance"
+msgstr ""
+
+#: templates/admin/dashboard.html:371
+#, fuzzy
+#| msgid "Inscription"
+msgid "Inscriptions aux cours"
+msgstr "Enskripsyon"
+
+#: templates/admin/dashboard.html:378
+msgid "Paiements en attente"
+msgstr ""
+
+#: templates/admin/dashboard.html:385
+msgid "Enseignants"
+msgstr ""
+
+#: templates/admin/dashboard.html:392
+msgid "Actifs aujourd'hui"
+msgstr ""
+
+#: templates/admin/dashboard.html:399
+msgid "Répartition des cours"
+msgstr ""
+
+#: templates/admin/dashboard.html:403
+msgid "Évolution des utilisateurs"
+msgstr ""
+
+#: templates/admin/dashboard.html:411
+msgid "Dernière mise à jour"
+msgstr ""
+
+#: templates/attendance/justification_form.html:4
+msgid "Justifier mon absence"
+msgstr ""
+
+#: templates/attendance/justification_form.html:8
+msgid "Justification d'absence / retard"
+msgstr ""
+
+#: templates/attendance/justification_form.html:12
+#: templates/attendance/review_justification.html:11
+#: templates/enrollments/enrollment_detail.html:47
+msgid "Raison"
+msgstr ""
+
+#: templates/attendance/justification_form.html:15
+#: templates/subscriptions/subscribe.html:74
+msgid "Soumettre"
+msgstr ""
+
+#: templates/attendance/review_justification.html:4
+msgid "Réviser la justification"
+msgstr ""
+
+#: templates/attendance/review_justification.html:8
+#, fuzzy
+#| msgid "Notifications"
+msgid "Justification de"
+msgstr "Notifikasyon"
+
+#: templates/attendance/review_justification.html:9
+#: templates/attendance/session_detail.html:4
+#: templates/attendance/student_list.html:16
+#, fuzzy
+#| msgid "Progression"
+msgid "Session"
+msgstr "Pwogresyon"
+
+#: templates/attendance/review_justification.html:10
+#: templates/attendance/session_detail.html:10
+#: templates/attendance/student_list.html:14
+#: templates/enrollments/admin_pending.html:23
+#: templates/subscriptions/admin_pending.html:23
+msgid "Date"
+msgstr ""
+
+#: templates/attendance/review_justification.html:15
+msgid "Note admin"
+msgstr ""
+
+#: templates/attendance/review_justification.html:21
+msgid "Approuver"
+msgstr ""
+
+#: templates/attendance/review_justification.html:24
+#: templates/courses/course_form.html:100 templates/todo/create_todo.html:31
+msgid "Enregistrer"
+msgstr ""
+
+#: templates/attendance/session_detail.html:11
+msgid "Horaire"
+msgstr ""
+
+#: templates/attendance/session_detail.html:11
+#: templates/subscriptions/detail.html:21
+msgid "Fin"
+msgstr ""
+
+#: templates/attendance/session_detail.html:14
+msgid "Liste des présences"
+msgstr ""
+
+#: templates/attendance/session_detail.html:17
+msgid "Étudiant"
+msgstr ""
+
+#: templates/attendance/session_detail.html:17
+#: templates/attendance/session_detail.html:36
+#: templates/attendance/session_detail.html:40
+#: templates/attendance/student_list.html:17
+#: templates/subscriptions/my_subscriptions.html:30
+#: templates/todo/todo_list.html:52
+msgid "Statut"
+msgstr ""
+
+#: templates/attendance/session_detail.html:17
+#, fuzzy
+#| msgid "Notifications"
+msgid "Justification"
+msgstr "Notifikasyon"
+
+#: templates/attendance/session_detail.html:25
+#: templates/courses/course_detail.html:690
+#: templates/courses/course_list.html:565
+#: templates/courses/learning_path_detail.html:119
+#: templates/notifications/list.html:32
+#: templates/progress/course_progress.html:90 templates/quiz/detail.html:65
+#: templates/quiz/quiz_detail.html:65
+msgid "Voir"
+msgstr ""
+
+#: templates/attendance/session_detail.html:35
+msgid "Mon statut"
+msgstr ""
+
+#: templates/attendance/session_detail.html:39
+msgid "Justification soumise le"
+msgstr ""
+
+#: templates/attendance/session_detail.html:40
+msgid "Approuvée"
+msgstr ""
+
+#: templates/attendance/session_detail.html:40
+msgid "Refusée"
+msgstr ""
+
+#: templates/attendance/session_detail.html:40
+msgid "En attente"
+msgstr ""
+
+#: templates/attendance/session_detail.html:42
+msgid "Soumettre une justification"
+msgstr ""
+
+#: templates/attendance/session_detail.html:46
+msgid "Vous n'êtes pas enregistré dans cette session."
+msgstr ""
+
+#: templates/attendance/student_list.html:4
+#: templates/attendance/student_list.html:8
+msgid "Mes présences"
+msgstr ""
+
+#: templates/attendance/student_list.html:18
+#: templates/enrollments/enrollment_detail.html:35
+#, fuzzy
+#| msgid "Attention"
+msgid "Actions"
+msgstr "Atansyon"
+
+#: templates/attendance/student_list.html:29
+#: templates/badges/badge_list.html:16
+#: templates/enrollments/enrollment_detail.html:24
+#: templates/enrollments/enrollment_list.html:33
+#: templates/subscriptions/my_subscriptions.html:52
+msgid "Détails"
+msgstr ""
+
+#: templates/attendance/student_list.html:31
+msgid "Justifier"
+msgstr ""
+
+#: templates/attendance/student_list.html:40
+msgid "Aucune session de présence enregistrée."
+msgstr ""
+
+#: templates/badges/badge_detail.html:11
+#, fuzzy
+#| msgid "Conditions"
+msgid "Condition"
+msgstr "Kondisyon"
+
+#: templates/badges/badge_detail.html:12
+msgid "Objectif"
+msgstr ""
+
+#: templates/badges/badge_detail.html:14
+msgid "Retour aux badges"
+msgstr ""
+
+#: templates/badges/badge_list.html:4 templates/badges/badge_list.html:8
+msgid "Badges disponibles"
+msgstr ""
+
+#: templates/badges/badge_list.html:21
+#, fuzzy
+#| msgid "Aucune donnee"
+msgid "Aucun badge disponible."
+msgstr "Pa gen done"
+
+#: templates/badges/my_badges.html:15
+msgid "Obtenu le"
+msgstr ""
+
+#: templates/badges/my_badges.html:20
+msgid "Vous n'avez pas encore gagné de badge."
+msgstr ""
+
+#: templates/badges/my_badges.html:21
+msgid "Voir les badges disponibles"
+msgstr ""
+
+#: templates/base.html:90
+msgid "Ouvrir le menu"
+msgstr ""
+
+#: templates/base.html:94
+msgid "Navigation principale"
+msgstr ""
+
+#: templates/base.html:96 templates/base.html:98
+msgid "Rechercher un cours"
+msgstr ""
+
+#: templates/base.html:100
+msgid "Lancer la recherche"
+msgstr ""
+
+#: templates/base.html:106
+#, fuzzy
+#| msgid "Explorer les cours"
+msgid "Explorer"
+msgstr "Eksplore kou yo"
+
+#: templates/base.html:116 templates/base.html:173
+#: templates/todo/todo_list.html:4 templates/todo/todo_list.html:11
+msgid "Mes tâches"
+msgstr ""
+
+#: templates/base.html:128
+msgid "Mes salons"
+msgstr ""
+
+#: templates/base.html:131 templates/home.html:50
+msgid "Étudiants"
+msgstr ""
+
+#: templates/base.html:147
+msgid "Dashboard"
+msgstr "Tablo"
+
+#: templates/base.html:151
+msgid "Admin"
+msgstr "Adminystratè"
+
+#: templates/base.html:167 templates/subscriptions/list.html:4
+msgid "Abonnements"
+msgstr "Abònman"
+
+#: templates/base.html:185
+#, fuzzy
+#| msgid "Deconnexion"
+msgid "Déconnexion"
+msgstr "Dekoneksyon"
+
+#: templates/base.html:198 templates/courses/course_access_denied.html:16
+#: templates/courses/course_detail.html:783
+msgid "S'inscrire"
+msgstr ""
+
+#: templates/base.html:205 templates/base.html:206
+#, fuzzy
+#| msgid "Basculer le theme clair/sombre"
+msgid "Basculer le thème clair/sombre"
 msgstr "Basile tèm klè/fon"
+
+#: templates/base.html:268 templates/courses/learning_path_detail.html:11
+#: templates/home.html:4
+msgid "Accueil"
+msgstr "Akèy"
+
+#: templates/chat/etudiants_list.html:4
+msgid "Etudiants"
+msgstr ""
+
+#: templates/chat/etudiants_list.html:4
+msgid "Chat prive"
+msgstr ""
+
+#: templates/chat/etudiants_list.html:9
+msgid "Etudiants dans vos cours"
+msgstr ""
+
+#: templates/chat/etudiants_list.html:11
+msgid "Retour aux salons"
+msgstr ""
+
+#: templates/chat/etudiants_list.html:16
+msgid ""
+"Voici la liste des etudiants qui partagent au moins un cours avec vous. "
+"Cliquez sur un etudiant pour creer un chat prive."
+msgstr ""
+
+#: templates/chat/etudiants_list.html:22
+msgid "Rechercher un etudiant..."
+msgstr ""
+
+#: templates/chat/etudiants_list.html:25 templates/todo/todo_list.html:47
+#, fuzzy
+#| msgid "Chercher"
+msgid "Rechercher"
+msgstr "Chèche"
+
+#: templates/chat/etudiants_list.html:29
+msgid "Effacer"
+msgstr ""
+
+#: templates/chat/etudiants_list.html:53
+msgid "Creer"
+msgstr ""
+
+#: templates/chat/etudiants_list.html:65
+msgid "Aucun etudiant ne correspond a votre recherche."
+msgstr ""
+
+#: templates/chat/etudiants_list.html:67
+msgid "Vous n'etes dans aucun cours avec d'autres etudiants pour le moment."
+msgstr ""
+
+#: templates/chat/etudiants_list.html:72
+#: templates/enrollments/enrollment_list.html:11
+#: templates/enrollments/enrollment_list.html:44 templates/home.html:29
+#: templates/progress/dashboard.html:110 templates/quiz/list.html:38
+#: templates/quiz/quiz_list.html:38
+msgid "Explorer les cours"
+msgstr "Eksplore kou yo"
+
+#: templates/chat/room_detail.html:338
+msgid "Aucun message pour le moment."
+msgstr ""
+
+#: templates/chat/room_detail.html:339
+msgid "Soyez le premier à envoyer un message !"
+msgstr ""
+
+#: templates/chat/room_detail.html:361
+msgid "Message"
+msgstr ""
+
+#: templates/chat/room_list.html:4
+msgid "Salons de discussion"
+msgstr ""
+
+#: templates/chat/room_list.html:9
+msgid "Salons de chat"
+msgstr ""
+
+#: templates/chat/room_list.html:12
+msgid "Nouveau chat"
+msgstr ""
+
+#: templates/chat/room_list.html:32
+msgid "participants"
+msgstr ""
+
+#: templates/chat/room_list.html:41
+msgid "Aucun salon disponible."
+msgstr ""
+
+#: templates/chat/room_list.html:43
+#, fuzzy
+#| msgid "Commencer le quiz"
+msgid "Commencer un chat"
+msgstr "Kòmanse kiz la"
+
+#: templates/courses/course_access_denied.html:4
+msgid "Accès refusé"
+msgstr ""
+
+#: templates/courses/course_access_denied.html:10
+msgid "Accès restreint"
+msgstr ""
+
+#: templates/courses/course_access_denied.html:12
+msgid "Vous n'avez pas encore accès à ce cours."
+msgstr ""
+
+#: templates/courses/course_access_denied.html:19 templates/quiz/detail.html:98
+#: templates/quiz/quiz_detail.html:98 templates/quiz/result.html:53
+msgid "Retour aux cours"
+msgstr ""
+
+#: templates/courses/course_access_denied.html:25
+msgid "Votre inscription est en attente de validation par un administrateur."
+msgstr ""
+
+#: templates/courses/course_confirm_delete.html:8
+msgid "Confirmation de suppression"
+msgstr ""
+
+#: templates/courses/course_confirm_delete.html:9
+msgid "Voulez-vous vraiment supprimer le cours"
+msgstr ""
+
+#: templates/courses/course_confirm_delete.html:12
+#, fuzzy
+#| msgid "Supprimer"
+msgid "Oui, supprimer"
+msgstr "Efase"
+
+#: templates/courses/course_detail.html:643
+#: templates/courses/course_list.html:508
+#: templates/courses/course_list.html:539
+#: templates/courses/learning_path_detail.html:103
+msgid "Payant"
+msgstr ""
+
+#: templates/courses/course_detail.html:645
+#: templates/courses/course_list.html:507
+#: templates/courses/course_list.html:541
+#: templates/courses/course_list.html:556
+#: templates/courses/learning_path_detail.html:105
+#: templates/subscriptions/list.html:37
+#: templates/subscriptions/subscribe.html:19
+msgid "Gratuit"
+msgstr "Gratis"
+
+#: templates/courses/course_detail.html:648
+#: templates/courses/course_form.html:95
+msgid "Publié"
+msgstr ""
+
+#: templates/courses/course_detail.html:677
+msgid "Prérequis"
+msgstr ""
+
+#: templates/courses/course_detail.html:680
+msgid "Vous avez complété tous les prérequis !"
+msgstr ""
+
+#: templates/courses/course_detail.html:730
+#, fuzzy
+#| msgid "Inscription"
+msgid "Fermer inscriptions"
+msgstr "Enskripsyon"
+
+#: templates/courses/course_detail.html:730
+#, fuzzy
+#| msgid "Inscription"
+msgid "Ouvrir inscriptions"
+msgstr "Enskripsyon"
+
+#: templates/courses/course_detail.html:744
+msgid "Contenu du cours"
+msgstr ""
+
+#: templates/courses/course_detail.html:757
+msgid "modules"
+msgstr ""
+
+#: templates/courses/course_detail.html:764
+msgid "Aucune unité disponible pour ce cours."
+msgstr ""
+
+#: templates/courses/course_detail.html:774
+#: templates/courses/course_detail.html:834
+#: templates/courses/course_detail.html:840
+#: templates/courses/lesson_detail.html:464
+#: templates/courses/module_detail.html:75
+#, fuzzy
+#| msgid "Commencer le quiz"
+msgid "Commencer"
+msgstr "Kòmanse kiz la"
+
+#: templates/courses/course_detail.html:778
+msgid "Cours en préparation"
+msgstr ""
+
+#: templates/courses/course_detail.html:787
+msgid "Prérequis manquants"
+msgstr ""
+
+#: templates/courses/course_detail.html:792
+msgid "Se connecter pour s'inscrire"
+msgstr ""
+
+#: templates/courses/course_detail.html:805
+msgid "Quiz du cours"
+msgstr ""
+
+#: templates/courses/course_detail.html:816
+#: templates/courses/lesson_detail.html:461
+#: templates/courses/module_detail.html:72
+msgid "réussite"
+msgstr ""
+
+#: templates/courses/course_detail.html:825
+#: templates/quiz/correction/tentative_list.html:15
+#: templates/quiz/detail.html:59 templates/quiz/list.html:18
+#: templates/quiz/quiz_detail.html:59 templates/quiz/quiz_list.html:18
+#, fuzzy
+#| msgid "Reussi"
+msgid "Réussi"
+msgstr "Siksè"
+
+#: templates/courses/course_detail.html:829 templates/quiz/detail.html:61
+#: templates/quiz/quiz_detail.html:61
+msgid "Échoué"
+msgstr ""
+
+#: templates/courses/course_form.html:4
+#, fuzzy
+#| msgid "Explorer les cours"
+msgid "Modifier le cours"
+msgstr "Eksplore kou yo"
+
+#: templates/courses/course_form.html:4
+msgid "Nouveau cours"
+msgstr ""
+
+#: templates/courses/course_form.html:10 templates/courses/course_list.html:462
+#, fuzzy
+#| msgid "Ajouter"
+msgid "Ajouter un cours"
+msgstr "Ajoute"
+
+#: templates/courses/course_form.html:11
+msgid "Remplissez les informations du cours"
+msgstr ""
+
+#: templates/courses/course_form.html:18
+msgid "Titre"
+msgstr ""
+
+#: templates/courses/course_form.html:24
+#, fuzzy
+#| msgid "Inscription"
+msgid "Description"
+msgstr "Enskripsyon"
+
+#: templates/courses/course_form.html:31
+msgid "URL de l'image"
+msgstr ""
+
+#: templates/courses/course_form.html:36
+msgid "Image (téléchargée)"
+msgstr ""
+
+#: templates/courses/course_form.html:49
+msgid "Prix (HTG)"
+msgstr ""
+
+#: templates/courses/course_form.html:52
+#, fuzzy
+#| msgid "Gratuit"
+msgid "0 = gratuit"
+msgstr "Gratis"
+
+#: templates/courses/course_form.html:55
+msgid "Durée (heures)"
+msgstr ""
+
+#: templates/courses/course_form.html:63
+#, fuzzy
+#| msgid "Categorie"
+msgid "Catégorie"
+msgstr "Kategori"
+
+#: templates/courses/course_form.html:68
+#: templates/courses/learning_path_detail.html:56
+msgid "Niveau"
+msgstr "Nivo"
+
+#: templates/courses/course_form.html:76
+msgid "Début des inscriptions"
+msgstr ""
+
+#: templates/courses/course_form.html:81
+#, fuzzy
+#| msgid "Inscription"
+msgid "Fin des inscriptions"
+msgstr "Enskripsyon"
+
+#: templates/courses/course_form.html:89
+#, fuzzy
+#| msgid "Inscription"
+msgid "Inscriptions ouvertes"
+msgstr "Enskripsyon"
+
+#: templates/courses/course_list.html:4 templates/courses/course_list.html:459
+msgid "Cours disponibles"
+msgstr ""
+
+#: templates/courses/course_list.html:471
+msgid "Rechercher un cours..."
+msgstr ""
+
+#: templates/courses/course_list.html:476
+msgid "Toutes les catégories"
+msgstr ""
+
+#: templates/courses/course_list.html:486
+msgid "Tous les niveaux"
+msgstr ""
+
+#: templates/courses/course_list.html:496
+msgid "Tous les Learning Paths"
+msgstr ""
+
+#: templates/courses/course_list.html:506
+msgid "Tous les prix"
+msgstr ""
+
+#: templates/courses/course_list.html:545
+msgid "Accès"
+msgstr ""
+
+#: templates/courses/course_list.html:563
+#: templates/subscriptions/detail.html:47
+msgid "Accéder"
+msgstr ""
+
+#: templates/courses/course_list.html:574
+msgid "Aucun cours disponible"
+msgstr ""
+
+#: templates/courses/course_list.html:575
+msgid "Revenez plus tard, de nouveaux cours seront bientôt disponibles."
+msgstr ""
+
+#: templates/courses/learning_path_detail.html:13
+#: templates/courses/learning_path_list.html:4
+msgid "Learning Paths"
+msgstr ""
+
+#: templates/courses/learning_path_detail.html:50
+#: templates/subscriptions/list.html:44
+#: templates/subscriptions/subscribe.html:25
+msgid "Durée"
+msgstr ""
+
+#: templates/courses/learning_path_detail.html:78
+msgid "Cours dans ce parcours"
+msgstr ""
+
+#: templates/courses/learning_path_detail.html:116
+#: templates/subscriptions/select_courses.html:44
+msgid "unités"
+msgstr ""
+
+#: templates/courses/learning_path_detail.html:130
+msgid "Aucun cours dans ce parcours"
+msgstr ""
+
+#: templates/courses/learning_path_detail.html:132
+msgid "Des cours seront bientôt ajoutés à ce parcours."
+msgstr ""
+
+#: templates/courses/learning_path_list.html:12
+msgid "Parcours d'apprentissage"
+msgstr ""
+
+#: templates/courses/learning_path_list.html:15
+msgid "Choisissez votre"
+msgstr ""
+
+#: templates/courses/learning_path_list.html:15
+msgid "chemin"
+msgstr ""
+
+#: templates/courses/learning_path_list.html:18
+msgid "Suivez un parcours structuré pour maîtriser une compétence de A à Z."
+msgstr ""
+
+#: templates/courses/learning_path_list.html:57
+#: templates/progress/dashboard.html:17
+#, fuzzy
+#| msgid "Cours"
+msgid "cours"
+msgstr "Kou"
+
+#: templates/courses/learning_path_list.html:75
+msgid "complété"
+msgstr ""
+
+#: templates/courses/learning_path_list.html:80
+#, fuzzy
+#| msgid "Explorer les cours"
+msgid "Voir le parcours"
+msgstr "Eksplore kou yo"
+
+#: templates/courses/learning_path_list.html:91
+msgid "Aucun parcours disponible"
+msgstr ""
+
+#: templates/courses/learning_path_list.html:93
+msgid "De nouveaux parcours seront bientôt disponibles."
+msgstr ""
+
+#: templates/courses/lesson_detail.html:402
+#: templates/courses/module_detail.html:39
+msgid "Leçon"
+msgstr ""
+
+#: templates/courses/lesson_detail.html:418
+msgid "Sections"
+msgstr ""
+
+#: templates/courses/lesson_detail.html:435
+msgid "Aucune section dans cette leçon."
+msgstr ""
+
+#: templates/courses/lesson_detail.html:445
+msgid "Quiz de la leçon"
+msgstr ""
+
+#: templates/courses/lesson_detail.html:478
+msgid "Marquer cette leçon comme terminée"
+msgstr ""
+
+#: templates/courses/lesson_detail.html:483 templates/quiz/detail.html:90
+#: templates/quiz/quiz_detail.html:90 templates/quiz/result.html:45
+msgid "Retour au module"
+msgstr ""
+
+#: templates/courses/lesson_detail.html:488 templates/quiz/detail.html:43
+#: templates/quiz/quiz_detail.html:43
+msgid "Commencer le quiz"
+msgstr "Kòmanse kiz la"
+
+#: templates/courses/module_detail.html:15
+#: templates/courses/unit_detail.html:13
+msgid "Module"
+msgstr ""
+
+#: templates/courses/module_detail.html:21
+msgid "quiz"
+msgstr ""
+
+#: templates/courses/module_detail.html:29
+#: templates/progress/course_progress.html:45
+msgid "Leçons"
+msgstr ""
+
+#: templates/courses/module_detail.html:45
+msgid "Aucune leçon dans ce module."
+msgstr ""
+
+#: templates/courses/module_detail.html:55
+msgid "Quiz du module"
+msgstr ""
+
+#: templates/courses/module_detail.html:87
+msgid "Retour à l'unité"
+msgstr ""
+
+#: templates/courses/module_detail.html:91
+msgid "Commencer la première leçon"
+msgstr ""
+
+#: templates/courses/section_detail.html:9
+msgid "Contenus"
+msgstr ""
+
+#: templates/courses/section_detail.html:18
+msgid "Votre navigateur ne supporte pas la lecture de vidéos."
+msgstr ""
+
+#: templates/courses/section_detail.html:19
+msgid "Aucune vidéo disponible dans cette langue."
+msgstr ""
+
+#: templates/courses/section_detail.html:23
+msgid "Aucune image disponible dans cette langue."
+msgstr ""
+
+#: templates/courses/section_detail.html:27
+msgid "Votre navigateur ne supporte pas l'audio."
+msgstr ""
+
+#: templates/courses/section_detail.html:27
+msgid "Aucun fichier audio disponible dans cette langue."
+msgstr ""
+
+#: templates/courses/section_detail.html:31
+msgid "Télécharger le PDF"
+msgstr ""
+
+#: templates/courses/section_detail.html:31
+msgid "Aucun PDF disponible dans cette langue."
+msgstr ""
+
+#: templates/courses/section_detail.html:35
+msgid "Aucun lien disponible dans cette langue."
+msgstr ""
+
+#: templates/courses/section_detail.html:38
+#: templates/quiz/correction/corriger_tentative.html:62
+msgid "Télécharger le fichier"
+msgstr ""
+
+#: templates/courses/section_detail.html:40
+msgid "Type de contenu non pris en charge ou non disponible."
+msgstr ""
+
+#: templates/courses/section_detail.html:43
+msgid "Aucun contenu dans cette section."
+msgstr ""
+
+#: templates/courses/unit_detail.html:8
+msgid "Unité"
+msgstr ""
+
+#: templates/courses/unit_detail.html:10
+msgid "Modules"
+msgstr ""
+
+#: templates/courses/unit_detail.html:15
+msgid "Aucun module dans cette unité."
+msgstr ""
+
+#: templates/enrollments/admin_pending.html:4
+#: templates/enrollments/admin_pending.html:9
+#, fuzzy
+#| msgid "Inscription"
+msgid "Inscriptions en attente"
+msgstr "Enskripsyon"
+
+#: templates/enrollments/admin_pending.html:10
+#: templates/subscriptions/admin_pending.html:10
+msgid "en attente"
+msgstr ""
+
+#: templates/enrollments/admin_pending.html:18
+#: templates/quiz/correction/corriger_tentative.html:6
+#: templates/quiz/correction/tentative_list.html:12
+#: templates/subscriptions/admin_pending.html:18
+#, fuzzy
+#| msgid "Utilisateurs"
+msgid "Utilisateur"
+msgstr "Itilizatè"
+
+#: templates/enrollments/admin_pending.html:20
+#: templates/subscriptions/admin_pending.html:20
+msgid "Méthode"
+msgstr ""
+
+#: templates/enrollments/admin_pending.html:21
+#: templates/enrollments/enrollment_detail.html:26
+#: templates/subscriptions/admin_pending.html:21
+#, fuzzy
+#| msgid "Inscription"
+msgid "ID transaction"
+msgstr "Enskripsyon"
+
+#: templates/enrollments/admin_pending.html:22
+#: templates/subscriptions/admin_pending.html:22
+msgid "Photo"
+msgstr ""
+
+#: templates/enrollments/admin_pending.html:24
+#: templates/quiz/correction/tentative_list.html:17
+#: templates/subscriptions/admin_pending.html:24
+#, fuzzy
+#| msgid "Attention"
+msgid "Action"
+msgstr "Atansyon"
+
+#: templates/enrollments/admin_pending.html:43
+#: templates/subscriptions/admin_pending.html:43
+#, fuzzy
+#| msgid "Aucune donnee"
+msgid "Aucune"
+msgstr "Pa gen done"
+
+#: templates/enrollments/admin_pending.html:49
+msgid "Approuver cette inscription ?"
+msgstr ""
+
+#: templates/enrollments/admin_pending.html:52
+msgid "Refuser cette inscription ?"
+msgstr ""
+
+#: templates/enrollments/admin_pending.html:68
+msgid "Aucune inscription en attente."
+msgstr ""
+
+#: templates/enrollments/enroll_form.html:13
+msgid "Ce cours est payant"
+msgstr ""
+
+#: templates/enrollments/enroll_form.html:14
+msgid ""
+"Effectuez le paiement via MonCash ou NatCash, puis remplissez le formulaire "
+"ci-dessous."
+msgstr ""
+
+#: templates/enrollments/enroll_form.html:17
+#, fuzzy
+#| msgid "Inscription"
+msgid "Instructions"
+msgstr "Enskripsyon"
+
+#: templates/enrollments/enroll_form.html:19
+msgid "Envoyez le montant exact"
+msgstr ""
+
+#: templates/enrollments/enroll_form.html:19
+msgid "au numéro MonCash ou NatCash indiqué ci-dessous."
+msgstr ""
+
+#: templates/enrollments/enroll_form.html:20
+msgid "Conservez l'ID de transaction qui vous sera fourni."
+msgstr ""
+
+#: templates/enrollments/enroll_form.html:21
+msgid ""
+"Remplissez le formulaire ci-dessous avec vos informations et l'ID de "
+"transaction."
+msgstr ""
+
+#: templates/enrollments/enroll_form.html:27
+msgid "Numéros de paiement"
+msgstr ""
+
+#: templates/enrollments/enroll_form.html:49
+msgid "Code agent (retrait)"
+msgstr ""
+
+#: templates/enrollments/enroll_form.html:56
+msgid "Copiez le numéro correspondant à votre méthode de paiement."
+msgstr ""
+
+#: templates/enrollments/enroll_form.html:62
+msgid ""
+"Ce cours est gratuit. Cliquez sur le bouton pour vous inscrire immédiatement."
+msgstr ""
+
+#: templates/enrollments/enroll_form.html:71
+#: templates/enrollments/enrollment_detail.html:25
+#: templates/subscriptions/subscribe.html:41
+msgid "Méthode de paiement"
+msgstr ""
+
+#: templates/enrollments/enroll_form.html:77
+#: templates/enrollments/enrollment_detail.html:27
+#: templates/subscriptions/subscribe.html:47
+msgid "Nom sur le compte"
+msgstr ""
+
+#: templates/enrollments/enroll_form.html:83
+#: templates/enrollments/enrollment_detail.html:28
+#: templates/pages/contact.html:23 templates/subscriptions/subscribe.html:53
+msgid "Téléphone"
+msgstr ""
+
+#: templates/enrollments/enroll_form.html:89
+#: templates/subscriptions/subscribe.html:59
+msgid "ID de transaction"
+msgstr ""
+
+#: templates/enrollments/enroll_form.html:95
+msgid "Photo du paiement (facultatif)"
+msgstr ""
+
+#: templates/enrollments/enroll_form.html:98
+msgid "Prenez une photo de votre reçu MonCash ou NatCash."
+msgstr ""
+
+#: templates/enrollments/enroll_form.html:106
+msgid "Soumettre la preuve de paiement"
+msgstr ""
+
+#: templates/enrollments/enroll_form.html:108
+msgid "S'inscrire gratuitement"
+msgstr ""
+
+#: templates/enrollments/enrollment_detail.html:4
+msgid "Détail de l'inscription"
+msgstr ""
+
+#: templates/enrollments/enrollment_detail.html:11
+msgid "Demande"
+msgstr ""
+
+#: templates/enrollments/enrollment_detail.html:30
+msgid "Photo paiement"
+msgstr ""
+
+#: templates/enrollments/enrollment_detail.html:37
+msgid "Vous avez accès à ce cours."
+msgstr ""
+
+#: templates/enrollments/enrollment_detail.html:39
+msgid "Accéder au cours"
+msgstr ""
+
+#: templates/enrollments/enrollment_detail.html:42
+msgid "Votre paiement est en cours de vérification."
+msgstr ""
+
+#: templates/enrollments/enrollment_detail.html:44
+msgid "Votre inscription a été refusée."
+msgstr ""
+
+#: templates/enrollments/enrollment_list.html:42
+msgid "Vous n'êtes inscrit à aucun cours."
+msgstr ""
+
+#: templates/home.html:12
+msgid "Plateforme e-learning"
+msgstr ""
+
+#: templates/home.html:17
+msgid "Apprenez sans limites"
+msgstr ""
+
+#: templates/home.html:18
+msgid "Où que vous soyez"
+msgstr ""
+
+#: templates/home.html:23
+msgid "Des cours de qualité pour développer vos compétences à votre rythme."
+msgstr ""
+
+#: templates/home.html:33
+#, fuzzy
+#| msgid "Commencer le quiz"
+msgid "Commencer gratuitement"
+msgstr "Kòmanse kiz la"
+
+#: templates/home.html:56
+#, fuzzy
+#| msgid "Notifications"
+msgid "Satisfaction"
+msgstr "Notifikasyon"
+
+#: templates/home.html:71
+msgid "Formation en ligne"
+msgstr ""
+
+#: templates/home.html:72
+msgid "+1000 étudiants"
+msgstr ""
+
+#: templates/home.html:79
+msgid "Certifiés"
+msgstr ""
+
+#: templates/home.html:80
+msgid "Reconnus par l'État"
+msgstr ""
+
+#: templates/home.html:87
+msgid "+50 cours"
+msgstr ""
+
+#: templates/home.html:88
+msgid "Disponibles"
+msgstr ""
+
+#: templates/home.html:97
+msgid "Pourquoi nous choisir ?"
+msgstr ""
+
+#: templates/home.html:98
+msgid "Une expérience d'apprentissage"
+msgstr ""
+
+#: templates/home.html:98
+msgid "unique"
+msgstr ""
+
+#: templates/home.html:107
+msgid "Cours interactifs"
+msgstr ""
+
+#: templates/home.html:108
+msgid "Apprenez avec des vidéos, quiz et exercices pratiques conçus pour vous."
+msgstr ""
+
+#: templates/home.html:110 templates/home.html:121 templates/home.html:132
+msgid "En savoir plus"
+msgstr ""
+
+#: templates/home.html:118
+msgid "Certificats vérifiés"
+msgstr ""
+
+#: templates/home.html:119
+msgid ""
+"Recevez des certificats reconnus après chaque cours complété avec succès."
+msgstr ""
+
+#: templates/home.html:129
+msgid "Classement & Badges"
+msgstr ""
+
+#: templates/home.html:130
+msgid "Gagnez des points, débloquez des badges et grimpez dans le classement."
+msgstr ""
+
+#: templates/home.html:141
+msgid "Prêt à commencer votre"
+msgstr ""
+
+#: templates/home.html:141
+msgid "aventure"
+msgstr ""
+
+#: templates/home.html:142
+msgid ""
+"Rejoignez des milliers d'apprenants et transformez votre avenir dès "
+"aujourd'hui."
+msgstr ""
+
+#: templates/home.html:144
+msgid "Créer un compte gratuit"
+msgstr ""
+
+#: templates/home.html:152
+msgid "Ce que nos étudiants disent"
+msgstr ""
+
+#: templates/home.html:153
+msgid "Ils ont"
+msgstr ""
+
+#: templates/home.html:153
+#, fuzzy
+#| msgid "Reussi"
+msgid "réussi"
+msgstr "Siksè"
+
+#: templates/home.html:153
+msgid "grâce à nous"
+msgstr ""
+
+#: templates/home.html:168
+msgid ""
+"Grâce à EduPlatform, j'ai appris le développement web en 3 mois. Aujourd'hui "
+"je travaille comme freelance."
+msgstr ""
+
+#: templates/home.html:177
+msgid "Développeur Web"
+msgstr ""
+
+#: templates/home.html:192
+msgid ""
+"Les cours sont bien structurés et les professeurs sont très compétents. Je "
+"recommande à 100%."
+msgstr ""
+
+#: templates/home.html:201
+msgid "Data Analyst"
+msgstr ""
+
+#: templates/maintenance.html:4
+msgid "Maintenance"
+msgstr ""
+
+#: templates/maintenance.html:10
+msgid "Site en maintenance"
+msgstr ""
+
+#: templates/maintenance.html:19
+msgid "Rejoindre le groupe WhatsApp"
+msgstr ""
+
+#: templates/notifications/list.html:13
+msgid "Supprimer toutes les notifications ?"
+msgstr ""
+
+#: templates/notifications/list.html:14
+#, fuzzy
+#| msgid "Supprimer"
+msgid "Tout supprimer"
+msgstr "Efase"
+
+#: templates/notifications/list.html:47
+#, fuzzy
+#| msgid "Notifications"
+msgid "Aucune notification."
+msgstr "Notifikasyon"
+
+#: templates/pages/about.html:11
+msgid "À propos de nous"
+msgstr ""
+
+#: templates/pages/about.html:14
+msgid ""
+"Découvrez notre mission, nos valeurs et notre engagement pour l'éducation"
+msgstr ""
+
+#: templates/pages/about.html:23
+msgid ""
+"EduPlatform se yon platform e-learning ki fèt pou ede moun aprann san limit."
+msgstr ""
+
+#: templates/pages/about.html:24
+msgid "Misyon nou se bay tout moun aksè a edikasyon kalite."
+msgstr ""
+
+#: templates/pages/about.html:25
+msgid ""
+"Nou kwè ke tout moun merite opòtinite pou aprann epi grandi, kèlkeswa kote "
+"yo ye oswa sitiyasyon yo."
+msgstr ""
+
+#: templates/pages/about.html:33
+msgid "Accessibilité"
+msgstr ""
+
+#: templates/pages/about.html:34
+msgid "Edikasyon pou tout moun, tout kote"
+msgstr ""
+
+#: templates/pages/about.html:42
+#, fuzzy
+#| msgid "Information"
+msgid "Innovation"
+msgstr "Enfòmasyon"
+
+#: templates/pages/about.html:43
+msgid "Toujou ap avanse ak teknoloji"
+msgstr ""
+
+#: templates/pages/about.html:51
+msgid "Qualité"
+msgstr ""
+
+#: templates/pages/about.html:52
+msgid "Kontni ki prepare pa ekspè"
+msgstr ""
+
+#: templates/pages/about.html:67
+msgid "Image illustrative"
+msgstr ""
+
+#: templates/pages/conditions.html:4
+#, fuzzy
+#| msgid "Conditions"
+msgid "Conditions générales"
+msgstr "Kondisyon"
+
+#: templates/pages/conditions.html:8
+msgid "Conditions générales d'utilisation"
+msgstr ""
+
+#: templates/pages/contact.html:4 templates/pages/contact.html:10
+#, fuzzy
+#| msgid "Contact"
+msgid "Contactez-nous"
+msgstr "Kontak"
+
+#: templates/pages/contact.html:13
+msgid "Nous sommes là pour vous aider."
+msgstr ""
+
+#: templates/pages/contact.html:32
+msgid "Heures d'ouverture"
+msgstr ""
+
+#: templates/pages/contact.html:57
+msgid "Adresse"
+msgstr ""
+
+#: templates/pages/contact.html:69
+msgid "Aucune carte disponible."
+msgstr ""
+
+#: templates/pages/faq.html:8
+msgid "Questions fréquentes"
+msgstr ""
+
+#: templates/pages/privacy.html:8
+msgid "Politique de confidentialité"
+msgstr ""
+
+#: templates/progress/course_progress.html:14
+msgid "Suivez votre progression dans ce cours"
+msgstr ""
+
+#: templates/progress/course_progress.html:25
+#, fuzzy
+#| msgid "Progression"
+msgid "Progression globale"
+msgstr "Pwogresyon"
+
+#: templates/progress/course_progress.html:28
+msgid "terminé"
+msgstr ""
+
+#: templates/progress/course_progress.html:97
+msgid "Terminer"
+msgstr ""
+
+#: templates/progress/course_progress.html:106
+msgid "Aucune leçon disponible pour ce cours."
+msgstr ""
+
+#: templates/progress/course_progress.html:114
+msgid "Retour au tableau de bord"
+msgstr ""
+
+#: templates/progress/course_progress.html:117
+#, fuzzy
+#| msgid "Explorer les cours"
+msgid "Voir le cours"
+msgstr "Eksplore kou yo"
+
+#: templates/progress/course_progress.html:121
+#: templates/progress/dashboard.html:90 templates/quiz/detail.html:38
+#: templates/quiz/detail.html:72 templates/quiz/quiz_detail.html:38
+#: templates/quiz/quiz_detail.html:72
+msgid "Continuer"
+msgstr ""
+
+#: templates/progress/dashboard.html:17
+msgid "leçons terminées"
+msgstr ""
+
+#: templates/progress/dashboard.html:22
+msgid "terminés"
+msgstr ""
+
+#: templates/progress/dashboard.html:25
+#, fuzzy
+#| msgid "Cours"
+msgid "en cours"
+msgstr "Kou"
+
+#: templates/progress/dashboard.html:38
+msgid "Leçons terminées"
+msgstr ""
+
+#: templates/progress/dashboard.html:42
+msgid "Leçons en cours"
+msgstr ""
+
+#: templates/progress/dashboard.html:46
+msgid "Cours terminés"
+msgstr ""
+
+#: templates/progress/dashboard.html:74
+msgid "Terminé"
+msgstr ""
+
+#: templates/progress/dashboard.html:87 templates/quiz/list.html:28
+#: templates/quiz/quiz_list.html:28
+#, fuzzy
+#| msgid "Voir details"
+msgid "Voir détails"
+msgstr "Gade detay"
+
+#: templates/progress/dashboard.html:94
+msgid "Félicitations!"
+msgstr ""
+
+#: templates/progress/dashboard.html:105
+msgid "Vous n'avez pas encore commencé de cours."
+msgstr ""
+
+#: templates/progress/dashboard.html:107
+msgid "Explorez nos cours et commencez votre apprentissage dès maintenant."
+msgstr ""
+
+#: templates/quiz/correction/corriger_tentative.html:5
+msgid "Correction de la tentative"
+msgstr ""
+
+#: templates/quiz/correction/corriger_tentative.html:8
+msgid "Score actuel"
+msgstr ""
+
+#: templates/quiz/correction/corriger_tentative.html:16
+#: templates/quiz/result.html:68 templates/quiz/take_quiz.html:25
+#: templates/quiz/take_quiz.html:45
+msgid "Question"
+msgstr ""
+
+#: templates/quiz/correction/corriger_tentative.html:43
+msgid "Réponse de l'utilisateur"
+msgstr ""
+
+#: templates/quiz/correction/corriger_tentative.html:49
+#: templates/quiz/result.html:90
+msgid "Aucune réponse sélectionnée"
+msgstr ""
+
+#: templates/quiz/correction/corriger_tentative.html:64
+msgid "Aucun fichier envoyé"
+msgstr ""
+
+#: templates/quiz/correction/corriger_tentative.html:67
+msgid "Type non pris en charge pour l'affichage"
+msgstr ""
+
+#: templates/quiz/correction/corriger_tentative.html:72
+msgid "Points attribués (sur"
+msgstr ""
+
+#: templates/quiz/correction/corriger_tentative.html:79
+msgid "Laissez vide pour utiliser la notation automatique"
+msgstr ""
+
+#: templates/quiz/correction/corriger_tentative.html:84
+msgid "Aucune question trouvée."
+msgstr ""
+
+#: templates/quiz/correction/corriger_tentative.html:89
+msgid "Enregistrer les corrections"
+msgstr ""
+
+#: templates/quiz/correction/corriger_tentative.html:92
+msgid "Retour à la liste des tentatives"
+msgstr ""
+
+#: templates/quiz/correction/tentative_list.html:5
+msgid "Tentatives soumises"
+msgstr ""
+
+#: templates/quiz/correction/tentative_list.html:14
+#: templates/quiz/detail.html:57 templates/quiz/quiz_detail.html:57
+msgid "Score"
+msgstr ""
+
+#: templates/quiz/correction/tentative_list.html:16
+msgid "Soumis le"
+msgstr ""
+
+#: templates/quiz/correction/tentative_list.html:38
+msgid "Corriger"
+msgstr ""
+
+#: templates/quiz/correction/tentative_list.html:48
+msgid "Aucune tentative soumise pour le moment."
+msgstr ""
+
+#: templates/quiz/correction/tentative_list.html:54
+msgid "Retour à l'administration"
+msgstr ""
+
+#: templates/quiz/detail.html:10 templates/quiz/list.html:25
+#: templates/quiz/quiz_detail.html:10 templates/quiz/quiz_list.html:25
+msgid "Score requis"
+msgstr ""
+
+#: templates/quiz/detail.html:21 templates/quiz/quiz_detail.html:21
+msgid "Indépendant"
+msgstr ""
+
+#: templates/quiz/detail.html:28 templates/quiz/quiz_detail.html:28
+msgid "Vous avez déjà réussi ce quiz !"
+msgstr ""
+
+#: templates/quiz/detail.html:30 templates/quiz/quiz_detail.html:30
+msgid "Voir mon résultat"
+msgstr ""
+
+#: templates/quiz/detail.html:36 templates/quiz/quiz_detail.html:36
+msgid "Vous avez une tentative en cours."
+msgstr ""
+
+#: templates/quiz/detail.html:49 templates/quiz/quiz_detail.html:49
+msgid "Vos tentatives"
+msgstr ""
+
+#: templates/quiz/detail.html:69 templates/quiz/quiz_detail.html:69
+#: templates/todo/todo_list.html:30 templates/todo/todo_list.html:56
+#, fuzzy
+#| msgid "Cours"
+msgid "En cours"
+msgstr "Kou"
+
+#: templates/quiz/detail.html:79 templates/quiz/quiz_detail.html:79
+#, fuzzy
+#| msgid "Aucune donnee"
+msgid "Aucune tentative."
+msgstr "Pa gen done"
+
+#: templates/quiz/detail.html:86 templates/quiz/quiz_detail.html:86
+#: templates/quiz/result.html:41
+msgid "Retour au cours"
+msgstr ""
+
+#: templates/quiz/detail.html:94 templates/quiz/quiz_detail.html:94
+#: templates/quiz/result.html:49
+msgid "Retour à la leçon"
+msgstr ""
+
+#: templates/quiz/list.html:4 templates/quiz/quiz_list.html:4
+msgid "Quiz disponibles"
+msgstr ""
+
+#: templates/quiz/list.html:20 templates/quiz/quiz_list.html:20
+#: templates/todo/todo_list.html:26 templates/todo/todo_list.html:55
+#, fuzzy
+#| msgid "A faire"
+msgid "À faire"
+msgstr "Pou fè"
+
+#: templates/quiz/list.html:26 templates/quiz/quiz_list.html:26
+#: templates/quiz/take_quiz.html:16
+msgid "questions"
+msgstr ""
+
+#: templates/quiz/list.html:36 templates/quiz/quiz_list.html:36
+msgid "Aucun quiz disponible pour le moment."
+msgstr ""
+
+#: templates/quiz/result.html:4 templates/quiz/result.html:12
+msgid "Résultat du quiz"
+msgstr ""
+
+#: templates/quiz/result.html:23
+msgid "Félicitations ! Vous avez réussi !"
+msgstr ""
+
+#: templates/quiz/result.html:27
+msgid "Pas encore réussi. Réessayez !"
+msgstr ""
+
+#: templates/quiz/result.html:32
+msgid "Seuil de réussite"
+msgstr ""
+
+#: templates/quiz/result.html:36
+msgid "Réessayer"
+msgstr ""
+
+#: templates/quiz/result.html:61
+msgid "Détail de vos réponses"
+msgstr ""
+
+#: templates/quiz/result.html:77
+msgid "Votre réponse"
+msgstr ""
+
+#: templates/quiz/result.html:108 templates/quiz/result.html:120
+#: templates/quiz/result.html:130
+#, fuzzy
+#| msgid "Telecharger"
+msgid "Télécharger"
+msgstr "Telechaje"
+
+#: templates/quiz/result.html:111 templates/quiz/result.html:123
+#: templates/quiz/result.html:133 templates/quiz/result.html:142
+msgid "Aucun fichier téléchargé"
+msgstr ""
+
+#: templates/quiz/result.html:151
+msgid "Bonne réponse"
+msgstr ""
+
+#: templates/quiz/result.html:163
+msgid "Explication"
+msgstr ""
+
+#: templates/quiz/result.html:169
+msgid "Aucune réponse enregistrée."
+msgstr ""
+
+#: templates/quiz/take_quiz.html:13
+msgid "Temps restant"
+msgstr ""
+
+#: templates/quiz/take_quiz.html:19
+msgid "répondues"
+msgstr ""
+
+#: templates/quiz/take_quiz.html:46
+msgid "pts"
+msgstr ""
+
+#: templates/quiz/take_quiz.html:90
+msgid "Écrivez votre réponse..."
+msgstr ""
+
+#: templates/quiz/take_quiz.html:95
+msgid "Écrivez votre réponse ici..."
+msgstr ""
+
+#: templates/quiz/take_quiz.html:101
+msgid "Enregistrez votre réponse audio"
+msgstr ""
+
+#: templates/quiz/take_quiz.html:117
+msgid "Maintenez le bouton pour enregistrer (cliquez sur ordinateur)"
+msgstr ""
+
+#: templates/quiz/take_quiz.html:125
+msgid "Ou téléchargez un fichier audio"
+msgstr ""
+
+#: templates/quiz/take_quiz.html:133
+msgid "Téléchargez votre réponse vidéo"
+msgstr ""
+
+#: templates/quiz/take_quiz.html:140
+msgid "Téléchargez votre réponse image"
+msgstr ""
+
+#: templates/quiz/take_quiz.html:147
+msgid "Téléchargez votre fichier réponse"
+msgstr ""
+
+#: templates/quiz/take_quiz.html:158
+msgid "Précédent"
+msgstr ""
+
+#: templates/quiz/take_quiz.html:162
+msgid "Suivant"
+msgstr ""
+
+#: templates/quiz/take_quiz.html:165
+#, fuzzy
+#| msgid "Commencer le quiz"
+msgid "Soumettre le quiz"
+msgstr "Kòmanse kiz la"
+
+#: templates/quiz/take_quiz.html:361
+msgid "Êtes-vous sûr de vouloir soumettre ce quiz ?"
+msgstr ""
+
+#: templates/ranking/leaderboard.html:8
+msgid "Classement général"
+msgstr ""
+
+#: templates/ranking/leaderboard.html:10
+msgid "Général"
+msgstr ""
+
+#: templates/ranking/leaderboard.html:11 templates/ranking/my_rank.html:11
+msgid "Cette semaine"
+msgstr ""
+
+#: templates/ranking/leaderboard.html:12 templates/ranking/my_rank.html:12
+msgid "Ce mois"
+msgstr ""
+
+#: templates/ranking/leaderboard.html:18
+#, fuzzy
+#| msgid "Aucune donnee"
+msgid "Aucun joueur."
+msgstr "Pa gen done"
+
+#: templates/ranking/leaderboard.html:25
+msgid "Aucun joueur cette semaine."
+msgstr ""
+
+#: templates/ranking/leaderboard.html:32
+msgid "Aucun joueur ce mois."
+msgstr ""
+
+#: templates/ranking/my_rank.html:10
+msgid "Points totaux"
+msgstr ""
+
+#: templates/ranking/my_rank.html:16
+#, fuzzy
+#| msgid "Niveau"
+msgid "Niveau actuel"
+msgstr "Nivo"
+
+#: templates/ranking/my_rank.html:19
+msgid "Prochain niveau"
+msgstr ""
+
+#: templates/ranking/my_rank.html:19
+msgid "points requis"
+msgstr ""
+
+#: templates/ranking/my_rank.html:24
+msgid "Historique récent"
+msgstr ""
+
+#: templates/ranking/my_rank.html:32
+msgid "Aucune activité récente."
+msgstr ""
+
+#: templates/subscriptions/admin_pending.html:4
+#: templates/subscriptions/admin_pending.html:9
+#, fuzzy
+#| msgid "Abonnements"
+msgid "Abonnements en attente"
+msgstr "Abònman"
+
+#: templates/subscriptions/admin_pending.html:19
+#: templates/subscriptions/select_courses.html:12
+msgid "Plan"
+msgstr ""
+
+#: templates/subscriptions/admin_pending.html:49
+msgid "Gérer"
+msgstr ""
+
+#: templates/subscriptions/admin_pending.html:60
+msgid "Aucun abonnement en attente."
+msgstr ""
+
+#: templates/subscriptions/detail.html:16
+msgid "Début"
+msgstr ""
+
+#: templates/subscriptions/detail.html:29
+#: templates/subscriptions/my_subscriptions.html:15
+msgid "Action requise"
+msgstr ""
+
+#: templates/subscriptions/detail.html:30
+msgid "Vous devez choisir vos cours pour accéder au contenu."
+msgstr ""
+
+#: templates/subscriptions/detail.html:32
+#: templates/subscriptions/my_subscriptions.html:18
+#: templates/subscriptions/my_subscriptions.html:48
+#: templates/subscriptions/select_courses.html:4
+#, fuzzy
+#| msgid "Explorer les cours"
+msgid "Choisir mes cours"
+msgstr "Eksplore kou yo"
+
+#: templates/subscriptions/detail.html:38
+msgid "Cours sélectionnés"
+msgstr ""
+
+#: templates/subscriptions/detail.html:53
+msgid "Aucun cours sélectionné."
+msgstr ""
+
+#: templates/subscriptions/detail.html:57
+msgid "Accès actifs"
+msgstr ""
+
+#: templates/subscriptions/detail.html:67
+msgid "Expire"
+msgstr ""
+
+#: templates/subscriptions/detail.html:74
+msgid "Aucun accès actif."
+msgstr ""
+
+#: templates/subscriptions/list.html:9
+#, fuzzy
+#| msgid "Abonnements"
+msgid "Plans d'abonnement"
+msgstr "Abònman"
+
+#: templates/subscriptions/list.html:12
+msgid "Choisissez le plan qui vous convient et accédez à des cours exclusifs."
+msgstr ""
+
+#: templates/subscriptions/list.html:18
+#, fuzzy
+#| msgid "Abonnements"
+msgid "Abonnement actif"
+msgstr "Abònman"
+
+#: templates/subscriptions/list.html:19
+msgid "expire le"
+msgstr ""
+
+#: templates/subscriptions/list.html:29
+msgid "GRATUIT"
+msgstr ""
+
+#: templates/subscriptions/list.html:44
+#: templates/subscriptions/subscribe.html:25
+#, fuzzy
+#| msgid "Cours"
+msgid "jours"
+msgstr "Kou"
+
+#: templates/subscriptions/list.html:48
+#: templates/subscriptions/subscribe.html:28
+msgid "Cours inclus"
+msgstr ""
+
+#: templates/subscriptions/list.html:50
+#: templates/subscriptions/subscribe.html:30
+msgid "max"
+msgstr ""
+
+#: templates/subscriptions/list.html:52
+#: templates/subscriptions/subscribe.html:32
+msgid "tous"
+msgstr ""
+
+#: templates/subscriptions/list.html:64
+msgid "Activer gratuitement"
+msgstr ""
+
+#: templates/subscriptions/list.html:68
+#: templates/subscriptions/subscribe.html:4
+#: templates/subscriptions/subscribe.html:9
+msgid "S'abonner"
+msgstr ""
+
+#: templates/subscriptions/list.html:74
+msgid "Aucun plan disponible pour le moment."
+msgstr ""
+
+#: templates/subscriptions/my_subscriptions.html:4
+#: templates/subscriptions/my_subscriptions.html:9
+#, fuzzy
+#| msgid "Abonnements"
+msgid "Mes abonnements"
+msgstr "Abònman"
+
+#: templates/subscriptions/my_subscriptions.html:16
+#, fuzzy
+#| msgid "Abonnements"
+msgid "Votre abonnement"
+msgstr "Abònman"
+
+#: templates/subscriptions/my_subscriptions.html:16
+msgid "est actif, mais vous devez choisir vos cours."
+msgstr ""
+
+#: templates/subscriptions/my_subscriptions.html:41
+msgid "Expire le"
+msgstr ""
+
+#: templates/subscriptions/my_subscriptions.html:60
+msgid "Vous n'avez pas encore d'abonnement."
+msgstr ""
+
+#: templates/subscriptions/my_subscriptions.html:64
+#, fuzzy
+#| msgid "Voir details"
+msgid "Voir les plans"
+msgstr "Gade detay"
+
+#: templates/subscriptions/select_courses.html:9
+msgid "Choisissez vos cours"
+msgstr ""
+
+#: templates/subscriptions/select_courses.html:13
+msgid "Places restantes"
+msgstr ""
+
+#: templates/subscriptions/select_courses.html:23
+msgid "Déjà sélectionnés"
+msgstr ""
+
+#: templates/subscriptions/select_courses.html:54
+msgid "Valider la sélection"
+msgstr ""
+
+#: templates/subscriptions/select_courses.html:57
+msgid "Plus tard"
+msgstr ""
+
+#: templates/subscriptions/select_courses.html:84
+msgid "Vous ne pouvez sélectionner que"
+msgstr ""
+
+#: templates/subscriptions/select_courses.html:84
+msgid "cours maximum."
+msgstr ""
+
+#: templates/subscriptions/subscribe.html:17
+msgid "Prix"
+msgstr "Pri"
+
+#: templates/subscriptions/subscribe.html:65
+msgid "Photo du paiement"
+msgstr ""
+
+#: templates/subscriptions/subscribe.html:68
+msgid "Prenez une photo de votre reçu de paiement."
+msgstr ""
+
+#: templates/theme_manager/theme_preview.html:4
+#: templates/theme_manager/theme_preview.html:8
+msgid "Aperçu du thème"
+msgstr ""
+
+#: templates/theme_manager/theme_preview.html:10
+msgid "Couleurs principales"
+msgstr ""
+
+#: templates/theme_manager/theme_preview.html:21
+msgid "Boutons"
+msgstr ""
+
+#: templates/theme_manager/theme_preview.html:35
+msgid "Gérer les thèmes"
+msgstr ""
+
+#: templates/todo/create_todo.html:4 templates/todo/create_todo.html:14
+#: templates/todo/todo_list.html:15
+msgid "Nouvelle tâche"
+msgstr ""
+
+#: templates/todo/create_todo.html:8
+msgid "Retour aux tâches"
+msgstr ""
+
+#: templates/todo/create_todo.html:13 templates/todo/todo_list.html:10
+#, fuzzy
+#| msgid "Inscription"
+msgid "Organisation"
+msgstr "Enskripsyon"
+
+#: templates/todo/create_todo.html:15
+msgid ""
+"Définissez une prochaine étape claire pour avancer dans votre apprentissage."
+msgstr ""
+
+#: templates/todo/delete_confirm.html:4
+#, fuzzy
+#| msgid "Supprimer"
+msgid "Supprimer la tâche"
+msgstr "Efase"
+
+#: templates/todo/delete_confirm.html:10
+msgid "Supprimer cette tâche ?"
+msgstr ""
+
+#: templates/todo/delete_confirm.html:11
+#, python-format
+msgid "La tâche « %(title)s » sera définitivement supprimée."
+msgstr ""
+
+#: templates/todo/todo_list.html:12
+msgid ""
+"Planifiez vos prochaines étapes et gardez votre apprentissage sur la bonne "
+"voie."
+msgstr ""
+
+#: templates/todo/todo_list.html:19
+msgid "Résumé des tâches"
+msgstr ""
+
+#: templates/todo/todo_list.html:22
+#, fuzzy
+#| msgid "Ajouter"
+msgid "Toutes"
+msgstr "Ajoute"
+
+#: templates/todo/todo_list.html:34 templates/todo/todo_list.html:57
+msgid "Terminées"
+msgstr ""
+
+#: templates/todo/todo_list.html:40
+msgid "Filtrer vos tâches"
+msgstr ""
+
+#: templates/todo/todo_list.html:49
+#, fuzzy
+#| msgid "Chercher"
+msgid "Rechercher une tâche"
+msgstr "Chèche"
+
+#: templates/todo/todo_list.html:54
+#, fuzzy
+#| msgid "Tous droits reserves"
+msgid "Tous les statuts"
+msgstr "Tout dwa rezève"
+
+#: templates/todo/todo_list.html:61
+msgid "Priorité"
+msgstr ""
+
+#: templates/todo/todo_list.html:63
+msgid "Toutes les priorités"
+msgstr ""
+
+#: templates/todo/todo_list.html:64
+msgid "Haute"
+msgstr ""
+
+#: templates/todo/todo_list.html:65
+msgid "Moyenne"
+msgstr ""
+
+#: templates/todo/todo_list.html:66
+msgid "Basse"
+msgstr ""
+
+#: templates/todo/todo_list.html:69
+msgid "Appliquer"
+msgstr ""
+
+#: templates/todo/todo_list.html:73
+msgid "Liste des tâches"
+msgstr ""
+
+#: templates/todo/todo_list.html:78
+msgid "Changer le statut de la tâche"
+msgstr ""
+
+#: templates/todo/todo_list.html:79
+msgid "Changer le statut"
+msgstr ""
+
+#: templates/todo/todo_list.html:104
+msgid "Votre liste est vide"
+msgstr ""
+
+#: templates/todo/todo_list.html:105
+msgid ""
+"Ajoutez une tâche pour transformer votre prochain objectif en action "
+"concrète."
+msgstr ""
+
+#: templates/todo/todo_list.html:106
+msgid "Créer une tâche"
+msgstr ""
+
+#: theme_manager/models.py:188
+msgid "Thèmes"
+msgstr ""
+
+#~ msgid "Sauvegarder"
+#~ msgstr "Sove"
+
+#~ msgid "Editer"
+#~ msgstr "Edite"
+
+#~ msgid "Oui"
+#~ msgstr "Wi"
+
+#~ msgid "Non"
+#~ msgstr "Non"
+
+#~ msgid "Filtrer"
+#~ msgstr "Filtre"
+
+#~ msgid "Repondre"
+#~ msgstr "Reponn"
+
+#~ msgid "Confirmer"
+#~ msgstr "Konfime"
+
+#~ msgid "Erreur"
+#~ msgstr "Erè"
+
+#~ msgid "Succes"
+#~ msgstr "Siksè"
+
+#~ msgid "Etes-vous sur ?"
+#~ msgstr "Èske ou sèten?"
+
+#~ msgid "Cette action ne peut pas etre annulee."
+#~ msgstr "Aksyon sa a pa ka anile."
