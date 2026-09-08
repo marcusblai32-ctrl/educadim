@@ -11,10 +11,18 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         fetch-depth: 0
+    
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y gettext
+        echo "✅ gettext installed"
+        msgfmt --version
     
     - name: Setup Python
       uses: actions/setup-python@v4
@@ -27,53 +35,37 @@ jobs:
         pip install django
         pip install -r requirements.txt 2>/dev/null || true
     
-    - name: Show current locale structure
-      run: |
-        echo "=== Current locale files ==="
-        find locale -type f 2>/dev/null || echo "No locale directory"
-        echo "=== Find manage.py ==="
-        find . -name "manage.py" -type f
-    
-    - name: Create locale for French (fr) - DEFAULT
+    - name: Create FR locale (French - Default)
       run: |
         echo "🔄 Creating French locale files..."
         mkdir -p locale/fr/LC_MESSAGES
         python manage.py makemessages -l fr --no-obsolete 2>&1 || echo "makemessages fr failed"
         echo "✅ French locale created"
     
-    - name: Create locale for Haitian Creole (ht)
+    - name: Create HT locale (Haitian Creole)
       run: |
         echo "🔄 Creating Haitian Creole locale files..."
         mkdir -p locale/ht/LC_MESSAGES
         python manage.py makemessages -l ht --no-obsolete 2>&1 || echo "makemessages ht failed"
         echo "✅ Haitian Creole locale created"
     
-    - name: Verify fr files
+    - name: Verify files
       run: |
-        echo "=== FR Locale files ==="
-        find locale/fr -type f 2>/dev/null || echo "No fr files"
-        if [ -f "locale/fr/LC_MESSAGES/django.po" ]; then
-          echo "--- FR django.po content (first 30 lines) ---"
-          head -30 locale/fr/LC_MESSAGES/django.po
-        fi
-    
-    - name: Verify ht files
-      run: |
-        echo "=== HT Locale files ==="
-        find locale/ht -type f 2>/dev/null || echo "No ht files"
-        if [ -f "locale/ht/LC_MESSAGES/django.po" ]; then
-          echo "--- HT django.po content (first 30 lines) ---"
-          head -30 locale/ht/LC_MESSAGES/django.po
-        fi
+        echo "=== FR files ==="
+        find locale/fr -type f 2>/dev/null
+        echo "=== HT files ==="
+        find locale/ht -type f 2>/dev/null
+        echo "=== All locale files ==="
+        find locale -type f
     
     - name: Compile messages
       run: |
         python manage.py compilemessages 2>&1 || echo "compilemessages failed"
     
-    - name: Final listing
+    - name: List compiled files
       run: |
-        echo "=== ALL locale files ==="
-        find locale -type f | sort
+        echo "=== Compiled .mo files ==="
+        find locale -name "*.mo" -type f
     
     - name: Commit and push
       run: |
@@ -81,5 +73,5 @@ jobs:
         git config user.email "actions@github.com"
         git add locale/
         git status
-        git commit -m "Create locale files: fr (default) and ht" || echo "No changes to commit"
+        git commit -m "Create locale files: fr (default) and ht" || echo "No changes"
         git push origin HEAD:main
