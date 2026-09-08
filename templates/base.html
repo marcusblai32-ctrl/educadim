@@ -4,24 +4,12 @@
 <html lang="{{ LANGUAGE_CODE|default:'fr' }}">
 <head>
     {# ===== THEME BOOT (avoid flash of wrong theme) ===== #}
-    <script>
-        (function () {
-            try {
-                var stored = localStorage.getItem('educdim-theme');
-                if (stored !== 'dark' && stored !== 'light') {
-                    stored = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
-                }
-                document.documentElement.setAttribute('data-theme', stored);
-            } catch (e) {
-                document.documentElement.setAttribute('data-theme', 'light');
-            }
-        })();
-    </script>
+    <script src="{% static 'js/theme-init.js' %}"></script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% if theme %}{{ theme.site_name|default:'EducDim' }}{% else %}EducDim{% endif %}{% endblock %}</title>
-    <meta name="description" content="{{ meta_description|default:theme.site_description|default:'EducDim — plateforme e-learning : cours en ligne, quiz, badges et suivi de progression.' }}">
+    <meta name="description" content="{% if meta_description %}{{ meta_description }}{% elif theme and theme.site_description %}{{ theme.site_description }}{% else %}EducDim — plateforme e-learning : cours en ligne, quiz, badges et suivi de progression.{% endif %}">
     <meta name="keywords" content="{{ meta_keywords|default:'e-learning, cours en ligne, éducation, EducDim, formation, quiz' }}">
 
     {# ===== TECHNICAL SEO ===== #}
@@ -34,7 +22,7 @@
     <meta property="og:site_name" content="{% if theme %}{{ theme.site_name|default:'EducDim' }}{% else %}EducDim{% endif %}">
     <meta property="og:type" content="{% block og_type %}website{% endblock %}">
     <meta property="og:title" content="{% block og_title %}{% if theme %}{{ theme.site_name|default:'EducDim' }}{% else %}EducDim{% endif %}{% endblock %}">
-    <meta property="og:description" content="{% block og_description %}{{ meta_description|default:theme.site_description|default:'EducDim — plateforme e-learning.' }}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{% if meta_description %}{{ meta_description }}{% elif theme and theme.site_description %}{{ theme.site_description }}{% else %}EducDim — plateforme e-learning.{% endif %}{% endblock %}">
     <meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
     <meta property="og:locale" content="{{ LANGUAGE_CODE|default:'fr' }}">
     {% block og_image %}{% if theme and theme.get_logo %}<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ theme.get_logo }}">{% endif %}{% endblock %}
@@ -42,7 +30,7 @@
     {# ===== TWITTER CARD ===== #}
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{% block twitter_title %}{% if theme %}{{ theme.site_name|default:'EducDim' }}{% else %}EducDim{% endif %}{% endblock %}">
-    <meta name="twitter:description" content="{% block twitter_description %}{{ meta_description|default:theme.site_description|default:'EducDim — plateforme e-learning.' }}{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}{% if meta_description %}{{ meta_description }}{% elif theme and theme.site_description %}{{ theme.site_description }}{% else %}EducDim — plateforme e-learning.{% endif %}{% endblock %}">
 
     {# ===== JSON-LD (site-wide, real data only) ===== #}
     <script type="application/ld+json">
@@ -67,120 +55,14 @@
     {% endif %}
 
     {# ===== CSS ===== #}
+    <link rel="stylesheet" href="{% static 'css/variables.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% url 'theme_manager:dynamic_css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <style>
-        /* ===== BANNIERES STYLES ===== */
-        .banner-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1rem;
-        }
-
-        .banner-container .banner {
-            display: block;
-            border-radius: var(--radius, 8px);
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            margin: 0.5rem 0;
-        }
-
-        .banner-container .banner:hover {
-            transform: scale(1.01);
-            box-shadow: var(--shadow, 0 4px 20px rgba(0,0,0,0.08));
-        }
-
-        .banner-container .banner img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .banner-container .banner-header {
-            margin-bottom: 1rem;
-        }
-
-        .banner-container .banner-footer {
-            margin-top: 1rem;
-        }
-
-        .banner-container .banner-sidebar {
-            margin: 1rem 0;
-        }
-
-        .banner-container .banner-sidebar img {
-            max-width: 100%;
-            height: auto;
-            border-radius: var(--radius, 8px);
-        }
-
-        .banner-container .banner-empty {
-            display: none;
-        }
-
-        /* Sidebar layout */
-        .main-with-sidebar {
-            display: flex;
-            gap: 1.5rem;
-            flex-wrap: wrap;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1rem;
-        }
-
-        .main-with-sidebar .sidebar {
-            flex: 0 0 250px;
-            max-width: 100%;
-        }
-
-        .main-with-sidebar .main-content {
-            flex: 1;
-            min-width: 300px;
-        }
-
-        @media (max-width: 768px) {
-            .main-with-sidebar {
-                flex-direction: column;
-            }
-            .main-with-sidebar .sidebar {
-                flex: 1;
-                order: 2;
-            }
-            .main-with-sidebar .main-content {
-                order: 1;
-            }
-        }
-
-        /* ===== LANG SWITCHER ===== */
-        .lang-switcher select {
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            border: 1px solid var(--glass-brd, rgba(0,0,0,0.1));
-            background: var(--glass, rgba(255,255,255,0.9));
-            color: var(--text, #333);
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            appearance: auto;
-        }
-
-        .lang-switcher select:hover {
-            border-color: var(--primary, #5624d0);
-            box-shadow: 0 2px 8px rgba(86,36,208,0.15);
-        }
-
-        .lang-switcher select:focus {
-            outline: none;
-            border-color: var(--primary, #5624d0);
-            box-shadow: 0 0 0 3px rgba(86,36,208,0.1);
-        }
-    </style>
-
     {% block extra_head %}{% endblock %}
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
 
@@ -204,11 +86,21 @@
                 {% endif %}
             </a>
 
-            <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+            <button class="menu-toggle" id="menuToggle" type="button"
+                    aria-label="{% trans 'Ouvrir le menu' %}" aria-controls="mainNav" aria-expanded="false">
                 <i class="fas fa-bars"></i>
             </button>
 
-            <nav id="mainNav" class="main-nav">
+            <nav id="mainNav" class="main-nav" aria-label="{% trans 'Navigation principale' %}">
+                <form class="nav-search" action="{% url 'courses:course_list' %}" method="get" role="search">
+                    <label class="sr-only" for="navSearch">{% trans "Rechercher un cours" %}</label>
+                    <input id="navSearch" name="search" type="search"
+                           placeholder="{% trans 'Rechercher un cours' %}"
+                           autocomplete="off">
+                    <button type="submit" aria-label="{% trans 'Lancer la recherche' %}">
+                        <i class="fas fa-search" aria-hidden="true"></i>
+                    </button>
+                </form>
                 <a href="{% url 'courses:course_list' %}" class="nav-link">
                     <i class="fas fa-book"></i>
                     <span>{% trans "Explorer" %}</span>
@@ -219,9 +111,14 @@
                         <i class="fas fa-chart-line"></i>
                         <span>{% trans "Progression" %}</span>
                     </a>
+                    <a href="{% url 'todo:todo_list' %}" class="nav-link">
+                        <i class="fas fa-list-check"></i>
+                        <span>{% trans "Mes tâches" %}</span>
+                    </a>
 
                     <div class="nav-dropdown">
-                        <button type="button" class="nav-dropdown-btn" id="chatDropdownBtn">
+                        <button type="button" class="nav-dropdown-btn" id="chatDropdownBtn"
+                                aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-comments"></i>
                             <span>{% trans "Chat" %}</span>
                             <i class="fas fa-chevron-down"></i>
@@ -256,7 +153,8 @@
                     {% endif %}
 
                     <div class="user-dropdown">
-                        <button type="button" class="dropbtn" id="userDropdownBtn">
+                        <button type="button" class="dropbtn" id="userDropdownBtn"
+                                aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-user-circle"></i>
                             <span>{{ user.first_name|default:user.email }}</span>
                             <i class="fas fa-chevron-down"></i>
@@ -270,6 +168,9 @@
                             </a>
                             <a href="{% url 'enrollments:list' %}">
                                 <i class="fas fa-list-check"></i> {% trans "Inscriptions" %}
+                            </a>
+                            <a href="{% url 'todo:todo_list' %}">
+                                <i class="fas fa-tasks"></i> {% trans "Mes tâches" %}
                             </a>
                             <a href="{% url 'ranking:my_rank' %}">
                                 <i class="fas fa-trophy"></i> {% trans "Classement" %}
@@ -325,9 +226,8 @@
     {% if banners_header %}
     <div class="banner-container banner-header">
         {% for banner in banners_header %}
-            <a href="{{ banner.lien }}" class="banner" {% if banner.lien %}target="_blank"{% endif %}>
-                <img src="{{ banner.image.url }}" alt="{{ banner.titre }}" 
-                     style="width:100%; height:auto; max-height:{{ banner.hauteur }}px; object-fit:cover;">
+                <a href="{{ banner.lien }}" class="banner" {% if banner.lien %}target="_blank" rel="noopener noreferrer"{% endif %}>
+                <img src="{{ banner.image.url }}" alt="{{ banner.titre }}" class="banner-image">
             </a>
         {% endfor %}
     </div>
@@ -335,26 +235,26 @@
 
     {# ===== EVENEMENT BANNER ===== #}
     {% if theme and theme.evenement_actif %}
-    <div class="evenement-banner" style="display:block; background:linear-gradient(135deg, var(--primary), var(--secondary)); color:#fff; padding:1.5rem; text-align:center; position:relative; overflow:hidden;">
+    <div class="evenement-banner">
         {% if theme.get_evenement_banner %}
-            <img src="{{ theme.get_evenement_banner }}" alt="{{ theme.evenement_nom }}" style="max-width:100%; border-radius:var(--radius-sm);">
+            <img src="{{ theme.get_evenement_banner }}" alt="{{ theme.evenement_nom }}" class="event-banner-image">
         {% endif %}
 
-        <h2 class="evenement-glow" style="font-family:var(--font-display); font-size:1.5rem; text-shadow:0 0 24px rgba(255,255,255,0.55); display:flex; align-items:center; justify-content:center; gap:0.6rem; flex-wrap:wrap; margin:0.5rem 0;">
+        <h2 class="evenement-glow">
             {% if theme.get_evenement_logo %}
-                <img src="{{ theme.get_evenement_logo }}" alt="{{ theme.evenement_nom }}" style="max-height:50px; max-width:100px; object-fit:contain;">
+                <img src="{{ theme.get_evenement_logo }}" alt="{{ theme.evenement_nom }}" class="event-logo">
             {% endif %}
             {{ theme.evenement_nom|default:"Évènement spécial" }}
         </h2>
 
         {% if theme.evenement_message %}
-        <p style="color:rgba(255,255,255,0.9); margin:0.5rem 0; font-size:1rem;">
+        <p class="event-message">
             {{ theme.evenement_message }}
         </p>
         {% endif %}
 
         {% if theme.evenement_hashtag %}
-            <div class="hashtag" style="display:inline-block; margin-top:0.6rem; padding:0.3rem 1rem; border-radius:50px; background:rgba(255,255,255,0.2); font-weight:600;">
+            <div class="hashtag">
                 #{{ theme.evenement_hashtag }}
             </div>
         {% endif %}
@@ -384,8 +284,8 @@
         <aside class="sidebar">
             <div class="banner-container banner-sidebar">
                 {% for banner in banners_sidebar %}
-                    <a href="{{ banner.lien }}" class="banner" {% if banner.lien %}target="_blank"{% endif %}>
-                        <img src="{{ banner.image.url }}" alt="{{ banner.titre }}" style="width:100%; height:auto; border-radius:var(--radius, 8px);">
+                    <a href="{{ banner.lien }}" class="banner" {% if banner.lien %}target="_blank" rel="noopener noreferrer"{% endif %}>
+                        <img src="{{ banner.image.url }}" alt="{{ banner.titre }}" class="banner-image">
                     </a>
                 {% endfor %}
             </div>
@@ -416,9 +316,8 @@
     {% if banners_footer %}
     <div class="banner-container banner-footer">
         {% for banner in banners_footer %}
-            <a href="{{ banner.lien }}" class="banner" {% if banner.lien %}target="_blank"{% endif %}>
-                <img src="{{ banner.image.url }}" alt="{{ banner.titre }}" 
-                     style="width:100%; height:auto; max-height:{{ banner.hauteur }}px; object-fit:cover; border-radius:var(--radius, 8px);">
+            <a href="{{ banner.lien }}" class="banner" {% if banner.lien %}target="_blank" rel="noopener noreferrer"{% endif %}>
+                <img src="{{ banner.image.url }}" alt="{{ banner.titre }}" class="banner-image">
             </a>
         {% endfor %}
     </div>
