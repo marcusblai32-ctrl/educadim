@@ -50,6 +50,7 @@ def supprimer_message(request, pk):
 def get_new_messages(request, room_pk, last_message_id):
     """Retounen nouvo mesaj depi dènye ID a (JSON)"""
     salon = get_object_or_404(ChatRoom, pk=room_pk)
+    
     if request.user not in salon.participants.all():
         return JsonResponse({'messages': []}, status=403)
 
@@ -61,7 +62,6 @@ def get_new_messages(request, room_pk, last_message_id):
     if not new_messages:
         return JsonResponse({'messages': []})
 
-    # Konvèti mesaj yo an JSON
     messages_data = []
     for msg in new_messages:
         messages_data.append({
@@ -79,48 +79,59 @@ def get_new_messages(request, room_pk, last_message_id):
 @login_required
 def send_message(request, room_pk):
     """Voye yon mesaj epi retounen an JSON"""
+    print(f"🔵 send_message called: room_pk={room_pk}, user={request.user}")
+    
     salon = get_object_or_404(ChatRoom, pk=room_pk)
+    
     if request.user not in salon.participants.all():
         return JsonResponse({'error': 'Unauthorized'}, status=403)
 
-    if request.method == 'POST':
-        contenu = None
-        
-        # Tcheke si se JSON
-        if request.content_type == 'application/json':
-            try:
-                data = json.loads(request.body)
-                contenu = data.get('contenu', '').strip()
-            except:
-                pass
-        
-        # Sinon, pran nan POST
-        if contenu is None:
-            contenu = request.POST.get('contenu', '').strip()
-        
-        if contenu:
-            # Kreye mesaj la nan baz done
-            msg = Message.objects.create(
-                room=salon,
-                user=request.user,
-                contenu=contenu
-            )
-            
-            # Retounen mesaj la an JSON
-            return JsonResponse({
-                'status': 'ok',
-                'id': msg.id,
-                'contenu': msg.contenu,
-                'sender': 'user',
-                'sender_name': request.user.get_full_name() or request.user.username,
-                'time': msg.created_at.strftime('%H:%M'),
-                'date': msg.created_at.strftime('%d/%m/%Y'),
-                'user_id': request.user.id,
-            })
-        else:
-            return JsonResponse({'error': 'Empty message'}, status=400)
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
 
-    return JsonResponse({'error': 'Method not allowed'}, status=405)
+    # Jwenn kontni an
+    contenu = None
+    
+    # Eseye jwenn nan JSON
+    if request.content_type == 'application/json':
+        try:
+            data = json.loads(request.body)
+            contenu = data.get('contenu', '').strip()
+        except:
+            pass
+    
+    # Eseye jwenn nan POST form
+    if contenu is None:
+        contenu = request.POST.get('contenu', '').strip()
+    
+    print(f"🔵 contenu: '{contenu}'")
+    
+    if not contenu:
+        return JsonResponse({'error': 'Empty message'}, status=400)
+    
+    # Kreye mesaj la nan baz done
+    try:
+        msg = Message.objects.create(
+            room=salon,
+            user=request.user,
+            contenu=contenu
+        )
+        print(f"✅ Message created: ID={msg.id}")
+    except Exception as e:
+        print(f"❌ Error: {e}")
+        return JsonResponse({'error': str(e)}, status=500)
+    
+    # Retounen mesaj la an JSON
+    return JsonResponse({
+        'status': 'ok',
+        'id': msg.id,
+        'contenu': msg.contenu,
+        'sender': 'user',
+        'sender_name': request.user.get_full_name() or request.user.username,
+        'time': msg.created_at.strftime('%H:%M'),
+        'date': msg.created_at.strftime('%d/%m/%Y'),
+        'user_id': request.user.id,
+    })
 
 @login_required
 def liste_etudiants_chat(request):
