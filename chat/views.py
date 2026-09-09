@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.template.loader import render_to_string
 from django.utils.translation import gettext as _
 from django.db.models import Q
@@ -10,6 +10,7 @@ from .models import ChatRoom, Message
 from courses.models import Course
 from enrollments.models import Enrollment
 from accounts.models import CustomUser
+import json
 
 @login_required
 def liste_salons(request):
@@ -23,7 +24,6 @@ def detail_salon(request, pk):
         raise PermissionDenied(_("Vous n'avez pas acces a ce salon."))
     messages_list = salon.messages.filter(is_deleted=False).select_related('user')
 
-    # Pou date divider
     from django.utils import timezone
     now = timezone.now()
     yesterday = now - timezone.timedelta(days=1)
@@ -48,70 +48,92 @@ def supprimer_message(request, pk):
 
 @login_required
 def get_new_messages(request, room_pk, last_message_id):
-    """Retounen nouvo mesaj depi dènye ID a"""
+    """Retounen nouvo mesaj depi dènye ID a (JSON)"""
     salon = get_object_or_404(ChatRoom, pk=room_pk)
     if request.user not in salon.participants.all():
-        return HttpResponse('', status=403)
+        return JsonResponse({'messages': []}, status=403)
 
-    # Jwenn nouvo mesaj
     new_messages = salon.messages.filter(
         is_deleted=False,
         id__gt=last_message_id
     ).select_related('user')
 
     if not new_messages:
-        return HttpResponse('')
+        return JsonResponse({'messages': []})
 
-    # Rann HTML nouvo mesaj yo
-    html = ''
+    # Konvèti mesaj yo an JSON
+    messages_data = []
     for msg in new_messages:
-        html += render_to_string('chat/_message.html', {
-            'msg': msg,
-            'request': request,
-            'user': request.user
+        messages_data.append({
+            'id': msg.id,
+            'contenu': msg.contenu,
+            'sender': 'user' if msg.user == request.user else 'other',
+            'sender_name': msg.user.get_full_name() or msg.user.username,
+            'time': msg.created_at.strftime('%H:%M'),
+            'date': msg.created_at.strftime('%d/%m/%Y'),
+            'user_id': msg.user.id,
         })
 
-    return HttpResponse(html)
+    return JsonResponse({'messages': messages_data})
 
 @login_required
 def send_message(request, room_pk):
+    """Voye yon mesaj epi retounen an JSON"""
     salon = get_object_or_404(ChatRoom, pk=room_pk)
     if request.user not in salon.participants.all():
-        return HttpResponse('', status=403)
+        return JsonResponse({'error': 'Unauthorized'}, status=403)
 
     if request.method == 'POST':
-        contenu = request.POST.get('contenu', '').strip()
+        contenu = None
+        
+        # Tcheke si se JSON
+        if request.content_type == 'application/json':
+            try:
+                data = json.loads(request.body)
+                contenu = data.get('contenu', '').strip()
+            except:
+                pass
+        
+        # Sinon, pran nan POST
+        if contenu is None:
+            contenu = request.POST.get('contenu', '').strip()
+        
         if contenu:
+            # Kreye mesaj la nan baz done
             msg = Message.objects.create(
                 room=salon,
                 user=request.user,
                 contenu=contenu
             )
-            # Rann HTML nouvo mesaj la
-            html = render_to_string('chat/_message.html', {
-                'msg': msg,
-                'request': request,
-                'user': request.user
+            
+            # Retounen mesaj la an JSON
+            return JsonResponse({
+                'status': 'ok',
+                'id': msg.id,
+                'contenu': msg.contenu,
+                'sender': 'user',
+                'sender_name': request.user.get_full_name() or request.user.username,
+                'time': msg.created_at.strftime('%H:%M'),
+                'date': msg.created_at.strftime('%d/%m/%Y'),
+                'user_id': request.user.id,
             })
-            return HttpResponse(html)
+        else:
+            return JsonResponse({'error': 'Empty message'}, status=400)
 
-    return HttpResponse('')
+    return JsonResponse({'error': 'Method not allowed'}, status=405)
 
 @login_required
 def liste_etudiants_chat(request):
-    # Jwenn tout kou kote ou enskri
     cours_ids = Enrollment.objects.filter(
         utilisateur=request.user,
         statut='active'
     ).values_list('cours_id', flat=True)
 
-    # Jwenn tout etidyan ki nan menm kou
     etudiants = CustomUser.objects.filter(
         inscriptions__cours_id__in=cours_ids,
         inscriptions__statut='active'
     ).exclude(id=request.user.id).distinct()
 
-    # SEARCH
     search_query = request.GET.get('search', '')
     if search_query:
         etudiants = etudiants.filter(
@@ -120,7 +142,6 @@ def liste_etudiants_chat(request):
             Q(email__icontains=search_query)
         )
 
-    # Pou chak etidyan, verifye si chat egziste
     for etudiant in etudiants:
         existing = ChatRoom.objects.filter(
             type='private',
@@ -175,9 +196,11 @@ def creer_salon_groupe(request, course_pk):
     if not (request.user.is_staff or Enrollment.objects.filter(utilisateur=request.user, cours=course, statut='active').exists()):
         messages.error(request, _("Vous n'etes pas inscrit a ce cours."))
         return redirect('courses:course_detail', pk=course_pk)
+    
     existing = ChatRoom.objects.filter(type='group', course=course).first()
     if existing:
         return redirect('chat:detail_salon', pk=existing.pk)
+    
     salon = ChatRoom.objects.create(
         type='group',
         nom=f"Groupe - {course.titre}",
@@ -198,10 +221,13 @@ def creer_salon_feedback(request, user_id):
     if not request.user.is_staff:
         messages.error(request, _("Seuls les administrateurs peuvent creer un salon de feedback."))
         return redirect('chat:liste_salons')
+    
     student = get_object_or_404(CustomUser, pk=user_id)
     existing = ChatRoom.objects.filter(type='feedback', participants=request.user).filter(participants=student).first()
+    
     if existing:
         return redirect('chat:detail_salon', pk=existing.pk)
+    
     salon = ChatRoom.objects.create(
         type='feedback',
         nom=f"Feedback {student.get_full_name()}",
