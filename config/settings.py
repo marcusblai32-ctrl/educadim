@@ -22,7 +22,8 @@ ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[
     '127.0.0.1',
     '.onrender.com',
     'educadim.onrender.com',
-    'educadim.com'
+    'educadim.com',
+    'educdim.onrender.com',
 ])
 
 # ============================================
@@ -54,15 +55,15 @@ else:
 # ============================================
 # SITE INFO
 # ============================================
-SITE_NAME = env('SITE_NAME', default='EducDim')
-SITE_URL = env('SITE_URL', default='https://educdim.onrender.com')
+SITE_NAME = env('SITE_NAME', default='EducaDim')
+SITE_URL = env('SITE_URL', default='https://educadim.onrender.com')
 
 # ============================================
 # BREVO (EMAIL)
 # ============================================
 BREVO_API_KEY = env('BREVO_API_KEY', default='')
-BREVO_SENDER_EMAIL = env('BREVO_SENDER_EMAIL', default='noreply@educdim.com')
-BREVO_SENDER_NAME = env('BREVO_SENDER_NAME', default='EducDim')
+BREVO_SENDER_EMAIL = env('BREVO_SENDER_EMAIL', default='noreply@educadim.com')
+BREVO_SENDER_NAME = env('BREVO_SENDER_NAME', default='EducaDim')
 
 if BREVO_API_KEY:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -74,7 +75,7 @@ if BREVO_API_KEY:
     DEFAULT_FROM_EMAIL = BREVO_SENDER_EMAIL
 else:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-    DEFAULT_FROM_EMAIL = 'no-reply@educdim.com'
+    DEFAULT_FROM_EMAIL = 'no-reply@educadim.com'
 
 # ============================================
 # TELERIVET (SMS)
@@ -134,7 +135,7 @@ USE_I18N = True
 USE_TZ = True
 
 # ============================================
-# INSTALLED APPS - KOREKTE (RETIRE DOUB sitemaps)
+# INSTALLED APPS
 # ============================================
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -143,7 +144,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.sitemaps',  # ✅ Sèlman sa a, PA mete 'sitemaps' ankò
+    'django.contrib.sitemaps',
     'accounts.apps.AccountsConfig',
     'courses.apps.CoursesConfig',
     'enrollments.apps.EnrollmentsConfig',
@@ -243,12 +244,17 @@ LOGIN_REDIRECT_URL = 'accounts:profile'
 LOGOUT_REDIRECT_URL = 'accounts:login'
 
 # ============================================
-# STATIC & MEDIA
+# STATIC & MEDIA - KORIJE POU WHITENOISE
 # ============================================
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# WhiteNoise konfigirasyon
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+WHITENOISE_USE_FINDERS = True
+WHITENOISE_AUTOREFRESH = DEBUG
+WHITENOISE_MANIFEST_STRICT = False  # Evite erè manifest
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
