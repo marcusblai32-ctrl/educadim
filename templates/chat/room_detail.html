@@ -45,14 +45,16 @@
         const FETCH_URL = '{% url "chat:get_new_messages" salon.pk 0 %}';
         const CSRF_TOKEN = document.querySelector('[name=csrfmiddlewaretoken]')?.value || '';
         
-        // ===== VARIABLES POU SCROLL =====
+        console.log('🔵 Chat room initialized');
+        console.log('🔵 SEND_URL:', SEND_URL);
+        console.log('🔵 FETCH_URL:', FETCH_URL);
+        
+        // ===== SCROLL =====
         let isUserScrolling = false;
         let scrollTimeout = null;
         
-        // ===== FONKSYON SCROLL =====
         function isAtBottom() {
-            const threshold = 150;
-            return (container.scrollHeight - container.scrollTop - container.clientHeight) < threshold;
+            return (container.scrollHeight - container.scrollTop - container.clientHeight) < 150;
         }
         
         function scrollBottom(smooth) {
@@ -64,9 +66,7 @@
             }
         }
         
-        // ===== DETEKTE SI ITILIZATÈ AP SCROLL =====
         container.addEventListener('scroll', function() {
-            // Si itilizatè pa anba a, li ap scroll monte
             if (!isAtBottom()) {
                 isUserScrolling = true;
                 clearTimeout(scrollTimeout);
@@ -74,12 +74,11 @@
                     isUserScrolling = false;
                 }, 3000);
             } else {
-                // Si li rive anba, reaktive scroll otomatik
                 isUserScrolling = false;
             }
         });
         
-        // ===== KREYE ELEMAN MESAJ =====
+        // ===== KREYE MESAJ =====
         function createMessageElement(msg) {
             const wrapper = document.createElement('div');
             const isMe = msg.sender === 'user' || msg.user_id === {{ request.user.id }};
@@ -114,7 +113,6 @@
             return wrapper;
         }
         
-        // ===== AJOUTE NOUVO MESAJ =====
         function appendMessage(msg) {
             const empty = document.getElementById('emptyChat');
             if (empty) empty.remove();
@@ -122,7 +120,6 @@
             const el = createMessageElement(msg);
             container.appendChild(el);
             
-            // Scroll anba sèlman si itilizatè pa ap scroll
             if (!isUserScrolling) {
                 setTimeout(function() {
                     scrollBottom(true);
@@ -134,7 +131,7 @@
         function loadMessages() {
             fetch(FETCH_URL)
                 .then(response => {
-                    if (!response.ok) throw new Error('Network error');
+                    if (!response.ok) throw new Error('HTTP ' + response.status);
                     return response.json();
                 })
                 .then(data => {
@@ -145,25 +142,27 @@
                             if (id) existingIds.add(id);
                         });
                         
-                        let newMessages = false;
                         data.messages.forEach(msg => {
                             const id = msg.id.toString();
                             if (!existingIds.has(id)) {
                                 appendMessage(msg);
-                                newMessages = true;
                             }
                         });
                     }
                 })
-                .catch(error => console.error('Error loading messages:', error));
+                .catch(error => console.error('❌ Load error:', error));
         }
         
         // ===== VOYE MESAJ =====
         function sendMessage() {
             const text = input.value.trim();
-            if (!text) return;
+            if (!text) {
+                console.log('⚠️ Empty message');
+                return;
+            }
             
-            // Ajoute mesaj imedyatman
+            console.log('📤 Sending:', text);
+            
             const tempId = 'temp_' + Date.now();
             const tempMsg = {
                 id: tempId,
@@ -178,7 +177,6 @@
             input.value = '';
             sendBtn.disabled = true;
             
-            // ===== VOYE NAN SERVEUR =====
             fetch(SEND_URL, {
                 method: 'POST',
                 headers: {
@@ -187,23 +185,26 @@
                 },
                 body: 'contenu=' + encodeURIComponent(text)
             })
-            .then(response => response.json())
+            .then(response => {
+                console.log('📥 Response status:', response.status);
+                if (!response.ok) throw new Error('HTTP ' + response.status);
+                return response.json();
+            })
             .then(data => {
+                console.log('📥 Response data:', data);
                 if (data.status === 'ok' && data.id) {
-                    console.log('Message sent! ID:', data.id);
-                    // Ranplase ID tanporè a
+                    console.log('✅ Message sent! ID:', data.id);
                     const tempEl = container.querySelector(`[data-message-id="${tempId}"]`);
                     if (tempEl) {
                         tempEl.dataset.messageId = data.id;
                     }
-                    // Rechaje mesaj yo pou mete ajou
                     setTimeout(loadMessages, 500);
                 } else {
-                    console.error('Send failed:', data);
+                    console.error('❌ Send failed:', data);
                 }
             })
             .catch(error => {
-                console.error('Error:', error);
+                console.error('❌ Fetch error:', error);
             });
         }
         
@@ -221,16 +222,13 @@
             sendBtn.disabled = !this.value.trim();
         });
         
-        // ===== POLLING CHAK 3 SEGONN =====
+        // ===== POLLING =====
         setTimeout(loadMessages, 100);
         setInterval(loadMessages, 3000);
         
-        // ===== SCROLL INITIAL =====
         setTimeout(function() {
             scrollBottom(false);
         }, 200);
-        
-        console.log('Chat room initialized!');
         
     })();
 </script>
