@@ -1,89 +1,164 @@
 {% extends 'base_chat.html' %}
 {% load i18n %}
 
-{% block title %}{{ salon.nom|default:salon.get_type_display }}{% endblock %}
-
 {% block chat_title %}{{ salon.nom|default:salon.get_type_display }}{% endblock %}
 
 {% block messages_content %}
-    {% for msg in messages %}
-    <div class="message-wrapper {% if msg.user == request.user %}me{% else %}other{% endif %}" data-message-id="{{ msg.id }}">
-        {% if msg.user != request.user %}
-        <div class="msg-avatar">{{ msg.user.get_full_name|slice:":1" }}</div>
-        {% endif %}
-        <div class="message-bubble">
-            {% if msg.user != request.user %}
-            <div class="sender">{{ msg.user.get_full_name }}</div>
-            {% endif %}
-            <div class="text">{{ msg.contenu }}</div>
-            <div class="footer">
-                <span class="time">{{ msg.created_at|date:"H:i" }}</span>
-                {% if msg.user == request.user %}
-                <span class="read delivered">✓✓</span>
+    {# ===== GRUPE MESAJ SELON DAT ===== #}
+    {% regroup messages by created_at|date:"d/m/Y" as grouped_messages %}
+    
+    {% for group in grouped_messages %}
+        {# ===== DIVIZÒ DAT ===== #}
+        <div class="date-divider">
+            <span>
+                {% if group.grouper == now|date:"d/m/Y" %}
+                    {% trans "Aujourd'hui" %}
+                {% elif group.grouper == yesterday|date:"d/m/Y" %}
+                    {% trans "Hier" %}
+                {% else %}
+                    {{ group.grouper }}
                 {% endif %}
-            </div>
+            </span>
         </div>
-    </div>
+        
+        {# ===== MESAJ YO ===== #}
+        {% for msg in group.list %}
+            {% include 'chat/_message.html' with msg=msg %}
+        {% endfor %}
     {% empty %}
-    <div class="empty-chat" id="emptyChatNotice">
-        <i class="fas fa-comment-slash"></i>
-        <p>{% trans "Aucun message pour le moment." %}</p>
-        <p style="font-size:0.85rem;">{% trans "Soyez le premier à envoyer un message !" %}</p>
-    </div>
+        <div class="empty-chat" id="emptyChat">
+            <i class="fas fa-comment-slash"></i>
+            <p>{% trans "Aucun message pour le moment." %}</p>
+        </div>
     {% endfor %}
 {% endblock %}
 
 {% block extra_js %}
-{{ block.super }}
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    (function() {
+        'use strict';
+        
         // ===== ELEMAN YO =====
         const container = document.getElementById('chatMessages');
         const input = document.getElementById('msgInput');
         const sendBtn = document.getElementById('sendBtn');
-        const scrollBtn = document.getElementById('scrollBottomBtn');
         
-        // ===== SCROLL =====
-        function scrollChat(smooth) {
-            container.scrollTo({ top: container.scrollHeight, behavior: smooth ? 'smooth' : 'auto' });
-        }
-        scrollChat(false);
-        
-        function isAtBottom() {
-            return (container.scrollHeight - container.scrollTop - container.clientHeight) < 120;
-        }
-        
-        container.addEventListener('scroll', function() {
-            if (scrollBtn) {
-                scrollBtn.style.display = isAtBottom() ? 'none' : 'flex';
-            }
-        });
-        
-        if (scrollBtn) {
-            scrollBtn.addEventListener('click', function() { scrollChat(true); });
-        }
-        
-        // ===== VOYE MESAJ AK AJAX =====
+        // ===== URL YO =====
+        const SEND_URL = '{% url "chat:send_message" salon.pk %}';
+        const FETCH_URL = '{% url "chat:get_new_messages" salon.pk 0 %}';
         const CSRF_TOKEN = document.querySelector('[name=csrfmiddlewaretoken]')?.value || '';
         
-        function sendMessageAjax(text) {
+        console.log('Chat room:', { send: SEND_URL, fetch: FETCH_URL });
+        
+        // ===== FONKSYON SCROLL =====
+        function scrollBottom(smooth) {
+            container.scrollTo({
+                top: container.scrollHeight,
+                behavior: smooth ? 'smooth' : 'auto'
+            });
+        }
+        
+        // ===== KREYE ELEMAN MESAJ =====
+        function createMessageElement(msg) {
+            const wrapper = document.createElement('div');
+            const isMe = msg.sender === 'user' || msg.user === '{{ request.user.id }}';
+            wrapper.className = `message-wrapper ${isMe ? 'me' : 'other'}`;
+            wrapper.dataset.messageId = msg.id;
+            
+            let html = '';
+            
+            // Avatar
+            if (!isMe) {
+                const name = msg.sender_name || msg.user__get_full_name || 'U';
+                html += `<div class="msg-avatar">${name.charAt(0).toUpperCase()}</div>`;
+            }
+            
+            // Bubble
+            html += '<div class="message-bubble">';
+            
+            // Non sendè (si lòt moun)
+            if (!isMe) {
+                const name = msg.sender_name || msg.user__get_full_name || 'Utilisateur';
+                html += `<div class="sender">${name}</div>`;
+            }
+            
+            // Kontni
+            const content = msg.contenu || msg.text || '';
+            html += `<div class="text">${content}</div>`;
+            
+            // Footer
+            const time = msg.time || new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+            html += `<div class="footer"><span class="time">${time}</span>`;
+            if (isMe) {
+                html += `<span class="read delivered">✓✓</span>`;
+            }
+            html += '</div></div>';
+            
+            wrapper.innerHTML = html;
+            return wrapper;
+        }
+        
+        // ===== AJOUTE NOUVO MESAJ =====
+        function appendMessage(msg) {
+            // Retire mesaj vid si egziste
+            const empty = document.getElementById('emptyChat');
+            if (empty) empty.remove();
+            
+            const el = createMessageElement(msg);
+            container.appendChild(el);
+            scrollBottom(true);
+        }
+        
+        // ===== REKIPERE MESAJ (INITIAL) =====
+        function loadMessages() {
+            fetch(FETCH_URL)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.messages && data.messages.length > 0) {
+                        // Retire mesaj ki deja la
+                        const existingIds = new Set();
+                        container.querySelectorAll('.message-wrapper').forEach(el => {
+                            const id = el.dataset.messageId;
+                            if (id) existingIds.add(id);
+                        });
+                        
+                        let newMessages = false;
+                        data.messages.forEach(msg => {
+                            const id = msg.id.toString();
+                            if (!existingIds.has(id)) {
+                                appendMessage(msg);
+                                newMessages = true;
+                            }
+                        });
+                        
+                        if (newMessages) {
+                            scrollBottom(true);
+                        }
+                    }
+                })
+                .catch(error => console.error('Error loading messages:', error));
+        }
+        
+        // ===== VOYE MESAJ =====
+        function sendMessage() {
+            const text = input.value.trim();
             if (!text) return;
             
-            const msgDiv = document.createElement('div');
-            msgDiv.className = 'message-wrapper me';
-            msgDiv.innerHTML = `
-                <div class="message-bubble">
-                    <div class="text">${text}</div>
-                    <div class="footer">
-                        <span class="time">${new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</span>
-                        <span class="read delivered">✓✓</span>
-                    </div>
-                </div>
-            `;
-            container.appendChild(msgDiv);
-            scrollChat(true);
+            // Ajoute mesaj imedyatman
+            const tempMsg = {
+                id: 'temp_' + Date.now(),
+                contenu: text,
+                sender: 'user',
+                sender_name: '{{ request.user.get_full_name|default:"Moi" }}',
+                time: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+            };
+            appendMessage(tempMsg);
             
-            fetch('{% url "chat:send_message" salon.pk %}', {
+            input.value = '';
+            sendBtn.disabled = true;
+            
+            // Voye nan serveur
+            fetch(SEND_URL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -93,76 +168,46 @@
             })
             .then(response => response.json())
             .then(data => {
-                if (data.status === 'ok') {
-                    console.log('Message sent!');
+                if (data.status === 'ok' || data.id) {
+                    console.log('Message sent! ID:', data.id);
+                    // Ranplase ID tanporè ak ID reyèl
+                    const tempEl = container.querySelector(`[data-message-id="temp_${Date.now()}"]`);
+                    // (n ap fè sa nan prochain refresh)
+                } else {
+                    console.error('Send failed:', data);
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                msgDiv.style.border = '2px solid #ff4444';
             });
         }
         
-        // OVRIDE sendMessage nan base_chat.html
-        if (typeof window.sendMessage === 'function') {
-            const originalSend = window.sendMessage;
-            window.sendMessage = function() {
-                const text = input.value.trim();
-                if (!text) return;
-                sendMessageAjax(text);
-                input.value = '';
-                sendBtn.disabled = true;
-            };
-        }
+        // ===== EVENEMAN =====
+        sendBtn.addEventListener('click', sendMessage);
         
-        // ===== POLLING =====
-        function refreshMessages() {
-            if (document.hidden) return;
-            const wasAtBottom = isAtBottom();
-            const messages = container.querySelectorAll('.message-wrapper');
-            const lastId = messages.length > 0 ? messages[messages.length-1].dataset.messageId || '0' : '0';
-            const url = '{% url "chat:get_new_messages" salon.pk 0 %}'.replace('/0/', '/' + lastId + '/');
-            
-            fetch(url)
-                .then(response => response.ok ? response.text() : '')
-                .then(html => {
-                    if (html.trim() && !html.includes('<!DOCTYPE html>')) {
-                        const empty = document.getElementById('emptyChatNotice');
-                        if (empty) empty.remove();
-                        container.insertAdjacentHTML('beforeend', html);
-                        if (wasAtBottom) scrollChat(true);
-                    }
-                })
-                .catch(err => console.log('Refresh error:', err));
-        }
-        setInterval(refreshMessages, 3000);
-        
-        // ===== TYPING =====
-        let typingTimeout;
-        if (input) {
-            input.addEventListener('input', function() {
-                clearTimeout(typingTimeout);
-                const indicator = document.getElementById('typingIndicator');
-                if (indicator) {
-                    if (this.value.length > 0) {
-                        document.getElementById('typingName').textContent = 'Vous';
-                        indicator.style.display = 'flex';
-                        typingTimeout = setTimeout(() => { indicator.style.display = 'none'; }, 2000);
-                    } else {
-                        indicator.style.display = 'none';
-                    }
-                }
-            });
-        }
-        
-        // ===== KEYBOARD SHORTCUT =====
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && input) {
-                input.blur();
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
             }
         });
         
+        input.addEventListener('input', function() {
+            sendBtn.disabled = !this.value.trim();
+        });
+        
+        // ===== POLLING CHAK 5 SEGONN =====
+        // Chaje mesaj yo imedyatman
+        setTimeout(loadMessages, 100);
+        
+        // Refresh chak 5 segonn
+        setInterval(loadMessages, 5000);
+        
+        // ===== SCROLL =====
+        setTimeout(() => scrollBottom(false), 200);
+        
         console.log('Chat room initialized!');
-    });
+        
+    })();
 </script>
 {% endblock %}
