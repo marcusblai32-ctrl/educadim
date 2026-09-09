@@ -8,9 +8,9 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% if theme %}{{ theme.site_name|default:'EducDim' }}{% else %}EducDim{% endif %}{% endblock %}</title>
-    <meta name="description" content="{% if meta_description %}{{ meta_description }}{% elif theme and theme.site_description %}{{ theme.site_description }}{% else %}EducDim — plateforme e-learning : cours en ligne, quiz, badges et suivi de progression.{% endif %}">
-    <meta name="keywords" content="{{ meta_keywords|default:'e-learning, cours en ligne, éducation, EducDim, formation, quiz' }}">
+    <title>{% block title %}{% if theme %}{{ theme.site_name|default:'EducaDim' }}{% else %}EducDim{% endif %}{% endblock %}</title>
+    <meta name="description" content="{% if meta_description %}{{ meta_description }}{% elif theme and theme.site_description %}{{ theme.site_description }}{% else %}EducaDim — plateforme e-learning : cours en ligne, quiz, badges et suivi de progression.{% endif %}">
+    <meta name="keywords" content="{{ meta_keywords|default:'e-learning, cours en ligne, éducation, EducaDim, formation, quiz' }}">
 
     {# ===== TECHNICAL SEO ===== #}
     {% block meta_robots %}<meta name="robots" content="index, follow">{% endblock %}
@@ -19,17 +19,17 @@
     <meta name="theme-color" content="#0a0f22" media="(prefers-color-scheme: dark)">
 
     {# ===== OPEN GRAPH ===== #}
-    <meta property="og:site_name" content="{% if theme %}{{ theme.site_name|default:'EducDim' }}{% else %}EducDim{% endif %}">
+    <meta property="og:site_name" content="{% if theme %}{{ theme.site_name|default:'EducaDim' }}{% else %}EducaDim{% endif %}">
     <meta property="og:type" content="{% block og_type %}website{% endblock %}">
-    <meta property="og:title" content="{% block og_title %}{% if theme %}{{ theme.site_name|default:'EducDim' }}{% else %}EducDim{% endif %}{% endblock %}">
-    <meta property="og:description" content="{% block og_description %}{% if meta_description %}{{ meta_description }}{% elif theme and theme.site_description %}{{ theme.site_description }}{% else %}EducDim — plateforme e-learning.{% endif %}{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}{% if theme %}{{ theme.site_name|default:'EducaDim' }}{% else %}EducDim{% endif %}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{% if meta_description %}{{ meta_description }}{% elif theme and theme.site_description %}{{ theme.site_description }}{% else %}EducaDim — plateforme e-learning.{% endif %}{% endblock %}">
     <meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
     <meta property="og:locale" content="{{ LANGUAGE_CODE|default:'fr' }}">
     {% block og_image %}{% if theme and theme.get_logo %}<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ theme.get_logo }}">{% endif %}{% endblock %}
 
     {# ===== TWITTER CARD ===== #}
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{% block twitter_title %}{% if theme %}{{ theme.site_name|default:'EducDim' }}{% else %}EducDim{% endif %}{% endblock %}">
+    <meta name="twitter:title" content="{% block twitter_title %}{% if theme %}{{ theme.site_name|default:'EducaDim' }}{% else %}EducDim{% endif %}{% endblock %}">
     <meta name="twitter:description" content="{% block twitter_description %}{% if meta_description %}{{ meta_description }}{% elif theme and theme.site_description %}{{ theme.site_description }}{% else %}EducDim — plateforme e-learning.{% endif %}{% endblock %}">
 
     {# ===== JSON-LD (site-wide, real data only) ===== #}
@@ -77,10 +77,10 @@
             <a href="{% url 'home' %}" class="logo">
                 {% if theme and theme.get_logo %}
                     <img src="{{ theme.get_logo }}" alt="{{ theme.site_name|default:'EducDim' }}">
-                    <span>{{ theme.site_name|default:'EducDim' }}</span>
+                    <span>{{ theme.site_name|default:'EducaDim' }}</span>
                 {% elif theme and theme.logo %}
-                    <img src="{{ theme.logo.url }}" alt="{{ theme.site_name|default:'EducDim' }}">
-                    <span>{{ theme.site_name|default:'EducDim' }}</span>
+                    <img src="{{ theme.logo.url }}" alt="{{ theme.site_name|default:'EducaDim' }}">
+                    <span>{{ theme.site_name|default:'EducaDim' }}</span>
                 {% else %}
                     <span>EducDim</span>
                 {% endif %}
@@ -168,9 +168,6 @@
                             </a>
                             <a href="{% url 'enrollments:list' %}">
                                 <i class="fas fa-list-check"></i> {% trans "Inscriptions" %}
-                            </a>
-                            <a href="{% url 'todo:todo_list' %}">
-                                <i class="fas fa-tasks"></i> {% trans "Mes tâches" %}
                             </a>
                             <a href="{% url 'ranking:my_rank' %}">
                                 <i class="fas fa-trophy"></i> {% trans "Classement" %}
