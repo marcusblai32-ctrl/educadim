@@ -31,4 +31,10 @@ python manage.py compilemessages --ignore=.venv --ignore=node_modules
 echo "[4/5] Kolekte fichye statik..."
 python manage.py collectstatic --noinput
 
-echo "[5/5] FINI! Pa bezwen pouse sou GitHub."
+# Migrasyon database
+echo "[5/5] Migrasyon database..."
+python manage.py migrate --noinput
+
+echo "============================================"
+echo " BUILD FINI AVEC SUKSE!"
+echo "============================================"
