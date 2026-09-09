@@ -1,22 +1,36 @@
 {% load i18n %}
 
 <div class="message-wrapper {% if msg.user == request.user %}me{% else %}other{% endif %}"
-     data-message-id="{{ msg.id }}">
+     data-message-id="{{ msg.id }}"
+     data-sender="{% if msg.user == request.user %}me{% else %}other{% endif %}">
+    
+    {# ===== AVATAR (POU LÒT MOUN) ===== #}
     {% if msg.user != request.user %}
-    <div class="msg-avatar">
-        {{ msg.user.get_full_name|slice:":1" }}
+    <div class="msg-avatar" style="background:{% if msg.user.get_full_name|slice:":1" == 'A' %}#e74c3c{% elif msg.user.get_full_name|slice:":1" == 'B' %}#3498db{% elif msg.user.get_full_name|slice:":1" == 'C' %}#2ecc71{% else %}#128C7E{% endif %};">
+        {{ msg.user.get_full_name|slice:":1"|upper }}
     </div>
     {% endif %}
+    
+    {# ===== BUL MESAJ ===== #}
     <div class="message-bubble">
+        
+        {# ===== NON SENDÈ (POU LÒT MOUN) ===== #}
         {% if msg.user != request.user %}
         <div class="sender">{{ msg.user.get_full_name }}</div>
         {% endif %}
-        <div class="text">{{ msg.contenu }}</div>
+        
+        {# ===== KONTNI MESAJ ===== #}
+        <div class="text">{{ msg.contenu|linebreaksbr }}</div>
+        
+        {# ===== FOOTER (LÈ + ESTATI) ===== #}
         <div class="footer">
             <span class="time">{{ msg.created_at|date:"H:i" }}</span>
             {% if msg.user == request.user %}
-            <span class="read delivered">✓</span>
+            <span class="read {% if msg.lu %}read{% else %}delivered{% endif %}">
+                {% if msg.lu %}✓✓{% else %}✓{% endif %}
+            </span>
             {% endif %}
         </div>
+        
     </div>
 </div>
