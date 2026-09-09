@@ -21,7 +21,7 @@ ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[
     'localhost',
     '127.0.0.1',
     '.onrender.com',
-    'educdim.onrender.com',
+    'educadim.onrender.com',
     'educadim.com'
 ])
 
