@@ -61,298 +61,640 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
+    {# ===== EMOJI MART CSS ===== #}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/emoji-mart@5.5.2/css/emoji-mart.css">
+
     {% block extra_head %}{% endblock %}
     {% block extra_css %}{% endblock %}
+
+    {# ===== STYLE CHAT ===== #}
+    <style>
+        /* RESET */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0a0f22;
+        }
+        
+        .chat-app {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            height: 100dvh;
+            width: 100%;
+            max-width: 100%;
+            background: #0a0f22;
+            position: relative;
+        }
+        
+        .chat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            flex-shrink: 0;
+            z-index: 10;
+            min-height: 56px;
+        }
+        
+        .chat-header .back-btn {
+            color: #fff;
+            font-size: 1.2rem;
+            text-decoration: none;
+            padding: 4px 8px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+        
+        .chat-header .back-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .chat-header .chat-title {
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 600;
+            flex: 1;
+            text-align: center;
+            margin: 0 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .chat-header .chat-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .chat-header .chat-actions button {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1.1rem;
+            padding: 4px 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .chat-header .chat-actions button:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            scroll-behavior: smooth;
+            background: #0a0f22;
+        }
+        
+        .chat-messages::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .chat-messages::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+        
+        .message {
+            max-width: 85%;
+            padding: 10px 14px;
+            border-radius: 16px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            word-wrap: break-word;
+            animation: fadeIn 0.2s ease;
+        }
+        
+        .message.sent {
+            align-self: flex-end;
+            background: #5b76f7;
+            color: #fff;
+            border-bottom-right-radius: 4px;
+        }
+        
+        .message.received {
+            align-self: flex-start;
+            background: rgba(255, 255, 255, 0.08);
+            color: #e0e0e0;
+            border-bottom-left-radius: 4px;
+        }
+        
+        .message .msg-time {
+            font-size: 0.65rem;
+            opacity: 0.6;
+            margin-top: 4px;
+            display: block;
+            text-align: right;
+        }
+        
+        .message .msg-emoji {
+            font-size: 2.5rem;
+            line-height: 1.2;
+        }
+        
+        .message.sent .msg-emoji {
+            font-size: 2.8rem;
+        }
+        
+        .message.received .msg-emoji {
+            font-size: 2.8rem;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .chat-footer {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            flex-shrink: 0;
+            min-height: 64px;
+        }
+        
+        .chat-footer .emoji-btn {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1.5rem;
+            padding: 4px 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+        
+        .chat-footer .emoji-btn:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .chat-footer .emoji-btn.active {
+            color: #5b76f7;
+        }
+        
+        .chat-footer .msg-input {
+            flex: 1;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.3s;
+            min-width: 0;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .chat-footer .msg-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+        
+        .chat-footer .msg-input:focus {
+            background: rgba(255, 255, 255, 0.12);
+        }
+        
+        .chat-footer .send-btn {
+            background: #5b76f7;
+            border: none;
+            color: #fff;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .chat-footer .send-btn:hover {
+            background: #4a63d4;
+            transform: scale(1.05);
+        }
+        
+        .chat-footer .send-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .chat-footer .send-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .emoji-picker-container {
+            display: none;
+            position: absolute;
+            bottom: 80px;
+            left: 16px;
+            right: 16px;
+            max-height: 350px;
+            background: #1a1f3a;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+            z-index: 100;
+            overflow: hidden;
+        }
+        
+        .emoji-picker-container.open {
+            display: block;
+        }
+        
+        .emoji-picker-container .emoji-mart {
+            background: #1a1f3a !important;
+            border: none !important;
+            border-radius: 16px !important;
+            max-height: 350px;
+            overflow-y: auto;
+        }
+        
+        .emoji-picker-container .emoji-mart-category-label {
+            background: #1a1f3a !important;
+            color: rgba(255, 255, 255, 0.6) !important;
+            font-size: 0.75rem !important;
+        }
+        
+        .emoji-picker-container .emoji-mart-emoji {
+            padding: 4px !important;
+        }
+        
+        .emoji-picker-container .emoji-mart-emoji span {
+            cursor: pointer !important;
+        }
+        
+        .empty-chat {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.3);
+            text-align: center;
+            padding: 32px;
+        }
+        
+        .empty-chat i {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+        
+        .empty-chat p {
+            font-size: 0.95rem;
+            max-width: 280px;
+        }
+        
+        .message-loading {
+            align-self: flex-start;
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.5);
+            padding: 10px 16px;
+            border-radius: 16px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .message-loading .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-top-color: #5b76f7;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 480px) {
+            .message {
+                max-width: 92%;
+                font-size: 0.9rem;
+                padding: 8px 12px;
+            }
+            
+            .chat-header {
+                padding: 8px 12px;
+                min-height: 48px;
+            }
+            
+            .chat-footer {
+                padding: 8px 12px;
+                min-height: 56px;
+            }
+            
+            .chat-footer .msg-input {
+                padding: 8px 14px;
+                font-size: 0.9rem;
+            }
+            
+            .chat-footer .send-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+            
+            .emoji-picker-container {
+                bottom: 70px;
+                left: 8px;
+                right: 8px;
+                max-height: 280px;
+            }
+        }
+    </style>
 </head>
 <body>
-
-    {# ===== LOADING OVERLAY ===== #}
-    <div id="loadingOverlay" class="loading-overlay">
-        <div class="loading-spinner"></div>
-    </div>
-
-    {# ===== HEADER ===== #}
-    <header class="main-header" id="mainHeader">
-        <div class="header-container">
-            <a href="{% url 'home' %}" class="logo">
-                {% if theme and theme.get_logo %}
-                    <img src="{{ theme.get_logo }}" alt="{{ theme.site_name|default:'EducDim' }}">
-                    <span>{{ theme.site_name|default:'EducDim' }}</span>
-                {% elif theme and theme.logo %}
-                    <img src="{{ theme.logo.url }}" alt="{{ theme.site_name|default:'EducDim' }}">
-                    <span>{{ theme.site_name|default:'EducDim' }}</span>
-                {% else %}
-                    <span>EducDim</span>
-                {% endif %}
+    
+    {# ===== CHAT APP (SAN HEADER AK FOOTER) ===== #}
+    <div class="chat-app">
+        
+        {# ===== HEADER CHAT (MINIMAL) ===== #}
+        <header class="chat-header">
+            <a href="{% url 'home' %}" class="back-btn" aria-label="Retour">
+                <i class="fas fa-arrow-left"></i>
             </a>
-
-            <button class="menu-toggle" id="menuToggle" type="button"
-                    aria-label="{% trans 'Ouvrir le menu' %}" aria-controls="mainNav" aria-expanded="false">
-                <i class="fas fa-bars"></i>
-            </button>
-
-            <nav id="mainNav" class="main-nav" aria-label="{% trans 'Navigation principale' %}">
-                <form class="nav-search" action="{% url 'courses:course_list' %}" method="get" role="search">
-                    <label class="sr-only" for="navSearch">{% trans "Rechercher un cours" %}</label>
-                    <input id="navSearch" name="search" type="search"
-                           placeholder="{% trans 'Rechercher un cours' %}"
-                           autocomplete="off">
-                    <button type="submit" aria-label="{% trans 'Lancer la recherche' %}">
-                        <i class="fas fa-search" aria-hidden="true"></i>
-                    </button>
-                </form>
-                <a href="{% url 'courses:course_list' %}" class="nav-link">
-                    <i class="fas fa-book"></i>
-                    <span>{% trans "Explorer" %}</span>
-                </a>
-
-                {% if user.is_authenticated %}
-                    <a href="{% url 'progress:dashboard' %}" class="nav-link">
-                        <i class="fas fa-chart-line"></i>
-                        <span>{% trans "Progression" %}</span>
-                    </a>
-                    <a href="{% url 'todo:todo_list' %}" class="nav-link">
-                        <i class="fas fa-list-check"></i>
-                        <span>{% trans "Mes tâches" %}</span>
-                    </a>
-
-                    <div class="nav-dropdown">
-                        <button type="button" class="nav-dropdown-btn" id="chatDropdownBtn"
-                                aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-comments"></i>
-                            <span>{% trans "Chat" %}</span>
-                            <i class="fas fa-chevron-down"></i>
-                        </button>
-                        <div class="nav-dropdown-content" id="chatDropdownContent">
-                            <a href="{% url 'chat:liste_salons' %}">
-                                <i class="fas fa-comment-dots"></i> {% trans "Mes salons" %}
-                            </a>
-                            <a href="{% url 'chat:liste_etudiants' %}">
-                                <i class="fas fa-user-friends"></i> {% trans "Étudiants" %}
-                            </a>
-                        </div>
-                    </div>
-
-                    <a href="{% url 'notifications:list' %}" class="nav-link notification-link">
-                        <i class="fas fa-bell"></i>
-                        <span>{% trans "Notifications" %}</span>
-                        {% if unread_notifications > 0 %}
-                            <span class="badge badge-danger badge-pulse">{{ unread_notifications }}</span>
-                        {% endif %}
-                    </a>
-
-                    {% if user.is_staff %}
-                        <a href="{% url 'dashboard:admin_dashboard' %}" class="nav-link">
-                            <i class="fas fa-chart-pie"></i>
-                            <span>{% trans "Dashboard" %}</span>
-                        </a>
-                        <a href="{% url 'admin:index' %}" class="nav-link">
-                            <i class="fas fa-cog"></i>
-                            <span>{% trans "Admin" %}</span>
-                        </a>
-                    {% endif %}
-
-                    <div class="user-dropdown">
-                        <button type="button" class="dropbtn" id="userDropdownBtn"
-                                aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-user-circle"></i>
-                            <span>{{ user.first_name|default:user.email }}</span>
-                            <i class="fas fa-chevron-down"></i>
-                        </button>
-                        <div class="dropdown-content" id="userDropdownContent">
-                            <a href="{% url 'accounts:profile' %}">
-                                <i class="fas fa-id-card"></i> {% trans "Profil" %}
-                            </a>
-                            <a href="{% url 'subscriptions:my_subscriptions' %}">
-                                <i class="fas fa-crown"></i> {% trans "Abonnements" %}
-                            </a>
-                            <a href="{% url 'enrollments:list' %}">
-                                <i class="fas fa-list-check"></i> {% trans "Inscriptions" %}
-                            </a>
-                            <a href="{% url 'todo:todo_list' %}">
-                                <i class="fas fa-tasks"></i> {% trans "Mes tâches" %}
-                            </a>
-                            <a href="{% url 'ranking:my_rank' %}">
-                                <i class="fas fa-trophy"></i> {% trans "Classement" %}
-                            </a>
-                            <a href="{% url 'badges:my_badges' %}">
-                                <i class="fas fa-medal"></i> {% trans "Badges" %}
-                            </a>
-                            <hr>
-                            <form method="post" action="{% url 'accounts:logout' %}" id="logoutForm">
-                                {% csrf_token %}
-                                <button type="submit" class="logout-btn">
-                                    <i class="fas fa-sign-out-alt"></i> {% trans "Déconnexion" %}
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-
-                {% else %}
-                    <a href="{% url 'accounts:login' %}" class="nav-link">
-                        <i class="fas fa-sign-in-alt"></i>
-                        <span>{% trans "Connexion" %}</span>
-                    </a>
-                    <a href="{% url 'accounts:signup' %}" class="nav-link btn-nav-primary">
-                        <i class="fas fa-user-plus"></i>
-                        <span>{% trans "S'inscrire" %}</span>
-                    </a>
-                {% endif %}
-            </nav>
-
-            {# ===== THEME TOGGLE ===== #}
-            <button type="button" class="theme-toggle" id="themeToggle"
-                    aria-label="{% trans 'Basculer le thème clair/sombre' %}"
-                    title="{% trans 'Basculer le thème clair/sombre' %}" aria-pressed="false">
-                <i class="fas fa-moon" aria-hidden="true"></i>
-            </button>
-
-            {# ===== SWITCH LANG (MANYÈL) ===== #}
-            {% get_current_language as CURRENT_LANGUAGE %}
-            <div class="lang-switcher">
-                <form action="{% url 'set_language' %}" method="post">
-                    {% csrf_token %}
-                    <input name="next" type="hidden" value="{{ request.path }}">
-                    <select name="language" onchange="this.form.submit()">
-                        <option value="fr" {% if CURRENT_LANGUAGE == 'fr' %}selected{% endif %}>Français</option>
-                        <option value="ht" {% if CURRENT_LANGUAGE == 'ht' %}selected{% endif %}>Kreyòl</option>
-                    </select>
-                </form>
+            <span class="chat-title">{% block chat_title %}{% trans "Chat" %}{% endblock %}</span>
+            <div class="chat-actions">
+                <button type="button" id="chatInfoBtn" aria-label="Informations">
+                    <i class="fas fa-info-circle"></i>
+                </button>
             </div>
-        </div>
-    </header>
-
-    {# ===== BANNIERES HEADER ===== #}
-    {% if banners_header %}
-    <div class="banner-container banner-header">
-        {% for banner in banners_header %}
-                <a href="{{ banner.lien }}" class="banner" {% if banner.lien %}target="_blank" rel="noopener noreferrer"{% endif %}>
-                <img src="{{ banner.image.url }}" alt="{{ banner.titre }}" class="banner-image">
-            </a>
-        {% endfor %}
-    </div>
-    {% endif %}
-
-    {# ===== EVENEMENT BANNER ===== #}
-    {% if theme and theme.evenement_actif %}
-    <div class="evenement-banner">
-        {% if theme.get_evenement_banner %}
-            <img src="{{ theme.get_evenement_banner }}" alt="{{ theme.evenement_nom }}" class="event-banner-image">
-        {% endif %}
-
-        <h2 class="evenement-glow">
-            {% if theme.get_evenement_logo %}
-                <img src="{{ theme.get_evenement_logo }}" alt="{{ theme.evenement_nom }}" class="event-logo">
-            {% endif %}
-            {{ theme.evenement_nom|default:"Évènement spécial" }}
-        </h2>
-
-        {% if theme.evenement_message %}
-        <p class="event-message">
-            {{ theme.evenement_message }}
-        </p>
-        {% endif %}
-
-        {% if theme.evenement_hashtag %}
-            <div class="hashtag">
-                #{{ theme.evenement_hashtag }}
-            </div>
-        {% endif %}
-    </div>
-    {% endif %}
-
-    {# ===== BREADCRUMB ===== #}
-    {% if request.path != '/' and request.path != '/fr/' and request.path != '/ht/' %}
-        <nav class="breadcrumb">
-            <div>
-                <a href="{% url 'home' %}"><i class="fas fa-home"></i> {% trans "Accueil" %}</a>
-                {% for crumb in breadcrumbs %}
-                    <span class="separator"> &gt; </span>
-                    {% if crumb.url and not forloop.last %}
-                        <a href="{{ crumb.url }}">{{ crumb.name }}</a>
-                    {% else %}
-                        <span>{{ crumb.name }}</span>
-                    {% endif %}
-                {% endfor %}
-            </div>
-        </nav>
-    {% endif %}
-
-    {# ===== MAIN CONTENT WITH SIDEBAR ===== #}
-    <div class="main-with-sidebar">
-        {% if banners_sidebar %}
-        <aside class="sidebar">
-            <div class="banner-container banner-sidebar">
-                {% for banner in banners_sidebar %}
-                    <a href="{{ banner.lien }}" class="banner" {% if banner.lien %}target="_blank" rel="noopener noreferrer"{% endif %}>
-                        <img src="{{ banner.image.url }}" alt="{{ banner.titre }}" class="banner-image">
-                    </a>
-                {% endfor %}
-            </div>
-        </aside>
-        {% endif %}
-
-        <main class="main-content">
-            {% block messages %}
-                {% if messages %}
-                    <div class="messages-container">
-                        {% for message in messages %}
-                            <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
-                                <span>{{ message }}</span>
-                                <button type="button" class="close-alert" aria-label="Close">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
-                        {% endfor %}
-                    </div>
-                {% endif %}
+        </header>
+        
+        {# ===== MESAJ YO ===== #}
+        <div class="chat-messages" id="chatMessages">
+            {% block messages_content %}
+                <div class="empty-chat" id="emptyChat">
+                    <i class="fas fa-comment-dots"></i>
+                    <p>{% trans "Aucun message pour le moment" %}</p>
+                </div>
             {% endblock %}
-
-            {% block content %}{% endblock %}
-        </main>
-    </div>
-
-    {# ===== BANNIERES FOOTER ===== #}
-    {% if banners_footer %}
-    <div class="banner-container banner-footer">
-        {% for banner in banners_footer %}
-            <a href="{{ banner.lien }}" class="banner" {% if banner.lien %}target="_blank" rel="noopener noreferrer"{% endif %}>
-                <img src="{{ banner.image.url }}" alt="{{ banner.titre }}" class="banner-image">
-            </a>
-        {% endfor %}
-    </div>
-    {% endif %}
-
-    <footer>
-        <div class="footer-container">
-            <nav>
-                <a href="{% url 'about' %}">
-                    <i class="fas fa-info-circle"></i> {% trans "À propos" %}
-                </a>
-                <a href="{% url 'contact' %}">
-                    <i class="fas fa-envelope"></i> {% trans "Contact" %}
-                </a>
-                <a href="{% url 'privacy' %}">
-                    <i class="fas fa-shield-alt"></i> {% trans "Confidentialité" %}
-                </a>
-                <a href="{% url 'conditions' %}">
-                    <i class="fas fa-file-contract"></i> {% trans "Conditions" %}
-                </a>
-                <a href="{% url 'faq' %}">
-                    <i class="fas fa-question-circle"></i> {% trans "FAQ" %}
-                </a>
-            </nav>
-            <p>
-                &copy; {% if theme %}{{ theme.site_name|default:'EducDim' }}{% else %}EducDim{% endif %} - 
-                {% if theme %}{{ theme.footer_text|default:_('Tous droits réservés') }}{% else %}{% trans "Tous droits réservés" %}{% endif %}
-            </p>
         </div>
-    </footer>
-
+        
+        {# ===== FOOTER CHAT ===== #}
+        <footer class="chat-footer">
+            <button type="button" class="emoji-btn" id="emojiBtn" aria-label="Emojis">
+                <i class="fas fa-smile"></i>
+            </button>
+            
+            <input type="text" class="msg-input" id="msgInput" 
+                   placeholder="{% trans 'Écrire un message...' %}" 
+                   autocomplete="off">
+            
+            <button type="button" class="send-btn" id="sendBtn" aria-label="Envoyer">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </footer>
+        
+        {# ===== EMOJI PICKER ===== #}
+        <div class="emoji-picker-container" id="emojiPickerContainer">
+            <div id="emojiPicker"></div>
+        </div>
+        
+    </div>
+    
+    {# ===== SCRIPTS ===== #}
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/emoji-mart@5.5.2/dist/browser.js"></script>
     <script src="{% static 'js/main.js' %}"></script>
 
+    {# ===== BACKEND JS CHAT ===== #}
+    <script>
+        (function() {
+            'use strict';
+            
+            // ===== ELEMAN YO =====
+            const msgInput = document.getElementById('msgInput');
+            const sendBtn = document.getElementById('sendBtn');
+            const chatMessages = document.getElementById('chatMessages');
+            const emojiBtn = document.getElementById('emojiBtn');
+            const emojiPickerContainer = document.getElementById('emojiPickerContainer');
+            const emojiPicker = document.getElementById('emojiPicker');
+            const emptyChat = document.getElementById('emptyChat');
+            
+            let emojiPickerInstance = null;
+            let isEmojiPickerOpen = false;
+            
+            // ===== CSRF TOKEN =====
+            const CSRF_TOKEN = document.querySelector('[name=csrfmiddlewaretoken]')?.value || '';
+            
+            // ===== REKI PERASYON MESAJ =====
+            function loadMessages() {
+                fetch('/api/messages/')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.messages && data.messages.length > 0) {
+                            chatMessages.innerHTML = '';
+                            data.messages.forEach(msg => {
+                                const msgDiv = createMessageElement(msg);
+                                chatMessages.appendChild(msgDiv);
+                            });
+                            chatMessages.scrollTop = chatMessages.scrollHeight;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error loading messages:', error);
+                    });
+            }
+            
+            // ===== KREYE ELEMAN MESAJ =====
+            function createMessageElement(msg) {
+                const msgDiv = document.createElement('div');
+                msgDiv.className = `message ${msg.sender === 'user' ? 'sent' : 'received'}`;
+                msgDiv.dataset.id = msg.id || Date.now();
+                
+                const isOnlyEmoji = /^[\p{Emoji}\p{Extended_Pictographic}\s]*$/u.test(msg.text);
+                
+                if (isOnlyEmoji) {
+                    msgDiv.innerHTML = `<span class="msg-emoji">${msg.text}</span>`;
+                } else {
+                    msgDiv.innerHTML = `${msg.text}`;
+                }
+                
+                const timeStr = msg.time || new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+                msgDiv.innerHTML += `<span class="msg-time">${timeStr}</span>`;
+                
+                return msgDiv;
+            }
+            
+            // ===== VOYE MESAJ =====
+            function sendMessage() {
+                const text = msgInput.value.trim();
+                if (!text) return;
+                
+                const tempMsg = {
+                    id: Date.now(),
+                    text: text,
+                    sender: 'user',
+                    time: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+                };
+                const msgDiv = createMessageElement(tempMsg);
+                chatMessages.appendChild(msgDiv);
+                
+                msgInput.value = '';
+                sendBtn.disabled = true;
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                fetch('/api/messages/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': CSRF_TOKEN
+                    },
+                    body: JSON.stringify({ text: text })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'ok') {
+                        console.log('Message sent!');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error sending message:', error);
+                    msgDiv.style.border = '2px solid #ff4444';
+                });
+                
+                if (isEmojiPickerOpen) {
+                    closeEmojiPicker();
+                }
+            }
+            
+            // ===== EMOJI PICKER =====
+            function initEmojiPicker() {
+                if (typeof EmojiMart !== 'undefined' && EmojiMart.Picker) {
+                    emojiPickerInstance = new EmojiMart.Picker({
+                        parent: emojiPicker,
+                        theme: 'dark',
+                        previewPosition: 'none',
+                        searchPosition: 'sticky',
+                        skinTonePosition: 'none',
+                        categories: ['smileys', 'people', 'nature', 'foods', 'activities', 'places', 'objects', 'symbols', 'flags'],
+                        onEmojiSelect: function(emoji) {
+                            const native = emoji.native || emoji.colons || '';
+                            if (native) {
+                                msgInput.value += native;
+                                msgInput.focus();
+                                const event = new Event('input', { bubbles: true });
+                                msgInput.dispatchEvent(event);
+                            }
+                            closeEmojiPicker();
+                        }
+                    });
+                } else {
+                    console.warn('Emoji Mart not loaded');
+                }
+            }
+            
+            function openEmojiPicker() {
+                if (!emojiPickerInstance) {
+                    initEmojiPicker();
+                }
+                emojiPickerContainer.classList.add('open');
+                isEmojiPickerOpen = true;
+                emojiBtn.classList.add('active');
+            }
+            
+            function closeEmojiPicker() {
+                emojiPickerContainer.classList.remove('open');
+                isEmojiPickerOpen = false;
+                emojiBtn.classList.remove('active');
+            }
+            
+            function toggleEmojiPicker() {
+                if (isEmojiPickerOpen) {
+                    closeEmojiPicker();
+                } else {
+                    openEmojiPicker();
+                }
+            }
+            
+            // ===== EVENEMAN =====
+            sendBtn.addEventListener('click', sendMessage);
+            
+            msgInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+            
+            emojiBtn.addEventListener('click', toggleEmojiPicker);
+            
+            document.addEventListener('click', function(e) {
+                if (isEmojiPickerOpen) {
+                    const container = document.querySelector('.emoji-picker-container');
+                    const btn = document.getElementById('emojiBtn');
+                    if (!container.contains(e.target) && !btn.contains(e.target)) {
+                        closeEmojiPicker();
+                    }
+                }
+            });
+            
+            msgInput.addEventListener('input', function() {
+                sendBtn.disabled = !this.value.trim();
+            });
+            
+            // ===== CHARJE MESAJ AY OUVÈTI =====
+            loadMessages();
+            
+            // ===== REKI PERASYON PERYODIK =====
+            setInterval(loadMessages, 5000);
+            
+            // ===== INISYALIZE =====
+            sendBtn.disabled = true;
+            
+            if (typeof EmojiMart === 'undefined') {
+                setTimeout(() => {
+                    if (typeof EmojiMart !== 'undefined' && EmojiMart.Picker) {
+                        initEmojiPicker();
+                    }
+                }, 1000);
+            }
+            
+            console.log('Chat app initialized!');
+            
+        })();
+    </script>
+    
     {% block extra_js %}{% endblock %}
+    
 </body>
 </html>
