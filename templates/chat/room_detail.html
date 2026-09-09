@@ -28,6 +28,9 @@
             <p>{% trans "Aucun message pour le moment." %}</p>
         </div>
     {% endfor %}
+    
+    {# ===== CSRF TOKEN CACHE ===== #}
+    <input type="hidden" id="csrfToken" value="{{ csrf_token }}">
 {% endblock %}
 
 {% block extra_js %}
@@ -43,11 +46,10 @@
         // ===== URL YO =====
         const SEND_URL = '{% url "chat:send_message" salon.pk %}';
         const FETCH_URL = '{% url "chat:get_new_messages" salon.pk 0 %}';
-        const CSRF_TOKEN = document.querySelector('[name=csrfmiddlewaretoken]')?.value || '';
         
-        console.log('🔵 Chat room initialized');
-        console.log('🔵 SEND_URL:', SEND_URL);
-        console.log('🔵 FETCH_URL:', FETCH_URL);
+        // ===== CSRF TOKEN =====
+        const CSRF_TOKEN = document.getElementById('csrfToken')?.value || '';
+        console.log('🔵 CSRF Token length:', CSRF_TOKEN.length);
         
         // ===== SCROLL =====
         let isUserScrolling = false;
@@ -156,12 +158,10 @@
         // ===== VOYE MESAJ =====
         function sendMessage() {
             const text = input.value.trim();
-            if (!text) {
-                console.log('⚠️ Empty message');
-                return;
-            }
+            if (!text) return;
             
             console.log('📤 Sending:', text);
+            console.log('📤 CSRF Token length:', CSRF_TOKEN.length);
             
             const tempId = 'temp_' + Date.now();
             const tempMsg = {
@@ -177,21 +177,29 @@
             input.value = '';
             sendBtn.disabled = true;
             
+            // ===== VOYE AK FORM DATA (PI SENP) =====
+            const formData = new FormData();
+            formData.append('contenu', text);
+            formData.append('csrfmiddlewaretoken', CSRF_TOKEN);
+            
             fetch(SEND_URL, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'X-CSRFToken': CSRF_TOKEN
+                    'X-CSRFToken': CSRF_TOKEN,
                 },
-                body: 'contenu=' + encodeURIComponent(text)
+                body: formData
             })
             .then(response => {
-                console.log('📥 Response status:', response.status);
-                if (!response.ok) throw new Error('HTTP ' + response.status);
+                console.log('📥 Status:', response.status);
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        throw new Error('HTTP ' + response.status + ': ' + text);
+                    });
+                }
                 return response.json();
             })
             .then(data => {
-                console.log('📥 Response data:', data);
+                console.log('📥 Response:', data);
                 if (data.status === 'ok' && data.id) {
                     console.log('✅ Message sent! ID:', data.id);
                     const tempEl = container.querySelector(`[data-message-id="${tempId}"]`);
@@ -204,7 +212,12 @@
                 }
             })
             .catch(error => {
-                console.error('❌ Fetch error:', error);
+                console.error('❌ Error:', error);
+                const tempEl = container.querySelector(`[data-message-id="${tempId}"]`);
+                if (tempEl) {
+                    tempEl.style.border = '2px solid #ff4444';
+                    tempEl.title = error.message;
+                }
             });
         }
         
@@ -229,6 +242,10 @@
         setTimeout(function() {
             scrollBottom(false);
         }, 200);
+        
+        console.log('✅ Chat room initialized!');
+        console.log('🔵 SEND_URL:', SEND_URL);
+        console.log('🔵 FETCH_URL:', FETCH_URL);
         
     })();
 </script>
