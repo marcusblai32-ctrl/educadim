@@ -4,11 +4,9 @@
 {% block chat_title %}{{ salon.nom|default:salon.get_type_display }}{% endblock %}
 
 {% block messages_content %}
-    {# ===== GRUPE MESAJ SELON DAT ===== #}
     {% regroup messages by created_at|date:"d/m/Y" as grouped_messages %}
     
     {% for group in grouped_messages %}
-        {# ===== DIVIZÒ DAT ===== #}
         <div class="date-divider">
             <span>
                 {% if group.grouper == now|date:"d/m/Y" %}
@@ -21,7 +19,6 @@
             </span>
         </div>
         
-        {# ===== MESAJ YO ===== #}
         {% for msg in group.list %}
             {% include 'chat/_message.html' with msg=msg %}
         {% endfor %}
@@ -48,45 +45,64 @@
         const FETCH_URL = '{% url "chat:get_new_messages" salon.pk 0 %}';
         const CSRF_TOKEN = document.querySelector('[name=csrfmiddlewaretoken]')?.value || '';
         
-        console.log('Chat room:', { send: SEND_URL, fetch: FETCH_URL });
+        // ===== VARIABLES POU SCROLL =====
+        let isUserScrolling = false;
+        let scrollTimeout = null;
         
         // ===== FONKSYON SCROLL =====
-        function scrollBottom(smooth) {
-            container.scrollTo({
-                top: container.scrollHeight,
-                behavior: smooth ? 'smooth' : 'auto'
-            });
+        function isAtBottom() {
+            const threshold = 150;
+            return (container.scrollHeight - container.scrollTop - container.clientHeight) < threshold;
         }
+        
+        function scrollBottom(smooth) {
+            if (!isUserScrolling) {
+                container.scrollTo({
+                    top: container.scrollHeight,
+                    behavior: smooth ? 'smooth' : 'auto'
+                });
+            }
+        }
+        
+        // ===== DETEKTE SI ITILIZATÈ AP SCROLL =====
+        container.addEventListener('scroll', function() {
+            // Si itilizatè pa anba a, li ap scroll monte
+            if (!isAtBottom()) {
+                isUserScrolling = true;
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(function() {
+                    isUserScrolling = false;
+                }, 3000);
+            } else {
+                // Si li rive anba, reaktive scroll otomatik
+                isUserScrolling = false;
+            }
+        });
         
         // ===== KREYE ELEMAN MESAJ =====
         function createMessageElement(msg) {
             const wrapper = document.createElement('div');
-            const isMe = msg.sender === 'user' || msg.user === '{{ request.user.id }}';
+            const isMe = msg.sender === 'user' || msg.user_id === {{ request.user.id }};
             wrapper.className = `message-wrapper ${isMe ? 'me' : 'other'}`;
             wrapper.dataset.messageId = msg.id;
             
             let html = '';
             
-            // Avatar
             if (!isMe) {
-                const name = msg.sender_name || msg.user__get_full_name || 'U';
+                const name = msg.sender_name || 'U';
                 html += `<div class="msg-avatar">${name.charAt(0).toUpperCase()}</div>`;
             }
             
-            // Bubble
             html += '<div class="message-bubble">';
             
-            // Non sendè (si lòt moun)
             if (!isMe) {
-                const name = msg.sender_name || msg.user__get_full_name || 'Utilisateur';
+                const name = msg.sender_name || 'Utilisateur';
                 html += `<div class="sender">${name}</div>`;
             }
             
-            // Kontni
             const content = msg.contenu || msg.text || '';
             html += `<div class="text">${content}</div>`;
             
-            // Footer
             const time = msg.time || new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
             html += `<div class="footer"><span class="time">${time}</span>`;
             if (isMe) {
@@ -100,22 +116,29 @@
         
         // ===== AJOUTE NOUVO MESAJ =====
         function appendMessage(msg) {
-            // Retire mesaj vid si egziste
             const empty = document.getElementById('emptyChat');
             if (empty) empty.remove();
             
             const el = createMessageElement(msg);
             container.appendChild(el);
-            scrollBottom(true);
+            
+            // Scroll anba sèlman si itilizatè pa ap scroll
+            if (!isUserScrolling) {
+                setTimeout(function() {
+                    scrollBottom(true);
+                }, 50);
+            }
         }
         
-        // ===== REKIPERE MESAJ (INITIAL) =====
+        // ===== REKIPERE MESAJ =====
         function loadMessages() {
             fetch(FETCH_URL)
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) throw new Error('Network error');
+                    return response.json();
+                })
                 .then(data => {
                     if (data.messages && data.messages.length > 0) {
-                        // Retire mesaj ki deja la
                         const existingIds = new Set();
                         container.querySelectorAll('.message-wrapper').forEach(el => {
                             const id = el.dataset.messageId;
@@ -130,10 +153,6 @@
                                 newMessages = true;
                             }
                         });
-                        
-                        if (newMessages) {
-                            scrollBottom(true);
-                        }
                     }
                 })
                 .catch(error => console.error('Error loading messages:', error));
@@ -145,19 +164,21 @@
             if (!text) return;
             
             // Ajoute mesaj imedyatman
+            const tempId = 'temp_' + Date.now();
             const tempMsg = {
-                id: 'temp_' + Date.now(),
+                id: tempId,
                 contenu: text,
                 sender: 'user',
                 sender_name: '{{ request.user.get_full_name|default:"Moi" }}',
-                time: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+                time: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }),
+                user_id: {{ request.user.id }}
             };
             appendMessage(tempMsg);
             
             input.value = '';
             sendBtn.disabled = true;
             
-            // Voye nan serveur
+            // ===== VOYE NAN SERVEUR =====
             fetch(SEND_URL, {
                 method: 'POST',
                 headers: {
@@ -168,11 +189,15 @@
             })
             .then(response => response.json())
             .then(data => {
-                if (data.status === 'ok' || data.id) {
+                if (data.status === 'ok' && data.id) {
                     console.log('Message sent! ID:', data.id);
-                    // Ranplase ID tanporè ak ID reyèl
-                    const tempEl = container.querySelector(`[data-message-id="temp_${Date.now()}"]`);
-                    // (n ap fè sa nan prochain refresh)
+                    // Ranplase ID tanporè a
+                    const tempEl = container.querySelector(`[data-message-id="${tempId}"]`);
+                    if (tempEl) {
+                        tempEl.dataset.messageId = data.id;
+                    }
+                    // Rechaje mesaj yo pou mete ajou
+                    setTimeout(loadMessages, 500);
                 } else {
                     console.error('Send failed:', data);
                 }
@@ -196,15 +221,14 @@
             sendBtn.disabled = !this.value.trim();
         });
         
-        // ===== POLLING CHAK 5 SEGONN =====
-        // Chaje mesaj yo imedyatman
+        // ===== POLLING CHAK 3 SEGONN =====
         setTimeout(loadMessages, 100);
+        setInterval(loadMessages, 3000);
         
-        // Refresh chak 5 segonn
-        setInterval(loadMessages, 5000);
-        
-        // ===== SCROLL =====
-        setTimeout(() => scrollBottom(false), 200);
+        // ===== SCROLL INITIAL =====
+        setTimeout(function() {
+            scrollBottom(false);
+        }, 200);
         
         console.log('Chat room initialized!');
         
