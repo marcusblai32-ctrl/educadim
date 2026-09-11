@@ -4,7 +4,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
 from django.conf.urls.i18n import i18n_patterns
-from django.http import JsonResponse, FileResponse
+from django.http import JsonResponse, FileResponse, HttpResponse
 from django.contrib.sitemaps.views import sitemap
 from config.sitemaps import StaticViewSitemap, CourseSitemap
 from courses.views import about_page, contact_page, conditions_page, privacy_page, faq_page
@@ -36,20 +36,35 @@ def robots_txt(request):
     )
 
 
+def google_verification(request):
+    return HttpResponse(
+        "google-site-verification: google38eba4ca7aaf104d.html",
+        content_type="text/plain",
+    )
+
+
 urlpatterns = [
     path("dp/", admin.site.urls),
     path("i18n/", include("django.conf.urls.i18n")),
     path("health/", health_check, name="health_check"),
+
     path(
         "sitemap.xml",
         sitemap,
         {"sitemaps": sitemaps},
         name="django.contrib.sitemaps.views.sitemap",
     ),
+
     path(
         "robots.txt",
         robots_txt,
         name="robots",
+    ),
+
+    path(
+        "google38eba4ca7aaf104d.html",
+        google_verification,
+        name="google_verification",
     ),
 ]
 
