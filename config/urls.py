@@ -4,7 +4,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
 from django.conf.urls.i18n import i18n_patterns
-from django.http import JsonResponse
+from django.http import JsonResponse, FileResponse
 from django.contrib.sitemaps.views import sitemap
 from config.sitemaps import StaticViewSitemap, CourseSitemap
 from courses.views import about_page, contact_page, conditions_page, privacy_page, faq_page
@@ -28,6 +28,14 @@ def health_check(request):
     })
 
 
+def robots_txt(request):
+    robots_path = settings.BASE_DIR / "robots.txt"
+    return FileResponse(
+        open(robots_path, "rb"),
+        content_type="text/plain",
+    )
+
+
 urlpatterns = [
     path("dp/", admin.site.urls),
     path("i18n/", include("django.conf.urls.i18n")),
@@ -40,10 +48,7 @@ urlpatterns = [
     ),
     path(
         "robots.txt",
-        TemplateView.as_view(
-            template_name="robots.txt",
-            content_type="text/plain",
-        ),
+        robots_txt,
         name="robots",
     ),
 ]
