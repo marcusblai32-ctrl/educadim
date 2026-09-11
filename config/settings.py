@@ -15,7 +15,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 # SECURITY
 # ============================================
 SECRET_KEY = env('SECRET_KEY', default='django-insecure-dev-key')
-DEBUG = True
+DEBUG = env.bool('DEBUG', default=True)
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[
     'localhost',
