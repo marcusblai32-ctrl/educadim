@@ -1,19 +1,6 @@
 User-agent: *
 Allow: /
 
-# Pèmèt tout motè rechèch vizite paj sa yo
-Allow: /fr/
-Allow: /ht/
-Allow: /fr/cours/
-Allow: /ht/cours/
-Allow: /fr/a-propos/
-Allow: /ht/a-propos/
-Allow: /fr/contact/
-Allow: /ht/contact/
-Allow: /fr/faq/
-Allow: /ht/faq/
-
-# Bloke paj administratif ak prive
 Disallow: /dp/
 Disallow: /admin/
 Disallow: /dashboard/
@@ -24,5 +11,4 @@ Disallow: /notifications/
 Disallow: /theme/
 Disallow: /ads/
 
-# Sitemap — mete URL konplè a (pa template tag)
 Sitemap: https://educadim.onrender.com/sitemap.xml
