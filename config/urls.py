@@ -15,18 +15,13 @@ admin.site.site_title = "Administration EducDim"
 admin.site.index_title = "Bienvenue dans l'administration EducDim"
 
 
-# ============ SITEMAP ============
 sitemaps = {
-    'static': StaticViewSitemap,
-    'courses': CourseSitemap,
+    "static": StaticViewSitemap,
+    "courses": CourseSitemap,
 }
 
 
 def health_check(request):
-    """
-    Health check endpoint pou Render.
-    Retounen yon repons JSON pou montre ke app la vivan.
-    """
     return JsonResponse({
         "status": "ok",
         "message": "I am alive!",
@@ -34,43 +29,58 @@ def health_check(request):
 
 
 urlpatterns = [
-    path('dp/', admin.site.urls),
-    path('i18n/', include('django.conf.urls.i18n')),
-    path('health/', health_check, name='health_check'),
-    
-    # ===== SITEMAP (deyò i18n pou Google jwenn li fasil) =====
-    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
-    path('robots.txt', TemplateView.as_view(template_name='robots.txt', content_type='text/plain'), name='robots'),
+    path("dp/", admin.site.urls),
+    path("i18n/", include("django.conf.urls.i18n")),
+    path("health/", health_check, name="health_check"),
+    path(
+        "sitemap.xml",
+        sitemap,
+        {"sitemaps": sitemaps},
+        name="django.contrib.sitemaps.views.sitemap",
+    ),
+    path(
+        "robots.txt",
+        TemplateView.as_view(
+            template_name="robots.txt",
+            content_type="text/plain",
+        ),
+        name="robots",
+    ),
 ]
 
 
 urlpatterns += i18n_patterns(
-    path('', TemplateView.as_view(template_name='home.html'), name='home'),
-    path('accounts/', include('accounts.urls')),
-    path('cours/', include('courses.urls')),
-    path('inscriptions/', include('enrollments.urls')),
-    path('abonnements/', include('subscriptions.urls')),
-    path('progression/', include('progress.urls')),
-    path('todo/', include('todo.urls')),
-    path('quiz/', include('quiz.urls')),
-    path('presence/', include('attendance.urls')),
-    path('badges/', include('badges.urls')),
-    path('classement/', include('ranking.urls')),
-    path('chat/', include('chat.urls')),
-    path('notifications/', include('notifications.urls')),
-    path('theme/', include('theme_manager.urls')),
-    path('ads/', include('ads.urls')),
-    path('dashboard/', include('dashboard.urls')),
-    path('a-propos/', about_page, name='about'),
-    path('contact/', contact_page, name='contact'),
-    path('conditions/', conditions_page, name='conditions'),
-    path('confidentialite/', privacy_page, name='privacy'),
-    path('faq/', faq_page, name='faq'),
-
+    path("", TemplateView.as_view(template_name="home.html"), name="home"),
+    path("accounts/", include("accounts.urls")),
+    path("cours/", include("courses.urls")),
+    path("inscriptions/", include("enrollments.urls")),
+    path("abonnements/", include("subscriptions.urls")),
+    path("progression/", include("progress.urls")),
+    path("todo/", include("todo.urls")),
+    path("quiz/", include("quiz.urls")),
+    path("presence/", include("attendance.urls")),
+    path("badges/", include("badges.urls")),
+    path("classement/", include("ranking.urls")),
+    path("chat/", include("chat.urls")),
+    path("notifications/", include("notifications.urls")),
+    path("theme/", include("theme_manager.urls")),
+    path("ads/", include("ads.urls")),
+    path("dashboard/", include("dashboard.urls")),
+    path("a-propos/", about_page, name="about"),
+    path("contact/", contact_page, name="contact"),
+    path("conditions/", conditions_page, name="conditions"),
+    path("confidentialite/", privacy_page, name="privacy"),
+    path("faq/", faq_page, name="faq"),
     prefix_default_language=True,
 )
 
 
 if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(
+        settings.STATIC_URL,
+        document_root=settings.STATIC_ROOT,
+    )
+    urlpatterns += static(
+        settings.MEDIA_URL,
+        document_root=settings.MEDIA_ROOT,
+    )
