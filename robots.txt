@@ -25,4 +25,4 @@ Disallow: /theme/
 Disallow: /ads/
 
 # Sitemap — mete URL konplè a (pa template tag)
-Sitemap: https://educdim.onrender.com/sitemap.xml
+Sitemap: https://educadim.onrender.com/sitemap.xml
