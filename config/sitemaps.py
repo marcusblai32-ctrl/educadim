@@ -1,53 +1,78 @@
 from django.contrib.sitemaps import Sitemap
 from django.urls import reverse
-from django.utils import timezone
+from django.utils import translation
+
 from courses.models import Course
 
 
+SUPPORTED_LANGUAGES = ["fr", "ht"]
+
+
 class StaticViewSitemap(Sitemap):
-    """Sitemap pou paj statik yo"""
     changefreq = "weekly"
-    priority = 0.5
+    priority = 0.8
 
     def items(self):
         return [
-            'home',
-            'about',
-            'contact',
-            'conditions',
-            'privacy',
-            'faq',
+            "home",
+            "about",
+            "contact",
+            "conditions",
+            "privacy",
+            "faq",
+            "courses:course_list",
         ]
 
     def location(self, item):
         return reverse(item)
 
-    def lastmod(self, item):
-        return timezone.now()
+    def get_urls(self, page=1, site=None, protocol=None):
+        urls = []
+
+        for language in SUPPORTED_LANGUAGES:
+            with translation.override(language):
+                for item in self.items():
+                    urls.append({
+                        "item": item,
+                        "location": self.location(item),
+                        "lastmod": None,
+                        "changefreq": self.changefreq,
+                        "priority": self.priority,
+                    })
+
+        return urls
 
 
 class CourseSitemap(Sitemap):
-    """Sitemap pou kous yo"""
     changefreq = "weekly"
     priority = 0.8
 
     def items(self):
-        # Sèvi ak 'publie' — menm jan ak course_list view la
-        return Course.objects.filter(publie=True)
+        return Course.objects.filter(
+            publie=True
+        ).order_by("pk")
 
     def lastmod(self, obj):
-        # Tcheke dat ki egziste
-        if hasattr(obj, 'date_modification'):
-            return obj.date_modification
-        elif hasattr(obj, 'date_creation'):
-            return obj.date_creation
-        elif hasattr(obj, 'created_at'):
-            return obj.created_at
-        elif hasattr(obj, 'updated_at'):
-            return obj.updated_at
-        else:
-            return timezone.now()
+        return obj.updated_at
 
     def location(self, obj):
-        # Sèvi ak pk — menm jan ak course_detail view la
-        return reverse('courses:course_detail', args=[obj.pk])
+        return reverse(
+            "courses:course_detail",
+            kwargs={"pk": obj.pk},
+        )
+
+    def get_urls(self, page=1, site=None, protocol=None):
+        urls = []
+
+        for language in SUPPORTED_LANGUAGES:
+            with translation.override(language):
+                for obj in self.paginator.page(page).object_list:
+                    urls.append({
+                        "item": obj,
+                        "location": self.location(obj),
+                        "lastmod": self.lastmod(obj),
+                        "changefreq": self.changefreq,
+                        "priority": self.priority,
+                    })
+
+        return urls
