@@ -1,46 +1,37 @@
 from django.contrib.sitemaps import Sitemap
 from django.urls import reverse
 from django.utils import translation
-
 from courses.models import Course
 
-
-SUPPORTED_LANGUAGES = ["fr", "ht"]
+LANGUAGES = ["fr", "ht"]
 
 
 class StaticViewSitemap(Sitemap):
     changefreq = "weekly"
-    priority = 0.8
+    priority = 0.5
+
+    view_names = [
+        "home",
+        "about",
+        "contact",
+        "conditions",
+        "privacy",
+        "faq",
+        "courses:course_list",
+    ]
 
     def items(self):
         return [
-            "home",
-            "about",
-            "contact",
-            "conditions",
-            "privacy",
-            "faq",
-            "courses:course_list",
+            (language, view_name)
+            for language in LANGUAGES
+            for view_name in self.view_names
         ]
 
     def location(self, item):
-        return reverse(item)
+        language, view_name = item
 
-    def get_urls(self, page=1, site=None, protocol=None):
-        urls = []
-
-        for language in SUPPORTED_LANGUAGES:
-            with translation.override(language):
-                for item in self.items():
-                    urls.append({
-                        "item": item,
-                        "location": self.location(item),
-                        "lastmod": None,
-                        "changefreq": self.changefreq,
-                        "priority": self.priority,
-                    })
-
-        return urls
+        with translation.override(language):
+            return reverse(view_name)
 
 
 class CourseSitemap(Sitemap):
@@ -48,31 +39,23 @@ class CourseSitemap(Sitemap):
     priority = 0.8
 
     def items(self):
-        return Course.objects.filter(
-            publie=True
-        ).order_by("pk")
+        courses = Course.objects.filter(publie=True).order_by("pk")
 
-    def lastmod(self, obj):
-        return obj.updated_at
+        return [
+            (language, course)
+            for language in LANGUAGES
+            for course in courses
+        ]
 
-    def location(self, obj):
-        return reverse(
-            "courses:course_detail",
-            kwargs={"pk": obj.pk},
-        )
+    def location(self, item):
+        language, course = item
 
-    def get_urls(self, page=1, site=None, protocol=None):
-        urls = []
+        with translation.override(language):
+            return reverse(
+                "courses:course_detail",
+                kwargs={"pk": course.pk},
+            )
 
-        for language in SUPPORTED_LANGUAGES:
-            with translation.override(language):
-                for obj in self.paginator.page(page).object_list:
-                    urls.append({
-                        "item": obj,
-                        "location": self.location(obj),
-                        "lastmod": self.lastmod(obj),
-                        "changefreq": self.changefreq,
-                        "priority": self.priority,
-                    })
-
-        return urls
+    def lastmod(self, item):
+        course = item[1]
+        return course.updated_at
