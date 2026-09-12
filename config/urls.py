@@ -10,9 +10,9 @@ from config.sitemaps import StaticViewSitemap, CourseSitemap
 from courses.views import about_page, contact_page, conditions_page, privacy_page, faq_page
 
 
-admin.site.site_header = "Administration EducDim"
-admin.site.site_title = "Administration EducDim"
-admin.site.index_title = "Bienvenue dans l'administration EducDim"
+admin.site.site_header = "Administration EducaDim"
+admin.site.site_title = "Administration EducaDim"
+admin.site.index_title = "Bienvenue dans l'administration EducaDim"
 
 
 sitemaps = {
