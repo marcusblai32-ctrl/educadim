@@ -21,7 +21,7 @@
     {# ===== OPEN GRAPH ===== #}
     <meta property="og:site_name" content="{% if theme %}{{ theme.site_name|default:'EducaDim' }}{% else %}EducaDim{% endif %}">
     <meta property="og:type" content="{% block og_type %}website{% endblock %}">
-    <meta property="og:title" content="{% block og_title %}{% if theme %}{{ theme.site_name|default:'EducaDim' }}{% else %}EducDim{% endif %}{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}{% if theme %}{{ theme.site_name|default:'EducaDim' }}{% else %}EducaDim{% endif %}{% endblock %}">
     <meta property="og:description" content="{% block og_description %}{% if meta_description %}{{ meta_description }}{% elif theme and theme.site_description %}{{ theme.site_description }}{% else %}EducaDim — plateforme e-learning.{% endif %}{% endblock %}">
     <meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
     <meta property="og:locale" content="{{ LANGUAGE_CODE|default:'fr' }}">
@@ -37,7 +37,7 @@
     {
         "@context": "https://schema.org",
         "@type": "EducationalOrganization",
-        "name": "{% if theme %}{{ theme.site_name|default:'EducDim' }}{% else %}EducDim{% endif %}",
+        "name": "{% if theme %}{{ theme.site_name|default:'EducaDim' }}{% else %}EducaDim{% endif %}",
         "url": "{{ request.scheme }}://{{ request.get_host }}/"{% if theme and theme.get_logo %},
         "logo": "{{ request.scheme }}://{{ request.get_host }}{{ theme.get_logo }}"{% endif %}{% if theme and theme.contact_email %},
         "email": "{{ theme.contact_email }}"{% endif %}
@@ -76,7 +76,7 @@
         <div class="header-container">
             <a href="{% url 'home' %}" class="logo">
                 {% if theme and theme.get_logo %}
-                    <img src="{{ theme.get_logo }}" alt="{{ theme.site_name|default:'EducDim' }}">
+                    <img src="{{ theme.get_logo }}" alt="{{ theme.site_name|default:'EducaDim' }}">
                     <span>{{ theme.site_name|default:'EducaDim' }}</span>
                 {% elif theme and theme.logo %}
                     <img src="{{ theme.logo.url }}" alt="{{ theme.site_name|default:'EducaDim' }}">
