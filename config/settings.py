@@ -23,8 +23,6 @@ ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[
     '.onrender.com',
     'educadim.onrender.com',
     'educadim.com',
-    'educdim.onrender.com',
-    'https://educdim.vercel.app',
 ])
 
 # ============================================
