@@ -31,9 +31,9 @@
         {% csrf_token %}
 
         {% for item in question_data %}
-        <div class="card" style="border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:1.5rem;overflow:hidden;">
+        <div style="border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:1.5rem;overflow:hidden;">
 
-            {# ===== HEADER KESYON ===== #}
+            {# ===== HEADER ===== #}
             <div style="background:var(--glass-soft);padding:0.8rem 1rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;">
                 <strong style="font-family:var(--font-display);">
                     {% trans "Question" %} {{ forloop.counter }}
@@ -93,8 +93,8 @@
                     📝 {% trans "Réponse de l'utilisateur" %}
                 </h6>
 
-                {# ===== TIP: CHOIX (single, vrai_faux, multiple) ===== #}
-                {% if item.question.is_choice_type %}
+                {# ===== CHOIX ===== #}
+                {% if item.question.type_question == 'single' or item.question.type_question == 'vrai_faux' or item.question.type_question == 'multiple' %}
                     <ul style="padding-left:1.5rem;">
                         {% for rep in item.selected_reponses %}
                             <li style="margin-bottom:0.3rem;">
@@ -108,26 +108,38 @@
                         {% endfor %}
                     </ul>
 
-                {# ===== TIP: TEXTE (texte_trous, texte_libre) ===== #}
-                {% elif item.question.is_text_type %}
+                {# ===== TEXTE ===== #}
+                {% elif item.question.type_question == 'texte_trous' or item.question.type_question == 'texte_libre' %}
                     {% if item.reponse_utilisateur.texte_reponse %}
                         <pre style="background:var(--glass-soft);padding:0.8rem;border-radius:var(--radius-sm);white-space:pre-wrap;font-family:inherit;margin:0;">{{ item.reponse_utilisateur.texte_reponse }}</pre>
                     {% else %}
                         <em style="color:var(--text-muted);">{% trans "Non renseigné" %}</em>
                     {% endif %}
 
-                {# ===== TIP: AUDIO ===== #}
+                {# ===== AUDIO — AK PLIZYÈ SOURCE ===== #}
                 {% elif item.question.type_question == 'audio_reponse' %}
                     {% if item.upload_fields.audio %}
                         <div style="background:var(--glass-soft);padding:1rem;border-radius:var(--radius-sm);">
                             <strong>🎵 {% trans "Réponse audio" %}:</strong><br>
-                            <audio controls style="width:100%;max-width:500px;margin-top:0.5rem;">
-                                <source src="{{ item.upload_fields.audio.url }}" type="audio/webm">
-                                <source src="{{ item.upload_fields.audio.url }}" type="audio/mpeg">
-                                <source src="{{ item.upload_fields.audio.url }}" type="audio/mp4">
-                                <source src="{{ item.upload_fields.audio.url }}" type="audio/ogg">
+                            {% with url=item.upload_fields.audio.url %}
+                            <audio controls preload="metadata" style="width:100%;max-width:500px;margin-top:0.5rem;">
+                                {% if '.webm' in url %}
+                                    <source src="{{ url }}" type="audio/webm; codecs=opus">
+                                    <source src="{{ url }}" type="audio/webm">
+                                {% elif '.mp4' in url or '.m4a' in url %}
+                                    <source src="{{ url }}" type="audio/mp4">
+                                    <source src="{{ url }}" type="audio/m4a">
+                                {% elif '.ogg' in url %}
+                                    <source src="{{ url }}" type="audio/ogg; codecs=opus">
+                                    <source src="{{ url }}" type="audio/ogg">
+                                {% elif '.mp3' in url %}
+                                    <source src="{{ url }}" type="audio/mpeg">
+                                {% else %}
+                                    <source src="{{ url }}">
+                                {% endif %}
                                 {% trans "Navigatè w pa sipòte odyo." %}
                             </audio>
+                            {% endwith %}
                             <br>
                             <a href="{{ item.upload_fields.audio.url }}" target="_blank"
                                style="display:inline-block;margin-top:0.5rem;padding:6px 14px;background:var(--primary);color:#fff;border-radius:var(--radius-sm);text-decoration:none;font-size:0.85rem;">
@@ -138,7 +150,7 @@
                         <em style="color:var(--text-muted);">{% trans "Aucun fichier audio envoyé" %}</em>
                     {% endif %}
 
-                {# ===== TIP: VIDEO ===== #}
+                {# ===== VIDEO ===== #}
                 {% elif item.question.type_question == 'video_reponse' %}
                     {% if item.upload_fields.video %}
                         <div style="background:var(--glass-soft);padding:1rem;border-radius:var(--radius-sm);">
@@ -157,7 +169,7 @@
                         <em style="color:var(--text-muted);">{% trans "Aucune vidéo envoyée" %}</em>
                     {% endif %}
 
-                {# ===== TIP: IMAGE ===== #}
+                {# ===== IMAGE ===== #}
                 {% elif item.question.type_question == 'image_reponse' %}
                     {% if item.upload_fields.image %}
                         <div style="background:var(--glass-soft);padding:1rem;border-radius:var(--radius-sm);">
@@ -173,7 +185,7 @@
                         <em style="color:var(--text-muted);">{% trans "Aucune image envoyée" %}</em>
                     {% endif %}
 
-                {# ===== TIP: FICHIER ===== #}
+                {# ===== FICHIER ===== #}
                 {% elif item.question.type_question == 'fichier_reponse' %}
                     {% if item.upload_fields.fichier %}
                         <div style="background:var(--glass-soft);padding:1rem;border-radius:var(--radius-sm);">
