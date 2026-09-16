@@ -43,6 +43,10 @@ def google_verification(request):
     )
 
 
+# ============================================
+# WOUT SAN PREFIX LANG (toujou aksesib)
+# ============================================
+
 urlpatterns = [
     path("dp/", admin.site.urls),
     path("i18n/", include("django.conf.urls.i18n")),
@@ -68,6 +72,10 @@ urlpatterns = [
     ),
 ]
 
+
+# ============================================
+# WOUT AK PREFIX LANG
+# ============================================
 
 urlpatterns += i18n_patterns(
     path("", TemplateView.as_view(template_name="home.html"), name="home"),
@@ -95,11 +103,17 @@ urlpatterns += i18n_patterns(
 )
 
 
+# ============================================
+# STATIC & MEDIA — DEVLOPMAN SÈLMAN
+# ============================================
+
 if settings.DEBUG:
     urlpatterns += static(
         settings.STATIC_URL,
         document_root=settings.STATIC_ROOT,
     )
+    # ⚠️ PA sèvi MEDIA dirèkteman nan pwodiksyon
+    # Tout aksè media pase nan quiz:serve_audio, quiz:serve_video, elatriye
     urlpatterns += static(
         settings.MEDIA_URL,
         document_root=settings.MEDIA_ROOT,
