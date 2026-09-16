@@ -142,4 +142,98 @@
                 {% elif item.question.type_question == 'video_reponse' %}
                     {% if item.upload_fields.video %}
                         <div style="background:var(--glass-soft);padding:1rem;border-radius:var(--radius-sm);">
-                            <strong>🎬 {%
+                            <strong>🎬 {% trans "Réponse vidéo" %}:</strong><br>
+                            <video controls style="max-width:500px;margin-top:0.5rem;border-radius:var(--radius-sm);">
+                                <source src="{% url 'quiz:serve_video' item.reponse_utilisateur.id %}" type="video/webm">
+                                <source src="{% url 'quiz:serve_video' item.reponse_utilisateur.id %}" type="video/mp4">
+                            </video>
+                            <br>
+                            <a href="{% url 'quiz:serve_video' item.reponse_utilisateur.id %}" target="_blank"
+                               style="display:inline-block;margin-top:0.5rem;padding:6px 14px;background:var(--primary);color:#fff;border-radius:var(--radius-sm);text-decoration:none;font-size:0.85rem;">
+                                📥 {% trans "Télécharger la vidéo" %}
+                            </a>
+                        </div>
+                    {% else %}
+                        <em style="color:var(--text-muted);">{% trans "Aucune vidéo envoyée" %}</em>
+                    {% endif %}
+
+                {# IMAGE — SEKIRIZE #}
+                {% elif item.question.type_question == 'image_reponse' %}
+                    {% if item.upload_fields.image %}
+                        <div style="background:var(--glass-soft);padding:1rem;border-radius:var(--radius-sm);">
+                            <strong>🖼️ {% trans "Réponse image" %}:</strong><br>
+                            <img src="{% url 'quiz:serve_image' item.reponse_utilisateur.id %}" style="max-width:400px;border-radius:var(--radius-sm);margin-top:0.5rem;">
+                            <br>
+                            <a href="{% url 'quiz:serve_image' item.reponse_utilisateur.id %}" target="_blank"
+                               style="display:inline-block;margin-top:0.5rem;padding:6px 14px;background:var(--primary);color:#fff;border-radius:var(--radius-sm);text-decoration:none;font-size:0.85rem;">
+                                📥 {% trans "Télécharger l'image" %}
+                            </a>
+                        </div>
+                    {% else %}
+                        <em style="color:var(--text-muted);">{% trans "Aucune image envoyée" %}</em>
+                    {% endif %}
+
+                {# FICHIER — SEKIRIZE #}
+                {% elif item.question.type_question == 'fichier_reponse' %}
+                    {% if item.upload_fields.fichier %}
+                        <div style="background:var(--glass-soft);padding:1rem;border-radius:var(--radius-sm);">
+                            <strong>📎 {% trans "Réponse fichier" %}:</strong>
+                            <a href="{% url 'quiz:serve_fichier' item.reponse_utilisateur.id %}" target="_blank"
+                               style="display:inline-block;margin-left:0.5rem;padding:6px 14px;background:var(--primary);color:#fff;border-radius:var(--radius-sm);text-decoration:none;font-size:0.85rem;">
+                                📥 {% trans "Télécharger" %}
+                            </a>
+                        </div>
+                    {% else %}
+                        <em style="color:var(--text-muted);">{% trans "Aucun fichier envoyé" %}</em>
+                    {% endif %}
+
+                {% else %}
+                    <em style="color:var(--text-muted);">
+                        {% trans "Type non pris en charge" %} ({{ item.question.type_question }})
+                    </em>
+                {% endif %}
+
+                {# PWE ATRIBYE #}
+                <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
+                    <label for="points_{{ item.reponse_utilisateur.id }}" style="font-weight:600;font-size:0.95rem;">
+                        ⭐ {% trans "Points attribués (sur" %} {{ item.question.points }})
+                    </label>
+                    <div style="display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap;margin-top:0.5rem;">
+                        <input type="number"
+                               step="0.01"
+                               min="0"
+                               max="{{ item.question.points }}"
+                               name="points_{{ item.reponse_utilisateur.id }}"
+                               id="points_{{ item.reponse_utilisateur.id }}"
+                               value="{{ item.reponse_utilisateur.points_attribues|default:'' }}"
+                               placeholder="0 - {{ item.question.points }}"
+                               style="width:120px;padding:8px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:0.95rem;">
+                        <span style="color:var(--text-muted);font-size:0.85rem;">
+                            ℹ️ {% trans "Laissez vide pour la notation automatique" %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% empty %}
+            <p style="text-align:center;color:var(--text-muted);padding:2rem;">
+                {% trans "Aucune question trouvée." %}
+            </p>
+        {% endfor %}
+
+        {# BOUTON YO #}
+        <div style="display:flex;gap:10px;margin-top:2rem;flex-wrap:wrap;justify-content:flex-end;">
+            <a href="{% url 'quiz:tentative_list' %}"
+               style="padding:12px 24px;background:var(--glass-soft);color:var(--text);border:1.5px solid var(--border);border-radius:var(--radius-sm);text-decoration:none;font-weight:600;display:inline-flex;align-items:center;gap:0.5rem;">
+                ← {% trans "Retour à la liste" %}
+            </a>
+            <button type="submit"
+                    style="padding:12px 24px;background:var(--grad-brand);color:#fff;border:none;border-radius:var(--radius-sm);cursor:pointer;font-weight:700;display:inline-flex;align-items:center;gap:0.5rem;">
+                💾 {% trans "Enregistrer les corrections" %}
+            </button>
+        </div>
+
+    </form>
+</div>
+{% endblock %}
