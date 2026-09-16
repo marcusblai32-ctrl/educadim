@@ -73,7 +73,6 @@
             </h4>
             <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
                 <span class="badge badge-secondary">{{ reponse_utilisateur.question.get_type_question_display }}</span>
-                {# Pwen atribye #}
                 {% if reponse_utilisateur.points_attribues is not None %}
                     <span class="badge" style="background: var(--primary); color: #fff;">
                         ⭐ {{ reponse_utilisateur.points_attribues }} / {{ reponse_utilisateur.question.points }} pts
@@ -85,7 +84,7 @@
         {# ===== TÈKS KESYON AN ===== #}
         <p style="margin-bottom: 0.5rem; font-weight: 500;">{{ reponse_utilisateur.question.texte }}</p>
 
-        {# ===== MEDIA KESYON AN — KORIJE AK {% if %} ===== #}
+        {# ===== MEDIA KESYON AN ===== #}
         {% if reponse_utilisateur.question.has_media %}
         <div style="background: var(--glass-soft); padding: 0.8rem; border-radius: var(--radius-sm); margin-bottom: 0.8rem;">
             {% if reponse_utilisateur.question.q_media_titre %}
@@ -130,7 +129,7 @@
         <div style="background: var(--bg); padding: 0.8rem 1rem; border-radius: var(--radius-sm); margin-top: 0.5rem;">
             <strong style="color: var(--text-muted); font-size: 0.9rem;">{% trans "Votre réponse" %}:</strong>
 
-            {# ===== CHOIX (single, vrai_faux, multiple) — KORIJE ===== #}
+            {# ===== CHOIX ===== #}
             {% if reponse_utilisateur.question.type_question == 'single' or reponse_utilisateur.question.type_question == 'vrai_faux' or reponse_utilisateur.question.type_question == 'multiple' %}
                 <div style="margin-top: 0.3rem;">
                 {% for reponse in reponse_utilisateur.reponses_selectionnees.all %}
@@ -147,7 +146,7 @@
                 {% endfor %}
                 </div>
 
-            {# ===== TEXTE (texte_trous) ===== #}
+            {# ===== TEXTE TROUS ===== #}
             {% elif reponse_utilisateur.question.type_question == 'texte_trous' %}
                 {% if reponse_utilisateur.texte_reponse %}
                     <div style="margin-top: 0.3rem;">{{ reponse_utilisateur.texte_reponse }}</div>
@@ -165,17 +164,29 @@
                     <span style="color: var(--text-muted); font-style: italic;">{% trans "Non renseigné" %}</span>
                 {% endif %}
 
-            {# ===== AUDIO ===== #}
+            {# ===== AUDIO — AK PLIZYÈ SOURCE ===== #}
             {% elif reponse_utilisateur.question.type_question == 'audio_reponse' %}
                 {% if reponse_utilisateur.audio_reponse %}
                     <div style="margin-top: 0.5rem;">
-                        <audio controls style="width: 100%; max-width: 400px;">
-                            <source src="{{ reponse_utilisateur.audio_reponse.url }}" type="audio/webm">
-                            <source src="{{ reponse_utilisateur.audio_reponse.url }}" type="audio/mpeg">
-                            <source src="{{ reponse_utilisateur.audio_reponse.url }}" type="audio/mp4">
-                            <source src="{{ reponse_utilisateur.audio_reponse.url }}" type="audio/ogg">
+                        {% with url=reponse_utilisateur.audio_reponse.url %}
+                        <audio controls preload="metadata" style="width: 100%; max-width: 400px;">
+                            {% if '.webm' in url %}
+                                <source src="{{ url }}" type="audio/webm; codecs=opus">
+                                <source src="{{ url }}" type="audio/webm">
+                            {% elif '.mp4' in url or '.m4a' in url %}
+                                <source src="{{ url }}" type="audio/mp4">
+                                <source src="{{ url }}" type="audio/m4a">
+                            {% elif '.ogg' in url %}
+                                <source src="{{ url }}" type="audio/ogg; codecs=opus">
+                                <source src="{{ url }}" type="audio/ogg">
+                            {% elif '.mp3' in url %}
+                                <source src="{{ url }}" type="audio/mpeg">
+                            {% else %}
+                                <source src="{{ url }}">
+                            {% endif %}
                             {% trans "Navigatè w pa sipòte odyo." %}
                         </audio>
+                        {% endwith %}
                         <br>
                         <a href="{{ reponse_utilisateur.audio_reponse.url }}" target="_blank" style="font-size: 0.85rem; display: inline-block; margin-top: 0.3rem;">
                             <i class="fas fa-download"></i> {% trans "Télécharger l'audio" %}
@@ -231,7 +242,7 @@
             {% endif %}
         </div>
 
-        {# ===== BONNE RÉPONSE (choix sèlman) — KORIJE ===== #}
+        {# ===== BONNE RÉPONSE ===== #}
         {% if reponse_utilisateur.question.type_question == 'single' or reponse_utilisateur.question.type_question == 'vrai_faux' or reponse_utilisateur.question.type_question == 'multiple' %}
             <div style="background: rgba(34, 197, 94, 0.05); padding: 0.5rem 1rem; border-radius: var(--radius-sm); margin-top: 0.5rem; border-left: 3px solid var(--success);">
                 <strong style="color: var(--success); font-size: 0.9rem;">{% trans "Bonne réponse" %}:</strong>
