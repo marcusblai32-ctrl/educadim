@@ -6,27 +6,24 @@ from django.utils import timezone
 class Quiz(models.Model):
     # ===== RELASYON — You nan twa yo dwe ranpli =====
     cours = models.ForeignKey(
-        'courses.Course', 
-        on_delete=models.CASCADE, 
+        'courses.Course',
+        on_delete=models.CASCADE,
         related_name='quiz',
-        null=True, 
-        blank=True,
+        null=True, blank=True,
         verbose_name="Cours"
     )
     module = models.ForeignKey(
         'courses.Module',
         on_delete=models.CASCADE,
         related_name='quiz',
-        null=True,
-        blank=True,
+        null=True, blank=True,
         verbose_name="Module"
     )
     lecon = models.ForeignKey(
         'courses.Lecon',
         on_delete=models.CASCADE,
         related_name='quiz',
-        null=True,
-        blank=True,
+        null=True, blank=True,
         verbose_name="Leçon"
     )
 
@@ -35,7 +32,6 @@ class Quiz(models.Model):
     publie = models.BooleanField(default=False)
     pourcentage_reussite = models.PositiveIntegerField(default=70)
 
-    # ===== NOUVO: Durée du quiz en minutes (admin defini) =====
     duree_quiz = models.PositiveIntegerField(
         default=15,
         verbose_name="Durée du quiz (minutes)",
@@ -77,7 +73,6 @@ class Quiz(models.Model):
         ])
 
     def get_cours_parent(self):
-        """Retounen kou paran an kèlkeswa relasyon an."""
         if self.cours:
             return self.cours
         elif self.module:
@@ -87,7 +82,6 @@ class Quiz(models.Model):
         return None
 
     def get_niveau(self):
-        """Retounen nivo quiz la."""
         if self.cours:
             return "cours"
         elif self.module:
@@ -97,7 +91,6 @@ class Quiz(models.Model):
         return "inconnu"
 
     def get_duree_seconds(self):
-        """Retounen durée quiz la an segonn."""
         return self.duree_quiz * 60
 
 
@@ -193,7 +186,6 @@ class ReponseUtilisateur(models.Model):
     image_reponse = models.ImageField(upload_to='quiz/reponses/images/', blank=True, null=True, verbose_name="Réponse image")
     fichier_reponse = models.FileField(upload_to='quiz/reponses/fichiers/', blank=True, null=True, verbose_name="Réponse fichier")
 
-    # ===== NOUVO: Pwen manyèl pou koreksyon =====
     points_attribues = models.DecimalField(
         max_digits=5, decimal_places=2, null=True, blank=True,
         verbose_name="Points attribués (manuel)"
@@ -206,3 +198,25 @@ class ReponseUtilisateur(models.Model):
 
     def __str__(self):
         return f"{self.tentative.utilisateur.get_full_name()} - {self.question.texte[:30]}"
+
+    # ===== NOUVO: Verifye si gen yon fichye pou yon tip kesyon =====
+    def has_uploaded_file(self):
+        return any([
+            self.audio_reponse,
+            self.video_reponse,
+            self.image_reponse,
+            self.fichier_reponse,
+        ])
+
+    def get_uploaded_file_url(self):
+        """Retounen URL fichye a selon tip kesyon an."""
+        t = self.question.type_question
+        if t == 'audio_reponse' and self.audio_reponse:
+            return self.audio_reponse.url
+        elif t == 'video_reponse' and self.video_reponse:
+            return self.video_reponse.url
+        elif t == 'image_reponse' and self.image_reponse:
+            return self.image_reponse.url
+        elif t == 'fichier_reponse' and self.fichier_reponse:
+            return self.fichier_reponse.url
+        return None
