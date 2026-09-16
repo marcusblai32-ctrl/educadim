@@ -93,8 +93,7 @@ class ReponseUtilisateurAdmin(admin.ModelAdmin):
     list_display = ('tentative', 'question', 'get_fichye')
     search_fields = ('tentative__utilisateur__email', 'question__texte')
     readonly_fields = (
-        'audio_reponse', 'video_reponse', 'image_reponse', 'fichier_reponse',
-        'get_audio_player', 'get_video_player', 'get_image_preview', 'get_fichier_link'
+        'get_audio_player', 'get_video_player', 'get_image_preview', 'get_fichier_link',
     )
     fields = (
         'tentative', 'question', 'reponses_selectionnees', 'texte_reponse',
@@ -118,31 +117,48 @@ class ReponseUtilisateurAdmin(admin.ModelAdmin):
     def get_audio_player(self, obj):
         if obj.audio_reponse:
             return format_html(
-                '<audio controls style="width:300px;"><source src="{}" type="audio/webm">'
-                '<source src="{}" type="audio/mpeg">Navigatè w pa sipòte audio.</audio>',
-                obj.audio_reponse.url, obj.audio_reponse.url
+                '<audio controls style="width:400px;margin-top:5px;">'
+                '<source src="{}" type="audio/webm">'
+                '<source src="{}" type="audio/mpeg">'
+                '<source src="{}" type="audio/mp4">'
+                '<source src="{}" type="audio/ogg">'
+                'Navigatè w pa sipòte audio.</audio><br>'
+                '<a href="{}" target="_blank" style="margin-top:5px;display:inline-block;">📥 Telechaje</a>',
+                obj.audio_reponse.url, obj.audio_reponse.url,
+                obj.audio_reponse.url, obj.audio_reponse.url,
+                obj.audio_reponse.url
             )
-        return "-"
-    get_audio_player.short_description = "Lektè Audio"
+        return "—"
+    get_audio_player.short_description = "🎵 Lektè Audio"
 
     def get_video_player(self, obj):
         if obj.video_reponse:
             return format_html(
-                '<video controls style="width:300px;"><source src="{}" type="video/webm">'
-                '<source src="{}" type="video/mp4">Navigatè w pa sipòte video.</video>',
-                obj.video_reponse.url, obj.video_reponse.url
+                '<video controls style="width:400px;margin-top:5px;">'
+                '<source src="{}" type="video/webm">'
+                '<source src="{}" type="video/mp4">'
+                'Navigatè w pa sipòte video.</video><br>'
+                '<a href="{}" target="_blank" style="margin-top:5px;display:inline-block;">📥 Telechaje</a>',
+                obj.video_reponse.url, obj.video_reponse.url, obj.video_reponse.url
             )
-        return "-"
-    get_video_player.short_description = "Lektè Video"
+        return "—"
+    get_video_player.short_description = "🎬 Lektè Video"
 
     def get_image_preview(self, obj):
         if obj.image_reponse:
-            return format_html('<img src="{}" style="max-width:200px;max-height:200px;" />', obj.image_reponse.url)
-        return "-"
-    get_image_preview.short_description = "Apèsi Image"
+            return format_html(
+                '<img src="{}" style="max-width:300px;max-height:300px;border-radius:6px;margin-top:5px;" /><br>'
+                '<a href="{}" target="_blank" style="margin-top:5px;display:inline-block;">📥 Telechaje</a>',
+                obj.image_reponse.url, obj.image_reponse.url
+            )
+        return "—"
+    get_image_preview.short_description = "🖼️ Apèsi Image"
 
     def get_fichier_link(self, obj):
         if obj.fichier_reponse:
-            return format_html('<a href="{}" target="_blank">📥 Telechaje fichye</a>', obj.fichier_reponse.url)
-        return "-"
-    get_fichier_link.short_description = "Lyen Fichye"
+            return format_html(
+                '<a href="{}" target="_blank" class="button" style="margin-top:5px;">📥 Telechaje fichye</a>',
+                obj.fichier_reponse.url
+            )
+        return "—"
+    get_fichier_link.short_description = "📎 Lyen Fichye"
