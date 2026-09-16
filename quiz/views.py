@@ -61,8 +61,13 @@ def submit_quiz(request, tentative_pk):
 
     if request.method == 'POST':
         # ===== DEBUG: Verifye sa k ap rive nan FILES =====
+        print("=" * 60)
         print("=== FILES keys ===", list(request.FILES.keys()))
         print("=== POST keys ===", list(request.POST.keys()))
+        for key in request.FILES:
+            f = request.FILES[key]
+            print(f"  FILES['{key}'] = {f.name} ({f.size} bytes)")
+        print("=" * 60)
 
         questions = tentative.quiz.questions.all()
         for question in questions:
@@ -101,9 +106,9 @@ def submit_quiz(request, tentative_pk):
                 )
                 if fichye:
                     reponse_utilisateur.audio_reponse = fichye
-                    print(f"✅ Audio rive: {fichye.name} ({fichye.size} bytes)")
+                    print(f"✅ Audio rive: {fichye.name} ({fichye.size} bytes) pou Q{question.id}")
                 else:
-                    print(f"❌ Pa gen audio pou question {question.id}")
+                    print(f"❌ PA GEN audio pou Q{question.id}")
 
             elif question.type_question == 'video_reponse':
                 fichye = (
@@ -113,7 +118,7 @@ def submit_quiz(request, tentative_pk):
                 )
                 if fichye:
                     reponse_utilisateur.video_reponse = fichye
-                    print(f"✅ Video rive: {fichye.name}")
+                    print(f"✅ Video rive: {fichye.name} pou Q{question.id}")
 
             elif question.type_question == 'image_reponse':
                 fichye = (
@@ -123,7 +128,7 @@ def submit_quiz(request, tentative_pk):
                 )
                 if fichye:
                     reponse_utilisateur.image_reponse = fichye
-                    print(f"✅ Image rive: {fichye.name}")
+                    print(f"✅ Image rive: {fichye.name} pou Q{question.id}")
 
             elif question.type_question == 'fichier_reponse':
                 fichye = (
@@ -133,7 +138,7 @@ def submit_quiz(request, tentative_pk):
                 )
                 if fichye:
                     reponse_utilisateur.fichier_reponse = fichye
-                    print(f"✅ Fichye rive: {fichye.name}")
+                    print(f"✅ Fichye rive: {fichye.name} pou Q{question.id}")
 
             reponse_utilisateur.save()
 
