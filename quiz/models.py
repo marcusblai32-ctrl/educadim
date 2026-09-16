@@ -4,43 +4,17 @@ from django.utils import timezone
 
 
 class Quiz(models.Model):
-    # ===== RELASYON — You nan twa yo dwe ranpli =====
-    cours = models.ForeignKey(
-        'courses.Course',
-        on_delete=models.CASCADE,
-        related_name='quiz',
-        null=True, blank=True,
-        verbose_name="Cours"
-    )
-    module = models.ForeignKey(
-        'courses.Module',
-        on_delete=models.CASCADE,
-        related_name='quiz',
-        null=True, blank=True,
-        verbose_name="Module"
-    )
-    lecon = models.ForeignKey(
-        'courses.Lecon',
-        on_delete=models.CASCADE,
-        related_name='quiz',
-        null=True, blank=True,
-        verbose_name="Leçon"
-    )
+    cours = models.ForeignKey('courses.Course', on_delete=models.CASCADE, related_name='quiz', null=True, blank=True, verbose_name="Cours")
+    module = models.ForeignKey('courses.Module', on_delete=models.CASCADE, related_name='quiz', null=True, blank=True, verbose_name="Module")
+    lecon = models.ForeignKey('courses.Lecon', on_delete=models.CASCADE, related_name='quiz', null=True, blank=True, verbose_name="Leçon")
 
     titre = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     publie = models.BooleanField(default=False)
     pourcentage_reussite = models.PositiveIntegerField(default=70)
-
-    duree_quiz = models.PositiveIntegerField(
-        default=15,
-        verbose_name="Durée du quiz (minutes)",
-        help_text="Temps limite pour compléter le quiz en minutes."
-    )
-
+    duree_quiz = models.PositiveIntegerField(default=15, verbose_name="Durée du quiz (minutes)", help_text="Temps limite pour compléter le quiz en minutes.")
     created_at = models.DateTimeField(auto_now_add=True)
 
-    # Medya miltip
     media_audio_url = models.URLField(blank=True, verbose_name="URL Audio")
     media_audio_file = models.FileField(upload_to='quiz/media/audio/', blank=True, null=True, verbose_name="Fichier Audio")
     media_video_url = models.URLField(blank=True, verbose_name="URL Vidéo")
@@ -65,12 +39,7 @@ class Quiz(models.Model):
         return self.titre
 
     def has_media(self):
-        return any([
-            self.media_audio_url, self.media_audio_file,
-            self.media_video_url, self.media_video_file,
-            self.media_image_url, self.media_image_file,
-            self.media_texte
-        ])
+        return any([self.media_audio_url, self.media_audio_file, self.media_video_url, self.media_video_file, self.media_image_url, self.media_image_file, self.media_texte])
 
     def get_cours_parent(self):
         if self.cours:
@@ -133,12 +102,7 @@ class Question(models.Model):
         return f"{self.quiz.titre} - Q{self.ordre}: {self.texte[:50]}"
 
     def has_media(self):
-        return any([
-            self.q_media_audio_url, self.q_media_audio_file,
-            self.q_media_video_url, self.q_media_video_file,
-            self.q_media_image_url, self.q_media_image_file,
-            self.q_media_texte
-        ])
+        return any([self.q_media_audio_url, self.q_media_audio_file, self.q_media_video_url, self.q_media_video_file, self.q_media_image_url, self.q_media_image_file, self.q_media_texte])
 
     def is_upload_type(self):
         return self.type_question in ['audio_reponse', 'video_reponse', 'image_reponse', 'fichier_reponse']
@@ -186,10 +150,7 @@ class ReponseUtilisateur(models.Model):
     image_reponse = models.ImageField(upload_to='quiz/reponses/images/', blank=True, null=True, verbose_name="Réponse image")
     fichier_reponse = models.FileField(upload_to='quiz/reponses/fichiers/', blank=True, null=True, verbose_name="Réponse fichier")
 
-    points_attribues = models.DecimalField(
-        max_digits=5, decimal_places=2, null=True, blank=True,
-        verbose_name="Points attribués (manuel)"
-    )
+    points_attribues = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, verbose_name="Points attribués (manuel)")
 
     class Meta:
         unique_together = ('tentative', 'question')
@@ -199,17 +160,10 @@ class ReponseUtilisateur(models.Model):
     def __str__(self):
         return f"{self.tentative.utilisateur.get_full_name()} - {self.question.texte[:30]}"
 
-    # ===== NOUVO: Verifye si gen yon fichye pou yon tip kesyon =====
     def has_uploaded_file(self):
-        return any([
-            self.audio_reponse,
-            self.video_reponse,
-            self.image_reponse,
-            self.fichier_reponse,
-        ])
+        return any([self.audio_reponse, self.video_reponse, self.image_reponse, self.fichier_reponse])
 
     def get_uploaded_file_url(self):
-        """Retounen URL fichye a selon tip kesyon an."""
         t = self.question.type_question
         if t == 'audio_reponse' and self.audio_reponse:
             return self.audio_reponse.url
