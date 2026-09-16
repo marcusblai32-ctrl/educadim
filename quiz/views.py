@@ -60,13 +60,13 @@ def submit_quiz(request, tentative_pk):
         return redirect('quiz:quiz_result', tentative_pk=tentative.pk)
 
     if request.method == 'POST':
-        # ===== DEBUG: Verifye sa k ap rive nan FILES =====
+        # ===== DEBUG =====
         print("=" * 60)
         print("=== FILES keys ===", list(request.FILES.keys()))
         print("=== POST keys ===", list(request.POST.keys()))
         for key in request.FILES:
             f = request.FILES[key]
-            print(f"  FILES['{key}'] = {f.name} ({f.size} bytes)")
+            print(f"  FILES['{key}'] = {f.name} ({f.size} bytes) | type: {f.content_type}")
         print("=" * 60)
 
         questions = tentative.quiz.questions.all()
@@ -97,48 +97,37 @@ def submit_quiz(request, tentative_pk):
             elif question.type_question == 'texte_libre':
                 reponse_utilisateur.texte_reponse = request.POST.get(f'question_{question.id}_texte_libre', '').strip()
 
-            # ===== UPLOAD TYPES =====
+            # ===== UPLOAD =====
             elif question.type_question == 'audio_reponse':
                 fichye = (
                     request.FILES.get(f'question_{question.id}_audio') or
-                    request.FILES.get(f'question_{question.id}_audio_upload') or
-                    request.FILES.get(f'question_{question.id}_audio_reponse')
+                    request.FILES.get(f'question_{question.id}_audio_upload')
                 )
-                if fichye:
+                if fichye and fichye.size > 0:
                     reponse_utilisateur.audio_reponse = fichye
                     print(f"✅ Audio rive: {fichye.name} ({fichye.size} bytes) pou Q{question.id}")
+                elif fichye:
+                    print(f"❌ FICHYE VID pou Q{question.id}!")
                 else:
                     print(f"❌ PA GEN audio pou Q{question.id}")
 
             elif question.type_question == 'video_reponse':
-                fichye = (
-                    request.FILES.get(f'question_{question.id}_video') or
-                    request.FILES.get(f'question_{question.id}_video_upload') or
-                    request.FILES.get(f'question_{question.id}_video_reponse')
-                )
-                if fichye:
+                fichye = request.FILES.get(f'question_{question.id}_video')
+                if fichye and fichye.size > 0:
                     reponse_utilisateur.video_reponse = fichye
-                    print(f"✅ Video rive: {fichye.name} pou Q{question.id}")
+                    print(f"✅ Video rive: {fichye.name} ({fichye.size} bytes)")
 
             elif question.type_question == 'image_reponse':
-                fichye = (
-                    request.FILES.get(f'question_{question.id}_image') or
-                    request.FILES.get(f'question_{question.id}_image_upload') or
-                    request.FILES.get(f'question_{question.id}_image_reponse')
-                )
-                if fichye:
+                fichye = request.FILES.get(f'question_{question.id}_image')
+                if fichye and fichye.size > 0:
                     reponse_utilisateur.image_reponse = fichye
-                    print(f"✅ Image rive: {fichye.name} pou Q{question.id}")
+                    print(f"✅ Image rive: {fichye.name} ({fichye.size} bytes)")
 
             elif question.type_question == 'fichier_reponse':
-                fichye = (
-                    request.FILES.get(f'question_{question.id}_fichier') or
-                    request.FILES.get(f'question_{question.id}_fichier_upload') or
-                    request.FILES.get(f'question_{question.id}_fichier_reponse')
-                )
-                if fichye:
+                fichye = request.FILES.get(f'question_{question.id}_fichier')
+                if fichye and fichye.size > 0:
                     reponse_utilisateur.fichier_reponse = fichye
-                    print(f"✅ Fichye rive: {fichye.name} pou Q{question.id}")
+                    print(f"✅ Fichye rive: {fichye.name} ({fichye.size} bytes)")
 
             reponse_utilisateur.save()
 
@@ -170,7 +159,6 @@ def get_question_upload_type(request, question_id):
     return JsonResponse({'error': 'Not an upload type'}, status=400)
 
 
-# ===== VUE POU KOREKSYON STAFF =====
 @staff_member_required
 def tentative_list(request):
     tentatives = TentativeQuiz.objects.filter(date_soumission__isnull=False).select_related('utilisateur', 'quiz')
