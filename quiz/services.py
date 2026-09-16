@@ -57,7 +57,7 @@ def get_upload_fields_for_question(question):
             'input_name': f'question_{question.id}_audio',
             'label': 'Enregistrement audio',
             'accept': 'audio/*',
-            'accept_mime': 'audio/webm,audio/mpeg,audio/wav,audio/ogg',
+            'accept_mime': 'audio/webm,audio/mpeg,audio/wav,audio/ogg,audio/mp4',
         },
         'video_reponse': {
             'field_name': 'video_reponse',
