@@ -6,15 +6,15 @@
 {% block content %}
 <div style="max-width: 900px; margin: 2rem auto; padding: 0 1.5rem;">
 
-    <!-- ===== HEADER ===== -->
+    {# ===== HEADER ===== #}
     <div style="text-align: center; margin-bottom: 2rem;">
-        <h1 style="font-size: 2rem; font-weight: 800;">{{ tentative.quiz.titre }}</h1>
+        <h1 style="font-size: 2rem; font-weight: 800; font-family: var(--font-display);">{{ tentative.quiz.titre }}</h1>
         <p style="color: var(--text-muted);">{% trans "Résultat du quiz" %}</p>
     </div>
 
-    <!-- ===== SCORE ===== -->
+    {# ===== SCORE ===== #}
     <div style="background: var(--bg-card); border-radius: var(--radius-lg); padding: 2rem; text-align: center; box-shadow: var(--shadow-lg); border: 1px solid var(--border); margin-bottom: 2rem;">
-        <div style="font-size: 4rem; font-weight: 900; color: var(--primary);">
+        <div style="font-size: 4rem; font-weight: 900; color: var(--primary); font-family: var(--font-display);">
             {{ tentative.score|floatformat:0 }}%
         </div>
         <div style="font-size: 1.2rem; font-weight: 600; margin-top: 0.5rem;">
@@ -31,11 +31,13 @@
         <div style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">
             {% trans "Seuil de réussite" %}: {{ tentative.quiz.pourcentage_reussite }}%
         </div>
+        <div style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.3rem;">
+            {% trans "Soumis le" %}: {{ tentative.date_soumission|date:"d/m/Y H:i" }}
+        </div>
         <div style="margin-top: 1.5rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
             <a href="{% url 'quiz:start' tentative.quiz.pk %}" class="btn btn-primary">
                 <i class="fas fa-redo"></i> {% trans "Réessayer" %}
             </a>
-            <!-- ===== KORIJE: Tcheke si cours egziste ===== -->
             {% if tentative.quiz.cours %}
                 <a href="{% url 'courses:course_detail' tentative.quiz.cours.pk %}" class="btn btn-secondary">
                     <i class="fas fa-arrow-left"></i> {% trans "Retour au cours" %}
@@ -56,29 +58,83 @@
         </div>
     </div>
 
-    <!-- ===== DÉTAIL DES RÉPONSES ===== -->
-    <h2 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 1rem;">
+    {# ===== DÉTAIL DES RÉPONSES ===== #}
+    <h2 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 1rem; font-family: var(--font-display);">
         <i class="fas fa-list-ul"></i> {% trans "Détail de vos réponses" %}
     </h2>
 
     {% for reponse_utilisateur in reponses_utilisateur %}
     <div style="background: var(--bg-card); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1rem; box-shadow: var(--shadow); border: 1px solid var(--border);">
+
+        {# ===== HEADER KESYON ===== #}
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem;">
-            <h4 style="font-size: 1rem; font-weight: 600; margin: 0;">
+            <h4 style="font-size: 1rem; font-weight: 600; margin: 0; font-family: var(--font-display);">
                 {% trans "Question" %} {{ forloop.counter }}
             </h4>
-            <span class="badge badge-secondary">{{ reponse_utilisateur.question.get_type_question_display }}</span>
+            <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                <span class="badge badge-secondary">{{ reponse_utilisateur.question.get_type_question_display }}</span>
+                {# Pwen atribye #}
+                {% if reponse_utilisateur.points_attribues is not None %}
+                    <span class="badge" style="background: var(--primary); color: #fff;">
+                        ⭐ {{ reponse_utilisateur.points_attribues }} / {{ reponse_utilisateur.question.points }} pts
+                    </span>
+                {% endif %}
+            </div>
         </div>
 
-        <p style="margin-bottom: 0.5rem;">{{ reponse_utilisateur.question.texte }}</p>
+        {# ===== TÈKS KESYON AN ===== #}
+        <p style="margin-bottom: 0.5rem; font-weight: 500;">{{ reponse_utilisateur.question.texte }}</p>
 
-        <!-- ===== RÉPONSE DE L'UTILISATEUR ===== -->
+        {# ===== MEDIA KESYON AN — KORIJE AK {% if %} ===== #}
+        {% if reponse_utilisateur.question.has_media %}
+        <div style="background: var(--glass-soft); padding: 0.8rem; border-radius: var(--radius-sm); margin-bottom: 0.8rem;">
+            {% if reponse_utilisateur.question.q_media_titre %}
+                <p style="font-weight: 600; margin-bottom: 0.3rem; font-size: 0.9rem;">{{ reponse_utilisateur.question.q_media_titre }}</p>
+            {% endif %}
+
+            {% if reponse_utilisateur.question.q_media_audio_file %}
+                <audio controls style="width: 100%; max-width: 400px;">
+                    <source src="{{ reponse_utilisateur.question.q_media_audio_file.url }}" type="audio/mpeg">
+                    <source src="{{ reponse_utilisateur.question.q_media_audio_file.url }}" type="audio/webm">
+                </audio>
+            {% elif reponse_utilisateur.question.q_media_audio_url %}
+                <audio controls style="width: 100%; max-width: 400px;">
+                    <source src="{{ reponse_utilisateur.question.q_media_audio_url }}" type="audio/mpeg">
+                </audio>
+            {% endif %}
+
+            {% if reponse_utilisateur.question.q_media_video_file %}
+                <video controls style="max-width: 400px; border-radius: var(--radius-sm); margin-top: 0.3rem;">
+                    <source src="{{ reponse_utilisateur.question.q_media_video_file.url }}" type="video/mp4">
+                    <source src="{{ reponse_utilisateur.question.q_media_video_file.url }}" type="video/webm">
+                </video>
+            {% elif reponse_utilisateur.question.q_media_video_url %}
+                <video controls style="max-width: 400px; border-radius: var(--radius-sm); margin-top: 0.3rem;">
+                    <source src="{{ reponse_utilisateur.question.q_media_video_url }}" type="video/mp4">
+                </video>
+            {% endif %}
+
+            {% if reponse_utilisateur.question.q_media_image_file %}
+                <img src="{{ reponse_utilisateur.question.q_media_image_file.url }}" alt="média" style="max-width: 100%; max-height: 200px; border-radius: var(--radius-sm); margin-top: 0.3rem;">
+            {% elif reponse_utilisateur.question.q_media_image_url %}
+                <img src="{{ reponse_utilisateur.question.q_media_image_url }}" alt="média" style="max-width: 100%; max-height: 200px; border-radius: var(--radius-sm); margin-top: 0.3rem;">
+            {% endif %}
+
+            {% if reponse_utilisateur.question.q_media_texte %}
+                <p style="margin-top: 0.3rem; color: var(--text-muted); font-size: 0.85rem;">{{ reponse_utilisateur.question.q_media_texte }}</p>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {# ===== RÉPONSE DE L'UTILISATEUR ===== #}
         <div style="background: var(--bg); padding: 0.8rem 1rem; border-radius: var(--radius-sm); margin-top: 0.5rem;">
-            <strong style="color: var(--text-muted);">{% trans "Votre réponse" %}:</strong>
+            <strong style="color: var(--text-muted); font-size: 0.9rem;">{% trans "Votre réponse" %}:</strong>
 
-            {% if reponse_utilisateur.question.type_question in 'single,vrai_faux,multiple' %}
+            {# ===== CHOIX (single, vrai_faux, multiple) — KORIJE ===== #}
+            {% if reponse_utilisateur.question.type_question == 'single' or reponse_utilisateur.question.type_question == 'vrai_faux' or reponse_utilisateur.question.type_question == 'multiple' %}
+                <div style="margin-top: 0.3rem;">
                 {% for reponse in reponse_utilisateur.reponses_selectionnees.all %}
-                    <span class="badge {% if reponse.est_correcte %}badge-success{% else %}badge-danger{% endif %}" style="margin-right: 0.3rem;">
+                    <span class="badge {% if reponse.est_correcte %}badge-success{% else %}badge-danger{% endif %}" style="margin-right: 0.3rem; margin-bottom: 0.3rem;">
                         {{ reponse.texte }}
                         {% if reponse.est_correcte %}
                             <i class="fas fa-check"></i>
@@ -87,86 +143,117 @@
                         {% endif %}
                     </span>
                 {% empty %}
-                    <span style="color: var(--text-muted);">{% trans "Aucune réponse sélectionnée" %}</span>
+                    <span style="color: var(--text-muted); font-style: italic;">{% trans "Aucune réponse sélectionnée" %}</span>
                 {% endfor %}
-
-            {% elif reponse_utilisateur.question.type_question == 'texte_trous' %}
-                <span>{{ reponse_utilisateur.texte_reponse|default:"-" }}</span>
-
-            {% elif reponse_utilisateur.question.type_question == 'texte_libre' %}
-                <div style="white-space: pre-wrap; font-style: italic; color: var(--text-muted);">
-                    {{ reponse_utilisateur.texte_reponse|default:"-" }}
                 </div>
 
-            <!-- ===== UPLOAD TYPES ===== -->
+            {# ===== TEXTE (texte_trous) ===== #}
+            {% elif reponse_utilisateur.question.type_question == 'texte_trous' %}
+                {% if reponse_utilisateur.texte_reponse %}
+                    <div style="margin-top: 0.3rem;">{{ reponse_utilisateur.texte_reponse }}</div>
+                {% else %}
+                    <span style="color: var(--text-muted); font-style: italic;">{% trans "Non renseigné" %}</span>
+                {% endif %}
+
+            {# ===== TEXTE LIBRE ===== #}
+            {% elif reponse_utilisateur.question.type_question == 'texte_libre' %}
+                {% if reponse_utilisateur.texte_reponse %}
+                    <div style="white-space: pre-wrap; font-style: italic; color: var(--text-muted); margin-top: 0.3rem;">
+                        {{ reponse_utilisateur.texte_reponse }}
+                    </div>
+                {% else %}
+                    <span style="color: var(--text-muted); font-style: italic;">{% trans "Non renseigné" %}</span>
+                {% endif %}
+
+            {# ===== AUDIO ===== #}
             {% elif reponse_utilisateur.question.type_question == 'audio_reponse' %}
                 {% if reponse_utilisateur.audio_reponse %}
-                    <audio controls style="max-width: 100%; margin-top: 0.3rem;">
-                        <source src="{{ reponse_utilisateur.audio_reponse.url }}" type="audio/mpeg">
-                    </audio>
-                    <br><a href="{{ reponse_utilisateur.audio_reponse.url }}" target="_blank" style="font-size: 0.85rem;">
-                        <i class="fas fa-download"></i> {% trans "Télécharger" %}
-                    </a>
+                    <div style="margin-top: 0.5rem;">
+                        <audio controls style="width: 100%; max-width: 400px;">
+                            <source src="{{ reponse_utilisateur.audio_reponse.url }}" type="audio/webm">
+                            <source src="{{ reponse_utilisateur.audio_reponse.url }}" type="audio/mpeg">
+                            <source src="{{ reponse_utilisateur.audio_reponse.url }}" type="audio/mp4">
+                            <source src="{{ reponse_utilisateur.audio_reponse.url }}" type="audio/ogg">
+                            {% trans "Navigatè w pa sipòte odyo." %}
+                        </audio>
+                        <br>
+                        <a href="{{ reponse_utilisateur.audio_reponse.url }}" target="_blank" style="font-size: 0.85rem; display: inline-block; margin-top: 0.3rem;">
+                            <i class="fas fa-download"></i> {% trans "Télécharger l'audio" %}
+                        </a>
+                    </div>
                 {% else %}
-                    <span style="color: var(--text-muted);">{% trans "Aucun fichier téléchargé" %}</span>
+                    <span style="color: var(--text-muted); font-style: italic;">{% trans "Aucun fichier audio envoyé" %}</span>
                 {% endif %}
 
+            {# ===== VIDEO ===== #}
             {% elif reponse_utilisateur.question.type_question == 'video_reponse' %}
                 {% if reponse_utilisateur.video_reponse %}
-                    <video controls style="max-width: 100%; max-height: 300px; margin-top: 0.3rem;">
-                        <source src="{{ reponse_utilisateur.video_reponse.url }}" type="video/mp4">
-                    </video>
-                    <br><a href="{{ reponse_utilisateur.video_reponse.url }}" target="_blank" style="font-size: 0.85rem;">
-                        <i class="fas fa-download"></i> {% trans "Télécharger" %}
-                    </a>
+                    <div style="margin-top: 0.5rem;">
+                        <video controls style="max-width: 100%; max-height: 300px; border-radius: var(--radius-sm);">
+                            <source src="{{ reponse_utilisateur.video_reponse.url }}" type="video/webm">
+                            <source src="{{ reponse_utilisateur.video_reponse.url }}" type="video/mp4">
+                        </video>
+                        <br>
+                        <a href="{{ reponse_utilisateur.video_reponse.url }}" target="_blank" style="font-size: 0.85rem; display: inline-block; margin-top: 0.3rem;">
+                            <i class="fas fa-download"></i> {% trans "Télécharger la vidéo" %}
+                        </a>
+                    </div>
                 {% else %}
-                    <span style="color: var(--text-muted);">{% trans "Aucun fichier téléchargé" %}</span>
+                    <span style="color: var(--text-muted); font-style: italic;">{% trans "Aucune vidéo envoyée" %}</span>
                 {% endif %}
 
+            {# ===== IMAGE ===== #}
             {% elif reponse_utilisateur.question.type_question == 'image_reponse' %}
                 {% if reponse_utilisateur.image_reponse %}
-                    <img src="{{ reponse_utilisateur.image_reponse.url }}" alt="Réponse image" style="max-width: 100%; max-height: 200px; border-radius: var(--radius-sm); margin-top: 0.3rem;">
-                    <br><a href="{{ reponse_utilisateur.image_reponse.url }}" target="_blank" style="font-size: 0.85rem;">
-                        <i class="fas fa-download"></i> {% trans "Télécharger" %}
-                    </a>
+                    <div style="margin-top: 0.5rem;">
+                        <img src="{{ reponse_utilisateur.image_reponse.url }}" alt="Réponse image" style="max-width: 100%; max-height: 200px; border-radius: var(--radius-sm);">
+                        <br>
+                        <a href="{{ reponse_utilisateur.image_reponse.url }}" target="_blank" style="font-size: 0.85rem; display: inline-block; margin-top: 0.3rem;">
+                            <i class="fas fa-download"></i> {% trans "Télécharger l'image" %}
+                        </a>
+                    </div>
                 {% else %}
-                    <span style="color: var(--text-muted);">{% trans "Aucun fichier téléchargé" %}</span>
+                    <span style="color: var(--text-muted); font-style: italic;">{% trans "Aucune image envoyée" %}</span>
                 {% endif %}
 
+            {# ===== FICHIER ===== #}
             {% elif reponse_utilisateur.question.type_question == 'fichier_reponse' %}
                 {% if reponse_utilisateur.fichier_reponse %}
-                    <a href="{{ reponse_utilisateur.fichier_reponse.url }}" target="_blank" style="font-size: 0.95rem;">
-                        <i class="fas fa-file"></i> {{ reponse_utilisateur.fichier_reponse.name|cut:"quiz/reponses/fichiers/" }}
-                    </a>
+                    <div style="margin-top: 0.5rem;">
+                        <a href="{{ reponse_utilisateur.fichier_reponse.url }}" target="_blank" style="font-size: 0.95rem;">
+                            <i class="fas fa-file"></i> {{ reponse_utilisateur.fichier_reponse.name|cut:"quiz/reponses/fichiers/" }}
+                        </a>
+                    </div>
                 {% else %}
-                    <span style="color: var(--text-muted);">{% trans "Aucun fichier téléchargé" %}</span>
+                    <span style="color: var(--text-muted); font-style: italic;">{% trans "Aucun fichier envoyé" %}</span>
                 {% endif %}
 
             {% endif %}
         </div>
 
-        <!-- ===== BONNE RÉPONSE (si applicable) ===== -->
-        {% if reponse_utilisateur.question.type_question in 'single,vrai_faux,multiple' %}
+        {# ===== BONNE RÉPONSE (choix sèlman) — KORIJE ===== #}
+        {% if reponse_utilisateur.question.type_question == 'single' or reponse_utilisateur.question.type_question == 'vrai_faux' or reponse_utilisateur.question.type_question == 'multiple' %}
             <div style="background: rgba(34, 197, 94, 0.05); padding: 0.5rem 1rem; border-radius: var(--radius-sm); margin-top: 0.5rem; border-left: 3px solid var(--success);">
-                <strong style="color: var(--success);">{% trans "Bonne réponse" %}:</strong>
+                <strong style="color: var(--success); font-size: 0.9rem;">{% trans "Bonne réponse" %}:</strong>
                 {% for reponse in reponse_utilisateur.question.reponses.all %}
                     {% if reponse.est_correcte %}
-                        <span class="badge badge-success" style="margin-right: 0.3rem;">{{ reponse.texte }}</span>
+                        <span class="badge badge-success" style="margin-right: 0.3rem; margin-left: 0.3rem;">{{ reponse.texte }}</span>
                     {% endif %}
                 {% endfor %}
             </div>
         {% endif %}
 
-        <!-- ===== EXPLICATION ===== -->
+        {# ===== EXPLICATION ===== #}
         {% if reponse_utilisateur.question.explication %}
             <div style="background: rgba(59, 130, 246, 0.05); padding: 0.5rem 1rem; border-radius: var(--radius-sm); margin-top: 0.5rem; border-left: 3px solid var(--info);">
-                <strong style="color: var(--info);">{% trans "Explication" %}:</strong>
+                <strong style="color: var(--info); font-size: 0.9rem;">{% trans "Explication" %}:</strong>
                 <span style="color: var(--text-muted);">{{ reponse_utilisateur.question.explication }}</span>
             </div>
         {% endif %}
     </div>
     {% empty %}
-    <p style="color: var(--text-muted);">{% trans "Aucune réponse enregistrée." %}</p>
+    <p style="color: var(--text-muted); text-align: center; padding: 2rem;">{% trans "Aucune réponse enregistrée." %}</p>
     {% endfor %}
+
 </div>
 {% endblock %}
