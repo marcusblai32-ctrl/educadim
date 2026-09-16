@@ -1,6 +1,7 @@
 from django.utils import timezone
 from .models import ReponseUtilisateur
 
+
 def corriger_tentative(tentative):
     total_points = 0
     points_obtenus = 0.0
@@ -13,11 +14,10 @@ def corriger_tentative(tentative):
         except ReponseUtilisateur.DoesNotExist:
             continue
 
-        # ===== NOUVO: Si gen pwen manyèl, itilize yo =====
+        # ===== Si gen pwen manyèl, itilize yo =====
         if reponse_utilisateur.points_attribues is not None:
             points_obtenus += float(reponse_utilisateur.points_attribues)
             continue
-        # ===== FEN NOUVO =====
 
         # ===== TYPES AVEC REPONSES (CHOIX) =====
         if question.type_question in ['single', 'vrai_faux']:
@@ -36,26 +36,10 @@ def corriger_tentative(tentative):
             if bonne_reponse and reponse_utilisateur.texte_reponse.strip().lower() == bonne_reponse.texte.strip().lower():
                 points_obtenus += question.points
 
-        # ===== TYPES AVEC UPLOAD (Fichier, Audio, Video, Image) =====
+        # ===== TYPES AVEC UPLOAD (koreksyon manyèl) =====
         elif question.type_question in ['audio_reponse', 'video_reponse', 'image_reponse', 'fichier_reponse', 'texte_libre']:
-            # Vérifier si l'utilisateur a bien envoyé quelque chose
-            has_response = False
-            if question.type_question == 'audio_reponse' and reponse_utilisateur.audio_reponse:
-                has_response = True
-            elif question.type_question == 'video_reponse' and reponse_utilisateur.video_reponse:
-                has_response = True
-            elif question.type_question == 'image_reponse' and reponse_utilisateur.image_reponse:
-                has_response = True
-            elif question.type_question == 'fichier_reponse' and reponse_utilisateur.fichier_reponse:
-                has_response = True
-            elif question.type_question == 'texte_libre' and reponse_utilisateur.texte_reponse:
-                has_response = True
-
-            # Pour l'instant, on ne donne pas de points automatiquement.
-            # L'instructeur doit corriger manuellement.
-            if has_response:
-                # On ne donne pas de points automatiquement
-                pass
+            # Pa gen pwen otomatik — prof la dwe koreje manyèlman
+            pass
 
     pourcentage = (points_obtenus / total_points * 100) if total_points > 0 else 0
     tentative.score = pourcentage
@@ -66,11 +50,35 @@ def corriger_tentative(tentative):
 
 
 def get_upload_fields_for_question(question):
-    """Retourne les champs d'upload disponibles pour un type de question"""
+    """Retounen enfòmasyon sou champs upload selon tip kesyon an."""
     mapping = {
-        'audio_reponse': ('audio_reponse', 'Enregistrement audio', 'audio/*', 'audio/mpeg, audio/wav'),
-        'video_reponse': ('video_reponse', 'Enregistrement vidéo', 'video/*', 'video/mp4, video/webm'),
-        'image_reponse': ('image_reponse', 'Télécharger une image', 'image/*', 'image/png, image/jpeg'),
-        'fichier_reponse': ('fichier_reponse', 'Télécharger un fichier', '*/*', '.pdf, .doc, .docx, .txt'),
+        'audio_reponse': {
+            'field_name': 'audio_reponse',
+            'input_name': f'question_{question.id}_audio',
+            'label': 'Enregistrement audio',
+            'accept': 'audio/*',
+            'accept_mime': 'audio/webm,audio/mpeg,audio/wav,audio/ogg',
+        },
+        'video_reponse': {
+            'field_name': 'video_reponse',
+            'input_name': f'question_{question.id}_video',
+            'label': 'Enregistrement vidéo',
+            'accept': 'video/*',
+            'accept_mime': 'video/webm,video/mp4',
+        },
+        'image_reponse': {
+            'field_name': 'image_reponse',
+            'input_name': f'question_{question.id}_image',
+            'label': 'Télécharger une image',
+            'accept': 'image/*',
+            'accept_mime': 'image/png,image/jpeg,image/webp',
+        },
+        'fichier_reponse': {
+            'field_name': 'fichier_reponse',
+            'input_name': f'question_{question.id}_fichier',
+            'label': 'Télécharger un fichier',
+            'accept': '*/*',
+            'accept_mime': '.pdf,.doc,.docx,.txt',
+        },
     }
     return mapping.get(question.type_question, None)
