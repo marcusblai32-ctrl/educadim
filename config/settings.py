@@ -143,6 +143,44 @@ TELERIVET_PROJECT_ID = env(
 
 
 # ============================================
+# CLOUDFLARE R2 (FICHYE MEDIA)
+# ============================================
+
+R2_ACCESS_KEY_ID = env(
+    "R2_ACCESS_KEY_ID",
+    default="",
+)
+
+R2_SECRET_ACCESS_KEY = env(
+    "R2_SECRET_ACCESS_KEY",
+    default="",
+)
+
+R2_BUCKET_NAME = env(
+    "R2_BUCKET_NAME",
+    default="",
+)
+
+R2_ACCOUNT_ID = env(
+    "R2_ACCOUNT_ID",
+    default="",
+)
+
+R2_CUSTOM_DOMAIN = env(
+    "R2_CUSTOM_DOMAIN",
+    default="",
+)
+
+# Verifye si R2 configire
+R2_ENABLED = all([
+    R2_ACCESS_KEY_ID,
+    R2_SECRET_ACCESS_KEY,
+    R2_BUCKET_NAME,
+    R2_ACCOUNT_ID,
+])
+
+
+# ============================================
 # SECURE SETTINGS
 # ============================================
 
@@ -233,6 +271,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.sitemaps",
+
+    # ===== R2 STORAGE =====
+    "storages",
 
     "accounts.apps.AccountsConfig",
     "courses.apps.CoursesConfig",
@@ -374,31 +415,75 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 # WHITENOISE
 # ============================================
 
-STATICFILES_STORAGE = (
-    "whitenoise.storage.CompressedManifestStaticFilesStorage"
-)
-
-# ← KORIJE: Toujou True (pa depann de DEBUG)
 WHITENOISE_USE_FINDERS = True
 
-# ← KORIJE: Toujou True pou devlopman
 WHITENOISE_AUTOREFRESH = True
 
 WHITENOISE_MANIFEST_STRICT = False
 
 
 # ============================================
-# MEDIA — KORIJE POU PWODIKSYON
+# MEDIA — R2 OUBYEN LOCAL
 # ============================================
 
 MEDIA_URL = "/media/"
 
-# ← KORIJE: Sou Render, itilize Persistent Disk
-# Si w pa gen Persistent Disk, li ap rete nan BASE_DIR/media
 MEDIA_ROOT = env(
     "MEDIA_ROOT",
     default=str(BASE_DIR / "media"),
 )
+
+
+# ============================================
+# STORAGES — KONFIGIRASYON R2
+# ============================================
+
+if R2_ENABLED:
+    # ===== R2 STORAGE =====
+    STORAGES = {
+        "default": {
+            "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+            "OPTIONS": {
+                "access_key": R2_ACCESS_KEY_ID,
+                "secret_key": R2_SECRET_ACCESS_KEY,
+                "bucket_name": R2_BUCKET_NAME,
+                "endpoint_url": f"https://{R2_ACCOUNT_ID}.r2.cloudflarestorage.com",
+                "region_name": "auto",
+                "signature_version": "s3v4",
+                "default_acl": None,
+                "file_overwrite": False,
+                "querystring_auth": False,
+                "custom_domain": R2_CUSTOM_DOMAIN or None,
+            },
+        },
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
+
+    # ===== URL PIBLIK POU MEDIA =====
+    if R2_CUSTOM_DOMAIN:
+        MEDIA_URL = f"https://{R2_CUSTOM_DOMAIN}/"
+
+    # ===== LIMIT MEMWA POU UPLOAD =====
+    AWS_S3_FILE_OVERWRITE = False
+    AWS_DEFAULT_ACL = None
+    AWS_QUERYSTRING_AUTH = False
+    AWS_S3_OBJECT_PARAMETERS = {
+        "CacheControl": "max-age=86400",
+    }
+
+else:
+    # ===== LOCAL STORAGE (DEVLOPMAN) =====
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
+
 
 # ============================================
 # UPLOAD LIMITS — POU ODDYO/VIDEO
@@ -444,6 +529,12 @@ LOGGING = {
         },
 
         "utils.notifications": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": False,
+        },
+
+        "storages": {
             "handlers": ["console"],
             "level": "INFO",
             "propagate": False,
