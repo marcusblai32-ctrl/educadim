@@ -49,18 +49,15 @@
                     </div>
                     <p style="font-size: 1.05rem; margin-bottom: 1rem; font-weight: 500;">{{ question.texte }}</p>
 
-                    {# ===== MEDIA KESYON AN — KORIJE AK {% if %} ===== #}
+                    {# ===== MEDIA KESYON AN ===== #}
                     {% if question.has_media %}
                     <div style="background: var(--glass-soft); padding: 1rem; border-radius: var(--radius-sm); margin-bottom: 1rem;">
-                        {% if question.q_media_titre %}
-                            <p style="font-weight: 600; margin-bottom: 0.3rem;">{{ question.q_media_titre }}</p>
-                        {% endif %}
+                        {% if question.q_media_titre %}<p style="font-weight: 600; margin-bottom: 0.3rem;">{{ question.q_media_titre }}</p>{% endif %}
 
                         {% if question.q_media_audio_file %}
                             <audio controls style="width: 100%;">
                                 <source src="{{ question.q_media_audio_file.url }}" type="audio/mpeg">
                                 <source src="{{ question.q_media_audio_file.url }}" type="audio/webm">
-                                <source src="{{ question.q_media_audio_file.url }}" type="audio/ogg">
                             </audio>
                         {% elif question.q_media_audio_url %}
                             <audio controls style="width: 100%;">
@@ -85,12 +82,11 @@
                             <img src="{{ question.q_media_image_url }}" alt="{{ question.q_media_titre }}" style="max-width: 100%; max-height: 250px; border-radius: var(--radius-sm); margin-top: 0.5rem;">
                         {% endif %}
 
-                        {% if question.q_media_texte %}
-                            <p style="margin-top: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">{{ question.q_media_texte }}</p>
-                        {% endif %}
+                        {% if question.q_media_texte %}<p style="margin-top: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">{{ question.q_media_texte }}</p>{% endif %}
                     </div>
                     {% endif %}
 
+                    {# ===== TIP KESYON ===== #}
                     {% if question.type_question == 'single' or question.type_question == 'vrai_faux' %}
                     <div class="options-list" style="display: flex; flex-direction: column; gap: 0.5rem;">
                         {% for reponse in question.reponses.all %}
@@ -121,7 +117,7 @@
                         <textarea name="question_{{ question.id }}_texte_libre" class="form-control" rows="4" placeholder="{% trans 'Écrivez votre réponse ici...' %}" style="width: 100%; padding:0.7rem 1rem; border:1.5px solid var(--border); border-radius:var(--radius-sm); font-size:0.95rem;"></textarea>
                     </div>
 
-                    {# ===== AUDIO — KORIJE: SÈL INPUT KI GEN NAME ===== #}
+                    {# ===== AUDIO — KORIJE TOTALMAN ===== #}
                     {% elif question.type_question == 'audio_reponse' %}
                     <div class="voice-recorder" id="voiceRecorder_{{ question.id }}" style="border: 2px dashed var(--primary); border-radius: var(--radius-sm); padding: 1.5rem; text-align: center; transition: all 0.3s ease;">
                         <i class="fas fa-microphone" style="font-size: 2.5rem; color: var(--danger); margin-bottom: 0.5rem;"></i>
@@ -146,22 +142,11 @@
 
                         <audio id="audioPreview_{{ question.id }}" controls style="display:none; margin:1rem auto; width:100%; max-width:400px;"></audio>
 
-                        {# ===== SÈL INPUT KI VOYE NAN DJANGO — GEN NAME ===== #}
-                        <input type="file"
-                               name="question_{{ question.id }}_audio"
-                               id="audioFile_{{ question.id }}"
-                               accept="audio/*"
-                               style="display:none;">
+                        <input type="file" name="question_{{ question.id }}_audio" id="audioFile_{{ question.id }}" accept="audio/*" style="display:none;">
 
-                        {# ===== INPUT UPLOAD MANYÈL — PA GEN NAME POU PA FÈ KONFLI ===== #}
                         <div style="margin-top:1rem; border-top:1px solid var(--border); padding-top:1rem;">
-                            <p style="font-size:0.85rem; color:var(--text-muted);">{% trans "Ou téléchargez un fichier audio" %}</p>
-                            <input type="file"
-                                   id="audioUpload_{{ question.id }}"
-                                   accept="audio/*"
-                                   class="form-control"
-                                   style="margin-top:0.3rem;"
-                                   onchange="syncUploadToRecord({{ question.id }}, this)">
+                            <p style="font-size:0.85rem; color: var(--text-muted);">{% trans "Ou téléchargez un fichier audio" %}</p>
+                            <input type="file" id="audioUpload_{{ question.id }}" accept="audio/*" class="form-control" style="margin-top:0.3rem;" onchange="syncUploadToRecord({{ question.id }}, this)">
                         </div>
                     </div>
 
@@ -228,33 +213,26 @@
     let isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
     const MAX_RECORDING_SECONDS = 180;
 
-    // ===== FALLBACK POU BLOBS (Safari) =====
-    window.__audioBlobs = window.__audioBlobs || {};
+    // ===== STOCKAGE ODDYO ANREJISTRE (KLE) =====
+    // Kle: "question_5_audio" → File
+    window.__recordedAudio = {};
 
-    // ===== SINKRONIZE UPLOAD MANYÈL AK INPUT ANREJISTREMAN =====
+    // ===== SINKRONIZE UPLOAD MANYÈL =====
     window.syncUploadToRecord = function(questionId, inputEl) {
         if (inputEl.files && inputEl.files.length > 0) {
-            const recordInput = document.getElementById('audioFile_' + questionId);
-            if (recordInput) {
-                try {
-                    const dt = new DataTransfer();
-                    dt.items.add(inputEl.files[0]);
-                    recordInput.files = dt.files;
-                    const previewEl = document.getElementById('audioPreview_' + questionId);
-                    if (previewEl) {
-                        previewEl.src = URL.createObjectURL(inputEl.files[0]);
-                        previewEl.style.display = 'block';
-                    }
-                    const statusEl = document.getElementById('recordStatus_' + questionId);
-                    if (statusEl) {
-                        statusEl.textContent = '✅ Fichye chaj: ' + inputEl.files[0].name;
-                        statusEl.style.color = 'var(--success)';
-                    }
-                    console.log('✅ Upload manyèl kopye nan input anrejistreman');
-                } catch (err) {
-                    console.warn('⚠️ Pa ka kopye upload nan input anrejistreman:', err);
-                    window.__audioBlobs['question_' + questionId + '_audio'] = inputEl.files[0];
-                }
+            const file = inputEl.files[0];
+            window.__recordedAudio['question_' + questionId + '_audio'] = file;
+            console.log('✅ Upload manyèl: ' + file.name + ' (' + file.size + ' bytes)');
+
+            const previewEl = document.getElementById('audioPreview_' + questionId);
+            if (previewEl) {
+                previewEl.src = URL.createObjectURL(file);
+                previewEl.style.display = 'block';
+            }
+            const statusEl = document.getElementById('recordStatus_' + questionId);
+            if (statusEl) {
+                statusEl.textContent = '✅ Fichye chaj: ' + file.name;
+                statusEl.style.color = 'var(--success)';
             }
         }
     };
@@ -304,10 +282,11 @@
             currentStreams[questionId] = stream;
             audioChunks[questionId] = [];
 
-            // ===== CHWAZI BON MIME TYPE SELON NAVIGATÈ A =====
             let mimeType = '';
             if (typeof MediaRecorder !== 'undefined') {
-                if (MediaRecorder.isTypeSupported('audio/webm')) {
+                if (MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
+                    mimeType = 'audio/webm;codecs=opus';
+                } else if (MediaRecorder.isTypeSupported('audio/webm')) {
                     mimeType = 'audio/webm';
                 } else if (MediaRecorder.isTypeSupported('audio/mp4')) {
                     mimeType = 'audio/mp4';
@@ -328,37 +307,33 @@
                 let ext = 'webm';
                 if (actualMime.indexOf('mp4') !== -1) ext = 'mp4';
                 else if (actualMime.indexOf('ogg') !== -1) ext = 'ogg';
-                else if (actualMime.indexOf('wav') !== -1) ext = 'wav';
 
                 const blob = new Blob(audioChunks[questionId], { type: actualMime });
                 const file = new File([blob], 'enregistrement_q' + questionId + '.' + ext, { type: actualMime });
 
                 console.log('🎙️ Anrejistreman fini | Gwosè:', file.size, 'bytes | Tip:', actualMime);
 
-                // ===== METÒD 1: DataTransfer =====
-                let transferOk = false;
+                // ===== STOKE NAN MEMWA JS =====
+                window.__recordedAudio['question_' + questionId + '_audio'] = file;
+
+                // Eseye tou mete nan input kache a
                 try {
-                    const dataTransfer = new DataTransfer();
-                    dataTransfer.items.add(file);
                     const inputEl = document.getElementById('audioFile_' + questionId);
-                    inputEl.files = dataTransfer.files;
-                    if (inputEl.files.length > 0 && inputEl.files[0].size > 0) {
-                        transferOk = true;
-                        console.log('✅ DataTransfer mache');
+                    if (inputEl) {
+                        const dt = new DataTransfer();
+                        dt.items.add(file);
+                        inputEl.files = dt.files;
+                        console.log('✅ Input file tou mete');
                     }
                 } catch (err) {
-                    console.warn('⚠️ DataTransfer pa mache:', err);
-                }
-
-                // ===== METÒD 2: Fallback pou Safari =====
-                if (!transferOk) {
-                    window.__audioBlobs['question_' + questionId + '_audio'] = file;
-                    console.log('✅ Fallback: file nan window.__audioBlobs');
+                    console.warn('⚠️ DataTransfer pa mache, men fichye a nan window.__recordedAudio');
                 }
 
                 const previewEl = document.getElementById('audioPreview_' + questionId);
-                previewEl.src = URL.createObjectURL(blob);
-                previewEl.style.display = 'block';
+                if (previewEl) {
+                    previewEl.src = URL.createObjectURL(blob);
+                    previewEl.style.display = 'block';
+                }
 
                 if (currentStreams[questionId]) {
                     currentStreams[questionId].getTracks().forEach(t => t.stop());
@@ -385,7 +360,6 @@
                 const secs = String(recordingSeconds[questionId] % 60).padStart(2, '0');
                 if (timerEl) timerEl.textContent = mins + ':' + secs;
 
-                // ===== SISPANN OTOMATIKMAN SI DEPASE MAX =====
                 if (recordingSeconds[questionId] >= MAX_RECORDING_SECONDS) {
                     stopRecording(questionId);
                 }
@@ -437,7 +411,7 @@
         });
     }
 
-    // ===== PAGINATION + SOUMÈT =====
+    // ===== PAGINATION =====
     function initPagination() {
         const slides = document.querySelectorAll('.question-slide');
         const totalSlides = slides.length;
@@ -472,7 +446,7 @@
         prevBtn.addEventListener('click', function() { if (currentSlide > 0) { currentSlide--; updateSlide(); } });
         quizDots.forEach(function(dot) { dot.addEventListener('click', function() { currentSlide = parseInt(this.getAttribute('data-dot')) - 1; updateSlide(); }); });
 
-        // ===== SOUMÈT AK FALLBACK FORMIDABLE =====
+        // ===== SOUMÈT AK FETCH SI GEN ODDYO =====
         submitBtn.addEventListener('click', function(e) {
             if (!confirm("{% trans 'Êtes-vous sûr de vouloir soumettre ce quiz ?' %}")) {
                 e.preventDefault();
@@ -482,26 +456,29 @@
             // Sispann timer a
             if (quizTimer) { clearInterval(quizTimer); quizTimer = null; }
 
-            // ===== SI GEN BLOBS FALLBACK, VOYE AK FormData =====
-            if (window.__audioBlobs && Object.keys(window.__audioBlobs).length > 0) {
+            const audioKeys = Object.keys(window.__recordedAudio);
+            console.log('🎵 Odyo ki nan memwa:', audioKeys.length, '| Kle:', audioKeys);
+
+            if (audioKeys.length > 0) {
                 e.preventDefault();
 
                 const form = document.getElementById('quizForm');
                 const formData = new FormData(form);
 
-                Object.keys(window.__audioBlobs).forEach(function(key) {
-                    if (window.__audioBlobs[key]) {
-                        formData.append(key, window.__audioBlobs[key]);
-                        console.log('➕ Ajoute nan FormData:', key, window.__audioBlobs[key].size, 'bytes');
+                audioKeys.forEach(function(key) {
+                    const file = window.__recordedAudio[key];
+                    if (file && file.size > 0) {
+                        formData.append(key, file, file.name);
+                        console.log('➕ Ajoute nan FormData: ' + key + ' = ' + file.name + ' (' + file.size + ' bytes)');
                     }
                 });
 
                 console.log('📦 FormData final:');
                 for (let pair of formData.entries()) {
                     if (pair[1] instanceof File) {
-                        console.log('  ', pair[0], '=', pair[1].name, '(' + pair[1].size + ' bytes)');
-                    } else {
-                        console.log('  ', pair[0], '=', pair[1]);
+                        console.log('  📎', pair[0], '=', pair[1].name, '(' + pair[1].size + ' bytes)');
+                    } else if (pair[0].indexOf('question_') === 0 || pair[0] === 'csrfmiddlewaretoken') {
+                        console.log('  📝', pair[0], '=', pair[1].substring ? pair[1].substring(0, 30) : pair[1]);
                     }
                 }
 
@@ -512,46 +489,25 @@
                         'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value
                     }
                 }).then(function(response) {
+                    console.log('📥 Response:', response.status, '| redirected:', response.redirected);
                     if (response.redirected) {
                         window.location.href = response.url;
                     } else {
-                        window.location.reload();
+                        return response.text().then(function(text) {
+                            console.error('❌ Erè:', text.substring(0, 500));
+                            alert('Erè pandan soumèt. Gade Console.');
+                        });
                     }
                 }).catch(function(err) {
-                    alert('Erreur: ' + err.message);
+                    console.error('❌ Erè fetch:', err);
+                    alert('Erè: ' + err.message);
                 });
             } else {
-                console.log('📦 Soumèt nòmal (pa gen fallback blobs)');
+                console.log('📦 Pa gen odyo anrejistre — soumèt nòmal');
             }
         });
 
-        updateSetupAnsweredCounter();
         updateSlide();
-    }
-
-    // ===== KONTE REPONS YO =====
-    function updateSetupAnsweredCounter() {
-        const answeredNumEl = document.getElementById('answeredNum');
-        if (!answeredNumEl) return;
-
-        function countAnswered() {
-            let count = 0;
-            // Radio/checkbox
-            document.querySelectorAll('input[type="radio"]:checked, input[type="checkbox"]:checked').forEach(function() { count++; });
-            // Texte
-            document.querySelectorAll('input[type="text"], textarea').forEach(function(el) {
-                if (el.value && el.value.trim() !== '') count++;
-            });
-            // Fichye
-            document.querySelectorAll('input[type="file"]').forEach(function(el) {
-                if (el.files && el.files.length > 0) count++;
-            });
-            answeredNumEl.textContent = count;
-        }
-
-        document.addEventListener('change', countAnswered);
-        document.addEventListener('input', countAnswered);
-        countAnswered();
     }
 
     // ===== INIT =====
