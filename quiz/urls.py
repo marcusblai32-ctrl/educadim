@@ -12,7 +12,7 @@ urlpatterns = [
     path('resultat/<int:tentative_pk>/', views.quiz_result, name='quiz_result'),
     path('question/<int:question_id>/upload-type/', views.get_question_upload_type, name='get_upload_type'),
 
-    # ===== NOUVO: Wout pou koreksyon staff =====
+    # ===== Wout pou koreksyon staff =====
     path('correction/', views.tentative_list, name='tentative_list'),
-    path('correction/<int:tentative_pk>/', views.corriger_tentative_view, name='corriger_tentative'),  # <--- Non chanje
+    path('correction/<int:tentative_pk>/', views.corriger_tentative_view, name='corriger_tentative'),
 ]
