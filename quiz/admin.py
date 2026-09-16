@@ -31,13 +31,8 @@ class QuizAdmin(admin.ModelAdmin):
     search_fields = ('titre', 'description', 'cours__titre', 'module__titre', 'lecon__titre')
     inlines = [QuestionInline]
     fieldsets = (
-        (None, {
-            'fields': ('titre', 'description', 'publie', 'pourcentage_reussite', 'duree_quiz')
-        }),
-        ('Relasyon', {
-            'fields': ('cours', 'module', 'lecon'),
-            'description': 'Chwazi youn nan twa: Cours, Module, oswa Leçon.'
-        }),
+        (None, {'fields': ('titre', 'description', 'publie', 'pourcentage_reussite', 'duree_quiz')}),
+        ('Relasyon', {'fields': ('cours', 'module', 'lecon'), 'description': 'Chwazi youn nan twa: Cours, Module, oswa Leçon.'}),
         ('Média du Quiz', {
             'fields': ('media_titre', 'media_audio_url', 'media_audio_file', 'media_video_url',
                        'media_video_file', 'media_image_url', 'media_image_file', 'media_texte'),
@@ -90,7 +85,7 @@ class TentativeQuizAdmin(admin.ModelAdmin):
 
 @admin.register(ReponseUtilisateur)
 class ReponseUtilisateurAdmin(admin.ModelAdmin):
-    list_display = ('tentative', 'question', 'get_fichye')
+    list_display = ('tentative', 'question', 'get_fichye_type')
     search_fields = ('tentative__utilisateur__email', 'question__texte')
     readonly_fields = (
         'get_audio_player', 'get_video_player', 'get_image_preview', 'get_fichier_link',
@@ -102,7 +97,7 @@ class ReponseUtilisateurAdmin(admin.ModelAdmin):
         'points_attribues'
     )
 
-    def get_fichye(self, obj):
+    def get_fichye_type(self, obj):
         if obj.audio_reponse:
             return "🎵 Audio"
         if obj.video_reponse:
@@ -111,35 +106,38 @@ class ReponseUtilisateurAdmin(admin.ModelAdmin):
             return "🖼️ Image"
         if obj.fichier_reponse:
             return "📎 Fichye"
-        return "-"
-    get_fichye.short_description = "Fichye"
+        return "—"
+    get_fichye_type.short_description = "Fichye"
 
     def get_audio_player(self, obj):
         if obj.audio_reponse:
+            url = obj.audio_reponse.url
             return format_html(
-                '<audio controls style="width:400px;margin-top:5px;">'
+                '<audio controls preload="metadata" style="width:400px;margin-top:5px;">'
+                '<source src="{}" type="audio/webm; codecs=opus">'
                 '<source src="{}" type="audio/webm">'
                 '<source src="{}" type="audio/mpeg">'
                 '<source src="{}" type="audio/mp4">'
                 '<source src="{}" type="audio/ogg">'
                 'Navigatè w pa sipòte audio.</audio><br>'
-                '<a href="{}" target="_blank" style="margin-top:5px;display:inline-block;">📥 Telechaje</a>',
-                obj.audio_reponse.url, obj.audio_reponse.url,
-                obj.audio_reponse.url, obj.audio_reponse.url,
-                obj.audio_reponse.url
+                '<a href="{}" target="_blank" style="margin-top:5px;display:inline-block;padding:4px 10px;background:#6c757d;color:#fff;border-radius:4px;text-decoration:none;">'
+                '📥 Télécharger</a>',
+                url, url, url, url, url, url
             )
         return "—"
     get_audio_player.short_description = "🎵 Lektè Audio"
 
     def get_video_player(self, obj):
         if obj.video_reponse:
+            url = obj.video_reponse.url
             return format_html(
                 '<video controls style="width:400px;margin-top:5px;">'
                 '<source src="{}" type="video/webm">'
                 '<source src="{}" type="video/mp4">'
                 'Navigatè w pa sipòte video.</video><br>'
-                '<a href="{}" target="_blank" style="margin-top:5px;display:inline-block;">📥 Telechaje</a>',
-                obj.video_reponse.url, obj.video_reponse.url, obj.video_reponse.url
+                '<a href="{}" target="_blank" style="margin-top:5px;display:inline-block;padding:4px 10px;background:#6c757d;color:#fff;border-radius:4px;text-decoration:none;">'
+                '📥 Télécharger</a>',
+                url, url, url
             )
         return "—"
     get_video_player.short_description = "🎬 Lektè Video"
@@ -148,7 +146,8 @@ class ReponseUtilisateurAdmin(admin.ModelAdmin):
         if obj.image_reponse:
             return format_html(
                 '<img src="{}" style="max-width:300px;max-height:300px;border-radius:6px;margin-top:5px;" /><br>'
-                '<a href="{}" target="_blank" style="margin-top:5px;display:inline-block;">📥 Telechaje</a>',
+                '<a href="{}" target="_blank" style="margin-top:5px;display:inline-block;padding:4px 10px;background:#6c757d;color:#fff;border-radius:4px;text-decoration:none;">'
+                '📥 Télécharger</a>',
                 obj.image_reponse.url, obj.image_reponse.url
             )
         return "—"
@@ -157,7 +156,8 @@ class ReponseUtilisateurAdmin(admin.ModelAdmin):
     def get_fichier_link(self, obj):
         if obj.fichier_reponse:
             return format_html(
-                '<a href="{}" target="_blank" class="button" style="margin-top:5px;">📥 Telechaje fichye</a>',
+                '<a href="{}" target="_blank" class="button" style="padding:4px 10px;background:#6c757d;color:#fff;border-radius:4px;text-decoration:none;">'
+                '📥 Télécharger fichye</a>',
                 obj.fichier_reponse.url
             )
         return "—"
