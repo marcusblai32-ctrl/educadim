@@ -33,7 +33,7 @@
         {% for item in question_data %}
         <div style="border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:1.5rem;overflow:hidden;">
 
-            {# ===== HEADER ===== #}
+            {# HEADER #}
             <div style="background:var(--glass-soft);padding:0.8rem 1rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;">
                 <strong style="font-family:var(--font-display);">
                     {% trans "Question" %} {{ forloop.counter }}
@@ -46,10 +46,10 @@
 
             <div style="padding:1.2rem;">
 
-                {# ===== TÈKS KESYON AN ===== #}
+                {# TÈKS KESYON #}
                 <p style="font-size:1.05rem;font-weight:500;margin-bottom:1rem;">{{ item.question.texte }}</p>
 
-                {# ===== MEDIA KESYON AN ===== #}
+                {# MEDIA KESYON #}
                 {% if item.question.has_media %}
                 <div style="background:var(--glass-soft);padding:0.8rem;border-radius:var(--radius-sm);margin-bottom:1rem;">
                     {% if item.question.q_media_titre %}
@@ -88,12 +88,12 @@
                 </div>
                 {% endif %}
 
-                {# ===== REPONS ITILIZATÈ A ===== #}
+                {# REPONS ITILIZATÈ A #}
                 <h6 style="font-weight:700;margin-top:1rem;margin-bottom:0.5rem;color:var(--primary);">
                     📝 {% trans "Réponse de l'utilisateur" %}
                 </h6>
 
-                {# ===== CHOIX ===== #}
+                {# CHOIX #}
                 {% if item.question.type_question == 'single' or item.question.type_question == 'vrai_faux' or item.question.type_question == 'multiple' %}
                     <ul style="padding-left:1.5rem;">
                         {% for rep in item.selected_reponses %}
@@ -108,7 +108,7 @@
                         {% endfor %}
                     </ul>
 
-                {# ===== TEXTE ===== #}
+                {# TEXTE #}
                 {% elif item.question.type_question == 'texte_trous' or item.question.type_question == 'texte_libre' %}
                     {% if item.reponse_utilisateur.texte_reponse %}
                         <pre style="background:var(--glass-soft);padding:0.8rem;border-radius:var(--radius-sm);white-space:pre-wrap;font-family:inherit;margin:0;">{{ item.reponse_utilisateur.texte_reponse }}</pre>
@@ -116,32 +116,20 @@
                         <em style="color:var(--text-muted);">{% trans "Non renseigné" %}</em>
                     {% endif %}
 
-                {# ===== AUDIO — AK PLIZYÈ SOURCE ===== #}
+                {# AUDIO — SEKIRIZE #}
                 {% elif item.question.type_question == 'audio_reponse' %}
                     {% if item.upload_fields.audio %}
                         <div style="background:var(--glass-soft);padding:1rem;border-radius:var(--radius-sm);">
                             <strong>🎵 {% trans "Réponse audio" %}:</strong><br>
-                            {% with url=item.upload_fields.audio.url %}
                             <audio controls preload="metadata" style="width:100%;max-width:500px;margin-top:0.5rem;">
-                                {% if '.webm' in url %}
-                                    <source src="{{ url }}" type="audio/webm; codecs=opus">
-                                    <source src="{{ url }}" type="audio/webm">
-                                {% elif '.mp4' in url or '.m4a' in url %}
-                                    <source src="{{ url }}" type="audio/mp4">
-                                    <source src="{{ url }}" type="audio/m4a">
-                                {% elif '.ogg' in url %}
-                                    <source src="{{ url }}" type="audio/ogg; codecs=opus">
-                                    <source src="{{ url }}" type="audio/ogg">
-                                {% elif '.mp3' in url %}
-                                    <source src="{{ url }}" type="audio/mpeg">
-                                {% else %}
-                                    <source src="{{ url }}">
-                                {% endif %}
+                                <source src="{% url 'quiz:serve_audio' item.reponse_utilisateur.id %}" type="audio/webm; codecs=opus">
+                                <source src="{% url 'quiz:serve_audio' item.reponse_utilisateur.id %}" type="audio/webm">
+                                <source src="{% url 'quiz:serve_audio' item.reponse_utilisateur.id %}" type="audio/mpeg">
+                                <source src="{% url 'quiz:serve_audio' item.reponse_utilisateur.id %}" type="audio/mp4">
                                 {% trans "Navigatè w pa sipòte odyo." %}
                             </audio>
-                            {% endwith %}
                             <br>
-                            <a href="{{ item.upload_fields.audio.url }}" target="_blank"
+                            <a href="{% url 'quiz:serve_audio' item.reponse_utilisateur.id %}" target="_blank"
                                style="display:inline-block;margin-top:0.5rem;padding:6px 14px;background:var(--primary);color:#fff;border-radius:var(--radius-sm);text-decoration:none;font-size:0.85rem;">
                                 📥 {% trans "Télécharger l'audio" %}
                             </a>
@@ -150,102 +138,8 @@
                         <em style="color:var(--text-muted);">{% trans "Aucun fichier audio envoyé" %}</em>
                     {% endif %}
 
-                {# ===== VIDEO ===== #}
+                {# VIDEO — SEKIRIZE #}
                 {% elif item.question.type_question == 'video_reponse' %}
                     {% if item.upload_fields.video %}
                         <div style="background:var(--glass-soft);padding:1rem;border-radius:var(--radius-sm);">
-                            <strong>🎬 {% trans "Réponse vidéo" %}:</strong><br>
-                            <video controls style="max-width:500px;margin-top:0.5rem;border-radius:var(--radius-sm);">
-                                <source src="{{ item.upload_fields.video.url }}" type="video/webm">
-                                <source src="{{ item.upload_fields.video.url }}" type="video/mp4">
-                            </video>
-                            <br>
-                            <a href="{{ item.upload_fields.video.url }}" target="_blank"
-                               style="display:inline-block;margin-top:0.5rem;padding:6px 14px;background:var(--primary);color:#fff;border-radius:var(--radius-sm);text-decoration:none;font-size:0.85rem;">
-                                📥 {% trans "Télécharger la vidéo" %}
-                            </a>
-                        </div>
-                    {% else %}
-                        <em style="color:var(--text-muted);">{% trans "Aucune vidéo envoyée" %}</em>
-                    {% endif %}
-
-                {# ===== IMAGE ===== #}
-                {% elif item.question.type_question == 'image_reponse' %}
-                    {% if item.upload_fields.image %}
-                        <div style="background:var(--glass-soft);padding:1rem;border-radius:var(--radius-sm);">
-                            <strong>🖼️ {% trans "Réponse image" %}:</strong><br>
-                            <img src="{{ item.upload_fields.image.url }}" style="max-width:400px;border-radius:var(--radius-sm);margin-top:0.5rem;">
-                            <br>
-                            <a href="{{ item.upload_fields.image.url }}" target="_blank"
-                               style="display:inline-block;margin-top:0.5rem;padding:6px 14px;background:var(--primary);color:#fff;border-radius:var(--radius-sm);text-decoration:none;font-size:0.85rem;">
-                                📥 {% trans "Télécharger l'image" %}
-                            </a>
-                        </div>
-                    {% else %}
-                        <em style="color:var(--text-muted);">{% trans "Aucune image envoyée" %}</em>
-                    {% endif %}
-
-                {# ===== FICHIER ===== #}
-                {% elif item.question.type_question == 'fichier_reponse' %}
-                    {% if item.upload_fields.fichier %}
-                        <div style="background:var(--glass-soft);padding:1rem;border-radius:var(--radius-sm);">
-                            <strong>📎 {% trans "Réponse fichier" %}:</strong>
-                            <a href="{{ item.upload_fields.fichier.url }}" target="_blank"
-                               style="display:inline-block;margin-left:0.5rem;padding:6px 14px;background:var(--primary);color:#fff;border-radius:var(--radius-sm);text-decoration:none;font-size:0.85rem;">
-                                📥 {% trans "Télécharger" %}
-                            </a>
-                        </div>
-                    {% else %}
-                        <em style="color:var(--text-muted);">{% trans "Aucun fichier envoyé" %}</em>
-                    {% endif %}
-
-                {% else %}
-                    <em style="color:var(--text-muted);">
-                        {% trans "Type non pris en charge" %} ({{ item.question.type_question }})
-                    </em>
-                {% endif %}
-
-                {# ===== PWE ATRIBYE ===== #}
-                <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
-                    <label for="points_{{ item.reponse_utilisateur.id }}" style="font-weight:600;font-size:0.95rem;">
-                        ⭐ {% trans "Points attribués (sur" %} {{ item.question.points }})
-                    </label>
-                    <div style="display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap;margin-top:0.5rem;">
-                        <input type="number"
-                               step="0.01"
-                               min="0"
-                               max="{{ item.question.points }}"
-                               name="points_{{ item.reponse_utilisateur.id }}"
-                               id="points_{{ item.reponse_utilisateur.id }}"
-                               value="{{ item.reponse_utilisateur.points_attribues|default:'' }}"
-                               placeholder="0 - {{ item.question.points }}"
-                               style="width:120px;padding:8px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:0.95rem;">
-                        <span style="color:var(--text-muted);font-size:0.85rem;">
-                            ℹ️ {% trans "Laissez vide pour la notation automatique" %}
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        {% empty %}
-            <p style="text-align:center;color:var(--text-muted);padding:2rem;">
-                {% trans "Aucune question trouvée." %}
-            </p>
-        {% endfor %}
-
-        {# ===== BOUTON YO ===== #}
-        <div style="display:flex;gap:10px;margin-top:2rem;flex-wrap:wrap;justify-content:flex-end;">
-            <a href="{% url 'quiz:tentative_list' %}"
-               style="padding:12px 24px;background:var(--glass-soft);color:var(--text);border:1.5px solid var(--border);border-radius:var(--radius-sm);text-decoration:none;font-weight:600;display:inline-flex;align-items:center;gap:0.5rem;">
-                ← {% trans "Retour à la liste" %}
-            </a>
-            <button type="submit"
-                    style="padding:12px 24px;background:var(--grad-brand);color:#fff;border:none;border-radius:var(--radius-sm);cursor:pointer;font-weight:700;display:inline-flex;align-items:center;gap:0.5rem;">
-                💾 {% trans "Enregistrer les corrections" %}
-            </button>
-        </div>
-
-    </form>
-</div>
-{% endblock %}
+                            <strong>🎬 {%
