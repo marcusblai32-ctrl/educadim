@@ -378,17 +378,36 @@ STATICFILES_STORAGE = (
     "whitenoise.storage.CompressedManifestStaticFilesStorage"
 )
 
-WHITENOISE_USE_FINDERS = DEBUG
-WHITENOISE_AUTOREFRESH = DEBUG
+# ← KORIJE: Toujou True (pa depann de DEBUG)
+WHITENOISE_USE_FINDERS = True
+
+# ← KORIJE: Toujou True pou devlopman
+WHITENOISE_AUTOREFRESH = True
+
 WHITENOISE_MANIFEST_STRICT = False
 
 
 # ============================================
-# MEDIA
+# MEDIA — KORIJE POU PWODIKSYON
 # ============================================
 
 MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
+
+# ← KORIJE: Sou Render, itilize Persistent Disk
+# Si w pa gen Persistent Disk, li ap rete nan BASE_DIR/media
+MEDIA_ROOT = env(
+    "MEDIA_ROOT",
+    default=str(BASE_DIR / "media"),
+)
+
+# ============================================
+# UPLOAD LIMITS — POU ODDYO/VIDEO
+# ============================================
+
+FILE_UPLOAD_MAX_MEMORY_SIZE = 52428800  # 50 MB
+DATA_UPLOAD_MAX_MEMORY_SIZE = 52428800  # 50 MB
+FILE_UPLOAD_PERMISSIONS = 0o644
+FILE_UPLOAD_DIRECTORY_PERMISSIONS = 0o755
 
 
 # ============================================
