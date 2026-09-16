@@ -201,7 +201,6 @@
 (function() {
     "use strict";
 
-    // ===== VARIABLES =====
     let quizTimeLeft = {{ quiz_duree|default:15 }} * 60;
     let quizTimer = null;
     let mediaRecorders = {};
@@ -213,17 +212,13 @@
     let isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
     const MAX_RECORDING_SECONDS = 180;
 
-    // ===== STOCKAGE ODDYO ANREJISTRE (KLE) =====
-    // Kle: "question_5_audio" → File
+    // ===== KLE A: STOKE ODDYO NAN MEMWA =====
     window.__recordedAudio = {};
 
-    // ===== SINKRONIZE UPLOAD MANYÈL =====
     window.syncUploadToRecord = function(questionId, inputEl) {
         if (inputEl.files && inputEl.files.length > 0) {
             const file = inputEl.files[0];
             window.__recordedAudio['question_' + questionId + '_audio'] = file;
-            console.log('✅ Upload manyèl: ' + file.name + ' (' + file.size + ' bytes)');
-
             const previewEl = document.getElementById('audioPreview_' + questionId);
             if (previewEl) {
                 previewEl.src = URL.createObjectURL(file);
@@ -237,18 +232,14 @@
         }
     };
 
-    // ===== TIMER QUIZ =====
     function startQuizTimer() {
         const timerEl = document.getElementById('timer');
         if (!timerEl) return;
-
         const initialMins = Math.floor(quizTimeLeft / 60);
         const initialSecs = quizTimeLeft % 60;
         timerEl.textContent = String(initialMins).padStart(2, '0') + ':' + String(initialSecs).padStart(2, '0');
-
         quizTimer = setInterval(function() {
             quizTimeLeft--;
-
             if (quizTimeLeft <= 0) {
                 clearInterval(quizTimer);
                 timerEl.textContent = '00:00';
@@ -256,45 +247,29 @@
                 document.getElementById('quizForm').submit();
                 return;
             }
-
             const mins = String(Math.floor(quizTimeLeft / 60)).padStart(2, '0');
             const secs = String(quizTimeLeft % 60).padStart(2, '0');
             timerEl.textContent = mins + ':' + secs;
-
-            if (quizTimeLeft <= 60) {
-                timerEl.style.color = 'var(--danger)';
-                timerEl.style.fontWeight = '800';
-            } else if (quizTimeLeft <= 120) {
-                timerEl.style.color = 'var(--warning)';
-            }
+            if (quizTimeLeft <= 60) { timerEl.style.color = 'var(--danger)'; timerEl.style.fontWeight = '800'; }
+            else if (quizTimeLeft <= 120) { timerEl.style.color = 'var(--warning)'; }
         }, 1000);
     }
 
-    // ===== ANREJISTREMAN =====
     async function startRecording(questionId) {
         const btnRecord = document.getElementById('btnRecord_' + questionId);
         const statusEl = document.getElementById('recordStatus_' + questionId);
-
         if (!btnRecord || isRecording[questionId]) return;
-
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             currentStreams[questionId] = stream;
             audioChunks[questionId] = [];
-
             let mimeType = '';
             if (typeof MediaRecorder !== 'undefined') {
-                if (MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
-                    mimeType = 'audio/webm;codecs=opus';
-                } else if (MediaRecorder.isTypeSupported('audio/webm')) {
-                    mimeType = 'audio/webm';
-                } else if (MediaRecorder.isTypeSupported('audio/mp4')) {
-                    mimeType = 'audio/mp4';
-                } else if (MediaRecorder.isTypeSupported('audio/ogg')) {
-                    mimeType = 'audio/ogg';
-                }
+                if (MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) mimeType = 'audio/webm;codecs=opus';
+                else if (MediaRecorder.isTypeSupported('audio/webm')) mimeType = 'audio/webm';
+                else if (MediaRecorder.isTypeSupported('audio/mp4')) mimeType = 'audio/mp4';
+                else if (MediaRecorder.isTypeSupported('audio/ogg')) mimeType = 'audio/ogg';
             }
-
             const options = mimeType ? { mimeType: mimeType } : {};
             mediaRecorders[questionId] = new MediaRecorder(stream, options);
 
@@ -307,33 +282,25 @@
                 let ext = 'webm';
                 if (actualMime.indexOf('mp4') !== -1) ext = 'mp4';
                 else if (actualMime.indexOf('ogg') !== -1) ext = 'ogg';
-
                 const blob = new Blob(audioChunks[questionId], { type: actualMime });
                 const file = new File([blob], 'enregistrement_q' + questionId + '.' + ext, { type: actualMime });
+                console.log('🎙️ Fini | Gwosè:', file.size, '| Tip:', actualMime);
 
-                console.log('🎙️ Anrejistreman fini | Gwosè:', file.size, 'bytes | Tip:', actualMime);
-
-                // ===== STOKE NAN MEMWA JS =====
+                // ===== STOKE NAN MEMWA =====
                 window.__recordedAudio['question_' + questionId + '_audio'] = file;
 
-                // Eseye tou mete nan input kache a
+                // Eseye tou mete nan input
                 try {
                     const inputEl = document.getElementById('audioFile_' + questionId);
                     if (inputEl) {
                         const dt = new DataTransfer();
                         dt.items.add(file);
                         inputEl.files = dt.files;
-                        console.log('✅ Input file tou mete');
                     }
-                } catch (err) {
-                    console.warn('⚠️ DataTransfer pa mache, men fichye a nan window.__recordedAudio');
-                }
+                } catch (err) { console.warn('DataTransfer pa mache'); }
 
                 const previewEl = document.getElementById('audioPreview_' + questionId);
-                if (previewEl) {
-                    previewEl.src = URL.createObjectURL(blob);
-                    previewEl.style.display = 'block';
-                }
+                if (previewEl) { previewEl.src = URL.createObjectURL(blob); previewEl.style.display = 'block'; }
 
                 if (currentStreams[questionId]) {
                     currentStreams[questionId].getTracks().forEach(t => t.stop());
@@ -343,31 +310,23 @@
 
             mediaRecorders[questionId].start();
             isRecording[questionId] = true;
-
             btnRecord.classList.add('recording');
             btnRecord.innerHTML = '<i class="fas fa-stop"></i>';
-
             const waveEl = document.getElementById('recordingWave_' + questionId);
             const timerEl = document.getElementById('recordingTimer_' + questionId);
             if (waveEl) waveEl.style.display = 'flex';
             if (timerEl) timerEl.style.display = 'block';
-            if (statusEl) { statusEl.textContent = 'Enregistrement en cours...'; statusEl.style.color = 'var(--danger)'; }
-
+            if (statusEl) { statusEl.textContent = 'Anrejistreman...'; statusEl.style.color = 'var(--danger)'; }
             recordingSeconds[questionId] = 0;
             recordingTimers[questionId] = setInterval(function() {
                 recordingSeconds[questionId]++;
                 const mins = String(Math.floor(recordingSeconds[questionId] / 60)).padStart(2, '0');
                 const secs = String(recordingSeconds[questionId] % 60).padStart(2, '0');
                 if (timerEl) timerEl.textContent = mins + ':' + secs;
-
-                if (recordingSeconds[questionId] >= MAX_RECORDING_SECONDS) {
-                    stopRecording(questionId);
-                }
+                if (recordingSeconds[questionId] >= MAX_RECORDING_SECONDS) stopRecording(questionId);
             }, 1000);
-
         } catch (err) {
-            if (statusEl) { statusEl.textContent = 'Impossible d\'accéder au microphone.'; statusEl.style.color = 'var(--danger)'; }
-            console.error('Erè mikwo:', err);
+            if (statusEl) { statusEl.textContent = 'Pa ka jwenn mikwo.'; statusEl.style.color = 'var(--danger)'; }
         }
     }
 
@@ -375,43 +334,36 @@
         if (isRecording[questionId] && mediaRecorders[questionId]) {
             try { mediaRecorders[questionId].stop(); } catch (err) {}
             isRecording[questionId] = false;
-
             const btnRecord = document.getElementById('btnRecord_' + questionId);
             const statusEl = document.getElementById('recordStatus_' + questionId);
             const waveEl = document.getElementById('recordingWave_' + questionId);
             const timerEl = document.getElementById('recordingTimer_' + questionId);
-
             if (btnRecord) { btnRecord.classList.remove('recording'); btnRecord.innerHTML = '<i class="fas fa-microphone"></i>'; }
             if (waveEl) waveEl.style.display = 'none';
             if (timerEl) timerEl.style.display = 'none';
-            if (statusEl) { statusEl.textContent = 'Enregistrement terminé !'; statusEl.style.color = 'var(--success)'; }
-
+            if (statusEl) { statusEl.textContent = 'Fini!'; statusEl.style.color = 'var(--success)'; }
             if (recordingTimers[questionId]) { clearInterval(recordingTimers[questionId]); recordingTimers[questionId] = null; }
         }
     }
 
-    // ===== INIT BOUTON RECORD =====
     function initRecordButtons() {
         document.querySelectorAll('.btn-record').forEach(function(btn) {
             const questionId = btn.id.replace('btnRecord_', '');
-
             if (isTouchDevice) {
                 btn.ontouchstart = function(e) { e.preventDefault(); startRecording(questionId); };
                 btn.ontouchend = function(e) { e.preventDefault(); stopRecording(questionId); };
-                btn.ontouchcancel = function(e) { stopRecording(questionId); };
                 btn.onmousedown = function(e) { e.preventDefault(); startRecording(questionId); };
                 btn.onmouseup = function(e) { e.preventDefault(); stopRecording(questionId); };
             } else {
                 btn.onclick = function(e) {
                     e.preventDefault();
-                    if (isRecording[questionId]) { stopRecording(questionId); }
-                    else { startRecording(questionId); }
+                    if (isRecording[questionId]) stopRecording(questionId);
+                    else startRecording(questionId);
                 };
             }
         });
     }
 
-    // ===== PAGINATION =====
     function initPagination() {
         const slides = document.querySelectorAll('.question-slide');
         const totalSlides = slides.length;
@@ -430,13 +382,11 @@
             progressBar.style.width = percent + '%';
             progressPercent.textContent = Math.round(percent) + '%';
             currentQuestionNum.textContent = currentSlide + 1;
-
             quizDots.forEach(function(dot, index) {
                 if (index === currentSlide) { dot.style.background = 'var(--primary)'; dot.style.borderColor = 'var(--primary)'; }
                 else if (index < currentSlide) { dot.style.background = 'var(--success)'; dot.style.borderColor = 'var(--success)'; }
                 else { dot.style.background = 'var(--glass-soft)'; dot.style.borderColor = 'var(--glass-brd)'; }
             });
-
             if (currentSlide === 0) prevBtn.style.display = 'none'; else prevBtn.style.display = 'inline-flex';
             if (currentSlide === totalSlides - 1) { nextBtn.style.display = 'none'; submitBtn.style.display = 'inline-flex'; }
             else { nextBtn.style.display = 'inline-flex'; submitBtn.style.display = 'none'; }
@@ -446,71 +396,39 @@
         prevBtn.addEventListener('click', function() { if (currentSlide > 0) { currentSlide--; updateSlide(); } });
         quizDots.forEach(function(dot) { dot.addEventListener('click', function() { currentSlide = parseInt(this.getAttribute('data-dot')) - 1; updateSlide(); }); });
 
-        // ===== SOUMÈT AK FETCH SI GEN ODDYO =====
+        // ===== SOUMÈT =====
         submitBtn.addEventListener('click', function(e) {
-            if (!confirm("{% trans 'Êtes-vous sûr de vouloir soumettre ce quiz ?' %}")) {
-                e.preventDefault();
-                return;
-            }
-
-            // Sispann timer a
+            if (!confirm("{% trans 'Êtes-vous sûr de vouloir soumettre ce quiz ?' %}")) { e.preventDefault(); return; }
             if (quizTimer) { clearInterval(quizTimer); quizTimer = null; }
 
             const audioKeys = Object.keys(window.__recordedAudio);
-            console.log('🎵 Odyo ki nan memwa:', audioKeys.length, '| Kle:', audioKeys);
+            console.log('🎵 Odyo nan memwa:', audioKeys.length);
 
             if (audioKeys.length > 0) {
                 e.preventDefault();
-
                 const form = document.getElementById('quizForm');
                 const formData = new FormData(form);
-
                 audioKeys.forEach(function(key) {
                     const file = window.__recordedAudio[key];
                     if (file && file.size > 0) {
                         formData.append(key, file, file.name);
-                        console.log('➕ Ajoute nan FormData: ' + key + ' = ' + file.name + ' (' + file.size + ' bytes)');
+                        console.log('➕ Ajoute:', key, file.size, 'bytes');
                     }
                 });
-
-                console.log('📦 FormData final:');
-                for (let pair of formData.entries()) {
-                    if (pair[1] instanceof File) {
-                        console.log('  📎', pair[0], '=', pair[1].name, '(' + pair[1].size + ' bytes)');
-                    } else if (pair[0].indexOf('question_') === 0 || pair[0] === 'csrfmiddlewaretoken') {
-                        console.log('  📝', pair[0], '=', pair[1].substring ? pair[1].substring(0, 30) : pair[1]);
-                    }
-                }
-
                 fetch(form.action, {
                     method: 'POST',
                     body: formData,
-                    headers: {
-                        'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value
-                    }
+                    headers: { 'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value }
                 }).then(function(response) {
-                    console.log('📥 Response:', response.status, '| redirected:', response.redirected);
-                    if (response.redirected) {
-                        window.location.href = response.url;
-                    } else {
-                        return response.text().then(function(text) {
-                            console.error('❌ Erè:', text.substring(0, 500));
-                            alert('Erè pandan soumèt. Gade Console.');
-                        });
-                    }
-                }).catch(function(err) {
-                    console.error('❌ Erè fetch:', err);
-                    alert('Erè: ' + err.message);
-                });
-            } else {
-                console.log('📦 Pa gen odyo anrejistre — soumèt nòmal');
+                    if (response.redirected) window.location.href = response.url;
+                    else window.location.reload();
+                }).catch(function(err) { alert('Erè: ' + err.message); });
             }
         });
 
         updateSlide();
     }
 
-    // ===== INIT =====
     document.addEventListener('DOMContentLoaded', function() {
         startQuizTimer();
         initRecordButtons();
@@ -518,7 +436,6 @@
     });
 })();
 </script>
-
 <style>
 .option-label:hover { border-color: var(--primary) !important; }
 .quiz-dot:hover { transform: scale(1.3) !important; }
