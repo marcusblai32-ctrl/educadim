@@ -16,9 +16,9 @@ class QuestionInline(admin.TabularInline):
     fieldsets = (
         (None, {'fields': ('type_question', 'texte', 'explication', 'points', 'ordre')}),
         ('Média de la question', {
-            'fields': ('q_media_titre', 'q_media_audio_url', 'q_media_audio_file', 
-                      'q_media_video_url', 'q_media_video_file', 'q_media_image_url', 
-                      'q_media_image_file', 'q_media_texte'),
+            'fields': ('q_media_titre', 'q_media_audio_url', 'q_media_audio_file',
+                       'q_media_video_url', 'q_media_video_file', 'q_media_image_url',
+                       'q_media_image_file', 'q_media_texte'),
             'classes': ('collapse',)
         }),
     )
@@ -39,8 +39,8 @@ class QuizAdmin(admin.ModelAdmin):
             'description': 'Chwazi youn nan twa: Cours, Module, oswa Leçon.'
         }),
         ('Média du Quiz', {
-            'fields': ('media_titre', 'media_audio_url', 'media_audio_file', 'media_video_url', 
-                      'media_video_file', 'media_image_url', 'media_image_file', 'media_texte'),
+            'fields': ('media_titre', 'media_audio_url', 'media_audio_file', 'media_video_url',
+                       'media_video_file', 'media_image_url', 'media_image_file', 'media_texte'),
             'classes': ('collapse',)
         }),
     )
@@ -62,9 +62,9 @@ class QuestionAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {'fields': ('quiz', 'type_question', 'texte', 'explication', 'points', 'ordre')}),
         ('Média de la question', {
-            'fields': ('q_media_titre', 'q_media_audio_url', 'q_media_audio_file', 
-                      'q_media_video_url', 'q_media_video_file', 'q_media_image_url', 
-                      'q_media_image_file', 'q_media_texte'),
+            'fields': ('q_media_titre', 'q_media_audio_url', 'q_media_audio_file',
+                       'q_media_video_url', 'q_media_video_file', 'q_media_image_url',
+                       'q_media_image_file', 'q_media_texte'),
             'classes': ('collapse',)
         }),
     )
@@ -76,10 +76,9 @@ class TentativeQuizAdmin(admin.ModelAdmin):
     list_filter = ('reussi', 'quiz')
     search_fields = ('utilisateur__email', 'quiz__titre')
     readonly_fields = ('date_debut', 'date_soumission')
-    
+
     def lien_correction(self, obj):
-        """Ajoute yon bouton pou korije tentativ la"""
-        if obj.date_soumission:  # Sèlman si tentativ la soumise
+        if obj.date_soumission:
             url = reverse('quiz:corriger_tentative', args=[obj.id])
             return format_html(
                 '<a class="button" href="{}" style="background:#28a745;color:white;padding:5px 10px;border-radius:4px;text-decoration:none;" target="_blank">✏️ Korije</a>',
@@ -87,13 +86,63 @@ class TentativeQuizAdmin(admin.ModelAdmin):
             )
         return "-"
     lien_correction.short_description = "Koreksyon"
-    lien_correction.allow_tags = True
 
 
 @admin.register(ReponseUtilisateur)
 class ReponseUtilisateurAdmin(admin.ModelAdmin):
-    list_display = ('tentative', 'question')
+    list_display = ('tentative', 'question', 'get_fichye')
     search_fields = ('tentative__utilisateur__email', 'question__texte')
-    readonly_fields = ('audio_reponse', 'video_reponse', 'image_reponse', 'fichier_reponse')
-    fields = ('tentative', 'question', 'reponses_selectionnees', 'texte_reponse',
-              'audio_reponse', 'video_reponse', 'image_reponse', 'fichier_reponse')
+    readonly_fields = (
+        'audio_reponse', 'video_reponse', 'image_reponse', 'fichier_reponse',
+        'get_audio_player', 'get_video_player', 'get_image_preview', 'get_fichier_link'
+    )
+    fields = (
+        'tentative', 'question', 'reponses_selectionnees', 'texte_reponse',
+        'get_audio_player', 'get_video_player', 'get_image_preview', 'get_fichier_link',
+        'audio_reponse', 'video_reponse', 'image_reponse', 'fichier_reponse',
+        'points_attribues'
+    )
+
+    def get_fichye(self, obj):
+        if obj.audio_reponse:
+            return "🎵 Audio"
+        if obj.video_reponse:
+            return "🎬 Video"
+        if obj.image_reponse:
+            return "🖼️ Image"
+        if obj.fichier_reponse:
+            return "📎 Fichye"
+        return "-"
+    get_fichye.short_description = "Fichye"
+
+    def get_audio_player(self, obj):
+        if obj.audio_reponse:
+            return format_html(
+                '<audio controls style="width:300px;"><source src="{}" type="audio/webm">'
+                '<source src="{}" type="audio/mpeg">Navigatè w pa sipòte audio.</audio>',
+                obj.audio_reponse.url, obj.audio_reponse.url
+            )
+        return "-"
+    get_audio_player.short_description = "Lektè Audio"
+
+    def get_video_player(self, obj):
+        if obj.video_reponse:
+            return format_html(
+                '<video controls style="width:300px;"><source src="{}" type="video/webm">'
+                '<source src="{}" type="video/mp4">Navigatè w pa sipòte video.</video>',
+                obj.video_reponse.url, obj.video_reponse.url
+            )
+        return "-"
+    get_video_player.short_description = "Lektè Video"
+
+    def get_image_preview(self, obj):
+        if obj.image_reponse:
+            return format_html('<img src="{}" style="max-width:200px;max-height:200px;" />', obj.image_reponse.url)
+        return "-"
+    get_image_preview.short_description = "Apèsi Image"
+
+    def get_fichier_link(self, obj):
+        if obj.fichier_reponse:
+            return format_html('<a href="{}" target="_blank">📥 Telechaje fichye</a>', obj.fichier_reponse.url)
+        return "-"
+    get_fichier_link.short_description = "Lyen Fichye"
