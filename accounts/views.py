@@ -24,7 +24,7 @@ def signup_view(request):
 
 def login_view(request):
     if request.user.is_authenticated:
-        return redirect('accounts:profile')
+        return redirect('courses:course_list')
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -32,7 +32,7 @@ def login_view(request):
         if user is not None:
             user.update_activity()
             login(request, user)
-            return redirect('accounts:profile')
+            return redirect('courses:course_list')
         else:
             messages.error(request, _("Email/ID ou mot de passe incorrect."))
     return render(request, 'accounts/login.html')
