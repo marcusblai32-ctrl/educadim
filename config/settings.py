@@ -394,7 +394,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 LOGIN_URL = "accounts:login"
-LOGIN_REDIRECT_URL = "accounts:profile"
+LOGIN_REDIRECT_URL = "courses:course_list"
 LOGOUT_REDIRECT_URL = "accounts:login"
 
 
