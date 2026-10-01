@@ -2,351 +2,170 @@
 {% load i18n static %}
 
 {% block title %}
-    {% blocktrans with site_name=theme.site_name|default:'EducDim' %}
+    {% blocktrans with site_name=theme.site_name|default:'EducaDim' %}
         Accueil - {{ site_name }}
     {% endblocktrans %}
 {% endblock %}
 
 {% block content %}
+<div class="home-page">
+    <section class="hero container-xxl" aria-labelledby="home-title">
+        <div class="row g-4 align-items-center w-100">
+            <div class="col-12 col-lg-7 hero-content">
+                <span class="hero-badge">
+                    <i class="fas fa-book-open" aria-hidden="true"></i>
+                    {% blocktrans with badge=theme.hero_badge|default:_("Apprendre à son rythme") %}{{ badge }}{% endblocktrans %}
+                </span>
+                <h1 id="home-title">
+                    {% blocktrans with title=theme.hero_title|default:_("Des savoirs utiles,") %}{{ title }}{% endblocktrans %}
+                    <span class="highlight">
+                        {% blocktrans with subtitle=theme.hero_subtitle_line2|default:_("pour ouvrir de nouvelles voies.") %}{{ subtitle }}{% endblocktrans %}
+                    </span>
+                </h1>
+                <p class="hero-description">
+                    {% blocktrans with subtitle=theme.hero_subtitle|default:_("Des cours concrets, en français ou en kreyòl. Apprenez depuis Haïti, à votre rythme.") %}{{ subtitle }}{% endblocktrans %}
+                </p>
+                <div class="hero-actions">
+                    <a href="{% url 'courses:course_list' %}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-compass" aria-hidden="true"></i>
+                        {% blocktrans with btn=theme.btn_explore|default:_("Explorer les cours") %}{{ btn }}{% endblocktrans %}
+                    </a>
+                    {% if not user.is_authenticated %}
+                    <a href="{% url 'accounts:signup' %}" class="btn btn-outline btn-lg">
+                        {% blocktrans with btn=theme.btn_start|default:_("Créer un compte") %}{{ btn }}{% endblocktrans %}
+                    </a>
+                    {% else %}
+                    <a href="{% url 'progress:dashboard' %}" class="btn btn-outline btn-lg">
+                        <i class="fas fa-chart-line" aria-hidden="true"></i> {% trans "Voir ma progression" %}
+                    </a>
+                    {% endif %}
+                </div>
+                {% if theme.stats_cours or theme.stats_etudiants or theme.stats_satisfaction %}
+                <div class="hero-stats" aria-label="{% trans 'Repères de la plateforme' %}">
+                    {% if theme.stats_cours %}
+                    <div class="stat-item">
+                        <span class="stat-number">{{ theme.stats_cours }}+</span>
+                        <span class="stat-label">{% trans "Cours" %}</span>
+                    </div>
+                    {% endif %}
+                    {% if theme.stats_etudiants %}
+                    <div class="stat-item">
+                        <span class="stat-number">{{ theme.stats_etudiants }}+</span>
+                        <span class="stat-label">{% trans "Apprenants" %}</span>
+                    </div>
+                    {% endif %}
+                    {% if theme.stats_satisfaction %}
+                    <div class="stat-item">
+                        <span class="stat-number">{{ theme.stats_satisfaction }}%</span>
+                        <span class="stat-label">{% trans "Satisfaction" %}</span>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+            <div class="col-12 col-lg-5 hero-visual" aria-label="{% trans 'Façons d’apprendre sur EducaDim' %}">
+                {% if theme.hero_image %}
+                    <img src="{{ theme.hero_image.url }}" alt="{{ theme.hero_title }}" class="hero-main-image">
+                {% else %}
+                    <article class="hero-card animate-float">
+                        <div class="hero-card-icon"><i class="{{ theme.hero_card1_icon|default:'fas fa-book-reader' }}" aria-hidden="true"></i></div>
+                        <h3>{% blocktrans with title=theme.hero_card1_title|default:_("À votre rythme") %}{{ title }}{% endblocktrans %}</h3>
+                        <p>{% blocktrans with desc=theme.hero_card1_desc|default:_("Des leçons accessibles, où que vous soyez.") %}{{ desc }}{% endblocktrans %}</p>
+                    </article>
+                    <article class="hero-card animate-float delay-1">
+                        <div class="hero-card-icon"><i class="{{ theme.hero_card2_icon|default:'fas fa-language' }}" aria-hidden="true"></i></div>
+                        <h3>{% blocktrans with title=theme.hero_card2_title|default:_("Français et kreyòl") %}{{ title }}{% endblocktrans %}</h3>
+                        <p>{% blocktrans with desc=theme.hero_card2_desc|default:_("Choisissez la langue qui vous accompagne.") %}{{ desc }}{% endblocktrans %}</p>
+                    </article>
+                    <article class="hero-card animate-float delay-2">
+                        <div class="hero-card-icon"><i class="{{ theme.hero_card3_icon|default:'fas fa-chart-line' }}" aria-hidden="true"></i></div>
+                        <h3>{% blocktrans with title=theme.hero_card3_title|default:_("Quiz et progression") %}{{ title }}{% endblocktrans %}</h3>
+                        <p>{% blocktrans with desc=theme.hero_card3_desc|default:_("Pratiquez, puis voyez le chemin parcouru.") %}{{ desc }}{% endblocktrans %}</p>
+                    </article>
+                {% endif %}
+            </div>
+        </div>
+    </section>
 
-<!-- ===== HERO SECTION ===== -->
-<section class="hero">
-    <div class="hero-content">
-        <span class="hero-badge">
-            <i class="fas fa-sparkles"></i> 
-            {% blocktrans with badge=theme.hero_badge|default:_("Plateforme e-learning") %}
-                {{ badge }}
-            {% endblocktrans %}
-        </span>
+    <section class="features-section" aria-labelledby="features-title">
+        <div class="section-header">
+            <span class="section-tag">{% blocktrans with tag=theme.features_tag|default:_("Un apprentissage qui vous ressemble") %}{{ tag }}{% endblocktrans %}</span>
+            <h2 id="features-title">
+                {% blocktrans with title=theme.features_title|default:_("Apprendre pour") %}{{ title }}{% endblocktrans %}
+                <span class="highlight">{% blocktrans with highlight=theme.features_highlight|default:_("avancer concrètement") %}{{ highlight }}{% endblocktrans %}</span>
+            </h2>
+        </div>
+        <div class="features-grid">
+            <article class="feature-card animate-on-scroll">
+                <div class="feature-icon-wrapper"><i class="{{ theme.feature1_icon|default:'fas fa-book-open' }} feature-icon" aria-hidden="true"></i></div>
+                <h3>{% blocktrans with title=theme.feature1_title|default:_("Des cours pratiques") %}{{ title }}{% endblocktrans %}</h3>
+                <p>{% blocktrans with desc=theme.feature1_desc|default:_("Des leçons structurées pour acquérir des compétences utiles, une étape à la fois.") %}{{ desc }}{% endblocktrans %}</p>
+                <a href="{% url 'courses:course_list' %}" class="feature-link">{% blocktrans with link=theme.feature_link_text|default:_("Voir les cours") %}{{ link }}{% endblocktrans %} <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+            </article>
+            <article class="feature-card animate-on-scroll delay-1">
+                <div class="feature-icon-wrapper"><i class="{{ theme.feature2_icon|default:'fas fa-language' }} feature-icon" aria-hidden="true"></i></div>
+                <h3>{% blocktrans with title=theme.feature2_title|default:_("Français ou kreyòl") %}{{ title }}{% endblocktrans %}</h3>
+                <p>{% blocktrans with desc=theme.feature2_desc|default:_("Étudiez dans la langue qui rend chaque notion plus claire.") %}{{ desc }}{% endblocktrans %}</p>
+                <a href="{% url 'courses:course_list' %}" class="feature-link">{% blocktrans with link=theme.feature_link_text|default:_("Trouver un cours") %}{{ link }}{% endblocktrans %} <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+            </article>
+            <article class="feature-card animate-on-scroll delay-2">
+                <div class="feature-icon-wrapper"><i class="{{ theme.feature3_icon|default:'fas fa-chart-line' }} feature-icon" aria-hidden="true"></i></div>
+                <h3>{% blocktrans with title=theme.feature3_title|default:_("Votre progression, visible") %}{{ title }}{% endblocktrans %}</h3>
+                <p>{% blocktrans with desc=theme.feature3_desc|default:_("Répondez aux quiz existants et retrouvez vos avancées dans votre espace.") %}{{ desc }}{% endblocktrans %}</p>
+                <a href="{% url 'courses:course_list' %}" class="feature-link">{% blocktrans with link=theme.feature_link_text|default:_("Commencer à étudier") %}{{ link }}{% endblocktrans %} <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+            </article>
+        </div>
+    </section>
 
-        <!-- Titre -->
-        <h1>
-            {% blocktrans with title=theme.hero_title|default:_("Apprenez sans limites") %}
-                {{ title }}
-            {% endblocktrans %}<br>
-            <span class="highlight">
-                {% blocktrans with subtitle=theme.hero_subtitle_line2|default:_("Où que vous soyez") %}
-                    {{ subtitle }}
-                {% endblocktrans %}
-            </span>
-        </h1>
-
-        <!-- Sous-titre -->
-        <p class="hero-description">
-            {% blocktrans with subtitle=theme.hero_subtitle|default:_("Des cours de qualité pour développer vos compétences à votre rythme.") %}
-                {{ subtitle }}
-            {% endblocktrans %}
-        </p>
-
-        <!-- Boutons -->
-        <div class="hero-actions">
-            <a href="{% url 'courses:course_list' %}" class="btn btn-primary btn-lg">
-                <i class="fas fa-graduation-cap"></i> 
-                {% blocktrans with btn=theme.btn_explore|default:_("Explorer les cours") %}
-                    {{ btn }}
-                {% endblocktrans %}
-            </a>
-            {% if not user.is_authenticated %}
-                <a href="{% url 'accounts:signup' %}" class="btn btn-outline btn-lg">
-                    <i class="fas fa-user-plus"></i> 
-                    {% blocktrans with btn=theme.btn_start|default:_("Commencer gratuitement") %}
-                        {{ btn }}
-                    {% endblocktrans %}
-                </a>
+    <section class="cta-section">
+        <div class="cta-content">
+            <span class="section-tag text-white">{% trans "Le prochain pas est le vôtre" %}</span>
+            <h2>
+                {% blocktrans with title=theme.cta_title|default:_("Une compétence à la fois,") %}{{ title }}{% endblocktrans %}
+                <span class="cta-highlight">{% blocktrans with highlight=theme.cta_highlight|default:_("vous avancez.") %}{{ highlight }}{% endblocktrans %}</span>
+            </h2>
+            <p>{% blocktrans with desc=theme.cta_desc|default:_("Choisissez un cours, apprenez avec des repères clairs et mesurez votre progression.") %}{{ desc }}{% endblocktrans %}</p>
+            {% if user.is_authenticated %}
+            <a href="{% url 'courses:course_list' %}" class="btn btn-lg cta-button"><i class="fas fa-compass" aria-hidden="true"></i> {% trans "Choisir un cours" %}</a>
+            {% else %}
+            <a href="{% url 'accounts:signup' %}" class="btn btn-lg cta-button"><i class="fas fa-user-plus" aria-hidden="true"></i> {% blocktrans with btn=theme.cta_btn|default:_("Créer un compte") %}{{ btn }}{% endblocktrans %}</a>
             {% endif %}
         </div>
+    </section>
 
-        <!-- ===== STATS ===== -->
-        <div class="hero-stats">
-            <div class="stat-item">
-                <span class="stat-number">
-                    {% if theme.stats_cours %}{{ theme.stats_cours }}{% else %}50{% endif %}+
-                </span>
-                <span class="stat-label">{% trans "Cours" %}</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-number">
-                    {% if theme.stats_etudiants %}{{ theme.stats_etudiants }}{% else %}1200{% endif %}+
-                </span>
-                <span class="stat-label">{% trans "Étudiants" %}</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-number">
-                    {% if theme.stats_satisfaction %}{{ theme.stats_satisfaction }}{% else %}95{% endif %}%
-                </span>
-                <span class="stat-label">{% trans "Satisfaction" %}</span>
-            </div>
+    {% if theme.testimonial1_text or theme.testimonial2_text %}
+    <section class="testimonials-section" aria-labelledby="testimonials-title">
+        <div class="section-header">
+            <span class="section-tag">{% blocktrans with tag=theme.testimonials_tag|default:_("Paroles d’apprenants") %}{{ tag }}{% endblocktrans %}</span>
+            <h2 id="testimonials-title">{% blocktrans with title=theme.testimonials_title|default:_("Des expériences") %}{{ title }}{% endblocktrans %} <span class="highlight">{% blocktrans with highlight=theme.testimonials_highlight|default:_("partagées") %}{{ highlight }}{% endblocktrans %}</span></h2>
         </div>
-    </div>
-
-    <!-- ===== HERO VISUAL ===== -->
-    <div class="hero-visual">
-        {% if theme.hero_image %}
-            <img src="{{ theme.hero_image.url }}" alt="{{ theme.hero_title }}" class="hero-main-image">
-        {% else %}
-            <!-- Carte 1 -->
-            <div class="hero-card animate-float">
-                <div class="feature-icon-wrapper hero-card-icon">
-                    <i class="{{ theme.hero_card1_icon|default:'fas fa-laptop-code' }}"></i>
+        <div class="testimonials-grid">
+            {% if theme.testimonial1_text %}
+            <article class="testimonial-card">
+                {% if theme.testimonial1_stars %}<div class="stars" aria-label="{{ theme.testimonial1_stars }} {% trans 'étoiles' %}">{% for i in "12345"|make_list %}{% if forloop.counter <= theme.testimonial1_stars %}<i class="fas fa-star" aria-hidden="true"></i>{% endif %}{% endfor %}</div>{% endif %}
+                <p>“{{ theme.testimonial1_text }}”</p>
+                {% if theme.testimonial1_name or theme.testimonial1_job %}
+                <div class="testimonial-author">
+                    {% if theme.testimonial1_avatar %}<img src="{{ theme.testimonial1_avatar }}" alt="">{% else %}<span class="testimonial-initials" aria-hidden="true">{{ theme.testimonial1_name|slice:":1" }}</span>{% endif %}
+                    <div>{% if theme.testimonial1_name %}<h4>{{ theme.testimonial1_name }}</h4>{% endif %}{% if theme.testimonial1_job %}<span>{{ theme.testimonial1_job }}</span>{% endif %}</div>
                 </div>
-                <h3>
-                    {% blocktrans with title=theme.hero_card1_title|default:_("Formation en ligne") %}
-                        {{ title }}
-                    {% endblocktrans %}
-                </h3>
-                <p>
-                    {% blocktrans with desc=theme.hero_card1_desc|default:_("+1000 étudiants") %}
-                        {{ desc }}
-                    {% endblocktrans %}
-                </p>
-            </div>
-            <!-- Carte 2 -->
-            <div class="hero-card animate-float delay-1">
-                <div class="feature-icon-wrapper hero-card-icon">
-                    <i class="{{ theme.hero_card2_icon|default:'fas fa-certificate' }}"></i>
-                </div>
-                <h3>
-                    {% blocktrans with title=theme.hero_card2_title|default:_("Certifiés") %}
-                        {{ title }}
-                    {% endblocktrans %}
-                </h3>
-                <p>
-                    {% blocktrans with desc=theme.hero_card2_desc|default:_("Reconnus par l'État") %}
-                        {{ desc }}
-                    {% endblocktrans %}
-                </p>
-            </div>
-            <!-- Carte 3 -->
-            <div class="hero-card animate-float delay-2">
-                <div class="feature-icon-wrapper hero-card-icon">
-                    <i class="{{ theme.hero_card3_icon|default:'fas fa-users' }}"></i>
-                </div>
-                <h3>
-                    {% blocktrans with title=theme.hero_card3_title|default:_("+50 cours") %}
-                        {{ title }}
-                    {% endblocktrans %}
-                </h3>
-                <p>
-                    {% blocktrans with desc=theme.hero_card3_desc|default:_("Disponibles") %}
-                        {{ desc }}
-                    {% endblocktrans %}
-                </p>
-            </div>
-        {% endif %}
-    </div>
-</section>
-
-<!-- ===== FEATURES SECTION ===== -->
-<section class="features-section">
-    <div class="section-header">
-        <span class="section-tag">
-            {% blocktrans with tag=theme.features_tag|default:_("Pourquoi nous choisir ?") %}
-                {{ tag }}
-            {% endblocktrans %}
-        </span>
-        <h2>
-            {% blocktrans with title=theme.features_title|default:_("Une expérience d'apprentissage") %}
-                {{ title }}
-            {% endblocktrans %} 
-            <span class="highlight">
-                {% blocktrans with highlight=theme.features_highlight|default:_("unique") %}
-                    {{ highlight }}
-                {% endblocktrans %}
-            </span>
-        </h2>
-    </div>
-
-    <div class="features-grid">
-        <!-- Feature 1 -->
-        <div class="feature-card animate-on-scroll">
-            <div class="feature-icon-wrapper">
-                <i class="{{ theme.feature1_icon|default:'fas fa-laptop-code' }} feature-icon"></i>
-            </div>
-            <h3>
-                {% blocktrans with title=theme.feature1_title|default:_("Cours interactifs") %}
-                    {{ title }}
-                {% endblocktrans %}
-            </h3>
-            <p>
-                {% blocktrans with desc=theme.feature1_desc|default:_("Apprenez avec des vidéos, quiz et exercices pratiques conçus pour vous.") %}
-                    {{ desc }}
-                {% endblocktrans %}
-            </p>
-            <a href="{% url 'courses:course_list' %}" class="feature-link">
-                {% blocktrans with link=theme.feature_link_text|default:_("En savoir plus") %}
-                    {{ link }}
-                {% endblocktrans %} <i class="fas fa-arrow-right"></i>
-            </a>
-        </div>
-        <!-- Feature 2 -->
-        <div class="feature-card animate-on-scroll delay-1">
-            <div class="feature-icon-wrapper">
-                <i class="{{ theme.feature2_icon|default:'fas fa-certificate' }} feature-icon"></i>
-            </div>
-            <h3>
-                {% blocktrans with title=theme.feature2_title|default:_("Certificats vérifiés") %}
-                    {{ title }}
-                {% endblocktrans %}
-            </h3>
-            <p>
-                {% blocktrans with desc=theme.feature2_desc|default:_("Recevez des certificats reconnus après chaque cours complété avec succès.") %}
-                    {{ desc }}
-                {% endblocktrans %}
-            </p>
-            <a href="{% url 'courses:course_list' %}" class="feature-link">
-                {% blocktrans with link=theme.feature_link_text|default:_("En savoir plus") %}
-                    {{ link }}
-                {% endblocktrans %} <i class="fas fa-arrow-right"></i>
-            </a>
-        </div>
-        <!-- Feature 3 -->
-        <div class="feature-card animate-on-scroll delay-2">
-            <div class="feature-icon-wrapper">
-                <i class="{{ theme.feature3_icon|default:'fas fa-trophy' }} feature-icon"></i>
-            </div>
-            <h3>
-                {% blocktrans with title=theme.feature3_title|default:_("Classement & Badges") %}
-                    {{ title }}
-                {% endblocktrans %}
-            </h3>
-            <p>
-                {% blocktrans with desc=theme.feature3_desc|default:_("Gagnez des points, débloquez des badges et grimpez dans le classement.") %}
-                    {{ desc }}
-                {% endblocktrans %}
-            </p>
-            <a href="{% url 'courses:course_list' %}" class="feature-link">
-                {% blocktrans with link=theme.feature_link_text|default:_("En savoir plus") %}
-                    {{ link }}
-                {% endblocktrans %} <i class="fas fa-arrow-right"></i>
-            </a>
-        </div>
-    </div>
-</section>
-
-<!-- ===== CTA SECTION ===== -->
-<section class="cta-section">
-    <div class="cta-content">
-        <h2>
-            {% blocktrans with title=theme.cta_title|default:_("Prêt à commencer votre") %}
-                {{ title }}
-            {% endblocktrans %} 
-            <span class="cta-highlight">
-                {% blocktrans with highlight=theme.cta_highlight|default:_("aventure") %}
-                    {{ highlight }}
-                {% endblocktrans %}
-            </span> ?
-        </h2>
-        <p>
-            {% blocktrans with desc=theme.cta_desc|default:_("Rejoignez des milliers d'apprenants et transformez votre avenir dès aujourd'hui.") %}
-                {{ desc }}
-            {% endblocktrans %}
-        </p>
-        <a href="{% url 'accounts:signup' %}" class="btn btn-lg cta-button">
-            <i class="fas fa-rocket"></i> 
-            {% blocktrans with btn=theme.cta_btn|default:_("Créer un compte gratuit") %}
-                {{ btn }}
-            {% endblocktrans %}
-        </a>
-    </div>
-</section>
-
-<!-- ===== TESTIMONIALS SECTION ===== -->
-<section class="testimonials-section">
-    <div class="section-header">
-        <span class="section-tag">
-            {% blocktrans with tag=theme.testimonials_tag|default:_("Ce que nos étudiants disent") %}
-                {{ tag }}
-            {% endblocktrans %}
-        </span>
-        <h2>
-            {% blocktrans with title=theme.testimonials_title|default:_("Ils ont") %}
-                {{ title }}
-            {% endblocktrans %} 
-            <span class="highlight">
-                {% blocktrans with highlight=theme.testimonials_highlight|default:_("réussi") %}
-                    {{ highlight }}
-                {% endblocktrans %}
-            </span> 
-            {% blocktrans with end=theme.testimonials_end|default:_("grâce à nous") %}
-                {{ end }}
-            {% endblocktrans %}
-        </h2>
-    </div>
-
-    <div class="testimonials-grid">
-        <!-- Témoignage 1 -->
-        <div class="testimonial-card">
-            <div class="stars">
-                {% for i in "12345"|make_list %}
-                    {% if forloop.counter <= theme.testimonial1_stars|default:5 %}
-                        <i class="fas fa-star"></i>
-                    {% else %}
-                        <i class="far fa-star"></i>
-                    {% endif %}
-                {% endfor %}
-            </div>
-            <p>
-                "{% blocktrans with text=theme.testimonial1_text|default:_("Grâce à EduPlatform, j'ai appris le développement web en 3 mois. Aujourd'hui je travaille comme freelance.") %}
-                    {{ text }}
-                {% endblocktrans %}"
-            </p>
-            <div class="testimonial-author">
-                {% if theme.testimonial1_avatar %}
-                    <img src="{{ theme.testimonial1_avatar }}" alt="{{ theme.testimonial1_name|default:'Jean Dupont' }}">
-                {% else %}
-                    <img src="https://ui-avatars.com/api/?name={{ theme.testimonial1_name|default:'Jean+Dupont' }}&background=2563eb&color=fff&size=50" alt="{{ theme.testimonial1_name|default:'Jean Dupont' }}">
                 {% endif %}
-                <div>
-                    <h4>
-                        {% blocktrans with name=theme.testimonial1_name|default:"Jean Dupont" %}
-                            {{ name }}
-                        {% endblocktrans %}
-                    </h4>
-                    <span>
-                        {% blocktrans with job=theme.testimonial1_job|default:_("Développeur Web") %}
-                            {{ job }}
-                        {% endblocktrans %}
-                    </span>
+            </article>
+            {% endif %}
+            {% if theme.testimonial2_text %}
+            <article class="testimonial-card">
+                {% if theme.testimonial2_stars %}<div class="stars" aria-label="{{ theme.testimonial2_stars }} {% trans 'étoiles' %}">{% for i in "12345"|make_list %}{% if forloop.counter <= theme.testimonial2_stars %}<i class="fas fa-star" aria-hidden="true"></i>{% endif %}{% endfor %}</div>{% endif %}
+                <p>“{{ theme.testimonial2_text }}”</p>
+                {% if theme.testimonial2_name or theme.testimonial2_job %}
+                <div class="testimonial-author">
+                    {% if theme.testimonial2_avatar %}<img src="{{ theme.testimonial2_avatar }}" alt="">{% else %}<span class="testimonial-initials" aria-hidden="true">{{ theme.testimonial2_name|slice:":1" }}</span>{% endif %}
+                    <div>{% if theme.testimonial2_name %}<h4>{{ theme.testimonial2_name }}</h4>{% endif %}{% if theme.testimonial2_job %}<span>{{ theme.testimonial2_job }}</span>{% endif %}</div>
                 </div>
-            </div>
-        </div>
-        <!-- Témoignage 2 -->
-        <div class="testimonial-card">
-            <div class="stars">
-                {% for i in "12345"|make_list %}
-                    {% if forloop.counter <= theme.testimonial2_stars|default:5 %}
-                        <i class="fas fa-star"></i>
-                    {% else %}
-                        <i class="far fa-star"></i>
-                    {% endif %}
-                {% endfor %}
-            </div>
-            <p>
-                "{% blocktrans with text=theme.testimonial2_text|default:_("Les cours sont bien structurés et les professeurs sont très compétents. Je recommande à 100%.") %}
-                    {{ text }}
-                {% endblocktrans %}"
-            </p>
-            <div class="testimonial-author">
-                {% if theme.testimonial2_avatar %}
-                    <img src="{{ theme.testimonial2_avatar }}" alt="{{ theme.testimonial2_name|default:'Marie Paul' }}">
-                {% else %}
-                    <img src="https://ui-avatars.com/api/?name={{ theme.testimonial2_name|default:'Marie+Paul' }}&background=10b981&color=fff&size=50" alt="{{ theme.testimonial2_name|default:'Marie Paul' }}">
                 {% endif %}
-                <div>
-                    <h4>
-                        {% blocktrans with name=theme.testimonial2_name|default:"Marie Paul" %}
-                            {{ name }}
-                        {% endblocktrans %}
-                    </h4>
-                    <span>
-                        {% blocktrans with job=theme.testimonial2_job|default:_("Data Analyst") %}
-                            {{ job }}
-                        {% endblocktrans %}
-                    </span>
-                </div>
-            </div>
+            </article>
+            {% endif %}
         </div>
-    </div>
-</section>
-
+    </section>
+    {% endif %}
+</div>
 {% endblock %}

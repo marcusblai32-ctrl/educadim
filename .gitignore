@@ -23,6 +23,12 @@ db.sqlite3-journal
 media/
 staticfiles/
 static/
+!static/
+static/*
+!static/css/
+static/css/*
+!static/css/brand.css
+!static/css/bootstrap.min.css
 *.log
 logs/
 *.pid

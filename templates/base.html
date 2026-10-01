@@ -8,7 +8,7 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% if theme %}{{ theme.site_name|default:'EducaDim' }}{% else %}EducDim{% endif %}{% endblock %}</title>
+    <title>{% block title %}{% if theme %}{{ theme.site_name|default:'EducaDim' }}{% else %}EducaDim{% endif %}{% endblock %}</title>
     <meta name="description" content="{% if meta_description %}{{ meta_description }}{% elif theme and theme.site_description %}{{ theme.site_description }}{% else %}EducaDim — plateforme e-learning : cours en ligne, quiz, badges et suivi de progression.{% endif %}">
     <meta name="keywords" content="{{ meta_keywords|default:'e-learning, cours en ligne, éducation, EducaDim, formation, quiz' }}">
 
@@ -56,10 +56,12 @@
 
     {# ===== CSS ===== #}
     <link rel="stylesheet" href="{% static 'css/variables.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/brand.css' %}">
     <link rel="stylesheet" href="{% url 'theme_manager:dynamic_css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     {% block extra_head %}{% endblock %}
     {% block extra_css %}{% endblock %}
@@ -72,8 +74,8 @@
     </div>
 
     {# ===== HEADER ===== #}
-    <header class="main-header" id="mainHeader">
-        <div class="header-container">
+    <header class="main-header navbar" id="mainHeader">
+        <div class="header-container container-fluid">
             <a href="{% url 'home' %}" class="logo">
                 {% if theme and theme.get_logo %}
                     <img src="{{ theme.get_logo }}" alt="{{ theme.site_name|default:'EducaDim' }}">
@@ -82,26 +84,27 @@
                     <img src="{{ theme.logo.url }}" alt="{{ theme.site_name|default:'EducaDim' }}">
                     <span>{{ theme.site_name|default:'EducaDim' }}</span>
                 {% else %}
-                    <span>EducDim</span>
+                    <span>EducaDim</span>
                 {% endif %}
             </a>
 
-            <button class="menu-toggle" id="menuToggle" type="button"
+            <button class="menu-toggle btn btn-outline-primary" id="menuToggle" type="button"
                     aria-label="{% trans 'Ouvrir le menu' %}" aria-controls="mainNav" aria-expanded="false">
                 <i class="fas fa-bars"></i>
             </button>
 
-            <nav id="mainNav" class="main-nav" aria-label="{% trans 'Navigation principale' %}">
+            <nav id="mainNav" class="main-nav navbar-nav flex-lg-row" aria-label="{% trans 'Navigation principale' %}">
                 <form class="nav-search" action="{% url 'courses:course_list' %}" method="get" role="search">
                     <label class="sr-only" for="navSearch">{% trans "Rechercher un cours" %}</label>
                     <input id="navSearch" name="search" type="search"
+                           class="form-control"
                            placeholder="{% trans 'Rechercher un cours' %}"
                            autocomplete="off">
-                    <button type="submit" aria-label="{% trans 'Lancer la recherche' %}">
+                    <button class="btn" type="submit" aria-label="{% trans 'Lancer la recherche' %}">
                         <i class="fas fa-search" aria-hidden="true"></i>
                     </button>
                 </form>
-                <a href="{% url 'courses:course_list' %}" class="nav-link">
+                    <a href="{% url 'courses:course_list' %}" class="nav-link">
                     <i class="fas fa-book"></i>
                     <span>{% trans "Explorer" %}</span>
                 </a>
@@ -198,7 +201,7 @@
             </nav>
 
             {# ===== THEME TOGGLE ===== #}
-            <button type="button" class="theme-toggle" id="themeToggle"
+            <button type="button" class="theme-toggle btn" id="themeToggle"
                     aria-label="{% trans 'Basculer le thème clair/sombre' %}"
                     title="{% trans 'Basculer le thème clair/sombre' %}" aria-pressed="false">
                 <i class="fas fa-moon" aria-hidden="true"></i>
@@ -210,7 +213,7 @@
                 <form action="{% url 'set_language' %}" method="post">
                     {% csrf_token %}
                     <input name="next" type="hidden" value="{{ request.path }}">
-                    <select name="language" data-submit-on-change>
+                    <select class="form-select" name="language" data-submit-on-change>
                         <option value="fr" {% if CURRENT_LANGUAGE == 'fr' %}selected{% endif %}>Français</option>
                         <option value="ht" {% if CURRENT_LANGUAGE == 'ht' %}selected{% endif %}>Kreyòl</option>
                     </select>
@@ -260,8 +263,8 @@
 
     {# ===== BREADCRUMB ===== #}
     {% if request.path != '/' and request.path != '/fr/' and request.path != '/ht/' %}
-        <nav class="breadcrumb">
-            <div>
+        <nav class="breadcrumb site-breadcrumb" aria-label="{% trans 'Fil d’Ariane' %}">
+            <div class="d-flex flex-wrap align-items-center gap-2">
                 <a href="{% url 'home' %}"><i class="fas fa-home"></i> {% trans "Accueil" %}</a>
                 {% for crumb in breadcrumbs %}
                     <span class="separator"> &gt; </span>
@@ -276,9 +279,10 @@
     {% endif %}
 
     {# ===== MAIN CONTENT WITH SIDEBAR ===== #}
-    <div class="main-with-sidebar">
+    <div class="main-with-sidebar container-xxl">
+        <div class="row gy-3">
         {% if banners_sidebar %}
-        <aside class="sidebar">
+        <aside class="sidebar col-12 col-lg-3">
             <div class="banner-container banner-sidebar">
                 {% for banner in banners_sidebar %}
                     <a href="{{ banner.lien }}" class="banner" {% if banner.lien %}target="_blank" rel="noopener noreferrer"{% endif %}>
@@ -289,7 +293,7 @@
         </aside>
         {% endif %}
 
-        <main class="main-content">
+        <main class="main-content col-12{% if banners_sidebar %} col-lg-9{% endif %}">
             {% block messages %}
                 {% if messages %}
                     <div class="messages-container">
@@ -307,6 +311,7 @@
 
             {% block content %}{% endblock %}
         </main>
+        </div>
     </div>
 
     {# ===== BANNIERES FOOTER ===== #}
@@ -321,8 +326,8 @@
     {% endif %}
 
     <footer>
-        <div class="footer-container">
-            <nav>
+        <div class="footer-container container-xxl">
+            <nav class="d-flex flex-wrap">
                 <a href="{% url 'about' %}">
                     <i class="fas fa-info-circle"></i> {% trans "À propos" %}
                 </a>
@@ -340,7 +345,7 @@
                 </a>
             </nav>
             <p>
-                &copy; {% if theme %}{{ theme.site_name|default:'EducDim' }}{% else %}EducDim{% endif %} - 
+                &copy; {% if theme %}{{ theme.site_name|default:'EducaDim' }}{% else %}EducaDim{% endif %} -
                 {% if theme %}{{ theme.footer_text|default:_('Tous droits réservés') }}{% else %}{% trans "Tous droits réservés" %}{% endif %}
             </p>
         </div>
