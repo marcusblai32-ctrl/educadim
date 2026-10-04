@@ -1,13 +1,14 @@
-from django.utils.deprecation import MiddlewareMixin
 from django.utils import timezone
+from django.utils.deprecation import MiddlewareMixin
+
 
 class UpdateActivityMiddleware(MiddlewareMixin):
-    """Met ajou aktivite itilizatè a chak fwa yon reqèt fèt"""
+    """Met ajou aktivite itilizatè a (maksimòm yon fwa chak 10 minit)."""
 
     def process_request(self, request):
-        if request.user.is_authenticated:
-            if hasattr(request.user, 'last_activity'):
-                delta = timezone.now() - request.user.last_activity
-                if delta.seconds > 600:  # 10 minit
-                    request.user.last_activity = timezone.now()
-                    request.user.save(update_fields=['last_activity'])
+        user = getattr(request, "user", None)
+        if user is not None and user.is_authenticated and hasattr(user, "last_activity"):
+            delta = timezone.now() - user.last_activity
+            if delta.total_seconds() > 600:
+                user.last_activity = timezone.now()
+                user.save(update_fields=["last_activity"])
