@@ -8,6 +8,7 @@ from .models import Enrollment
 from .forms import EnrollmentPaymentForm, EnrollmentAdminForm
 from courses.models import Course
 from notifications.models import Notification
+from utils.notifications import notify_safely, send_enrollment_approved, send_enrollment_rejected
 from subscriptions.models import SubscriptionAccess, Subscription
 import os
 
@@ -158,6 +159,11 @@ def admin_approve_enrollment(request, pk):
             message=f"Votre inscription au cours '{enrollment.cours.titre}' a été approuvée.",
             lien=f"/cours/{enrollment.cours.pk}/"
         )
+        notify_safely(
+            send_enrollment_approved,
+            user=enrollment.utilisateur, enrollment=enrollment,
+            send_email=True, send_sms=bool(enrollment.utilisateur.phone_number),
+        )
         messages.success(request, f"Inscription de {enrollment.utilisateur.get_full_name()} approuvée.")
     return redirect('enrollments:admin_pending')
 
@@ -179,6 +185,11 @@ def admin_reject_enrollment(request, pk):
             titre="Inscription refusée",
             message=f"Votre inscription au cours '{enrollment.cours.titre}' a été refusée.",
             lien=f"/cours/{enrollment.cours.pk}/"
+        )
+        notify_safely(
+            send_enrollment_rejected,
+            user=enrollment.utilisateur, enrollment=enrollment,
+            send_email=True, send_sms=bool(enrollment.utilisateur.phone_number),
         )
         messages.success(request, f"Inscription de {enrollment.utilisateur.get_full_name()} refusée.")
     return redirect('enrollments:admin_pending')
