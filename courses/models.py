@@ -190,21 +190,27 @@ class Course(models.Model):
         return self.learning_path.cours_publies().filter(position__gt=self.position).first()
 
     def get_prerequisites(self):
-        return self.est_prerequis_de.all()
+        """Prérequis DE CE COURS (lignes CoursePrerequisite où cours=self)."""
+        return self.prerequis_pour.select_related('prerequis')
 
     def get_prerequisites_completed(self, user):
-        from enrollments.models import Enrollment
-        prerequis = self.get_prerequisites()
+        """
+        Retounen (tout_konplete, lis_kou_ki_manke).
+        Yon prérequis obligatwa konte kòm konplete sèlman si ProgresCours = 100%.
+        """
+        from progress.models import ProgresCours
+        prerequis = [p for p in self.get_prerequisites() if p.obligatoire]
         if not prerequis:
             return True, []
-        completed = []
-        missing = []
-        for prereq in prerequis:
-            cours_prerequis = prereq.prerequis
-            if Enrollment.objects.filter(utilisateur=user, cours=cours_prerequis, statut='active').exists():
-                completed.append(cours_prerequis)
-            else:
-                missing.append(cours_prerequis)
+        ids_konplete = set(
+            ProgresCours.objects.filter(
+                utilisateur=user,
+                cours_id__in=[p.prerequis_id for p in prerequis],
+                pourcentage=100,
+            ).values_list('cours_id', flat=True)
+        )
+        missing = [p.prerequis for p in prerequis if p.prerequis_id not in ids_konplete]
+        completed = [p.prerequis for p in prerequis if p.prerequis_id in ids_konplete]
         return len(missing) == 0, missing
 
     def is_completed_by_user(self, user):
