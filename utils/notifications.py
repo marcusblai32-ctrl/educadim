@@ -122,6 +122,20 @@ def normalize_phone_number(raw, default_country_code='509'):
     return '+' + number
 
 
+def get_sms_number(user, source=None):
+    """
+    Jwenn nimewo SMS pou itilizatè a:
+      1. user.phone_number (pwofil)  — souvan vid, paske pa gen fòm ki mande l
+      2. source.telephone (nimewo peman an sou Enrollment/Subscription la)
+    Retounen nimewo fòma entènasyonal la, oswa None si pa gen okenn nimewo valid.
+    """
+    for candidate in (getattr(user, 'phone_number', None), getattr(source, 'telephone', None)):
+        number = normalize_phone_number(candidate)
+        if number:
+            return number
+    return None
+
+
 def send_telerivet_sms(to_number, message_text):
     if not to_number:
         return {'success': False, 'error_code': 'missing_recipient', 'error': 'Recipient phone number is required.'}
@@ -243,7 +257,7 @@ def send_enrollment_confirmation_sms(user, enrollment):
         message = f"{settings.SITE_NAME}: {first_name}, inscription confirmée pour {course_name}. Bon apprentissage!"
 
     return send_telerivet_sms(
-        to_number=user.phone_number,
+        to_number=get_sms_number(user, enrollment),
         message_text=message
     )
 
@@ -254,7 +268,7 @@ def send_enrollment_confirmation(user, enrollment, course_details=None, send_ema
     if send_email and user.email:
         results['email'] = send_enrollment_confirmation_email(user, enrollment, course_details)
 
-    if send_sms and user.phone_number:
+    if send_sms and get_sms_number(user, enrollment):
         results['sms'] = send_enrollment_confirmation_sms(user, enrollment)
 
     return results
@@ -301,7 +315,7 @@ def send_enrollment_approved_sms(user, enrollment):
     course_name = enrollment.cours.get_titre()
     message = f"{settings.SITE_NAME}: {first_name}, votre inscription pour {course_name} a été approuvée. Accédez au cours maintenant!"
     return send_telerivet_sms(
-        to_number=user.phone_number,
+        to_number=get_sms_number(user, enrollment),
         message_text=message
     )
 
@@ -312,7 +326,7 @@ def send_enrollment_approved(user, enrollment, admin_note=None, send_email=True,
     if send_email and user.email:
         results['email'] = send_enrollment_approved_email(user, enrollment, admin_note)
 
-    if send_sms and user.phone_number:
+    if send_sms and get_sms_number(user, enrollment):
         results['sms'] = send_enrollment_approved_sms(user, enrollment)
 
     return results
@@ -355,7 +369,7 @@ def send_enrollment_rejected_sms(user, enrollment):
     course_name = enrollment.cours.get_titre()
     message = f"{settings.SITE_NAME}: {first_name}, votre inscription pour {course_name} a été refusée. Consultez vos emails pour plus d'informations."
     return send_telerivet_sms(
-        to_number=user.phone_number,
+        to_number=get_sms_number(user, enrollment),
         message_text=message
     )
 
@@ -366,7 +380,7 @@ def send_enrollment_rejected(user, enrollment, admin_note=None, send_email=True,
     if send_email and user.email:
         results['email'] = send_enrollment_rejected_email(user, enrollment, admin_note)
 
-    if send_sms and user.phone_number:
+    if send_sms and get_sms_number(user, enrollment):
         results['sms'] = send_enrollment_rejected_sms(user, enrollment)
 
     return results
@@ -411,7 +425,7 @@ def send_subscription_confirmation_sms(user, subscription):
     plan_name = subscription.plan.nom
     message = f"{settings.SITE_NAME}: {first_name}, votre abonnement {plan_name} est confirmé. Profitez de vos cours!"
     return send_telerivet_sms(
-        to_number=user.phone_number,
+        to_number=get_sms_number(user, subscription),
         message_text=message
     )
 
@@ -422,7 +436,7 @@ def send_subscription_confirmation(user, subscription, send_email=True, send_sms
     if send_email and user.email:
         results['email'] = send_subscription_confirmation_email(user, subscription)
 
-    if send_sms and user.phone_number:
+    if send_sms and get_sms_number(user, subscription):
         results['sms'] = send_subscription_confirmation_sms(user, subscription)
 
     return results
@@ -470,7 +484,7 @@ def send_subscription_approved_sms(user, subscription):
     plan_name = subscription.plan.nom
     message = f"{settings.SITE_NAME}: {first_name}, votre abonnement {plan_name} a été approuvé. Commencez à apprendre!"
     return send_telerivet_sms(
-        to_number=user.phone_number,
+        to_number=get_sms_number(user, subscription),
         message_text=message
     )
 
@@ -481,7 +495,7 @@ def send_subscription_approved(user, subscription, admin_note=None, send_email=T
     if send_email and user.email:
         results['email'] = send_subscription_approved_email(user, subscription, admin_note)
 
-    if send_sms and user.phone_number:
+    if send_sms and get_sms_number(user, subscription):
         results['sms'] = send_subscription_approved_sms(user, subscription)
 
     return results
@@ -514,7 +528,7 @@ def send_password_reset_sms(user, reset_link):
     first_name = get_user_first_name(user)
     message = f"{settings.SITE_NAME}: {first_name}, réinitialisez votre mot de passe ici: {reset_link}"
     return send_telerivet_sms(
-        to_number=user.phone_number,
+        to_number=get_sms_number(user),
         message_text=message
     )
 
@@ -525,7 +539,7 @@ def send_password_reset(user, reset_link, send_email=True, send_sms=False):
     if send_email and user.email:
         results['email'] = send_password_reset_email(user, reset_link)
 
-    if send_sms and user.phone_number:
+    if send_sms and get_sms_number(user):
         results['sms'] = send_password_reset_sms(user, reset_link)
 
     return results
@@ -558,7 +572,7 @@ def send_notification_sms(user, message):
     first_name = get_user_first_name(user)
     sms_message = f"{settings.SITE_NAME}: {first_name}, {message}"
     return send_telerivet_sms(
-        to_number=user.phone_number,
+        to_number=get_sms_number(user),
         message_text=sms_message
     )
 
@@ -569,7 +583,7 @@ def send_notification(user, subject, message, link=None, send_email=True, send_s
     if send_email and user.email:
         results['email'] = send_notification_email(user, subject, message, link)
 
-    if send_sms and user.phone_number:
+    if send_sms and get_sms_number(user):
         results['sms'] = send_notification_sms(user, message)
 
     return results
