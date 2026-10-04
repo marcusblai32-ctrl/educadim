@@ -274,6 +274,7 @@ INSTALLED_APPS = [
 
     # ===== API + SEKIRITE =====
     "rest_framework",
+    "corsheaders",
     "axes",
 
     # ===== R2 STORAGE =====
@@ -309,6 +310,7 @@ MIDDLEWARE = [
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -410,6 +412,19 @@ AXES_FAILURE_LIMIT = 5
 AXES_COOLOFF_TIME = 1  # 1 èdtan
 AXES_LOCKOUT_PARAMETERS = [["username", "ip_address"]]
 AXES_RESET_ON_SUCCESS = True
+
+
+# ============================================
+# CORS — SÈLMAN POU KLIYAN WEB (Flutter mobil pa bezwen sa)
+# ============================================
+
+CORS_ALLOWED_ORIGINS = env.list(
+    "CORS_ALLOWED_ORIGINS",
+    default=["https://educadim.org", "https://www.educadim.org"],
+)
+CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOW_CREDENTIALS = False  # JWT nan header Authorization, pa nan cookie
+CORS_URLS_REGEX = r"^/api/.*$"
 
 
 # ============================================
