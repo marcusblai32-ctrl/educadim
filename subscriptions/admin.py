@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.contrib import messages
 from django.utils.translation import gettext as _
 from .models import SubscriptionPlan, Subscription, SubscriptionAccess, SubscriptionCourseSelection
+from utils.notifications import notify_safely, send_subscription_approved
 from notifications.models import Notification
 
 
@@ -98,6 +99,8 @@ class SubscriptionAdmin(admin.ModelAdmin):
                         lien=f"/abonnements/chwazi-kou/{sub.pk}/"
                     )
                     redirections += 1
+                    notify_safely(send_subscription_approved, user=sub.utilisateur, subscription=sub,
+                                  send_email=True, send_sms=bool(sub.utilisateur.phone_number))
                 else:
                     # ===== ANSYEN WORKFLOW: max_courses == 0 =====
                     # Kreye aksè pou tout kou plan an
@@ -118,6 +121,8 @@ class SubscriptionAdmin(admin.ModelAdmin):
                         message=f"Votre abonnement '{sub.plan.nom}' a été approuvé. Tous les cours sont maintenant accessibles.",
                         lien="/abonnements/mes-abonnements/"
                     )
+                    notify_safely(send_subscription_approved, user=sub.utilisateur, subscription=sub,
+                                  send_email=True, send_sms=bool(sub.utilisateur.phone_number))
                 
                 count += 1
         
