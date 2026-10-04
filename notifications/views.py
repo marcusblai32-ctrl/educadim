@@ -91,7 +91,7 @@ def enroll_free_course(request, course_id):
         enrollment=enrollment,
         course_details=course_details,
         send_email=True,
-        send_sms=True if request.user.phone_number else False
+        send_sms=True
     )
 
     messages.success(request, f"Félicitations! Vous êtes inscrit au cours {course.titre}.")
@@ -116,7 +116,7 @@ def approve_enrollment(request, enrollment_id):
         enrollment=enrollment,
         admin_note="Votre inscription a été approuvée. Bienvenue!",
         send_email=True,
-        send_sms=True if enrollment.utilisateur.phone_number else False
+        send_sms=True
     )
 
     messages.success(request, f"Inscription de {enrollment.utilisateur.get_full_name()} approuvée.")
@@ -141,7 +141,7 @@ def reject_enrollment(request, enrollment_id):
         enrollment=enrollment,
         admin_note="Veuillez vérifier votre photo de paiement et réessayer.",
         send_email=True,
-        send_sms=True if enrollment.utilisateur.phone_number else False
+        send_sms=True
     )
 
     messages.warning(request, f"Inscription de {enrollment.utilisateur.get_full_name()} refusée.")
@@ -165,7 +165,7 @@ def confirm_subscription(request, subscription_id):
         user=request.user,
         subscription=subscription,
         send_email=True,
-        send_sms=True if request.user.phone_number else False
+        send_sms=True
     )
 
     messages.success(request, f"Abonnement {subscription.plan.nom} confirmé!")
@@ -192,7 +192,7 @@ def approve_subscription(request, subscription_id):
         subscription=subscription,
         admin_note="Votre abonnement a été approuvé. Profitez de vos cours!",
         send_email=True,
-        send_sms=True if subscription.utilisateur.phone_number else False
+        send_sms=True
     )
 
     messages.success(request, f"Abonnement de {subscription.utilisateur.get_full_name()} approuvé.")
