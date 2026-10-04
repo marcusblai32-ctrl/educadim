@@ -6,12 +6,10 @@ from sib_api_v3_sdk.rest import ApiException
 logger = logging.getLogger(__name__)
 
 try:
-    from telerivet import APIClient
+    # SDK Telerivet a ekspoze klas la kòm `telerivet.API`
+    from telerivet import API as APIClient
 except ImportError:
-    try:
-        from telerivet import Client as APIClient
-    except ImportError:
-        APIClient = None
+    APIClient = None
 
 from django.conf import settings
 from django.template.loader import render_to_string
@@ -99,6 +97,31 @@ def send_brevo_email(to_email, subject, template_name, context=None, from_email=
 # TELERIVET - SMS
 # ============================================
 
+def normalize_phone_number(raw, default_country_code='509'):
+    """
+    Mete nimewo a nan fòma entènasyonal (+509XXXXXXXX pou Ayiti).
+    Aksepte: '37 12 3456', '509 3712 3456', '+50937123456', '0050937123456'.
+    Retounen None si nimewo a pa valid.
+    """
+    if not raw:
+        return None
+    raw = str(raw).strip()
+    digits = ''.join(ch for ch in raw if ch.isdigit())
+    if not digits:
+        return None
+    if raw.startswith('+'):
+        number = digits
+    elif digits.startswith('00'):
+        number = digits[2:]
+    elif len(digits) == 8:
+        number = default_country_code + digits
+    else:
+        number = digits
+    if not (8 <= len(number) <= 15):
+        return None
+    return '+' + number
+
+
 def send_telerivet_sms(to_number, message_text):
     if not to_number:
         return {'success': False, 'error_code': 'missing_recipient', 'error': 'Recipient phone number is required.'}
@@ -123,9 +146,9 @@ def send_telerivet_sms(to_number, message_text):
         client = APIClient(settings.TELERIVET_API_KEY)
         project = client.init_project_by_id(settings.TELERIVET_PROJECT_ID)
 
-        to_number = to_number.strip()
-        if not to_number.startswith('+'):
-            to_number = '+' + to_number
+        to_number = normalize_phone_number(to_number)
+        if not to_number:
+            return {'success': False, 'error_code': 'invalid_phone_number', 'error': 'Invalid phone number.'}
 
         result = project.send_message(
             to_number=to_number,
@@ -160,7 +183,7 @@ def get_user_first_name(user):
     return user.first_name or user.email.split('@')[0]
 
 def get_user_display_name(user):
-    return user.get_full_name() or user.first_name or user.username or user.email
+    return user.get_full_name() or user.first_name or user.email
 
 
 # ============================================
@@ -184,7 +207,7 @@ def send_enrollment_confirmation_email(user, enrollment, course_details=None):
         'enrollment': enrollment,
         'course_name': course_name,
         'course_link': course_details.get('course_link', ''),
-        'course_slug': enrollment.cours.slug,
+        'course_id': enrollment.cours.pk,
         'instructor': enrollment.cours.instructor.get_full_name() if hasattr(enrollment.cours, 'instructor') and enrollment.cours.instructor else 'Notre équipe',
         'start_date': enrollment.cours.start_date.strftime('%d/%m/%Y') if hasattr(enrollment.cours, 'start_date') and enrollment.cours.start_date else 'Immédiat',
         'enrollment_date': enrollment.date_demande.strftime('%d/%m/%Y à %H:%M'),
@@ -550,3 +573,19 @@ def send_notification(user, subject, message, link=None, send_email=True, send_s
         results['sms'] = send_notification_sms(user, message)
 
     return results
+
+
+# ============================================
+# ITILITE: ANVWAYE SAN KASE FLOW PRENSIPAL LA
+# ============================================
+
+def notify_safely(func, *args, **kwargs):
+    """
+    Rele yon fonksyon send_* san janm kite yon erè email/SMS kase aprobasyon an.
+    Retounen rezilta a, oswa {} si gen erè (li anrejistre nan log).
+    """
+    try:
+        return func(*args, **kwargs)
+    except Exception:
+        logger.exception("Notification failed func=%s", getattr(func, '__name__', func))
+        return {}
