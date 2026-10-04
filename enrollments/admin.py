@@ -44,7 +44,7 @@ class EnrollmentAdmin(admin.ModelAdmin):
                 notify_safely(
                     send_enrollment_approved,
                     user=enrollment.utilisateur, enrollment=enrollment,
-                    send_email=True, send_sms=bool(enrollment.utilisateur.phone_number),
+                    send_email=True, send_sms=True,
                 )
                 count += 1
         messages.success(request, f"{count} inscriptions approuvées.")
@@ -71,7 +71,7 @@ class EnrollmentAdmin(admin.ModelAdmin):
                 notify_safely(
                     send_enrollment_rejected,
                     user=enrollment.utilisateur, enrollment=enrollment,
-                    send_email=True, send_sms=bool(enrollment.utilisateur.phone_number),
+                    send_email=True, send_sms=True,
                 )
                 count += 1
         messages.success(request, f"{count} inscriptions refusées.")
