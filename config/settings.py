@@ -272,6 +272,10 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sitemaps",
 
+    # ===== API + SEKIRITE =====
+    "rest_framework",
+    "axes",
+
     # ===== R2 STORAGE =====
     "storages",
 
@@ -290,6 +294,9 @@ INSTALLED_APPS = [
     "subscriptions.apps.SubscriptionsConfig",
     "dashboard.apps.DashboardConfig",
     "todo.apps.TodoConfig",
+
+    # ===== PPI =====
+    "ppi.apps.PpiConfig",
 ]
 
 
@@ -309,6 +316,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "theme_manager.middleware.MaintenanceMiddleware",
     "accounts.middleware.UpdateActivityMiddleware",
+    "axes.middleware.AxesMiddleware",
 ]
 
 
@@ -389,9 +397,58 @@ AUTH_PASSWORD_VALIDATORS = [
 AUTH_USER_MODEL = "accounts.CustomUser"
 
 AUTHENTICATION_BACKENDS = [
+    "axes.backends.AxesStandaloneBackend",
     "accounts.backends.UserIDBackend",
     "django.contrib.auth.backends.ModelBackend",
 ]
+
+# ============================================
+# AXES — PWOTEKSYON KONT BRUTE-FORCE
+# ============================================
+
+AXES_FAILURE_LIMIT = 5
+AXES_COOLOFF_TIME = 1  # 1 èdtan
+AXES_LOCKOUT_PARAMETERS = [["username", "ip_address"]]
+AXES_RESET_ON_SUCCESS = True
+
+
+# ============================================
+# DJANGO REST FRAMEWORK + JWT (API PPI)
+# ============================================
+
+from datetime import timedelta  # noqa: E402
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
+    ],
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 20,
+    "DEFAULT_THROTTLE_CLASSES": [
+        "rest_framework.throttling.AnonRateThrottle",
+        "rest_framework.throttling.UserRateThrottle",
+    ],
+    "DEFAULT_THROTTLE_RATES": {
+        "anon": "30/min",
+        "user": "120/min",
+        "ppi_write": "60/min",
+    },
+}
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=14),
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": False,
+    "AUTH_HEADER_TYPES": ("Bearer",),
+}
+
 
 LOGIN_URL = "accounts:login"
 LOGIN_REDIRECT_URL = "/"
@@ -417,7 +474,7 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 WHITENOISE_USE_FINDERS = True
 
-WHITENOISE_AUTOREFRESH = True
+WHITENOISE_AUTOREFRESH = DEBUG
 
 WHITENOISE_MANIFEST_STRICT = False
 
