@@ -4,6 +4,7 @@ from django.contrib import messages
 from .models import Enrollment
 from .forms import EnrollmentAdminForm
 from notifications.models import Notification
+from utils.notifications import notify_safely, send_enrollment_approved, send_enrollment_rejected
 
 @admin.register(Enrollment)
 class EnrollmentAdmin(admin.ModelAdmin):
@@ -40,6 +41,11 @@ class EnrollmentAdmin(admin.ModelAdmin):
                     message=f"Votre inscription au cours '{enrollment.cours.titre}' a été approuvée.",
                     lien=f"/cours/{enrollment.cours.pk}/"
                 )
+                notify_safely(
+                    send_enrollment_approved,
+                    user=enrollment.utilisateur, enrollment=enrollment,
+                    send_email=True, send_sms=bool(enrollment.utilisateur.phone_number),
+                )
                 count += 1
         messages.success(request, f"{count} inscriptions approuvées.")
     approuver_inscriptions.short_description = "Approuver les inscriptions"
@@ -61,6 +67,11 @@ class EnrollmentAdmin(admin.ModelAdmin):
                     titre="Inscription refusée",
                     message=f"Votre inscription au cours '{enrollment.cours.titre}' a été refusée.",
                     lien=f"/cours/{enrollment.cours.pk}/"
+                )
+                notify_safely(
+                    send_enrollment_rejected,
+                    user=enrollment.utilisateur, enrollment=enrollment,
+                    send_email=True, send_sms=bool(enrollment.utilisateur.phone_number),
                 )
                 count += 1
         messages.success(request, f"{count} inscriptions refusées.")
