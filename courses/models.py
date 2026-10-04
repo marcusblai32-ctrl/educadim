@@ -196,10 +196,12 @@ class Course(models.Model):
     def get_prerequisites_completed(self, user):
         """
         Retounen (tout_konplete, lis_kou_ki_manke).
-        Yon prérequis obligatwa konte kòm konplete sèlman si ProgresCours = 100%.
+        Yon prérequis konte kòm konplete sèlman si ProgresCours = 100%.
+        Prérequis obligatwa AK opsyonèl yo tou de nan lis la, pou template la
+        afiche ✓/✗ kòrèkteman pou chak kou.
         """
         from progress.models import ProgresCours
-        prerequis = [p for p in self.get_prerequisites() if p.obligatoire]
+        prerequis = list(self.get_prerequisites())
         if not prerequis:
             return True, []
         ids_konplete = set(
@@ -210,7 +212,6 @@ class Course(models.Model):
             ).values_list('cours_id', flat=True)
         )
         missing = [p.prerequis for p in prerequis if p.prerequis_id not in ids_konplete]
-        completed = [p.prerequis for p in prerequis if p.prerequis_id in ids_konplete]
         return len(missing) == 0, missing
 
     def is_completed_by_user(self, user):
