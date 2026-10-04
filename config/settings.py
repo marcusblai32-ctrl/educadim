@@ -106,18 +106,14 @@ BREVO_SENDER_NAME = env(
 )
 
 if BREVO_API_KEY:
-    EMAIL_BACKEND = (
-        "django.core.mail.backends.smtp.EmailBackend"
-    )
-
-    EMAIL_HOST = "smtp-relay.brevo.com"
-    EMAIL_PORT = 587
-    EMAIL_USE_TLS = True
-
-    EMAIL_HOST_USER = BREVO_SENDER_EMAIL
-    EMAIL_HOST_PASSWORD = BREVO_API_KEY
-
-    DEFAULT_FROM_EMAIL = BREVO_SENDER_EMAIL
+    # API Brevo (menm kle ak send_brevo_email). SMTP Brevo mande yon lòt kle SMTP,
+    # se pou sa nou pa itilize SMTP isit la.
+    EMAIL_BACKEND = "anymail.backends.brevo.EmailBackend"
+    ANYMAIL = {
+        "BREVO_API_KEY": BREVO_API_KEY,
+    }
+    DEFAULT_FROM_EMAIL = f"{BREVO_SENDER_NAME} <{BREVO_SENDER_EMAIL}>"
+    SERVER_EMAIL = BREVO_SENDER_EMAIL
 
 else:
     EMAIL_BACKEND = (
@@ -275,6 +271,7 @@ INSTALLED_APPS = [
     # ===== API + SEKIRITE =====
     "rest_framework",
     "corsheaders",
+    "anymail",
     "axes",
 
     # ===== R2 STORAGE =====
