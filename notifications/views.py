@@ -68,11 +68,11 @@ def get_unread_count(request):
 
 @login_required
 def enroll_free_course(request, course_id):
-    course = get_object_or_404(Course, id=course_id, price=0)
+    course = get_object_or_404(Course, id=course_id, prix=0, publie=True)
 
     if Enrollment.objects.filter(utilisateur=request.user, cours=course).exists():
         messages.warning(request, f"Ou deja enskri nan {course.titre}.")
-        return redirect('course_detail', slug=course.slug)
+        return redirect('courses:course_detail', pk=course.pk)
 
     enrollment = Enrollment.objects.create(
         utilisateur=request.user,
@@ -83,7 +83,7 @@ def enroll_free_course(request, course_id):
     )
 
     course_details = {
-        'course_link': request.build_absolute_uri(reverse('course_detail', args=[course.slug]))
+        'course_link': request.build_absolute_uri(reverse('courses:course_detail', args=[course.pk]))
     }
 
     result = send_enrollment_confirmation(
@@ -95,7 +95,7 @@ def enroll_free_course(request, course_id):
     )
 
     messages.success(request, f"Félicitations! Vous êtes inscrit au cours {course.titre}.")
-    return redirect('course_detail', slug=course.slug)
+    return redirect('courses:course_detail', pk=course.pk)
 
 
 @staff_member_required
@@ -200,29 +200,8 @@ def approve_subscription(request, subscription_id):
 
 
 def password_reset_request(request):
-    if request.method == 'POST':
-        email = request.POST.get('email')
-        try:
-            user = CustomUser.objects.get(email=email)
-            reset_link = request.build_absolute_uri(
-                reverse('password_reset_confirm', kwargs={
-                    'uidb64': user.pk,
-                    'token': 'TOKEN'
-                })
-            )
-
-            result = send_password_reset(
-                user=user,
-                reset_link=reset_link,
-                send_email=True,
-                send_sms=True if user.phone_number else False
-            )
-
-            messages.success(request, "Un email vous a été envoyé pour réinitialiser votre mot de passe.")
-        except CustomUser.DoesNotExist:
-            messages.error(request, "Aucun compte associé à cet email.")
-
-    return render(request, 'registration/password_reset_form.html')
+    """Ansyen wout: voye sou vrè sistèm reyinisyalizasyon Django a (token valid, pa gen lyen fo)."""
+    return redirect('accounts:password_reset')
 
 
 @login_required
