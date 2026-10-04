@@ -9,6 +9,7 @@ from .forms import CourseForm
 from enrollments.models import Enrollment
 from quiz.models import TentativeQuiz, Quiz
 from subscriptions.models import Subscription, SubscriptionAccess, SubscriptionCourseSelection
+from subscriptions.access import active_subscription_for_course
 from theme_manager.models import Theme
 
 
@@ -51,45 +52,22 @@ def _get_user_access(request, cours):
 # ============================================
 # HELPER: Verifye ak kreye aksè atravè abònman
 # ============================================
-def _check_abonnement_access(request, cours):
-    """Tcheke si itilizatè a gen abònman aktif ki kouvri kou a, epi kreye aksè si nesesè."""
-    if not request.user.is_authenticated:
+def _check_abonnement_access(request, cours, sync=False):
+    """
+    Tcheke si itilizatè a gen abònman aktif ki kouvri kou a.
+    Pa default li SÈLMAN li (pa ekri nan baz done a).
+    sync=True kreye SubscriptionAccess ki manke a (itilize sèlman nan course_detail).
+    """
+    sub = active_subscription_for_course(request.user, cours)
+    if sub is None:
         return False
-    
-    # TCHEK 1: Abònman san limit (max_courses=0)
-    abonnement_san_limit = Subscription.objects.filter(
-        utilisateur=request.user,
-        statut='active',
-        plan__max_courses=0,
-        plan__cours=cours,
-        date_fin__gt=timezone.now()
-    ).first()
-    
-    if abonnement_san_limit:
+    if sync:
         SubscriptionAccess.objects.get_or_create(
-            subscription=abonnement_san_limit,
+            subscription=sub,
             cours=cours,
-            defaults={'date_expiration': abonnement_san_limit.date_fin}
+            defaults={'date_expiration': sub.date_fin},
         )
-        return True
-    
-    # TCHEK 2: Abònman ak limit ki gen kou sa a seleksyone
-    selection_active = SubscriptionCourseSelection.objects.filter(
-        subscription__utilisateur=request.user,
-        subscription__statut='active',
-        subscription__date_fin__gt=timezone.now(),
-        course=cours
-    ).first()
-    
-    if selection_active:
-        SubscriptionAccess.objects.get_or_create(
-            subscription=selection_active.subscription,
-            cours=cours,
-            defaults={'date_expiration': selection_active.subscription.date_fin}
-        )
-        return True
-    
-    return False
+    return True
 
 
 # ============================================
@@ -161,7 +139,7 @@ def course_detail(request, pk):
     cours = get_object_or_404(Course, pk=pk)
     
     # ===== TCHEK ABÒNMAN EPI KREYE AKSÈ SI NESESÈ =====
-    abonnement_access = _check_abonnement_access(request, cours)
+    abonnement_access = _check_abonnement_access(request, cours, sync=True)
     
     a_acces, est_inscrit, inscription_approuvee, a_acces_abonnement = _get_user_access(request, cours)
     
