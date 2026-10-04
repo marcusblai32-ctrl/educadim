@@ -100,7 +100,7 @@ class SubscriptionAdmin(admin.ModelAdmin):
                     )
                     redirections += 1
                     notify_safely(send_subscription_approved, user=sub.utilisateur, subscription=sub,
-                                  send_email=True, send_sms=bool(sub.utilisateur.phone_number))
+                                  send_email=True, send_sms=True)
                 else:
                     # ===== ANSYEN WORKFLOW: max_courses == 0 =====
                     # Kreye aksè pou tout kou plan an
@@ -122,7 +122,7 @@ class SubscriptionAdmin(admin.ModelAdmin):
                         lien="/abonnements/mes-abonnements/"
                     )
                     notify_safely(send_subscription_approved, user=sub.utilisateur, subscription=sub,
-                                  send_email=True, send_sms=bool(sub.utilisateur.phone_number))
+                                  send_email=True, send_sms=True)
                 
                 count += 1
         
