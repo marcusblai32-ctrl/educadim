@@ -162,7 +162,7 @@ def admin_approve_enrollment(request, pk):
         notify_safely(
             send_enrollment_approved,
             user=enrollment.utilisateur, enrollment=enrollment,
-            send_email=True, send_sms=bool(enrollment.utilisateur.phone_number),
+            send_email=True, send_sms=True,
         )
         messages.success(request, f"Inscription de {enrollment.utilisateur.get_full_name()} approuvée.")
     return redirect('enrollments:admin_pending')
@@ -189,7 +189,7 @@ def admin_reject_enrollment(request, pk):
         notify_safely(
             send_enrollment_rejected,
             user=enrollment.utilisateur, enrollment=enrollment,
-            send_email=True, send_sms=bool(enrollment.utilisateur.phone_number),
+            send_email=True, send_sms=True,
         )
         messages.success(request, f"Inscription de {enrollment.utilisateur.get_full_name()} refusée.")
     return redirect('enrollments:admin_pending')
