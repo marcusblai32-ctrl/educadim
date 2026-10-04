@@ -204,7 +204,7 @@ def password_reset_request(request):
     return redirect('accounts:password_reset')
 
 
-@login_required
+@staff_member_required
 def test_notification(request):
     if request.method == 'POST':
         subject = request.POST.get('subject', 'Test Notifikasyon')
@@ -231,7 +231,7 @@ def test_notification(request):
     return render(request, 'notifications/test.html')
 
 
-@login_required
+@staff_member_required
 def test_email(request):
     if request.method == 'POST':
         to_email = request.POST.get('to_email', request.user.email)
@@ -239,12 +239,12 @@ def test_email(request):
         message = request.POST.get('message', 'Sa se yon tès imel ki soti nan EducDim!')
 
         context = {
-            'first_name': request.user.first_name or request.user.username,
+            'first_name': request.user.first_name or request.user.email,
             'message': message,
             'user': request.user,
-            'full_name': request.user.get_full_name() or request.user.username,
+            'full_name': request.user.get_full_name() or request.user.email,
             'email': request.user.email,
-            'username': request.user.username,
+            'username': request.user.email,
         }
 
         result = send_brevo_email(
@@ -264,7 +264,7 @@ def test_email(request):
     return render(request, 'notifications/test_email.html')
 
 
-@login_required
+@staff_member_required
 def test_sms(request):
     if request.method == 'POST':
         to_number = request.POST.get('to_number', request.user.phone_number)
