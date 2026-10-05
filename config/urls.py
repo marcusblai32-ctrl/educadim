@@ -52,6 +52,11 @@ urlpatterns = [
     path("i18n/", include("django.conf.urls.i18n")),
     path("health/", health_check, name="health_check"),
 
+    # Thème (CSS dynamique + images) : URL STABLE /theme/... SANS préfixe de langue.
+    # Avant, elle était dans i18n_patterns (=> /fr/theme/css/) : pas cachable correctement
+    # et bloquée par le mode maintenance.
+    path("theme/", include("theme_manager.urls")),
+
     path(
         "sitemap.xml",
         sitemap,
@@ -91,7 +96,6 @@ urlpatterns += i18n_patterns(
     path("classement/", include("ranking.urls")),
     path("chat/", include("chat.urls")),
     path("notifications/", include("notifications.urls")),
-    path("theme/", include("theme_manager.urls")),
     path("ads/", include("ads.urls")),
     path("dashboard/", include("dashboard.urls")),
     path("a-propos/", about_page, name="about"),
