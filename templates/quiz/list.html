@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% block body_class %}page-quiz-list{% endblock %}
 {% load i18n %}
 
 {% block title %}{% trans "Quiz disponibles" %}{% endblock %}
@@ -42,28 +43,28 @@
 </div>
 
 <style>
-  .quiz-card-header {
+  body.page-quiz-list .quiz-card-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 0.5rem;
   }
 
-  .quiz-card-header h3 {
+  body.page-quiz-list .quiz-card-header h3 {
     margin: 0;
   }
 
-  .quiz-card .badge {
+  body.page-quiz-list .quiz-card .badge {
     font-size: 0.7rem;
   }
 
-  .quiz-grid {
+  body.page-quiz-list .quiz-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 2rem;
   }
 
-  .quiz-card {
+  body.page-quiz-list .quiz-card {
     background: var(--white);
     padding: 1.5rem;
     border-radius: var(--radius);
@@ -72,13 +73,13 @@
     border: 1px solid var(--border);
   }
 
-  .quiz-card:hover {
+  body.page-quiz-list .quiz-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
   }
 
   @media (max-width: 480px) {
-    .quiz-grid {
+    body.page-quiz-list .quiz-grid {
       grid-template-columns: 1fr;
     }
   }
