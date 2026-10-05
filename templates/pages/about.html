@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% block body_class %}page-pages-about{% endblock %}
 {% load i18n theme_tags %}
 
 {% block title %}{% if theme %}{{ theme.about_title|default:_("À propos") }} - {{ theme.site_name }}{% else %}{% trans "À propos" %} - EducDim{% endif %}{% endblock %}
@@ -83,16 +84,16 @@
 
 {% block extra_css %}
 <style>
-    .about-container {
+    body.page-pages-about .about-container {
         width: 100%;
     }
 
-    .about-header {
+    body.page-pages-about .about-header {
         text-align: center;
         margin-bottom: 2.5rem;
     }
 
-    .about-title {
+    body.page-pages-about .about-title {
         font-size: 2.2rem;
         font-weight: 700;
         color: var(--text, #212529);
@@ -101,7 +102,7 @@
         display: inline-block;
     }
 
-    .about-title::after {
+    body.page-pages-about .about-title::after {
         content: '';
         position: absolute;
         bottom: -6px;
@@ -113,13 +114,13 @@
         border-radius: 2px;
     }
 
-    .about-subtitle {
+    body.page-pages-about .about-subtitle {
         font-size: 1rem;
         color: var(--text-muted, #6c757d);
         margin-top: 0.75rem;
     }
 
-    .about-grid {
+    body.page-pages-about .about-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 2.5rem;
@@ -127,24 +128,24 @@
         margin-top: 1rem;
     }
 
-    .about-content {
+    body.page-pages-about .about-content {
         font-size: 1rem;
         line-height: 1.8;
         color: var(--text, #212529);
     }
 
-    .about-content p {
+    body.page-pages-about .about-content p {
         margin-bottom: 1rem;
     }
 
-    .about-values {
+    body.page-pages-about .about-values {
         margin-top: 1.5rem;
         display: flex;
         flex-direction: column;
         gap: 0.75rem;
     }
 
-    .value-item {
+    body.page-pages-about .value-item {
         display: flex;
         align-items: center;
         gap: 1rem;
@@ -155,12 +156,12 @@
         transition: transform 0.2s, box-shadow 0.2s;
     }
 
-    .value-item:hover {
+    body.page-pages-about .value-item:hover {
         transform: translateX(5px);
         box-shadow: var(--shadow, 0 4px 20px rgba(0,0,0,0.08));
     }
 
-    .value-icon-wrapper {
+    body.page-pages-about .value-icon-wrapper {
         width: 44px;
         height: 44px;
         display: flex;
@@ -173,25 +174,25 @@
         font-size: 1.2rem;
     }
 
-    .value-item h4 {
+    body.page-pages-about .value-item h4 {
         margin: 0 0 0.15rem 0;
         font-size: 1rem;
         font-weight: 600;
         color: var(--text, #212529);
     }
 
-    .value-item p {
+    body.page-pages-about .value-item p {
         margin: 0;
         font-size: 0.9rem;
         color: var(--text-muted, #6c757d);
     }
 
-    .about-image-wrapper {
+    body.page-pages-about .about-image-wrapper {
         position: sticky;
         top: 2rem;
     }
 
-    .about-image {
+    body.page-pages-about .about-image {
         width: 100%;
         height: auto;
         border-radius: var(--radius, 8px);
@@ -199,11 +200,11 @@
         transition: transform 0.3s;
     }
 
-    .about-image:hover {
+    body.page-pages-about .about-image:hover {
         transform: scale(1.01);
     }
 
-    .about-image-placeholder {
+    body.page-pages-about .about-image-placeholder {
         width: 100%;
         aspect-ratio: 4/3;
         display: flex;
@@ -216,20 +217,20 @@
         color: var(--text-muted, #6c757d);
     }
 
-    .placeholder-icon {
+    body.page-pages-about .placeholder-icon {
         font-size: 3.5rem;
         margin-bottom: 0.5rem;
         opacity: 0.5;
         color: var(--text-muted, #6c757d);
     }
 
-    .about-footer {
+    body.page-pages-about .about-footer {
         margin-top: 2rem;
         padding-top: 1.5rem;
         border-top: 1px solid var(--border, #dee2e6);
     }
 
-    .about-footer-content {
+    body.page-pages-about .about-footer-content {
         max-width: 800px;
         margin: 0 auto;
         text-align: center;
@@ -240,33 +241,33 @@
 
     /* Responsive */
     @media (max-width: 768px) {
-        .card {
+        body.page-pages-about .card {
             padding: 1.5rem !important;
         }
 
-        .about-grid {
+        body.page-pages-about .about-grid {
             grid-template-columns: 1fr;
             gap: 1.5rem;
         }
 
-        .about-title {
+        body.page-pages-about .about-title {
             font-size: 1.8rem;
         }
 
-        .about-image-wrapper {
+        body.page-pages-about .about-image-wrapper {
             position: static;
         }
 
-        .about-image {
+        body.page-pages-about .about-image {
             max-height: 250px;
             object-fit: cover;
         }
 
-        .value-item {
+        body.page-pages-about .value-item {
             padding: 0.6rem 0.75rem;
         }
 
-        .value-icon-wrapper {
+        body.page-pages-about .value-icon-wrapper {
             width: 38px;
             height: 38px;
             font-size: 1rem;
@@ -274,23 +275,23 @@
     }
 
     @media (max-width: 480px) {
-        .card {
+        body.page-pages-about .card {
             padding: 1rem !important;
         }
 
-        .about-title {
+        body.page-pages-about .about-title {
             font-size: 1.5rem;
         }
 
-        .about-subtitle {
+        body.page-pages-about .about-subtitle {
             font-size: 0.9rem;
         }
 
-        .about-content {
+        body.page-pages-about .about-content {
             font-size: 0.9rem;
         }
 
-        .value-icon-wrapper {
+        body.page-pages-about .value-icon-wrapper {
             width: 34px;
             height: 34px;
             font-size: 0.9rem;
@@ -298,21 +299,21 @@
     }
 
     /* Dark mode */
-    [data-bs-theme="dark"] .value-item {
+    body.page-pages-about [data-bs-theme="dark"] .value-item {
         background: var(--dark, #2d2d2d);
         border-left-color: var(--primary, #1a1a2e);
     }
 
-    [data-bs-theme="dark"] .value-icon-wrapper {
+    body.page-pages-about [data-bs-theme="dark"] .value-icon-wrapper {
         background: var(--primary, #1a1a2e);
     }
 
-    [data-bs-theme="dark"] .about-image-placeholder {
+    body.page-pages-about [data-bs-theme="dark"] .about-image-placeholder {
         background: var(--dark, #2d2d2d);
         border-color: var(--border, #444);
     }
 
-    [data-bs-theme="dark"] .about-footer {
+    body.page-pages-about [data-bs-theme="dark"] .about-footer {
         border-top-color: var(--border, #444);
     }
 </style>
