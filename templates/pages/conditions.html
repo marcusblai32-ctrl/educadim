@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load i18n %}
+{% load i18n theme_tags %}
 
 {% block title %}{{ theme.conditions_title|default:_("Conditions générales") }} - {{ theme.site_name }}{% endblock %}
 
@@ -7,7 +7,7 @@
 <div class="card">
     <h1>{{ theme.conditions_title|default:_("Conditions générales d'utilisation") }}</h1>
     <div style="margin-top:1.5rem;">
-        {{ theme.conditions_content|default:"<h3>1. Acceptation des conditions</h3><p>En utilisant notre plateforme, vous acceptez ces conditions.</p><h3>2. Compte utilisateur</h3><p>Vous êtes responsable de votre compte.</p><h3>3. Propriété intellectuelle</h3><p>Tout le contenu du site est protégé par le droit d'auteur.</p>"|safe }}
+        {% if theme.conditions_content %}{{ theme.conditions_content|rich_text }}{% else %}{{ "<h3>1. Acceptation des conditions</h3><p>En utilisant notre plateforme, vous acceptez ces conditions.</p><h3>2. Compte utilisateur</h3><p>Vous êtes responsable de votre compte.</p><h3>3. Propriété intellectuelle</h3><p>Tout le contenu du site est protégé par le droit d'auteur.</p>"|safe }}{% endif %}
     </div>
 </div>
 {% endblock %}
