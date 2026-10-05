@@ -292,9 +292,6 @@ INSTALLED_APPS = [
     "subscriptions.apps.SubscriptionsConfig",
     "dashboard.apps.DashboardConfig",
     "todo.apps.TodoConfig",
-
-    # ===== PPI =====
-    "ppi.apps.PpiConfig",
 ]
 
 
