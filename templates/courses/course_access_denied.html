@@ -20,7 +20,7 @@
             </a>
         </div>
         {% if est_inscrit and not inscription_approuvee %}
-        <div style="margin-top:1.5rem; padding:1rem; background:rgba(245,158,11,0.1); border-radius:var(--radius-sm);">
+        <div style="margin-top:1.5rem; padding:1rem; background:rgba(var(--warning-rgb), 0.1); border-radius:var(--radius-sm);">
             <p style="color:var(--warning);">
                 <i class="fas fa-clock"></i> {% trans "Votre inscription est en attente de validation par un administrateur." %}
             </p>
