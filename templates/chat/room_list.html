@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% block body_class %}page-chat-room-list{% endblock %}
 {% load i18n %}
 
 {% block title %}{% trans "Salons de discussion" %}{% endblock %}
@@ -47,14 +48,14 @@
 </div>
 
 <style>
-    .room-grid {
+    body.page-chat-room-list .room-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
         gap: 1.5rem;
         margin-top: 0.5rem;
     }
 
-    .room-card {
+    body.page-chat-room-list .room-card {
         background: var(--white);
         padding: 1.5rem;
         border-radius: var(--radius);
@@ -69,47 +70,47 @@
         text-decoration: none;
     }
 
-    .room-card:hover {
+    body.page-chat-room-list .room-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         border-color: var(--primary);
         text-decoration: none;
     }
 
-    .room-icon {
+    body.page-chat-room-list .room-icon {
         margin-bottom: 0.5rem;
     }
 
-    .room-icon i {
+    body.page-chat-room-list .room-icon i {
         color: var(--primary);
     }
 
-    .room-info {
+    body.page-chat-room-list .room-info {
         flex: 1;
         display: flex;
         flex-direction: column;
         align-items: center;
     }
 
-    .room-info h3 {
+    body.page-chat-room-list .room-info h3 {
         font-size: 1rem;
         margin: 0 0 0.2rem 0;
         color: var(--text);
     }
 
-    .room-info p {
+    body.page-chat-room-list .room-info p {
         font-size: 0.85rem;
         color: var(--text-muted);
         margin: 0.2rem 0;
     }
 
-    .room-info small {
+    body.page-chat-room-list .room-info small {
         font-size: 0.75rem;
         color: var(--text-muted);
     }
 
     @media (max-width: 480px) {
-        .room-grid {
+        body.page-chat-room-list .room-grid {
             grid-template-columns: 1fr;
         }
     }
