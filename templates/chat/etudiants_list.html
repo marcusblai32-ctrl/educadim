@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% block body_class %}page-chat-etudiants-list{% endblock %}
 {% load i18n %}
 
 {% block title %}{% trans "Etudiants" %} - {% trans "Chat prive" %}{% endblock %}
@@ -77,13 +78,13 @@
 </div>
 
 <style>
-  .etudiants-grid {
+  body.page-chat-etudiants-list .etudiants-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 1rem;
   }
 
-  .etudiant-card {
+  body.page-chat-etudiants-list .etudiant-card {
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -94,16 +95,16 @@
     transition: all 0.3s ease;
   }
 
-  .etudiant-card:hover {
+  body.page-chat-etudiants-list .etudiant-card:hover {
     transform: translateY(-3px);
     box-shadow: var(--shadow);
   }
 
-  .etudiant-card.chat-existe {
+  body.page-chat-etudiants-list .etudiant-card.chat-existe {
     border-left: 4px solid var(--success);
   }
 
-  .etudiant-avatar {
+  body.page-chat-etudiants-list .etudiant-avatar {
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -117,66 +118,66 @@
     flex-shrink: 0;
   }
 
-  .etudiant-info {
+  body.page-chat-etudiants-list .etudiant-info {
     flex: 1;
   }
 
-  .etudiant-info h3 {
+  body.page-chat-etudiants-list .etudiant-info h3 {
     font-size: 1rem;
     margin: 0;
   }
 
-  .etudiant-info p {
+  body.page-chat-etudiants-list .etudiant-info p {
     font-size: 0.85rem;
     color: var(--text-muted);
     margin: 0;
   }
 
-  .etudiant-action {
+  body.page-chat-etudiants-list .etudiant-action {
     flex-shrink: 0;
   }
 
-  .etudiant-action .btn {
+  body.page-chat-etudiants-list .etudiant-action .btn {
     white-space: nowrap;
   }
 
-  .search-box .form-control {
+  body.page-chat-etudiants-list .search-box .form-control {
     padding: 0.6rem 1rem;
     border: 2px solid var(--border);
     border-radius: var(--radius);
     font-size: 0.95rem;
   }
 
-  .search-box .form-control:focus {
+  body.page-chat-etudiants-list .search-box .form-control:focus {
     outline: none;
     border-color: var(--primary);
   }
 
   @media (max-width: 480px) {
-    .etudiants-grid {
+    body.page-chat-etudiants-list .etudiants-grid {
       grid-template-columns: 1fr;
     }
 
-    .etudiant-card {
+    body.page-chat-etudiants-list .etudiant-card {
       flex-wrap: wrap;
       justify-content: center;
       text-align: center;
     }
 
-    .etudiant-action {
+    body.page-chat-etudiants-list .etudiant-action {
       width: 100%;
     }
 
-    .etudiant-action .btn {
+    body.page-chat-etudiants-list .etudiant-action .btn {
       width: 100%;
       justify-content: center;
     }
 
-    .search-box form {
+    body.page-chat-etudiants-list .search-box form {
       flex-direction: column;
     }
 
-    .search-box .form-control {
+    body.page-chat-etudiants-list .search-box .form-control {
       width: 100%;
     }
   }
