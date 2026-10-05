@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load i18n %}
+{% load i18n theme_tags %}
 
 {% block title %}{{ theme.faq_title|default:_("FAQ") }} - {{ theme.site_name }}{% endblock %}
 
@@ -7,7 +7,7 @@
 <div class="card">
     <h1>{{ theme.faq_title|default:_("Questions fréquentes") }}</h1>
     <div style="margin-top:1.5rem;">
-        {{ theme.faq_content|default:"<h4>Comment m'inscrire ?</h4><p>Klike sou bouton S'inscrire anlè a. Rempli fòm nan epi klike sou bouton valide.</p><h4>Les cours sont-ils payants ?</h4><p>Gen kou gratis ak kou peye. Kou peye yo fèt ak MonCash oswa NatCash.</p><h4>Comment suivre ma progression ?</h4><p>Ale nan meni Progression anlè a.</p><h4>Comment obtenir un certificat ?</h4><p>Lè w fini tout leçons ak quiz yon kou, w ap resevwa yon certifica.</p>"|safe }}
+        {% if theme.faq_content %}{{ theme.faq_content|rich_text }}{% else %}{{ "<h4>Comment m'inscrire ?</h4><p>Klike sou bouton S'inscrire anlè a. Rempli fòm nan epi klike sou bouton valide.</p><h4>Les cours sont-ils payants ?</h4><p>Gen kou gratis ak kou peye. Kou peye yo fèt ak MonCash oswa NatCash.</p><h4>Comment suivre ma progression ?</h4><p>Ale nan meni Progression anlè a.</p><h4>Comment obtenir un certificat ?</h4><p>Lè w fini tout leçons ak quiz yon kou, w ap resevwa yon certifica.</p>"|safe }}{% endif %}
     </div>
 </div>
 {% endblock %}
