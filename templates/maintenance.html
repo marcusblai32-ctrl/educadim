@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load i18n %}
+{% load i18n theme_tags %}
 
 {% block title %}{% trans "Maintenance" %} - {{ theme.site_name }}{% endblock %}
 
@@ -15,7 +15,7 @@
         <div style="margin-top:1rem; padding:1rem; background:var(--body-bg); border-radius:var(--radius);">
             <i class="fab fa-whatsapp" style="color:#25D366; font-size:1.5rem;"></i>
             <p style="margin:0.5rem 0 0; font-size:0.9rem;">
-                <a href="https://wa.me/{{ theme.whatsapp_group }}" target="_blank" style="font-weight:600;">
+                <a href="{{ theme.whatsapp_group }}" target="_blank" rel="noopener noreferrer" style="font-weight:600;">
                     {% trans "Rejoindre le groupe WhatsApp" %}
                 </a>
             </p>
@@ -24,7 +24,7 @@
         {% if theme.whatsapp_contact %}
         <div style="margin-top:0.5rem;">
             <small style="color:var(--text-muted);">
-                {% trans "Contact" %} : <a href="https://wa.me/{{ theme.whatsapp_contact }}" target="_blank">{{ theme.whatsapp_contact }}</a>
+                {% trans "Contact" %} : <a href="{{ theme.whatsapp_contact }}" target="_blank" rel="noopener noreferrer">WhatsApp</a>
             </small>
         </div>
         {% endif %}
