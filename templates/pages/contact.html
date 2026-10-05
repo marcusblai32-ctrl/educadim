@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% block body_class %}page-pages-contact{% endblock %}
 {% load i18n theme_tags %}
 
 {% block title %}{{ theme.contact_page_title|default:_("Contactez-nous") }} - {{ theme.site_name }}{% endblock %}
@@ -74,10 +75,10 @@
 
 <style>
     @media (max-width: 768px) {
-        .card > div:last-of-type {
+        body.page-pages-contact .card > div:last-of-type {
             grid-template-columns: 1fr !important;
         }
-        .card > div:last-of-type .map-container {
+        body.page-pages-contact .card > div:last-of-type .map-container {
             min-height: 200px !important;
         }
     }
