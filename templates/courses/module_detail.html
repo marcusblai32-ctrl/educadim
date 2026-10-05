@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% block body_class %}page-courses-module-detail{% endblock %}
 {% load i18n %}
 
 {% block title %}{{ module.titre }}{% endblock %}
@@ -9,40 +10,40 @@
     <div style="background: var(--glass); backdrop-filter: blur(var(--blur)) saturate(150%); -webkit-backdrop-filter: blur(var(--blur)) saturate(150%); border: 1px solid var(--glass-brd); border-radius: var(--radius); box-shadow: var(--glass-sh); padding: 2.5rem; transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1); margin-bottom: 2rem; width: 100%; box-sizing: border-box; overflow: hidden;">
 
         <!-- ===== HEADER ===== -->
-        <div style="margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border, #dee2e6);">
-            <h1 style="font-size: clamp(1.4rem, 4vw, 1.8rem); font-weight: 700; margin-bottom: 0.5rem; color: var(--text, #212529); font-family: var(--font-display); line-height: 1.2; word-break: break-word;">
+        <div style="margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border, var(--border));">
+            <h1 style="font-size: clamp(1.4rem, 4vw, 1.8rem); font-weight: 700; margin-bottom: 0.5rem; color: var(--text, var(--text)); font-family: var(--font-display); line-height: 1.2; word-break: break-word;">
                 {{ module.titre }} 
-                <span style="font-size: 0.9rem; font-weight: 400; color: var(--text-muted, #6c757d);">({% trans "Module" %} {{ module.ordre }})</span>
+                <span style="font-size: 0.9rem; font-weight: 400; color: var(--text-muted, var(--text-muted));">({% trans "Module" %} {{ module.ordre }})</span>
             </h1>
-            <p style="color: var(--text-muted, #6c757d); margin-bottom: 0.5rem; line-height: 1.6;">{{ module.description }}</p>
-            <div style="font-size: 0.85rem; color: var(--text-muted, #6c757d); display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
-                <span><i class="fas fa-book-open" style="color: var(--primary, #5b76f7);"></i> {{ lecons|length }} {% trans "leçons" %}</span>
+            <p style="color: var(--text-muted, var(--text-muted)); margin-bottom: 0.5rem; line-height: 1.6;">{{ module.description }}</p>
+            <div style="font-size: 0.85rem; color: var(--text-muted, var(--text-muted)); display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                <span><i class="fas fa-book-open" style="color: var(--primary, var(--primary));"></i> {{ lecons|length }} {% trans "leçons" %}</span>
                 {% if quizzes_module %}
-                <span><i class="fas fa-question-circle" style="color: var(--primary, #5b76f7);"></i> {{ quizzes_module|length }} {% trans "quiz" %}</span>
+                <span><i class="fas fa-question-circle" style="color: var(--primary, var(--primary));"></i> {{ quizzes_module|length }} {% trans "quiz" %}</span>
                 {% endif %}
             </div>
         </div>
 
         <!-- ===== LECONS ===== -->
         <div style="margin-bottom: 2rem;">
-            <h2 style="font-size: clamp(1.1rem, 3vw, 1.3rem); font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; color: var(--text, #212529); font-family: var(--font-display); flex-wrap: wrap;">
-                <i class="fas fa-list-ul" style="color: var(--primary, #5b76f7);"></i> {% trans "Leçons" %}
-                <span style="font-size: 0.8rem; font-weight: 400; color: var(--text-muted, #6c757d);">({{ lecons|length }})</span>
+            <h2 style="font-size: clamp(1.1rem, 3vw, 1.3rem); font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; color: var(--text, var(--text)); font-family: var(--font-display); flex-wrap: wrap;">
+                <i class="fas fa-list-ul" style="color: var(--primary, var(--primary));"></i> {% trans "Leçons" %}
+                <span style="font-size: 0.8rem; font-weight: 400; color: var(--text-muted, var(--text-muted));">({{ lecons|length }})</span>
             </h2>
 
             <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.8rem; width: 100%; box-sizing: border-box;">
                 {% for lecon in lecons %}
                 <li style="background: var(--white, #ffffff); border: 1px solid #e8e8e8; border-radius: 10px; padding: 0; margin: 0; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); overflow: hidden; width: 100%; box-sizing: border-box;">
-                    <a href="{% url 'courses:lesson_detail' lecon.pk %}" style="display: flex; align-items: center; gap: 0.8rem; padding: 0.9rem 1.2rem; color: var(--text, #212529); text-decoration: none; transition: all 0.3s ease; width: 100%; font-weight: 500; font-family: var(--font-body); box-sizing: border-box; flex-wrap: wrap;">
-                        <i class="fas fa-book" style="color: var(--primary, #5b76f7); font-size: 1.1rem; width: 24px; text-align: center; flex-shrink: 0;"></i>
+                    <a href="{% url 'courses:lesson_detail' lecon.pk %}" style="display: flex; align-items: center; gap: 0.8rem; padding: 0.9rem 1.2rem; color: var(--text, var(--text)); text-decoration: none; transition: all 0.3s ease; width: 100%; font-weight: 500; font-family: var(--font-body); box-sizing: border-box; flex-wrap: wrap;">
+                        <i class="fas fa-book" style="color: var(--primary, var(--primary)); font-size: 1.1rem; width: 24px; text-align: center; flex-shrink: 0;"></i>
                         <span class="lesson-title">{{ lecon.display_titre }}</span>
-                        <span style="font-size: 0.7rem; color: var(--text-muted, #6c757d); background: var(--glass-soft, #f8f9fa); padding: 0.2rem 0.7rem; border-radius: 20px; flex-shrink: 0; font-weight: 500;">{% trans "Leçon" %} {{ lecon.ordre }}</span>
-                        <span style="color: var(--text-muted, #6c757d); font-size: 0.8rem; transition: all 0.3s ease; margin-left: 0.3rem; flex-shrink: 0;"><i class="fas fa-chevron-right"></i></span>
+                        <span style="font-size: 0.7rem; color: var(--text-muted, var(--text-muted)); background: var(--glass-soft, #f8f9fa); padding: 0.2rem 0.7rem; border-radius: 20px; flex-shrink: 0; font-weight: 500;">{% trans "Leçon" %} {{ lecon.ordre }}</span>
+                        <span style="color: var(--text-muted, var(--text-muted)); font-size: 0.8rem; transition: all 0.3s ease; margin-left: 0.3rem; flex-shrink: 0;"><i class="fas fa-chevron-right"></i></span>
                     </a>
                 </li>
                 {% empty %}
-                <li style="padding: 2rem; color: var(--text-muted, #6c757d); font-style: italic; text-align: center; background: var(--white, #ffffff); border-radius: 10px; border: 1px solid #e8e8e8; width: 100%; box-sizing: border-box;">
-                    <i class="fas fa-info-circle" style="color: var(--text-muted, #6c757d);"></i> {% trans "Aucune leçon dans ce module." %}
+                <li style="padding: 2rem; color: var(--text-muted, var(--text-muted)); font-style: italic; text-align: center; background: var(--white, #ffffff); border-radius: 10px; border: 1px solid #e8e8e8; width: 100%; box-sizing: border-box;">
+                    <i class="fas fa-info-circle" style="color: var(--text-muted, var(--text-muted));"></i> {% trans "Aucune leçon dans ce module." %}
                 </li>
                 {% endfor %}
             </ul>
@@ -50,28 +51,28 @@
 
         <!-- ===== QUIZ DU MODULE ===== -->
         {% if quizzes_module %}
-        <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border, #dee2e6);">
-            <h2 style="font-size: clamp(1.1rem, 3vw, 1.3rem); font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; color: var(--text, #212529); font-family: var(--font-display); flex-wrap: wrap;">
-                <i class="fas fa-question-circle" style="color: var(--primary, #5b76f7);"></i> {% trans "Quiz du module" %}
-                <span style="font-size: 0.8rem; font-weight: 400; color: var(--text-muted, #6c757d);">({{ quizzes_module|length }})</span>
+        <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border, var(--border));">
+            <h2 style="font-size: clamp(1.1rem, 3vw, 1.3rem); font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; color: var(--text, var(--text)); font-family: var(--font-display); flex-wrap: wrap;">
+                <i class="fas fa-question-circle" style="color: var(--primary, var(--primary));"></i> {% trans "Quiz du module" %}
+                <span style="font-size: 0.8rem; font-weight: 400; color: var(--text-muted, var(--text-muted));">({{ quizzes_module|length }})</span>
             </h2>
 
             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; width: 100%; box-sizing: border-box;">
                 {% for quiz in quizzes_module %}
                 <div style="background: var(--glass-soft); border-radius: 12px; padding: 1rem; border: 1px solid var(--glass-brd-soft); transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1); width: 100%; box-sizing: border-box;">
-                    <h3 style="font-size: 1rem; margin: 0 0 0.3rem; color: var(--text, #212529);">
-                        <a href="{% url 'quiz:detail' quiz.pk %}" style="color: var(--text, #212529); text-decoration: none; transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);">
+                    <h3 style="font-size: 1rem; margin: 0 0 0.3rem; color: var(--text, var(--text));">
+                        <a href="{% url 'quiz:detail' quiz.pk %}" style="color: var(--text, var(--text)); text-decoration: none; transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);">
                             {% if quiz.titre %}{{ quiz.titre }}{% else %}{% trans "Quiz" %} {{ forloop.counter }}{% endif %}
                         </a>
                     </h3>
                     {% if quiz.description %}
-                    <p style="color: var(--text-muted, #6c757d); font-size: 0.85rem; margin: 0 0 0.5rem;">{{ quiz.description|truncatechars:100 }}</p>
+                    <p style="color: var(--text-muted, var(--text-muted)); font-size: 0.85rem; margin: 0 0 0.5rem;">{{ quiz.description|truncatechars:100 }}</p>
                     {% endif %}
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem; flex-wrap: wrap; gap: 0.5rem;">
-                        <span style="color: var(--text-muted, #6c757d); font-size: 0.75rem; display: flex; align-items: center; gap: 0.3rem;">
-                            <i class="fas fa-percent" style="color: var(--primary, #5b76f7);"></i> {{ quiz.pourcentage_reussite }}% {% trans "réussite" %}
+                        <span style="color: var(--text-muted, var(--text-muted)); font-size: 0.75rem; display: flex; align-items: center; gap: 0.3rem;">
+                            <i class="fas fa-percent" style="color: var(--primary, var(--primary));"></i> {{ quiz.pourcentage_reussite }}% {% trans "réussite" %}
                         </span>
-                        <a href="{% url 'quiz:start' quiz.pk %}" style="padding: 0.3rem 0.8rem; font-size: 0.75rem; background: var(--primary, #5b76f7); color: #fff; border-radius: 12px; text-decoration: none; transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1); display: inline-flex; align-items: center; gap: 0.3rem; border: none; cursor: pointer; font-family: var(--font-body); font-weight: 600;">
+                        <a href="{% url 'quiz:start' quiz.pk %}" style="padding: 0.3rem 0.8rem; font-size: 0.75rem; background: var(--primary, var(--primary)); color: #fff; border-radius: 12px; text-decoration: none; transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1); display: inline-flex; align-items: center; gap: 0.3rem; border: none; cursor: pointer; font-family: var(--font-body); font-weight: 600;">
                             <i class="fas fa-play"></i> {% trans "Commencer" %}
                         </a>
                     </div>
@@ -82,12 +83,12 @@
         {% endif %}
 
         <!-- ===== ACTIONS ===== -->
-        <div style="margin-top: 2rem; display: flex; flex-wrap: wrap; gap: 1rem; padding-top: 1.5rem; border-top: 1px solid var(--border, #dee2e6); width: 100%; box-sizing: border-box;">
+        <div style="margin-top: 2rem; display: flex; flex-wrap: wrap; gap: 1rem; padding-top: 1.5rem; border-top: 1px solid var(--border, var(--border)); width: 100%; box-sizing: border-box;">
             <a href="{% url 'courses:unit_detail' module.unite.pk %}" style="display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.7rem 1.8rem; border-radius: 12px; font-size: 0.95rem; font-weight: 600; text-decoration: none; transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1); border: none; cursor: pointer; font-family: var(--font-body); min-width: 200px; flex: 1 1 auto; background: var(--secondary, #22d3ee); color: #fff;">
                 <i class="fas fa-arrow-left"></i> {% trans "Retour à l'unité" %}
             </a>
             {% if lecons.first %}
-            <a href="{% url 'courses:lesson_detail' lecons.first.pk %}" style="display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.7rem 1.8rem; border-radius: 12px; font-size: 0.95rem; font-weight: 600; text-decoration: none; transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1); border: none; cursor: pointer; font-family: var(--font-body); min-width: 200px; flex: 1 1 auto; background: var(--primary, #5b76f7); color: #fff;">
+            <a href="{% url 'courses:lesson_detail' lecons.first.pk %}" style="display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.7rem 1.8rem; border-radius: 12px; font-size: 0.95rem; font-weight: 600; text-decoration: none; transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1); border: none; cursor: pointer; font-family: var(--font-body); min-width: 200px; flex: 1 1 auto; background: var(--primary, var(--primary)); color: #fff;">
                 <i class="fas fa-play"></i> {% trans "Commencer la première leçon" %}
             </a>
             {% endif %}
@@ -100,116 +101,116 @@
 <style>
     /* ===== RESPONSIVE ===== */
     @media (max-width: 768px) {
-        .md-wrapper {
+        body.page-courses-module-detail .md-wrapper {
             padding: 0 0.5rem !important;
         }
-        .md-card {
+        body.page-courses-module-detail .md-card {
             padding: 1.5rem !important;
         }
-        .md-actions {
+        body.page-courses-module-detail .md-actions {
             flex-direction: column !important;
             align-items: stretch !important;
         }
-        .md-actions .md-btn {
+        body.page-courses-module-detail .md-actions .md-btn {
             width: 100% !important;
             min-width: unset !important;
             justify-content: center !important;
         }
-        .md-quiz-grid {
+        body.page-courses-module-detail .md-quiz-grid {
             grid-template-columns: 1fr !important;
         }
-        .md-lesson-item a {
+        body.page-courses-module-detail .md-lesson-item a {
             padding: 0.8rem 1rem !important;
             gap: 0.5rem !important;
         }
-        .md-lesson-item a .md-lesson-title {
+        body.page-courses-module-detail .md-lesson-item a .md-lesson-title {
             font-size: 0.9rem !important;
         }
-        .md-lesson-item a .md-lesson-arrow {
+        body.page-courses-module-detail .md-lesson-item a .md-lesson-arrow {
             display: none !important;
         }
     }
 
     @media (max-width: 480px) {
-        .md-card {
+        body.page-courses-module-detail .md-card {
             padding: 1rem !important;
         }
-        .md-header h1 {
+        body.page-courses-module-detail .md-header h1 {
             font-size: 1.2rem !important;
         }
-        .md-quiz-card {
+        body.page-courses-module-detail .md-quiz-card {
             padding: 0.8rem !important;
         }
-        .md-actions .md-btn {
+        body.page-courses-module-detail .md-actions .md-btn {
             padding: 0.6rem 1.2rem !important;
             font-size: 0.85rem !important;
             min-width: unset !important;
         }
-        .md-lesson-item a {
+        body.page-courses-module-detail .md-lesson-item a {
             padding: 0.6rem 0.8rem !important;
             flex-wrap: wrap !important;
         }
-        .md-lesson-item a .md-lesson-title {
+        body.page-courses-module-detail .md-lesson-item a .md-lesson-title {
             font-size: 0.85rem !important;
             flex-basis: 100% !important;
             order: 2 !important;
             min-width: unset !important;
         }
-        .md-lesson-item a .md-lesson-order {
+        body.page-courses-module-detail .md-lesson-item a .md-lesson-order {
             font-size: 0.65rem !important;
             padding: 0.15rem 0.5rem !important;
         }
-        .md-lesson-item a .md-lesson-arrow {
+        body.page-courses-module-detail .md-lesson-item a .md-lesson-arrow {
             display: none !important;
         }
-        .md-lesson-item a i {
+        body.page-courses-module-detail .md-lesson-item a i {
             font-size: 0.95rem !important;
             width: 20px !important;
         }
     }
 
     /* ===== HOVER ===== */
-    .md-lesson-item:hover {
+    body.page-courses-module-detail .md-lesson-item:hover {
         transform: translateY(-3px) !important;
         box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08) !important;
-        border-color: var(--primary, #5b76f7) !important;
+        border-color: var(--primary, var(--primary)) !important;
     }
 
-    .md-lesson-item:hover a {
-        color: var(--primary, #5b76f7) !important;
+    body.page-courses-module-detail .md-lesson-item:hover a {
+        color: var(--primary, var(--primary)) !important;
     }
 
-    .md-lesson-item:hover a i {
-        color: var(--primary, #5b76f7) !important;
+    body.page-courses-module-detail .md-lesson-item:hover a i {
+        color: var(--primary, var(--primary)) !important;
     }
 
-    .md-lesson-item:hover a .md-lesson-arrow {
-        color: var(--primary, #5b76f7) !important;
+    body.page-courses-module-detail .md-lesson-item:hover a .md-lesson-arrow {
+        color: var(--primary, var(--primary)) !important;
         transform: translateX(4px) !important;
     }
 
-    .md-quiz-card:hover {
-        border-color: color-mix(in srgb, var(--primary, #5b76f7) 30%, transparent) !important;
+    body.page-courses-module-detail .md-quiz-card:hover {
+        border-color: color-mix(in srgb, var(--primary, var(--primary)) 30%, transparent) !important;
         transform: translateY(-3px) !important;
         box-shadow: var(--shadow, 0 10px 34px rgba(30, 41, 89, 0.12)) !important;
     }
 
-    .md-quiz-card h3 a:hover {
-        color: var(--primary, #5b76f7) !important;
+    body.page-courses-module-detail .md-quiz-card h3 a:hover {
+        color: var(--primary, var(--primary)) !important;
     }
 
-    .md-btn-start-q:hover {
+    body.page-courses-module-detail .md-btn-start-q:hover {
         background: var(--primary-hover, #4a63e6) !important;
         transform: translateY(-2px) !important;
     }
 
-    .md-btn-secondary:hover {
+    body.page-courses-module-detail .md-btn-secondary:hover {
         background: var(--secondary-hover, #0fb9d6) !important;
         transform: translateY(-3px) !important;
         box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3) !important;
     }
 
-    .md-btn-primary:hover {
+    body.page-courses-module-detail .md-btn-primary:hover {
         background: var(--primary-hover, #4a63e6) !important;
         transform: translateY(-3px) !important;
         box-shadow: 0 4px 15px rgba(26, 26, 46, 0.35) !important;
