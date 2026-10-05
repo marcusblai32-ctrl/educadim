@@ -54,19 +54,13 @@
         <link rel="shortcut icon" type="image/x-icon" href="{{ theme.favicon.url }}">
     {% endif %}
 
-    {# ===== CSS ===== #}
-    <link rel="stylesheet" href="{% static 'css/variables.css' %}">
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <link rel="stylesheet" href="{% static 'css/brand.css' %}">
-    <link rel="stylesheet" href="{% url 'theme_manager:dynamic_css' %}?v={{ theme_css_version|default:'0' }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    {# ===== CSS (partial partagé avec base_chat) ===== #}
+    {% include "partials/head_assets.html" %}
 
     {% block extra_head %}{% endblock %}
     {% block extra_css %}{% endblock %}
 </head>
-<body>
+<body class="{% block body_class %}{% endblock %}">
 
     {# ===== LOADING OVERLAY ===== #}
     <div id="loadingOverlay" class="loading-overlay">
@@ -74,152 +68,156 @@
     </div>
 
     {# ===== HEADER ===== #}
-    <header class="main-header navbar" id="mainHeader">
-        <div class="header-container container-fluid">
-            <a href="{% url 'home' %}" class="logo">
-                {% if theme and theme.get_logo %}
-                    <img src="{{ theme.get_logo }}" alt="{{ theme.site_name|default:'EducaDim' }}">
-                    <span>{{ theme.site_name|default:'EducaDim' }}</span>
-                {% elif theme and theme.logo %}
-                    <img src="{{ theme.logo.url }}" alt="{{ theme.site_name|default:'EducaDim' }}">
-                    <span>{{ theme.site_name|default:'EducaDim' }}</span>
-                {% else %}
-                    <span>EducaDim</span>
-                {% endif %}
-            </a>
+    <header class="site-header" id="mainHeader">
+        <nav class="navbar navbar-expand-xl" aria-label="{% trans 'Navigation principale' %}">
+            <div class="container-xxl">
 
-            <button class="menu-toggle btn btn-outline-primary" id="menuToggle" type="button"
-                    aria-label="{% trans 'Ouvrir le menu' %}" aria-controls="mainNav" aria-expanded="false">
-                <i class="fas fa-bars"></i>
-            </button>
-
-            <nav id="mainNav" class="main-nav navbar-nav flex-lg-row" aria-label="{% trans 'Navigation principale' %}">
-                <form class="nav-search" action="{% url 'courses:course_list' %}" method="get" role="search">
-                    <label class="sr-only" for="navSearch">{% trans "Rechercher un cours" %}</label>
-                    <input id="navSearch" name="search" type="search"
-                           class="form-control"
-                           placeholder="{% trans 'Rechercher un cours' %}"
-                           autocomplete="off">
-                    <button class="btn" type="submit" aria-label="{% trans 'Lancer la recherche' %}">
-                        <i class="fas fa-search" aria-hidden="true"></i>
-                    </button>
-                </form>
-                    <a href="{% url 'courses:course_list' %}" class="nav-link">
-                    <i class="fas fa-book"></i>
-                    <span>{% trans "Explorer" %}</span>
+                {# Logo / nom du site (données de theme_manager) #}
+                <a class="navbar-brand d-flex align-items-center gap-2 me-auto me-xl-3" href="{% url 'home' %}">
+                    {% if theme and theme.get_logo %}
+                        <img class="navbar-logo" src="{{ theme.get_logo }}" alt="" width="32" height="32">
+                    {% endif %}
+                    <span class="navbar-site-name text-truncate">{{ site_name }}</span>
                 </a>
 
-                {% if user.is_authenticated %}
-                    <a href="{% url 'progress:dashboard' %}" class="nav-link">
-                        <i class="fas fa-chart-line"></i>
-                        <span>{% trans "Progression" %}</span>
-                    </a>
-                    <a href="{% url 'todo:todo_list' %}" class="nav-link">
-                        <i class="fas fa-list-check"></i>
-                        <span>{% trans "Mes tâches" %}</span>
-                    </a>
+                {# Outils toujours visibles, même sur le plus petit écran #}
+                <div class="d-flex align-items-center gap-2 order-xl-last ms-2 ms-xl-3">
+                    <button type="button" class="theme-toggle btn btn-sm" id="themeToggle"
+                            aria-label="{% trans 'Basculer le thème clair/sombre' %}"
+                            title="{% trans 'Basculer le thème clair/sombre' %}" aria-pressed="false">
+                        <i class="fas fa-moon" aria-hidden="true"></i>
+                    </button>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
+                            data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false"
+                            aria-label="{% trans 'Ouvrir le menu' %}">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
 
-                    <div class="nav-dropdown">
-                        <button type="button" class="nav-dropdown-btn" id="chatDropdownBtn"
-                                aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-comments"></i>
-                            <span>{% trans "Chat" %}</span>
-                            <i class="fas fa-chevron-down"></i>
-                        </button>
-                        <div class="nav-dropdown-content" id="chatDropdownContent">
-                            <a href="{% url 'chat:liste_salons' %}">
-                                <i class="fas fa-comment-dots"></i> {% trans "Mes salons" %}
-                            </a>
-                            <a href="{% url 'chat:liste_etudiants' %}">
-                                <i class="fas fa-user-friends"></i> {% trans "Étudiants" %}
-                            </a>
-                        </div>
+                {# Menu : barre horizontale (>= xl) / panneau latéral (< xl) — géré par Bootstrap #}
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="mainNav" aria-labelledby="mainNavLabel">
+                    <div class="offcanvas-header">
+                        <h2 class="offcanvas-title h5" id="mainNavLabel">{{ site_name }}</h2>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                                aria-label="{% trans 'Fermer' %}"></button>
                     </div>
 
-                    <a href="{% url 'notifications:list' %}" class="nav-link notification-link">
-                        <i class="fas fa-bell"></i>
-                        <span>{% trans "Notifications" %}</span>
-                        {% if unread_notifications > 0 %}
-                            <span class="badge badge-danger badge-pulse">{{ unread_notifications }}</span>
-                        {% endif %}
-                    </a>
+                    <div class="offcanvas-body align-items-xl-center">
+                        <form class="header-search input-group mb-3 mb-xl-0 me-xl-auto" action="{% url 'courses:course_list' %}" method="get" role="search">
+                            <label class="visually-hidden" for="navSearch">{% trans "Rechercher un cours" %}</label>
+                            <input id="navSearch" name="search" type="search" class="form-control"
+                                   placeholder="{% trans 'Rechercher un cours' %}" autocomplete="off">
+                            <button class="btn" type="submit" aria-label="{% trans 'Lancer la recherche' %}">
+                                <i class="fas fa-search" aria-hidden="true"></i>
+                            </button>
+                        </form>
 
-                    {% if user.is_staff %}
-                        <a href="{% url 'dashboard:admin_dashboard' %}" class="nav-link">
-                            <i class="fas fa-chart-pie"></i>
-                            <span>{% trans "Dashboard" %}</span>
-                        </a>
-                        <a href="{% url 'admin:index' %}" class="nav-link">
-                            <i class="fas fa-cog"></i>
-                            <span>{% trans "Admin" %}</span>
-                        </a>
-                    {% endif %}
+                        <ul class="navbar-nav align-items-xl-center gap-xl-1">
+                            <li class="nav-item">
+                                <a href="{% url 'courses:course_list' %}" class="nav-link">
+                                    <i class="fas fa-book"></i><span>{% trans "Explorer" %}</span>
+                                </a>
+                            </li>
 
-                    <div class="user-dropdown">
-                        <button type="button" class="dropbtn" id="userDropdownBtn"
-                                aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-user-circle"></i>
-                            <span>{{ user.first_name|default:user.email }}</span>
-                            <i class="fas fa-chevron-down"></i>
-                        </button>
-                        <div class="dropdown-content" id="userDropdownContent">
-                            <a href="{% url 'accounts:profile' %}">
-                                <i class="fas fa-id-card"></i> {% trans "Profil" %}
-                            </a>
-                            <a href="{% url 'subscriptions:my_subscriptions' %}">
-                                <i class="fas fa-crown"></i> {% trans "Abonnements" %}
-                            </a>
-                            <a href="{% url 'enrollments:list' %}">
-                                <i class="fas fa-list-check"></i> {% trans "Inscriptions" %}
-                            </a>
-                            <a href="{% url 'ranking:my_rank' %}">
-                                <i class="fas fa-trophy"></i> {% trans "Classement" %}
-                            </a>
-                            <a href="{% url 'badges:my_badges' %}">
-                                <i class="fas fa-medal"></i> {% trans "Badges" %}
-                            </a>
-                            <hr>
-                            <form method="post" action="{% url 'accounts:logout' %}" id="logoutForm">
-                                {% csrf_token %}
-                                <button type="submit" class="logout-btn">
-                                    <i class="fas fa-sign-out-alt"></i> {% trans "Déconnexion" %}
-                                </button>
-                            </form>
-                        </div>
+                            {% if user.is_authenticated %}
+                            <li class="nav-item">
+                                <a href="{% url 'progress:dashboard' %}" class="nav-link">
+                                    <i class="fas fa-chart-line"></i><span>{% trans "Progression" %}</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{% url 'todo:todo_list' %}" class="nav-link">
+                                    <i class="fas fa-list-check"></i><span>{% trans "Mes tâches" %}</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="chatDropdownBtn" role="button"
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-comments"></i><span>{% trans "Chat" %}</span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-xl-end" aria-labelledby="chatDropdownBtn">
+                                    <li><a class="dropdown-item" href="{% url 'chat:liste_salons' %}">
+                                        <i class="fas fa-comment-dots"></i>{% trans "Mes salons" %}</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'chat:liste_etudiants' %}">
+                                        <i class="fas fa-user-friends"></i>{% trans "Étudiants" %}</a></li>
+                                </ul>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{% url 'notifications:list' %}" class="nav-link notification-link">
+                                    <i class="fas fa-bell"></i><span>{% trans "Notifications" %}</span>
+                                    {% if unread_notifications > 0 %}
+                                        <span class="badge rounded-pill bg-danger badge-pulse">{{ unread_notifications }}</span>
+                                    {% endif %}
+                                </a>
+                            </li>
+
+                            {% if user.is_staff %}
+                            <li class="nav-item">
+                                <a href="{% url 'dashboard:admin_dashboard' %}" class="nav-link">
+                                    <i class="fas fa-chart-pie"></i><span>{% trans "Dashboard" %}</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{% url 'admin:index' %}" class="nav-link">
+                                    <i class="fas fa-cog"></i><span>{% trans "Admin" %}</span>
+                                </a>
+                            </li>
+                            {% endif %}
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="userDropdownBtn" role="button"
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-user-circle"></i>
+                                    <span class="text-truncate" style="max-width: 10rem;">{{ user.first_name|default:user.email }}</span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-xl-end" aria-labelledby="userDropdownBtn">
+                                    <li><a class="dropdown-item" href="{% url 'accounts:profile' %}"><i class="fas fa-id-card"></i>{% trans "Profil" %}</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'subscriptions:my_subscriptions' %}"><i class="fas fa-crown"></i>{% trans "Abonnements" %}</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'enrollments:list' %}"><i class="fas fa-list-check"></i>{% trans "Inscriptions" %}</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'ranking:my_rank' %}"><i class="fas fa-trophy"></i>{% trans "Classement" %}</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'badges:my_badges' %}"><i class="fas fa-medal"></i>{% trans "Badges" %}</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <form method="post" action="{% url 'accounts:logout' %}" id="logoutForm">
+                                            {% csrf_token %}
+                                            <button type="submit" class="dropdown-item text-danger">
+                                                <i class="fas fa-sign-out-alt"></i>{% trans "Déconnexion" %}
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
+                            {% else %}
+                            <li class="nav-item">
+                                <a href="{% url 'accounts:login' %}" class="nav-link">
+                                    <i class="fas fa-sign-in-alt"></i><span>{% trans "Connexion" %}</span>
+                                </a>
+                            </li>
+                            <li class="nav-item mt-2 mt-xl-0">
+                                <a href="{% url 'accounts:signup' %}" class="nav-link btn-nav-primary justify-content-center">
+                                    <i class="fas fa-user-plus"></i><span>{% trans "S'inscrire" %}</span>
+                                </a>
+                            </li>
+                            {% endif %}
+                        </ul>
+
+                        {# Langue #}
+                        {% get_current_language as CURRENT_LANGUAGE %}
+                        <form class="lang-switcher mt-3 mt-xl-0 ms-xl-2" action="{% url 'set_language' %}" method="post">
+                            {% csrf_token %}
+                            <input name="next" type="hidden" value="{{ request.path }}">
+                            <label class="visually-hidden" for="langSelect">{% trans "Langue" %}</label>
+                            <select id="langSelect" class="form-select form-select-sm" name="language" data-submit-on-change>
+                                <option value="fr" {% if CURRENT_LANGUAGE == 'fr' %}selected{% endif %}>Français</option>
+                                <option value="ht" {% if CURRENT_LANGUAGE == 'ht' %}selected{% endif %}>Kreyòl</option>
+                            </select>
+                        </form>
                     </div>
-
-                {% else %}
-                    <a href="{% url 'accounts:login' %}" class="nav-link">
-                        <i class="fas fa-sign-in-alt"></i>
-                        <span>{% trans "Connexion" %}</span>
-                    </a>
-                    <a href="{% url 'accounts:signup' %}" class="nav-link btn-nav-primary" style="color:white;">
-                        <i class="fas fa-user-plus"></i>
-                        <span>{% trans "S'inscrire" %}</span>
-                    </a>
-                {% endif %}
-            </nav>
-
-            {# ===== THEME TOGGLE ===== #}
-            <button type="button" class="theme-toggle btn" id="themeToggle"
-                    aria-label="{% trans 'Basculer le thème clair/sombre' %}"
-                    title="{% trans 'Basculer le thème clair/sombre' %}" aria-pressed="false">
-                <i class="fas fa-moon" aria-hidden="true"></i>
-            </button>
-
-            {# ===== SWITCH LANG (MANYÈL) ===== #}
-            {% get_current_language as CURRENT_LANGUAGE %}
-            <div class="lang-switcher">
-                <form action="{% url 'set_language' %}" method="post">
-                    {% csrf_token %}
-                    <input name="next" type="hidden" value="{{ request.path }}">
-                    <select class="form-select" name="language" data-submit-on-change>
-                        <option value="fr" {% if CURRENT_LANGUAGE == 'fr' %}selected{% endif %}>Français</option>
-                        <option value="ht" {% if CURRENT_LANGUAGE == 'ht' %}selected{% endif %}>Kreyòl</option>
-                    </select>
-                </form>
+                </div>
             </div>
-        </div>
+        </nav>
     </header>
 
     {# ===== BANNIERES HEADER ===== #}
@@ -353,6 +351,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'js/main.js' %}"></script>
 
     {% block extra_js %}{% endblock %}
