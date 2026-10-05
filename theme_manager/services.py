@@ -100,21 +100,46 @@ def on_color(color):
 
 # ------------------------------------------------------------------ CSS BUILDING
 _BRAND = [
-    # (nom variab, champ modèl, default, pa gen -hover nan model la)
-    ("primary", "primary", "#5b76f7"),
-    ("secondary", "secondary", "#22d3ee"),
-    ("success", "success", "#22c55e"),
-    ("danger", "danger", "#f43f5e"),
+    # (non variab, chan modèl, default)
+    ("primary", "primary", "#176b91"),
+    ("secondary", "secondary", "#45b7c7"),
+    ("success", "success", "#257b63"),
+    ("danger", "danger", "#dc3545"),
     ("warning", "warning", "#f59e0b"),
     ("info", "info", "#38bdf8"),
 ]
 
+GENERIC_FONTS = {
+    "serif", "sans-serif", "monospace", "cursive", "fantasy", "system-ui", "ui-sans-serif",
+    "ui-serif", "ui-monospace", "-apple-system", "blinkmacsystemfont", "segoe ui", "roboto",
+    "helvetica", "helvetica neue", "arial", "tahoma", "verdana", "georgia", "times new roman",
+}
+_FONT_NAME_RE = re.compile(r"^[A-Za-z0-9 ]{2,40}$")
 
-def _brand_vars(theme):
+
+def google_font_url(font_family):
+    """
+    URL Google Fonts pou premye fanmi nan `font_family` (egzanp "'Inter', sans-serif").
+    Retounen "" si se yon font sistèm oswa si non an pa sou.
+    Se sa ki fè font admin chwazi a CHAJE pou tout bon (anvan, li te rete 'Inter' san chaje).
+    """
+    first = (font_family or "").split(",")[0].strip().strip("'\"")
+    if not _FONT_NAME_RE.match(first) or first.lower() in GENERIC_FONTS:
+        return ""
+    family = first.replace(" ", "+")
+    return f"https://fonts.googleapis.com/css2?family={family}:wght@400;500;600;700;800&display=swap"
+
+
+def _brand_vars(theme, dark=False):
+    """Koulè mak yo + vèsyon Bootstrap (--bs-*). dark=True bay nuans ki lizib sou fon fonse."""
     lines = []
     for name, field, default in _BRAND:
         base = safe_color(getattr(theme, field, None), default)
         hover = safe_color(getattr(theme, f"{field}_hover", None), darken(base, 0.1))
+        if dark:
+            # Sou fon fonse a, koulè a dwe pi klè pou rete lizib
+            base = lighten(base, 0.25)
+            hover = lighten(base, 0.12)
         lines += [
             f"--{name}: {base};",
             f"--{name}-hover: {hover};",
@@ -124,58 +149,98 @@ def _brand_vars(theme):
             f"--{name}-darker: {darken(base, 0.38)};",
             f"--{name}-rgb: {rgb_triplet(base)};",
             f"--on-{name}: {on_color(base)};",
+            # ----- Bootstrap suiv menm koulè a -----
+            f"--bs-{name}: {base};",
+            f"--bs-{name}-rgb: {rgb_triplet(base)};",
         ]
+        if name == "primary":
+            lines += [
+                f"--bs-link-color: {base};",
+                f"--bs-link-color-rgb: {rgb_triplet(base)};",
+                f"--bs-link-hover-color: {hover};",
+                f"--bs-link-hover-color-rgb: {rgb_triplet(hover)};",
+            ]
+    secondary = safe_color(getattr(theme, "secondary", None), "#45b7c7")
+    primary = safe_color(getattr(theme, "primary", None), "#176b91")
+    if dark:
+        primary, secondary = lighten(primary, 0.25), lighten(secondary, 0.25)
+    lines.append(f"--grad-brand: linear-gradient(120deg, {primary}, {secondary});")
+    return lines
+
+
+def _surface_vars(theme):
+    """
+    Siperfis (fon, kat, tèks, bordi). SE NON VARIAB SIT LA ITILIZE VRÈMAN
+    (--bg, --bg-card, --glass-*...), pa sèlman --bg-body. Sa se kòz prensipal
+    poukisa tèm lan pa t parèt anvan.
+    """
+    c = {f: safe_color(getattr(theme, f, None)) for f in
+         ("body_bg", "text_color", "text_muted", "white", "light", "dark", "border")}
+    lines = []
+    if c["body_bg"]:
+        v = c["body_bg"]
+        lines += [f"--bg: {v};", f"--bg-body: {v};", f"--body-bg: {v};",
+                  f"--bs-body-bg: {v};", f"--bs-body-bg-rgb: {rgb_triplet(v)};"]
+    if c["text_color"]:
+        v = c["text_color"]
+        lines += [f"--text: {v};", f"--bs-body-color: {v};", f"--bs-body-color-rgb: {rgb_triplet(v)};",
+                  f"--bs-heading-color: {v};"]
+        if c["body_bg"]:
+            lines.append(f"--text-secondary: {mix(v, c['body_bg'], 0.2)};")
+    if c["text_muted"]:
+        v = c["text_muted"]
+        lines += [f"--text-muted: {v};", f"--bs-secondary-color: {v};"]
+    if c["white"]:
+        v = c["white"]
+        lines += [f"--white: {v};", f"--bg-card: {v};", f"--card-bg: {v};", f"--glass-2: {v};",
+                  f"--glass: rgba({rgb_triplet(v)}, 0.92);", f"--bs-card-bg: {v};",
+                  f"--bs-tertiary-bg: {v};"]
+    if c["light"]:
+        v = c["light"]
+        lines += [f"--light: {v};", f"--glass-soft: rgba({rgb_triplet(v)}, 0.72);",
+                  f"--bs-light: {v};", f"--bs-light-rgb: {rgb_triplet(v)};"]
+    if c["dark"]:
+        v = c["dark"]
+        lines += [f"--dark: {v};", f"--bs-dark: {v};", f"--bs-dark-rgb: {rgb_triplet(v)};"]
+    if c["border"]:
+        v = c["border"]
+        lines += [f"--border: {v};", f"--glass-brd: {v};", f"--glass-brd-soft: {mix(v, '#ffffff', 0.35)};",
+                  f"--bs-border-color: {v};"]
     return lines
 
 
 def build_css(theme):
-    """CSS variables pou tèm lan. Pa gen tèm => default yo nan variables.css rete."""
+    """CSS variables pou tèm lan. Pa gen tèm => default yo nan brand.css rete."""
     if theme is None:
         return "/* no active theme */\n"
 
-    root = _brand_vars(theme)
-
+    shared = []
     font = (theme.font_family or "").strip()
     if FONT_RE.match(font):
-        root += [f"--font-family: {font};", f"--font-body: {font};"]
-
+        shared += [f"--font-family: {font};", f"--font-body: {font};", f"--bs-body-font-family: {font};"]
     radius = (theme.border_radius or "").strip()
     if LENGTH_RE.match(radius):
-        root += [f"--radius: {radius};"]
-
+        shared += [f"--radius: {radius};", f"--bs-border-radius: {radius};"]
     shadow = (theme.box_shadow or "").strip()
     if SHADOW_RE.match(shadow):
-        root += [f"--shadow: {shadow};"]
+        shared += [f"--shadow: {shadow};"]
 
-    root += ["--body-bg: var(--bg-body);"]
-
-    light = []
-    mapping = [
-        ("--bg-body", "body_bg"),
-        ("--text", "text_color"),
-        ("--text-muted", "text_muted"),
-        ("--white", "white"),
-        ("--light", "light"),
-        ("--dark", "dark"),
-        ("--border", "border"),
-    ]
-    values = {}
-    for var, field in mapping:
-        color = safe_color(getattr(theme, field, None))
-        if color:
-            values[var] = color
-            light.append(f"{var}: {color};")
-    if "--text" in values and "--bg-body" in values:
-        light.append(f"--text-secondary: {mix(values['--text'], values['--bg-body'], 0.2)};")
-
-    css = ["/* Généré par theme_manager — ne pas modifier à la main */", ":root {"]
-    css += [f"  {line}" for line in root]
+    css = ["/* Généré par theme_manager — ne pas modifier à la main */",
+           ":root {"]
+    css += [f"  {line}" for line in _brand_vars(theme) + shared]
     css += ["}", ""]
-    if light:
-        # Mòd klè sèlman: pa janm kraze [data-theme="dark"]
-        css += [':root:not([data-theme="dark"]) {']
-        css += [f"  {line}" for line in light]
+
+    surfaces = _surface_vars(theme)
+    if surfaces:
+        # Mòd klè sèlman: pa janm kraze palèt fonse a
+        css += [':root:not([data-theme="dark"]):not([data-bs-theme="dark"]) {']
+        css += [f"  {line}" for line in surfaces]
         css += ["}", ""]
+
+    # Mòd fonse: menm koulè mak yo, men pi klè (sinon brand.css fonse a ta rete ak koulè default li)
+    css += ['html[data-theme="dark"], html[data-bs-theme="dark"], html.dark {']
+    css += [f"  {line}" for line in _brand_vars(theme, dark=True)]
+    css += ["}", ""]
     return "\n".join(css)
 
 
