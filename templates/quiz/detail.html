@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% block body_class %}page-quiz-detail{% endblock %}
 {% load i18n %}
 
 {% block title %}{{ quiz.titre }}{% endblock %}
@@ -18,7 +19,7 @@
         {% elif quiz.lecon %}
             {{ quiz.lecon.display_titre }}
         {% else %}
-            <span style="color: var(--text-muted, #6c757d);">{% trans "Indépendant" %}</span>
+            <span style="color: var(--text-muted, var(--text-muted));">{% trans "Indépendant" %}</span>
         {% endif %}
     </p>
 
@@ -76,7 +77,7 @@
             {% endfor %}
         </div>
     {% else %}
-        <p><i class="fas fa-info-circle" style="color: var(--text-muted, #6c757d);"></i> {% trans "Aucune tentative." %}</p>
+        <p><i class="fas fa-info-circle" style="color: var(--text-muted, var(--text-muted));"></i> {% trans "Aucune tentative." %}</p>
     {% endif %}
 
     <!-- ===== KORIJE: Bouton retou ak kondisyon ===== -->
@@ -102,14 +103,14 @@
 </div>
 
 <style>
-    .tentatives-list {
+    body.page-quiz-detail .tentatives-list {
         display: flex;
         flex-direction: column;
         gap: 0.5rem;
         margin-top: 0.5rem;
     }
 
-    .tentative-item {
+    body.page-quiz-detail .tentative-item {
         display: flex;
         align-items: center;
         gap: 1rem;
@@ -119,23 +120,23 @@
         flex-wrap: wrap;
     }
 
-    .tentative-date {
+    body.page-quiz-detail .tentative-date {
         font-size: 0.9rem;
         color: var(--text-muted);
         flex: 1;
     }
 
-    .tentative-item .badge {
+    body.page-quiz-detail .tentative-item .badge {
         font-size: 0.8rem;
         padding: 0.3rem 0.8rem;
     }
 
-    .tentative-item .btn {
+    body.page-quiz-detail .tentative-item .btn {
         font-size: 0.75rem;
         padding: 0.2rem 0.6rem;
     }
 
-    .alert {
+    body.page-quiz-detail .alert {
         padding: 1rem;
         border-radius: var(--radius);
         margin-bottom: 1rem;
@@ -145,19 +146,19 @@
         flex-wrap: wrap;
     }
 
-    .alert-success {
+    body.page-quiz-detail .alert-success {
         background: rgba(40, 167, 69, 0.1);
         border: 1px solid var(--success, #28a745);
         color: var(--success, #28a745);
     }
 
-    .alert-warning {
+    body.page-quiz-detail .alert-warning {
         background: rgba(255, 193, 7, 0.1);
         border: 1px solid var(--warning, #ffc107);
         color: var(--warning, #ffc107);
     }
 
-    .btn {
+    body.page-quiz-detail .btn {
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
@@ -170,46 +171,46 @@
         cursor: pointer;
     }
 
-    .btn-primary {
+    body.page-quiz-detail .btn-primary {
         background: var(--primary, #1a1a2e);
         color: #fff;
     }
-    .btn-primary:hover {
+    body.page-quiz-detail .btn-primary:hover {
         background: var(--primary-hover, #2d2d4a);
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(26, 26, 46, 0.3);
     }
 
-    .btn-secondary {
+    body.page-quiz-detail .btn-secondary {
         background: var(--secondary, #6c757d);
         color: #fff;
     }
-    .btn-secondary:hover {
+    body.page-quiz-detail .btn-secondary:hover {
         background: var(--secondary-hover, #5a6268);
         transform: translateY(-2px);
     }
 
-    .btn-outline {
+    body.page-quiz-detail .btn-outline {
         background: transparent;
         color: var(--text, #212529);
         border: 1px solid var(--border, #dee2e6);
     }
-    .btn-outline:hover {
+    body.page-quiz-detail .btn-outline:hover {
         background: var(--light, #f8f9fa);
         border-color: var(--primary, #1a1a2e);
     }
 
-    .btn-lg {
+    body.page-quiz-detail .btn-lg {
         padding: 0.8rem 2rem;
         font-size: 1.1rem;
     }
 
-    .btn-sm {
+    body.page-quiz-detail .btn-sm {
         padding: 0.3rem 0.8rem;
         font-size: 0.8rem;
     }
 
-    .badge {
+    body.page-quiz-detail .badge {
         padding: 0.3rem 0.8rem;
         border-radius: 50px;
         font-size: 0.75rem;
@@ -220,20 +221,20 @@
         gap: 0.3rem;
     }
 
-    .badge-success { background: var(--success, #28a745); }
-    .badge-danger { background: var(--danger, #dc3545); }
-    .badge-warning { background: var(--warning, #ffc107); color: #212529; }
+    body.page-quiz-detail .badge-success { background: var(--success, #28a745); }
+    body.page-quiz-detail .badge-danger { background: var(--danger, #dc3545); }
+    body.page-quiz-detail .badge-warning { background: var(--warning, #ffc107); color: #212529; }
 
     @media (max-width: 480px) {
-        .tentative-item {
+        body.page-quiz-detail .tentative-item {
             flex-direction: column;
             align-items: stretch;
             text-align: center;
         }
-        .tentative-item .badge {
+        body.page-quiz-detail .tentative-item .badge {
             align-self: center;
         }
-        .alert {
+        body.page-quiz-detail .alert {
             flex-direction: column;
             text-align: center;
         }
