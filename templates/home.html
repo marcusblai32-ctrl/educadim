@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load i18n static %}
+{% load i18n static theme_tags %}
 
 {% block title %}
     {% blocktrans with site_name=theme.site_name|default:'EducaDim' %}
@@ -64,8 +64,8 @@
                 {% endif %}
             </div>
             <div class="col-12 col-lg-5 hero-visual" aria-label="{% trans 'Façons d’apprendre sur EducaDim' %}">
-                {% if theme.hero_image %}
-                    <img src="{{ theme.hero_image.url }}" alt="{{ theme.hero_title }}" class="hero-main-image">
+                {% if theme.get_hero_image %}
+                    <img src="{{ theme.get_hero_image }}" alt="{{ theme.hero_title }}" class="hero-main-image">
                 {% else %}
                     <article class="hero-card animate-float">
                         <div class="hero-card-icon"><i class="{{ theme.hero_card1_icon|default:'fas fa-book-reader' }}" aria-hidden="true"></i></div>
@@ -96,19 +96,19 @@
             </h2>
         </div>
         <div class="features-grid">
-            <article class="feature-card animate-on-scroll">
+            <article class="feature-card animate-on-scroll"{% if theme.feature1_color|hex_color %} style="--feature-color: {{ theme.feature1_color|hex_color }};"{% endif %}>
                 <div class="feature-icon-wrapper"><i class="{{ theme.feature1_icon|default:'fas fa-book-open' }} feature-icon" aria-hidden="true"></i></div>
                 <h3>{% blocktrans with title=theme.feature1_title|default:_("Des cours pratiques") %}{{ title }}{% endblocktrans %}</h3>
                 <p>{% blocktrans with desc=theme.feature1_desc|default:_("Des leçons structurées pour acquérir des compétences utiles, une étape à la fois.") %}{{ desc }}{% endblocktrans %}</p>
                 <a href="{% url 'courses:course_list' %}" class="feature-link">{% blocktrans with link=theme.feature_link_text|default:_("Voir les cours") %}{{ link }}{% endblocktrans %} <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
             </article>
-            <article class="feature-card animate-on-scroll delay-1">
+            <article class="feature-card animate-on-scroll delay-1"{% if theme.feature2_color|hex_color %} style="--feature-color: {{ theme.feature2_color|hex_color }};"{% endif %}>
                 <div class="feature-icon-wrapper"><i class="{{ theme.feature2_icon|default:'fas fa-language' }} feature-icon" aria-hidden="true"></i></div>
                 <h3>{% blocktrans with title=theme.feature2_title|default:_("Français ou kreyòl") %}{{ title }}{% endblocktrans %}</h3>
                 <p>{% blocktrans with desc=theme.feature2_desc|default:_("Étudiez dans la langue qui rend chaque notion plus claire.") %}{{ desc }}{% endblocktrans %}</p>
                 <a href="{% url 'courses:course_list' %}" class="feature-link">{% blocktrans with link=theme.feature_link_text|default:_("Trouver un cours") %}{{ link }}{% endblocktrans %} <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
             </article>
-            <article class="feature-card animate-on-scroll delay-2">
+            <article class="feature-card animate-on-scroll delay-2"{% if theme.feature3_color|hex_color %} style="--feature-color: {{ theme.feature3_color|hex_color }};"{% endif %}>
                 <div class="feature-icon-wrapper"><i class="{{ theme.feature3_icon|default:'fas fa-chart-line' }} feature-icon" aria-hidden="true"></i></div>
                 <h3>{% blocktrans with title=theme.feature3_title|default:_("Votre progression, visible") %}{{ title }}{% endblocktrans %}</h3>
                 <p>{% blocktrans with desc=theme.feature3_desc|default:_("Répondez aux quiz existants et retrouvez vos avancées dans votre espace.") %}{{ desc }}{% endblocktrans %}</p>
@@ -146,7 +146,7 @@
                 <p>“{{ theme.testimonial1_text }}”</p>
                 {% if theme.testimonial1_name or theme.testimonial1_job %}
                 <div class="testimonial-author">
-                    {% if theme.testimonial1_avatar %}<img src="{{ theme.testimonial1_avatar }}" alt="">{% else %}<span class="testimonial-initials" aria-hidden="true">{{ theme.testimonial1_name|slice:":1" }}</span>{% endif %}
+                    {% if theme.get_testimonial1_avatar %}<img src="{{ theme.get_testimonial1_avatar }}" alt="" loading="lazy">{% else %}<span class="testimonial-initials" aria-hidden="true">{{ theme.testimonial1_name|slice:":1" }}</span>{% endif %}
                     <div>{% if theme.testimonial1_name %}<h4>{{ theme.testimonial1_name }}</h4>{% endif %}{% if theme.testimonial1_job %}<span>{{ theme.testimonial1_job }}</span>{% endif %}</div>
                 </div>
                 {% endif %}
@@ -158,7 +158,7 @@
                 <p>“{{ theme.testimonial2_text }}”</p>
                 {% if theme.testimonial2_name or theme.testimonial2_job %}
                 <div class="testimonial-author">
-                    {% if theme.testimonial2_avatar %}<img src="{{ theme.testimonial2_avatar }}" alt="">{% else %}<span class="testimonial-initials" aria-hidden="true">{{ theme.testimonial2_name|slice:":1" }}</span>{% endif %}
+                    {% if theme.get_testimonial2_avatar %}<img src="{{ theme.get_testimonial2_avatar }}" alt="" loading="lazy">{% else %}<span class="testimonial-initials" aria-hidden="true">{{ theme.testimonial2_name|slice:":1" }}</span>{% endif %}
                     <div>{% if theme.testimonial2_name %}<h4>{{ theme.testimonial2_name }}</h4>{% endif %}{% if theme.testimonial2_job %}<span>{{ theme.testimonial2_job }}</span>{% endif %}</div>
                 </div>
                 {% endif %}
