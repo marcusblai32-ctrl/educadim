@@ -1,18 +1,19 @@
 {% extends 'base.html' %}
+{% block body_class %}page-courses-lesson-detail{% endblock %}
 {% load i18n %}
 
 {% block title %}{{ lecon.display_titre }}{% endblock %}
 
 {% block extra_css %}
 <style>
-    .lesson-detail-container {
+    body.page-courses-lesson-detail .lesson-detail-container {
         max-width: 900px;
         margin: 0 auto;
         padding: 0 1rem;
     }
 
     /* ===== BREADCRUMB ===== */
-    .breadcrumb-lesson {
+    body.page-courses-lesson-detail .breadcrumb-lesson {
         display: flex;
         flex-wrap: wrap;
         align-items: center;
@@ -24,28 +25,28 @@
         border-bottom: 1px solid var(--border, #dee2e6);
     }
 
-    .breadcrumb-lesson a {
+    body.page-courses-lesson-detail .breadcrumb-lesson a {
         color: var(--primary, #1a1a2e);
         text-decoration: none;
         transition: var(--transition);
     }
 
-    .breadcrumb-lesson a:hover {
+    body.page-courses-lesson-detail .breadcrumb-lesson a:hover {
         text-decoration: underline;
     }
 
-    .breadcrumb-lesson .separator {
+    body.page-courses-lesson-detail .breadcrumb-lesson .separator {
         color: var(--text-muted, #6c757d);
         margin: 0 0.2rem;
     }
 
-    .breadcrumb-lesson .current {
+    body.page-courses-lesson-detail .breadcrumb-lesson .current {
         color: var(--text, #212529);
         font-weight: 500;
     }
 
     /* ===== HEADER ===== */
-    .lesson-header {
+    body.page-courses-lesson-detail .lesson-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -54,7 +55,7 @@
         margin-bottom: 0.5rem;
     }
 
-    .lesson-header h1 {
+    body.page-courses-lesson-detail .lesson-header h1 {
         font-size: 1.8rem;
         font-weight: 700;
         margin: 0;
@@ -62,7 +63,7 @@
         font-family: var(--font-display);
     }
 
-    .lesson-header .lesson-badge {
+    body.page-courses-lesson-detail .lesson-header .lesson-badge {
         display: inline-flex;
         align-items: center;
         gap: 0.3rem;
@@ -74,14 +75,14 @@
         background: var(--primary, #1a1a2e);
     }
 
-    .lesson-description {
+    body.page-courses-lesson-detail .lesson-description {
         color: var(--text-muted, #6c757d);
         margin-bottom: 1.5rem;
         line-height: 1.6;
     }
 
     /* ===== CONTENU ===== */
-    .lesson-content {
+    body.page-courses-lesson-detail .lesson-content {
         margin: 1.5rem 0;
         padding: 1.5rem;
         background: var(--glass-soft);
@@ -91,40 +92,37 @@
         color: var(--text, #212529);
     }
 
-    .lesson-content p {
+    body.page-courses-lesson-detail .lesson-content p {
         margin-bottom: 1rem;
     }
 
-    .lesson-content h2,
-    .lesson-content h3,
-    .lesson-content h4 {
+    body.page-courses-lesson-detail .lesson-content h2, body.page-courses-lesson-detail .lesson-content h3, body.page-courses-lesson-detail .lesson-content h4 {
         margin-top: 1.5rem;
         margin-bottom: 0.5rem;
         font-family: var(--font-display);
     }
 
-    .lesson-content ul,
-    .lesson-content ol {
+    body.page-courses-lesson-detail .lesson-content ul, body.page-courses-lesson-detail .lesson-content ol {
         padding-left: 1.5rem;
         margin-bottom: 1rem;
     }
 
-    .lesson-content li {
+    body.page-courses-lesson-detail .lesson-content li {
         margin-bottom: 0.3rem;
     }
 
-    .lesson-content img {
+    body.page-courses-lesson-detail .lesson-content img {
         max-width: 100%;
         height: auto;
         border-radius: var(--radius, 4px);
     }
 
     /* ===== SECTIONS ===== */
-    .sections-section {
+    body.page-courses-lesson-detail .sections-section {
         margin-top: 2rem;
     }
 
-    .sections-section h2 {
+    body.page-courses-lesson-detail .sections-section h2 {
         font-size: 1.3rem;
         font-weight: 600;
         margin-bottom: 1rem;
@@ -135,33 +133,33 @@
         font-family: var(--font-display);
     }
 
-    .sections-section h2 i {
+    body.page-courses-lesson-detail .sections-section h2 i {
         color: var(--primary, #1a1a2e);
     }
 
-    .section-list {
+    body.page-courses-lesson-detail .section-list {
         list-style: none;
         padding: 0;
         margin: 0;
     }
 
-    .section-list li {
+    body.page-courses-lesson-detail .section-list li {
         padding: 0.6rem 0.8rem;
         border-bottom: 1px solid var(--border, #dee2e6);
         transition: var(--transition);
     }
 
-    .section-list li:last-child {
+    body.page-courses-lesson-detail .section-list li:last-child {
         border-bottom: none;
     }
 
-    .section-list li:hover {
+    body.page-courses-lesson-detail .section-list li:hover {
         background: var(--glass-soft);
         border-radius: var(--radius-sm, 4px);
         padding-left: 1.2rem;
     }
 
-    .section-list li a {
+    body.page-courses-lesson-detail .section-list li a {
         display: flex;
         align-items: center;
         gap: 0.5rem;
@@ -170,30 +168,30 @@
         transition: var(--transition);
     }
 
-    .section-list li a i {
+    body.page-courses-lesson-detail .section-list li a i {
         color: var(--primary, #1a1a2e);
         width: 20px;
         text-align: center;
     }
 
-    .section-list li a:hover {
+    body.page-courses-lesson-detail .section-list li a:hover {
         color: var(--primary, #1a1a2e);
     }
 
-    .section-list .empty-sections {
+    body.page-courses-lesson-detail .section-list .empty-sections {
         padding: 0.6rem 0.8rem;
         color: var(--text-muted, #6c757d);
         font-style: italic;
     }
 
     /* ===== QUIZ SECTION (ANBA) ===== */
-    .quiz-section-lesson {
+    body.page-courses-lesson-detail .quiz-section-lesson {
         margin-top: 2rem;
         padding-top: 1.5rem;
         border-top: 1px solid var(--border, #dee2e6);
     }
 
-    .quiz-section-lesson h2 {
+    body.page-courses-lesson-detail .quiz-section-lesson h2 {
         font-size: 1.3rem;
         font-weight: 600;
         margin-bottom: 1rem;
@@ -204,17 +202,17 @@
         font-family: var(--font-display);
     }
 
-    .quiz-section-lesson h2 i {
+    body.page-courses-lesson-detail .quiz-section-lesson h2 i {
         color: var(--primary, #1a1a2e);
     }
 
-    .quiz-grid-lesson {
+    body.page-courses-lesson-detail .quiz-grid-lesson {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
         gap: 1rem;
     }
 
-    .quiz-card-lesson {
+    body.page-courses-lesson-detail .quiz-card-lesson {
         background: var(--glass-soft);
         border-radius: var(--radius-sm, 8px);
         padding: 1rem;
@@ -222,35 +220,35 @@
         transition: var(--transition);
     }
 
-    .quiz-card-lesson:hover {
+    body.page-courses-lesson-detail .quiz-card-lesson:hover {
         border-color: color-mix(in srgb, var(--primary) 30%, transparent);
         transform: translateY(-3px);
         box-shadow: var(--shadow, 0 4px 20px rgba(0,0,0,0.08));
     }
 
-    .quiz-card-lesson h3 {
+    body.page-courses-lesson-detail .quiz-card-lesson h3 {
         font-size: 1rem;
         margin: 0 0 0.3rem;
         color: var(--text, #212529);
     }
 
-    .quiz-card-lesson h3 a {
+    body.page-courses-lesson-detail .quiz-card-lesson h3 a {
         color: var(--text);
         text-decoration: none;
         transition: var(--transition);
     }
 
-    .quiz-card-lesson h3 a:hover {
+    body.page-courses-lesson-detail .quiz-card-lesson h3 a:hover {
         color: var(--primary, #1a1a2e);
     }
 
-    .quiz-card-lesson .quiz-desc {
+    body.page-courses-lesson-detail .quiz-card-lesson .quiz-desc {
         color: var(--text-muted, #6c757d);
         font-size: 0.85rem;
         margin: 0 0 0.5rem;
     }
 
-    .quiz-card-lesson .quiz-footer {
+    body.page-courses-lesson-detail .quiz-card-lesson .quiz-footer {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -259,7 +257,7 @@
         gap: 0.3rem;
     }
 
-    .quiz-card-lesson .quiz-percent {
+    body.page-courses-lesson-detail .quiz-card-lesson .quiz-percent {
         color: var(--text-muted, #6c757d);
         font-size: 0.75rem;
         display: flex;
@@ -267,11 +265,11 @@
         gap: 0.3rem;
     }
 
-    .quiz-card-lesson .quiz-percent i {
+    body.page-courses-lesson-detail .quiz-card-lesson .quiz-percent i {
         color: var(--primary, #1a1a2e);
     }
 
-    .quiz-card-lesson .btn-sm {
+    body.page-courses-lesson-detail .quiz-card-lesson .btn-sm {
         padding: 0.3rem 0.8rem;
         font-size: 0.75rem;
         background: var(--primary, #1a1a2e);
@@ -286,13 +284,13 @@
         cursor: pointer;
     }
 
-    .quiz-card-lesson .btn-sm:hover {
+    body.page-courses-lesson-detail .quiz-card-lesson .btn-sm:hover {
         background: var(--primary-hover, #2d2d4a);
         transform: translateY(-2px);
     }
 
     /* ===== ACTIONS ===== */
-    .lesson-actions {
+    body.page-courses-lesson-detail .lesson-actions {
         margin-top: 2rem;
         padding-top: 1.5rem;
         border-top: 1px solid var(--border, #dee2e6);
@@ -302,7 +300,7 @@
         align-items: center;
     }
 
-    .lesson-actions .btn {
+    body.page-courses-lesson-detail .lesson-actions .btn {
         display: inline-flex;
         align-items: center;
         gap: 0.4rem;
@@ -315,34 +313,34 @@
         cursor: pointer;
     }
 
-    .lesson-actions .btn-success {
+    body.page-courses-lesson-detail .lesson-actions .btn-success {
         background: var(--success, #28a745);
         color: #fff;
     }
 
-    .lesson-actions .btn-success:hover {
+    body.page-courses-lesson-detail .lesson-actions .btn-success:hover {
         background: var(--success-hover, #218838);
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
     }
 
-    .lesson-actions .btn-secondary {
+    body.page-courses-lesson-detail .lesson-actions .btn-secondary {
         background: var(--secondary, #6c757d);
         color: #fff;
     }
 
-    .lesson-actions .btn-secondary:hover {
+    body.page-courses-lesson-detail .lesson-actions .btn-secondary:hover {
         background: var(--secondary-hover, #5a6268);
         transform: translateY(-2px);
     }
 
-    .lesson-actions .btn-outline {
+    body.page-courses-lesson-detail .lesson-actions .btn-outline {
         background: transparent;
         color: var(--text, #212529);
         border: 1px solid var(--border, #dee2e6);
     }
 
-    .lesson-actions .btn-outline:hover {
+    body.page-courses-lesson-detail .lesson-actions .btn-outline:hover {
         background: var(--glass-soft);
         border-color: var(--primary, #1a1a2e);
         color: var(--primary, #1a1a2e);
@@ -350,43 +348,43 @@
 
     /* ===== RESPONSIVE ===== */
     @media (max-width: 768px) {
-        .lesson-header {
+        body.page-courses-lesson-detail .lesson-header {
             flex-direction: column;
             align-items: flex-start;
         }
 
-        .lesson-header h1 {
+        body.page-courses-lesson-detail .lesson-header h1 {
             font-size: 1.4rem;
         }
 
-        .quiz-grid-lesson {
+        body.page-courses-lesson-detail .quiz-grid-lesson {
             grid-template-columns: 1fr;
         }
 
-        .lesson-actions {
+        body.page-courses-lesson-detail .lesson-actions {
             flex-direction: column;
         }
 
-        .lesson-actions .btn {
+        body.page-courses-lesson-detail .lesson-actions .btn {
             justify-content: center;
             width: 100%;
         }
     }
 
     @media (max-width: 480px) {
-        .lesson-header h1 {
+        body.page-courses-lesson-detail .lesson-header h1 {
             font-size: 1.2rem;
         }
 
-        .breadcrumb-lesson {
+        body.page-courses-lesson-detail .breadcrumb-lesson {
             font-size: 0.75rem;
         }
 
-        .lesson-content {
+        body.page-courses-lesson-detail .lesson-content {
             padding: 1rem;
         }
 
-        .quiz-card-lesson {
+        body.page-courses-lesson-detail .quiz-card-lesson {
             padding: 0.8rem;
         }
     }
@@ -416,7 +414,7 @@
         <div class="sections-section">
             <h2>
                 <i class="fas fa-list-ul"></i> {% trans "Sections" %}
-                <span style="font-size: 0.8rem; font-weight: 400; color: var(--text-muted, #6c757d);">({{ sections|length }})</span>
+                <span style="font-size: 0.8rem; font-weight: 400; color: var(--text-muted, var(--text-muted));">({{ sections|length }})</span>
             </h2>
             <ul class="section-list">
                 {% for section in sections %}
@@ -424,14 +422,14 @@
                     <a href="{% url 'courses:section_detail' section.pk %}">
                         <i class="fas fa-file-alt"></i>
                         {{ section.titre }}
-                        <span style="font-size: 0.75rem; color: var(--text-muted, #6c757d); margin-left: auto;">
+                        <span style="font-size: 0.75rem; color: var(--text-muted, var(--text-muted)); margin-left: auto;">
                             {{ section.get_type_section_display }}
                         </span>
                     </a>
                 </li>
                 {% empty %}
                 <li class="empty-sections">
-                    <i class="fas fa-info-circle" style="color: var(--text-muted, #6c757d);"></i>
+                    <i class="fas fa-info-circle" style="color: var(--text-muted, var(--text-muted));"></i>
                     {% trans "Aucune section dans cette leçon." %}
                 </li>
                 {% endfor %}
@@ -443,7 +441,7 @@
         <div class="quiz-section-lesson">
             <h2>
                 <i class="fas fa-question-circle"></i> {% trans "Quiz de la leçon" %}
-                <span style="font-size: 0.8rem; font-weight: 400; color: var(--text-muted, #6c757d);">({{ quizzes_lecon|length }})</span>
+                <span style="font-size: 0.8rem; font-weight: 400; color: var(--text-muted, var(--text-muted));">({{ quizzes_lecon|length }})</span>
             </h2>
             <div class="quiz-grid-lesson">
                 {% for quiz in quizzes_lecon %}
