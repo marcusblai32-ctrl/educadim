@@ -23,4 +23,5 @@
   }
 
   document.documentElement.setAttribute("data-theme", storedTheme);
+  document.documentElement.setAttribute("data-bs-theme", storedTheme);
 })();
