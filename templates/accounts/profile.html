@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% block body_class %}page-accounts-profile{% endblock %}
 {% load i18n %}
 
 {% block title %}{% trans "Mon profil" %} - {{ theme.site_name }}{% endblock %}
@@ -35,10 +36,10 @@
     <hr>
 
     <!-- ===== DELETE ACCOUNT ===== -->
-    <div style="display: flex; justify-content: flex-end; margin-top: 1rem; padding-top: 0.5rem; border-top: 1px solid var(--border, #dee2e6);">
+    <div style="display: flex; justify-content: flex-end; margin-top: 1rem; padding-top: 0.5rem; border-top: 1px solid var(--border, var(--border));">
         <a href="{% url 'accounts:delete_account' %}" 
            class="btn btn-danger btn-sm" 
-           style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1.2rem; border-radius: 8px; font-size: 0.85rem; font-weight: 600; text-decoration: none; transition: all 0.3s ease; background: var(--danger, #dc3545); color: #fff; border: none; cursor: pointer;"
+           style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1.2rem; border-radius: 8px; font-size: 0.85rem; font-weight: 600; text-decoration: none; transition: all 0.3s ease; background: var(--danger, var(--danger)); color: #fff; border: none; cursor: pointer;"
            onclick="return confirm('{% trans "Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible." %}')">
             <i class="fas fa-trash-alt"></i> {% trans "Supprimer mon compte" %}
         </a>
@@ -46,7 +47,7 @@
 </div>
 
 <style>
-    .btn-block {
+    body.page-accounts-profile .btn-block {
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -62,25 +63,25 @@
         width: 100%;
     }
 
-    .btn-block:hover {
+    body.page-accounts-profile .btn-block:hover {
         transform: translateY(-2px);
         box-shadow: 0 4px 15px rgba(0,0,0,0.15);
     }
 
-    .btn-danger {
+    body.page-accounts-profile .btn-danger {
         background: var(--danger, #dc3545);
         color: #fff;
     }
 
-    .btn-danger:hover {
+    body.page-accounts-profile .btn-danger:hover {
         background: var(--danger-dark, #c82333);
     }
 
     @media (max-width: 480px) {
-        .card {
+        body.page-accounts-profile .card {
             padding: 1.5rem !important;
         }
-        .btn-block {
+        body.page-accounts-profile .btn-block {
             font-size: 0.8rem;
             padding: 0.6rem 1rem;
         }
