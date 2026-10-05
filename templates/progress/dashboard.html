@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% block body_class %}page-progress-dashboard{% endblock %}
 {% load i18n %}
 
 {% block title %}{% trans "Ma progression" %}{% endblock %}
@@ -8,17 +9,17 @@
     <!-- ===== HEADER ===== -->
     <div class="dashboard-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem;">
         <div>
-            <h1 style="font-size: 2rem; font-weight: 700; color: var(--text, #212529); display: flex; align-items: center; gap: 0.75rem;">
+            <h1 style="font-size: 2rem; font-weight: 700; color: var(--text, var(--text)); display: flex; align-items: center; gap: 0.75rem;">
                 <i class="fas fa-chart-line" style="color: var(--primary, #1a1a2e);"></i>
                 {% trans "Ma progression" %}
             </h1>
-            <p style="color: var(--text-muted, #6c757d); margin: 0;">
+            <p style="color: var(--text-muted, var(--text-muted)); margin: 0;">
                 <i class="fas fa-user-graduate"></i>
                 {{ total_cours }} {% trans "cours" %} · {{ lecons_termine }} {% trans "leçons terminées" %}
             </p>
         </div>
         <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-            <span style="background: var(--success, #28a745); color: #fff; padding: 0.3rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">
+            <span style="background: var(--success, var(--success)); color: #fff; padding: 0.3rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">
                 <i class="fas fa-check"></i> {{ completed_cours }} {% trans "terminés" %}
             </span>
             <span style="background: var(--primary, #1a1a2e); color: #fff; padding: 0.3rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">
@@ -31,19 +32,19 @@
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
         <div style="background: var(--light, #f8f9fa); padding: 1rem; border-radius: var(--radius, 8px); text-align: center;">
             <div style="font-size: 1.8rem; font-weight: 700; color: var(--primary, #1a1a2e);">{{ total_cours }}</div>
-            <div style="font-size: 0.85rem; color: var(--text-muted, #6c757d);">{% trans "Cours" %}</div>
+            <div style="font-size: 0.85rem; color: var(--text-muted, var(--text-muted));">{% trans "Cours" %}</div>
         </div>
         <div style="background: var(--light, #f8f9fa); padding: 1rem; border-radius: var(--radius, 8px); text-align: center;">
-            <div style="font-size: 1.8rem; font-weight: 700; color: var(--success, #28a745);">{{ lecons_termine }}</div>
-            <div style="font-size: 0.85rem; color: var(--text-muted, #6c757d);">{% trans "Leçons terminées" %}</div>
+            <div style="font-size: 1.8rem; font-weight: 700; color: var(--success, var(--success));">{{ lecons_termine }}</div>
+            <div style="font-size: 0.85rem; color: var(--text-muted, var(--text-muted));">{% trans "Leçons terminées" %}</div>
         </div>
         <div style="background: var(--light, #f8f9fa); padding: 1rem; border-radius: var(--radius, 8px); text-align: center;">
-            <div style="font-size: 1.8rem; font-weight: 700; color: var(--warning, #ffc107);">{{ lecons_en_cours }}</div>
-            <div style="font-size: 0.85rem; color: var(--text-muted, #6c757d);">{% trans "Leçons en cours" %}</div>
+            <div style="font-size: 1.8rem; font-weight: 700; color: var(--warning, var(--warning));">{{ lecons_en_cours }}</div>
+            <div style="font-size: 0.85rem; color: var(--text-muted, var(--text-muted));">{% trans "Leçons en cours" %}</div>
         </div>
         <div style="background: var(--light, #f8f9fa); padding: 1rem; border-radius: var(--radius, 8px); text-align: center;">
             <div style="font-size: 1.8rem; font-weight: 700; color: var(--info, #17a2b8);">{{ completed_cours }}</div>
-            <div style="font-size: 0.85rem; color: var(--text-muted, #6c757d);">{% trans "Cours terminés" %}</div>
+            <div style="font-size: 0.85rem; color: var(--text-muted, var(--text-muted));">{% trans "Cours terminés" %}</div>
         </div>
     </div>
 
@@ -51,16 +52,16 @@
     {% if progres_cours %}
     <div style="display: grid; gap: 1.5rem;">
         {% for pc in progres_cours %}
-        <div class="course-progress-item" style="background: var(--white, #ffffff); padding: 1.5rem; border-radius: var(--radius, 8px); border: 1px solid var(--border, #dee2e6); transition: transform 0.2s, box-shadow 0.2s;">
+        <div class="course-progress-item" style="background: var(--white, #ffffff); padding: 1.5rem; border-radius: var(--radius, 8px); border: 1px solid var(--border, var(--border)); transition: transform 0.2s, box-shadow 0.2s;">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.8rem;">
                 <div>
                     <h3 style="margin: 0; font-size: 1.1rem; font-weight: 600;">
-                        <a href="{% url 'progress:course_progress' pc.cours.pk %}" style="color: var(--text, #212529); text-decoration: none;">
+                        <a href="{% url 'progress:course_progress' pc.cours.pk %}" style="color: var(--text, var(--text)); text-decoration: none;">
                             {{ pc.cours.display_titre }}
                         </a>
                     </h3>
                     {% if pc.cours.categorie %}
-                    <span style="font-size: 0.8rem; color: var(--text-muted, #6c757d);">
+                    <span style="font-size: 0.8rem; color: var(--text-muted, var(--text-muted));">
                         <i class="fas fa-tag"></i> {{ pc.cours.categorie.nom }}
                     </span>
                     {% endif %}
@@ -70,7 +71,7 @@
                         {{ pc.pourcentage|floatformat:0 }}%
                     </span>
                     {% if pc.est_termine %}
-                    <span style="background: var(--success, #28a745); color: #fff; padding: 0.2rem 0.8rem; border-radius: 50px; font-size: 0.75rem; font-weight: 600;">
+                    <span style="background: var(--success, var(--success)); color: #fff; padding: 0.2rem 0.8rem; border-radius: 50px; font-size: 0.75rem; font-weight: 600;">
                         <i class="fas fa-check-circle"></i> {% trans "Terminé" %}
                     </span>
                     {% endif %}
@@ -78,7 +79,7 @@
             </div>
             
             <!-- Progress Bar -->
-            <div style="width: 100%; height: 8px; background: var(--border, #dee2e6); border-radius: 50px; overflow: hidden; margin-bottom: 1rem;">
+            <div style="width: 100%; height: 8px; background: var(--border, var(--border)); border-radius: 50px; overflow: hidden; margin-bottom: 1rem;">
                 <div style="height: 100%; width: {{ pc.pourcentage|floatformat:0 }}%; background: linear-gradient(90deg, var(--primary, #1a1a2e), var(--info, #17a2b8)); border-radius: 50px; transition: width 0.8s ease;"></div>
             </div>
 
@@ -90,7 +91,7 @@
                     <i class="fas fa-play"></i> {% trans "Continuer" %}
                 </a>
                 {% if pc.est_termine %}
-                <span style="padding: 0.3rem 1rem; background: var(--success, #28a745); color: #fff; border-radius: 50px; font-size: 0.8rem;">
+                <span style="padding: 0.3rem 1rem; background: var(--success, var(--success)); color: #fff; border-radius: 50px; font-size: 0.8rem;">
                     <i class="fas fa-trophy"></i> {% trans "Félicitations!" %}
                 </span>
                 {% endif %}
@@ -101,9 +102,9 @@
     {% else %}
     <!-- ===== VID ===== -->
     <div style="text-align: center; padding: 4rem 0;">
-        <i class="fas fa-book-open" style="font-size: 4rem; color: var(--text-muted, #6c757d); display: block; margin-bottom: 1rem;"></i>
-        <h3 style="color: var(--text-muted, #6c757d);">{% trans "Vous n'avez pas encore commencé de cours." %}</h3>
-        <p style="color: var(--text-muted, #6c757d); margin-bottom: 1.5rem;">
+        <i class="fas fa-book-open" style="font-size: 4rem; color: var(--text-muted, var(--text-muted)); display: block; margin-bottom: 1rem;"></i>
+        <h3 style="color: var(--text-muted, var(--text-muted));">{% trans "Vous n'avez pas encore commencé de cours." %}</h3>
+        <p style="color: var(--text-muted, var(--text-muted)); margin-bottom: 1.5rem;">
             {% trans "Explorez nos cours et commencez votre apprentissage dès maintenant." %}
         </p>
         <a href="{% url 'courses:course_list' %}" class="btn btn-primary" style="font-size: 1.1rem; padding: 0.8rem 2rem;">
@@ -116,13 +117,13 @@
 
 {% block extra_css %}
 <style>
-    .course-progress-item:hover {
+    body.page-progress-dashboard .course-progress-item:hover {
         transform: translateY(-3px);
         box-shadow: var(--shadow, 0 4px 20px rgba(0,0,0,0.08));
     }
     
     @media (max-width: 768px) {
-        .dashboard-header {
+        body.page-progress-dashboard .dashboard-header {
             flex-direction: column;
             align-items: flex-start !important;
         }
