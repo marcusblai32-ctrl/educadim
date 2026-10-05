@@ -24,7 +24,7 @@
     </div>
 
     {% if subscription.statut == 'active' and subscription.plan.max_courses > 0 and subscription.course_selections.count < subscription.plan.max_courses %}
-    <div class="alert alert-warning" style="background:rgba(245,158,11,0.1); color:var(--warning-dark); padding:1rem; border-radius:var(--radius); border-left:4px solid var(--warning); margin-bottom:1.5rem; text-align:center;">
+    <div class="alert alert-warning" style="background:rgba(var(--warning-rgb), 0.1); color:var(--warning-dark); padding:1rem; border-radius:var(--radius); border-left:4px solid var(--warning); margin-bottom:1.5rem; text-align:center;">
         <i class="fas fa-exclamation-triangle"></i>
         <strong>{% trans "Action requise" %} :</strong>
         {% trans "Vous devez choisir vos cours pour accéder au contenu." %}
