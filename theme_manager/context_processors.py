@@ -2,7 +2,7 @@ import logging
 
 from django.utils.translation import gettext as _
 
-from .services import DEFAULT_SITE_NAME, css_version, get_active_theme, safe_color
+from .services import DEFAULT_SITE_NAME, css_version, get_active_theme, google_font_url, safe_color
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +18,8 @@ def theme_processor(request):
             # Done deja nèt pou template yo (pa bezwen if/else repete):
             "site_name": (theme.site_name if theme and theme.site_name else DEFAULT_SITE_NAME),
             "theme_css_version": css_version(theme),
-            "theme_color": safe_color(theme.primary if theme else None, "#5b76f7"),
+            "theme_color": safe_color(theme.primary if theme else None, "#176b91"),
+            "theme_font_url": google_font_url(theme.font_family) if theme else "",
         }
     except Exception:
         logger.exception("Error in theme_processor")
@@ -28,7 +29,8 @@ def theme_processor(request):
             "maintenance_message": "",
             "site_name": DEFAULT_SITE_NAME,
             "theme_css_version": "0",
-            "theme_color": "#5b76f7",
+            "theme_color": "#176b91",
+            "theme_font_url": "",
         }
 
 
