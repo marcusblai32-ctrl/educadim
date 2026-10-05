@@ -1,7 +1,5 @@
 {% load static %}
-{# CSS partagé par base.html ET base_chat.html — ordre IMPORTANT :
-   variables -> bootstrap -> style -> brand -> CSS dynamique du thème (toujours en dernier)
-   Le CSS propre à une page (block extra_css) vient APRÈS ce fichier. #}
+
 <link rel="stylesheet" href="{% static 'css/variables.css' %}">
 <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
