@@ -31,6 +31,7 @@
 
   function applyTheme(theme) {
     root.setAttribute("data-theme", theme);
+    root.setAttribute("data-bs-theme", theme); // Bootstrap suit le même mode (clair/sombre)
     try {
       localStorage.setItem(STORAGE_KEY, theme);
     } catch (e) {}
@@ -61,128 +62,11 @@
   "use strict";
 
   function initEducDim() {
-    var menuToggle = document.getElementById("menuToggle");
-    var mainNav = document.getElementById("mainNav");
     var loadingOverlay = document.getElementById("loadingOverlay");
 
-    var dropdownButtons = document.querySelectorAll(
-      "#chatDropdownBtn, #userDropdownBtn, .nav-dropdown-btn, .dropbtn"
-    );
-    var dropdowns = document.querySelectorAll(".nav-dropdown, .user-dropdown");
     var closeAlerts = document.querySelectorAll(".close-alert");
     var revealItems = document.querySelectorAll(".animate-on-scroll, .reveal, .reveal-two, .reveal-three");
     var statNumbers = document.querySelectorAll(".stat-number");
-
-    function isMobile() {
-      return window.matchMedia("(max-width: 768px)").matches;
-    }
-
-    function setExpanded(button, expanded) {
-      if (button) button.setAttribute("aria-expanded", String(expanded));
-    }
-
-    function setMenuIcon(open) {
-      if (!menuToggle) return;
-      var icon = menuToggle.querySelector("i, svg");
-      if (icon) {
-        if (icon.classList.contains("fa-bars") || icon.classList.contains("fa-times")) {
-          icon.className = open ? "fas fa-times" : "fas fa-bars";
-        }
-      }
-      menuToggle.setAttribute("aria-expanded", String(open));
-      menuToggle.setAttribute("aria-label", open ? "Fermer le menu" : "Ouvrir le menu");
-    }
-
-    function closeDropdown(dropdown) {
-      dropdown.classList.remove("open");
-      setExpanded(dropdown.querySelector(".nav-dropdown-btn, .dropbtn"), false);
-    }
-
-    function closeAllDropdowns(except) {
-      dropdowns.forEach(function (dropdown) {
-        if (dropdown !== except) closeDropdown(dropdown);
-      });
-    }
-
-    function closeMenu() {
-      if (!mainNav) return;
-      mainNav.classList.remove("active");
-      setMenuIcon(false);
-      closeAllDropdowns();
-    }
-
-    function toggleMenu(event) {
-      if (event) {
-        event.preventDefault();
-        event.stopPropagation();
-      }
-      if (!mainNav || !isMobile()) return;
-      var open = !mainNav.classList.contains("active");
-      if (open) {
-        closeAllDropdowns();
-        mainNav.classList.add("active");
-        setMenuIcon(true);
-      } else {
-        closeMenu();
-      }
-    }
-
-    // ============================================
-    // MOBILE MENU TOGGLE
-    // ============================================
-    if (menuToggle && mainNav) {
-      menuToggle.addEventListener("click", toggleMenu);
-      setMenuIcon(mainNav.classList.contains("active"));
-    }
-
-    // ============================================
-    // DROPDOWNS - Délégation d'événements
-    // ============================================
-    dropdownButtons.forEach(function (button) {
-      button.setAttribute("aria-expanded", "false");
-      button.addEventListener("click", function (event) {
-        event.preventDefault();
-        event.stopPropagation();
-
-        var dropdown = button.closest(".nav-dropdown, .user-dropdown");
-        if (!dropdown) return;
-
-        var open = !dropdown.classList.contains("open");
-        closeAllDropdowns(dropdown);
-        dropdown.classList.toggle("open", open);
-        setExpanded(button, open);
-      });
-    });
-
-    // ============================================
-    // CLOSE ON OUTSIDE CLICK
-    // ============================================
-    document.addEventListener("click", function (event) {
-      var target = event.target;
-      if (!(target instanceof Element)) return;
-
-      if (!target.closest(".nav-dropdown, .user-dropdown")) {
-        closeAllDropdowns();
-      }
-
-      if (
-        isMobile() &&
-        !target.closest("#mainNav") &&
-        !target.closest("#menuToggle")
-      ) {
-        closeMenu();
-      }
-    });
-
-    // ============================================
-    // CLOSE ON ESCAPE KEY
-    // ============================================
-    document.addEventListener("keydown", function (event) {
-      if (event.key === "Escape") {
-        closeAllDropdowns();
-        closeMenu();
-      }
-    });
 
     // ============================================
     // CLOSE ALERTS
@@ -216,15 +100,6 @@
     });
 
     // ============================================
-    // CLOSE MENU ON NAV LINK CLICK (MOBILE)
-    // ============================================
-    document.querySelectorAll("#mainNav a, .footer-container nav a").forEach(function (link) {
-      link.addEventListener("click", function () {
-        if (isMobile()) closeMenu();
-      });
-    });
-
-    // ============================================
     // SMOOTH SCROLL FOR ANCHOR LINKS
     // ============================================
     document.querySelectorAll('a[href^="#"]').forEach(function (link) {
@@ -241,7 +116,6 @@
           top: offsetPosition,
           behavior: "smooth"
         });
-        if (isMobile()) closeMenu();
       });
     });
 
@@ -373,7 +247,7 @@
     // ============================================
     // HEADER SCROLL EFFECT
     // ============================================
-    var header = document.querySelector(".main-header");
+    var header = document.querySelector(".site-header");
     if (header) {
       window.addEventListener("scroll", function () {
         if (window.scrollY > 50) {
@@ -463,21 +337,6 @@
         });
       }, { passive: true });
     }
-
-    // ============================================
-    // RESIZE HANDLER
-    // ============================================
-    var resizeTimer;
-    window.addEventListener("resize", function () {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(function () {
-        if (!isMobile()) {
-          closeMenu();
-        } else {
-          closeAllDropdowns();
-        }
-      }, 250);
-    });
 
     console.log("EducDim initialized successfully");
   }
