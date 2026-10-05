@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load i18n %}
+{% load i18n theme_tags %}
 
 {% block title %}{% if theme %}{{ theme.about_title|default:_("À propos") }} - {{ theme.site_name }}{% else %}{% trans "À propos" %} - EducDim{% endif %}{% endblock %}
 
@@ -18,7 +18,7 @@
         <div class="about-grid">
             <div class="about-content">
                 {% if theme and theme.about_content %}
-                    {{ theme.about_content|safe }}
+                    {{ theme.about_content|rich_text }}
                 {% else %}
                     <p>{% trans "EduPlatform se yon platform e-learning ki fèt pou ede moun aprann san limit." %}</p>
                     <p>{% trans "Misyon nou se bay tout moun aksè a edikasyon kalite." %}</p>
