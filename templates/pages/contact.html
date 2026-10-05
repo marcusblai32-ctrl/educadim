@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load i18n %}
+{% load i18n theme_tags %}
 
 {% block title %}{{ theme.contact_page_title|default:_("Contactez-nous") }} - {{ theme.site_name }}{% endblock %}
 
@@ -61,7 +61,7 @@
         <!-- Google Maps -->
         {% if theme.contact_map_embed %}
         <div style="border-radius:var(--radius); overflow:hidden; min-height:200px;">
-            {{ theme.contact_map_embed|safe }}
+            {{ theme.contact_map_embed|embed_map }}
         </div>
         {% else %}
         <div style="background:var(--glass-soft); border-radius:var(--radius); padding:1.5rem; text-align:center; border:1px solid var(--glass-brd-soft); display:flex; flex-direction:column; justify-content:center; align-items:center; min-height:200px; color:var(--text-muted);">
