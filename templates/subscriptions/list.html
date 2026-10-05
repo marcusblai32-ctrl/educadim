@@ -13,7 +13,7 @@
     </p>
 
     {% if active_sub %}
-    <div class="alert alert-success" style="background:rgba(16,185,129,0.1); color:var(--success); padding:1rem; border-radius:var(--radius); border-left:4px solid var(--success); margin-bottom:1.5rem; text-align:center;">
+    <div class="alert alert-success" style="background:rgba(var(--success-rgb), 0.1); color:var(--success); padding:1rem; border-radius:var(--radius); border-left:4px solid var(--success); margin-bottom:1.5rem; text-align:center;">
         <i class="fas fa-check-circle"></i>
         <strong>{% trans "Abonnement actif" %}:</strong> {{ active_sub.plan.nom }}
         ({% trans "expire le" %} {{ active_sub.date_fin|date:"d/m/Y" }})
