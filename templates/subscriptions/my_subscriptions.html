@@ -10,7 +10,7 @@
     </h1>
 
     {% if active_sub_needing_selection %}
-    <div class="alert alert-warning" style="background:rgba(245,158,11,0.1); color:var(--warning-dark); padding:1rem; border-radius:var(--radius); border-left:4px solid var(--warning); margin-bottom:1.5rem; text-align:center;">
+    <div class="alert alert-warning" style="background:rgba(var(--warning-rgb), 0.1); color:var(--warning-dark); padding:1rem; border-radius:var(--radius); border-left:4px solid var(--warning); margin-bottom:1.5rem; text-align:center;">
         <i class="fas fa-exclamation-triangle"></i>
         <strong>{% trans "Action requise" %} :</strong>
         {% trans "Votre abonnement" %} "{{ active_sub_needing_selection.plan.nom }}" {% trans "est actif, mais vous devez choisir vos cours." %}
