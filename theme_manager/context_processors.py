@@ -1,46 +1,34 @@
-from .models import Theme
-from django.utils.translation import gettext as _
 import logging
+
+from django.utils.translation import gettext as _
+
+from .services import DEFAULT_SITE_NAME, css_version, get_active_theme, safe_color
 
 logger = logging.getLogger(__name__)
 
 
 def theme_processor(request):
-    """Ajoute tema aktif la nan tout paj yo"""
+    """Tèm aktif + done ki pare pou template yo (UN SÈL query pa requèt)."""
     try:
-        theme = Theme.objects.filter(actif=True).first()
-        if not theme:
-            try:
-                theme = Theme.objects.create(
-                    actif=True,
-                    nom="Défaut",
-                    site_name="EducDim",
-                    primary="#1a1a2e",
-                    secondary="#16213e",
-                    success="#28a745",
-                    danger="#dc3545",
-                    warning="#ffc107",
-                    info="#17a2b8",
-                )
-            except Exception as e:
-                logger.error(f"Error creating default theme: {e}")
-                return {
-                    'theme': None,
-                    'maintenance_mode': False,
-                    'maintenance_message': "",
-                }
-        
+        theme = get_active_theme(request)
         return {
-            'theme': theme,
-            'maintenance_mode': theme.maintenance_mode if theme else False,
-            'maintenance_message': theme.maintenance_message if theme else "",
+            "theme": theme,
+            "maintenance_mode": bool(theme and theme.maintenance_mode),
+            "maintenance_message": theme.maintenance_message if theme else "",
+            # Done deja nèt pou template yo (pa bezwen if/else repete):
+            "site_name": (theme.site_name if theme and theme.site_name else DEFAULT_SITE_NAME),
+            "theme_css_version": css_version(theme),
+            "theme_color": safe_color(theme.primary if theme else None, "#5b76f7"),
         }
-    except Exception as e:
-        logger.error(f"Error in theme_processor: {e}")
+    except Exception:
+        logger.exception("Error in theme_processor")
         return {
-            'theme': None,
-            'maintenance_mode': False,
-            'maintenance_message': "",
+            "theme": None,
+            "maintenance_mode": False,
+            "maintenance_message": "",
+            "site_name": DEFAULT_SITE_NAME,
+            "theme_css_version": "0",
+            "theme_color": "#5b76f7",
         }
 
 
@@ -56,7 +44,6 @@ def breadcrumbs_processor(request):
     if parts and parts[0] in ['fr', 'ht']:
         start_idx = 1
 
-    # Map non URL yo
     names = {
         'cours': _('Cours'),
         'inscriptions': _('Inscriptions'),
@@ -98,15 +85,12 @@ def breadcrumbs_processor(request):
 
 
 def seo_processor(request):
-    """Ajoute meta description ak meta keywords pou SEO"""
+    """Meta description/keywords pou SEO (itilize menm tèm memoize a, pa gen query ankò)."""
     try:
-        theme = Theme.objects.filter(actif=True).first()
+        theme = get_active_theme(request)
         return {
-            'meta_description': theme.meta_description if theme else '',
-            'meta_keywords': theme.meta_keywords if theme else '',
+            "meta_description": (theme.meta_description or theme.site_description) if theme else "",
+            "meta_keywords": theme.meta_keywords if theme else "",
         }
     except Exception:
-        return {
-            'meta_description': '',
-            'meta_keywords': '',
-        }
+        return {"meta_description": "", "meta_keywords": ""}
