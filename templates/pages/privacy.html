@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load i18n %}
+{% load i18n theme_tags %}
 
 {% block title %}{{ theme.privacy_title|default:_("Confidentialité") }} - {{ theme.site_name }}{% endblock %}
 
@@ -7,7 +7,7 @@
 <div class="card">
     <h1>{{ theme.privacy_title|default:_("Politique de confidentialité") }}</h1>
     <div style="margin-top:1.5rem;">
-        {{ theme.privacy_content|default:"<h3>1. Collecte des données</h3><p>Nous collectons certaines données pour améliorer nos services.</p><h3>2. Utilisation des données</h3><p>Vos données ne sont pas partagées avec des tiers.</p><h3>3. Sécurité</h3><p>Nous prenons des mesures pour protéger vos données.</p>"|safe }}
+        {% if theme.privacy_content %}{{ theme.privacy_content|rich_text }}{% else %}{{ "<h3>1. Collecte des données</h3><p>Nous collectons certaines données pour améliorer nos services.</p><h3>2. Utilisation des données</h3><p>Vos données ne sont pas partagées avec des tiers.</p><h3>3. Sécurité</h3><p>Nous prenons des mesures pour protéger vos données.</p>"|safe }}{% endif %}
     </div>
 </div>
 {% endblock %}
