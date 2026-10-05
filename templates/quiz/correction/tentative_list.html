@@ -25,9 +25,9 @@
                     <td>{{ tentative.score|default:"-" }}%</td>
                     <td>
                         {% if tentative.reussi %}
-                            <span style="color:#28a745;">&#10003;</span>
+                            <span style="color:var(--success);">&#10003;</span>
                         {% elif tentative.reussi == False %}
-                            <span style="color:#dc3545;">&#10007;</span>
+                            <span style="color:var(--danger);">&#10007;</span>
                         {% else %}
                             <span>-</span>
                         {% endif %}
