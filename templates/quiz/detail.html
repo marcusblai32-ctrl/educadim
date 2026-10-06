@@ -148,14 +148,14 @@
 
     body.page-quiz-detail .alert-success {
         background: rgba(40, 167, 69, 0.1);
-        border: 1px solid var(--success, #28a745);
-        color: var(--success, #28a745);
+        border: 1px solid var(--success, var(--success));
+        color: var(--success, var(--success));
     }
 
     body.page-quiz-detail .alert-warning {
         background: rgba(255, 193, 7, 0.1);
-        border: 1px solid var(--warning, #ffc107);
-        color: var(--warning, #ffc107);
+        border: 1px solid var(--warning, var(--warning));
+        color: var(--warning, var(--warning));
     }
 
     body.page-quiz-detail .btn {
@@ -172,7 +172,7 @@
     }
 
     body.page-quiz-detail .btn-primary {
-        background: var(--primary, #1a1a2e);
+        background: var(--primary, var(--primary));
         color: #fff;
     }
     body.page-quiz-detail .btn-primary:hover {
@@ -182,7 +182,7 @@
     }
 
     body.page-quiz-detail .btn-secondary {
-        background: var(--secondary, #6c757d);
+        background: var(--secondary, var(--text-muted));
         color: #fff;
     }
     body.page-quiz-detail .btn-secondary:hover {
@@ -192,12 +192,12 @@
 
     body.page-quiz-detail .btn-outline {
         background: transparent;
-        color: var(--text, #212529);
-        border: 1px solid var(--border, #dee2e6);
+        color: var(--text, var(--text));
+        border: 1px solid var(--border, var(--border));
     }
     body.page-quiz-detail .btn-outline:hover {
         background: var(--light, #f8f9fa);
-        border-color: var(--primary, #1a1a2e);
+        border-color: var(--primary, var(--primary));
     }
 
     body.page-quiz-detail .btn-lg {
@@ -221,9 +221,9 @@
         gap: 0.3rem;
     }
 
-    body.page-quiz-detail .badge-success { background: var(--success, #28a745); }
-    body.page-quiz-detail .badge-danger { background: var(--danger, #dc3545); }
-    body.page-quiz-detail .badge-warning { background: var(--warning, #ffc107); color: #212529; }
+    body.page-quiz-detail .badge-success { background: var(--success, var(--success)); }
+    body.page-quiz-detail .badge-danger { background: var(--danger, var(--danger)); }
+    body.page-quiz-detail .badge-warning { background: var(--warning, var(--warning)); color: var(--text); }
 
     @media (max-width: 480px) {
         body.page-quiz-detail .tentative-item {
