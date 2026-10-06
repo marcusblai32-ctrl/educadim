@@ -192,54 +192,43 @@ class Theme(models.Model):
         return f"{self.nom} ({'Actif' if self.actif else 'Inactif'})"
 
     # ===== METHODES POU IMAJ =====
+    @staticmethod
+    def _file_url(field):
+        """
+        URL yon ImageField. Si admin te mete yon URL konplè nan chan fichye a
+        (egzanp https://ui-avatars.com/...), non fichye a SE URL la : li dwe sèvi dirèkteman.
+        Rele .url sou li ta bay yon lyen kase (domèn stockage + URL la).
+        """
+        if not field or not getattr(field, "name", ""):
+            return None
+        name = field.name
+        if name.startswith(("https://", "http://")):
+            return name
+        try:
+            return field.url
+        except Exception:
+            return None
+
     def get_logo(self):
-        if self.logo and self.logo.name:
-            return self.logo.url
-        if self.logo_url:
-            return self.logo_url
-        return None
+        return self._file_url(self.logo) or self.logo_url or None
 
     def get_favicon(self):
-        if self.favicon and self.favicon.name:
-            return self.favicon.url
-        if self.favicon_url:
-            return self.favicon_url
-        return None
+        return self._file_url(self.favicon) or self.favicon_url or None
 
     def get_hero_image(self):
-        if self.hero_image and self.hero_image.name:
-            return self.hero_image.url
-        if self.hero_image_url:
-            return self.hero_image_url
-        return None
+        return self._file_url(self.hero_image) or self.hero_image_url or None
 
     def get_about_image(self):
-        if self.about_image and self.about_image.name:
-            return self.about_image.url
-        if self.about_image_url:
-            return self.about_image_url
-        return None
+        return self._file_url(self.about_image) or self.about_image_url or None
 
     def get_evenement_banner(self):
-        if self.evenement_banner and self.evenement_banner.name:
-            return self.evenement_banner.url
-        if self.evenement_banner_url:
-            return self.evenement_banner_url
-        return None
+        return self._file_url(self.evenement_banner) or self.evenement_banner_url or None
 
     def get_evenement_logo(self):
-        if self.evenement_logo and self.evenement_logo.name:
-            return self.evenement_logo.url
-        if self.evenement_logo_url:
-            return self.evenement_logo_url
-        return None
+        return self._file_url(self.evenement_logo) or self.evenement_logo_url or None
 
     def get_testimonial1_avatar(self):
-        if self.testimonial1_avatar and self.testimonial1_avatar.name:
-            return self.testimonial1_avatar.url
-        return None
+        return self._file_url(self.testimonial1_avatar)
 
     def get_testimonial2_avatar(self):
-        if self.testimonial2_avatar and self.testimonial2_avatar.name:
-            return self.testimonial2_avatar.url
-        return None
+        return self._file_url(self.testimonial2_avatar)
