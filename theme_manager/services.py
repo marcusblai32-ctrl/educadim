@@ -50,10 +50,67 @@ def get_active_theme(request=None):
 
 
 # ------------------------------------------------------------------ COLOR HELPERS
+NAMED_COLORS = {
+    pair.split(":")[0]: "#" + pair.split(":")[1]
+    for pair in "aliceblue:f0f8ff,antiquewhite:faebd7,aqua:00ffff,aquamarine:7fffd4,azure:f0ffff,beige:f5f5dc,bisque:ffe4c4,black:000000,blanchedalmond:ffebcd,blue:0000ff,blueviolet:8a2be2,brown:a52a2a,burlywood:deb887,cadetblue:5f9ea0,chartreuse:7fff00,chocolate:d2691e,coral:ff7f50,cornflowerblue:6495ed,cornsilk:fff8dc,crimson:dc143c,cyan:00ffff,darkblue:00008b,darkcyan:008b8b,darkgoldenrod:b8860b,darkgray:a9a9a9,darkgreen:006400,darkgrey:a9a9a9,darkkhaki:bdb76b,darkmagenta:8b008b,darkolivegreen:556b2f,darkorange:ff8c00,darkorchid:9932cc,darkred:8b0000,darksalmon:e9967a,darkseagreen:8fbc8f,darkslateblue:483d8b,darkslategray:2f4f4f,darkslategrey:2f4f4f,darkturquoise:00ced1,darkviolet:9400d3,deeppink:ff1493,deepskyblue:00bfff,dimgray:696969,dimgrey:696969,dodgerblue:1e90ff,firebrick:b22222,floralwhite:fffaf0,forestgreen:228b22,fuchsia:ff00ff,gainsboro:dcdcdc,ghostwhite:f8f8ff,gold:ffd700,goldenrod:daa520,gray:808080,green:008000,greenyellow:adff2f,grey:808080,honeydew:f0fff0,hotpink:ff69b4,indianred:cd5c5c,indigo:4b0082,ivory:fffff0,khaki:f0e68c,lavender:e6e6fa,lavenderblush:fff0f5,lawngreen:7cfc00,lemonchiffon:fffacd,lightblue:add8e6,lightcoral:f08080,lightcyan:e0ffff,lightgoldenrodyellow:fafad2,lightgray:d3d3d3,lightgreen:90ee90,lightgrey:d3d3d3,lightpink:ffb6c1,lightsalmon:ffa07a,lightseagreen:20b2aa,lightskyblue:87cefa,lightslategray:778899,lightslategrey:778899,lightsteelblue:b0c4de,lightyellow:ffffe0,lime:00ff00,limegreen:32cd32,linen:faf0e6,magenta:ff00ff,maroon:800000,mediumaquamarine:66cdaa,mediumblue:0000cd,mediumorchid:ba55d3,mediumpurple:9370db,mediumseagreen:3cb371,mediumslateblue:7b68ee,mediumspringgreen:00fa9a,mediumturquoise:48d1cc,mediumvioletred:c71585,midnightblue:191970,mintcream:f5fffa,mistyrose:ffe4e1,moccasin:ffe4b5,navajowhite:ffdead,navy:000080,oldlace:fdf5e6,olive:808000,olivedrab:6b8e23,orange:ffa500,orangered:ff4500,orchid:da70d6,palegoldenrod:eee8aa,palegreen:98fb98,paleturquoise:afeeee,palevioletred:db7093,papayawhip:ffefd5,peachpuff:ffdab9,peru:cd853f,pink:ffc0cb,plum:dda0dd,powderblue:b0e0e6,purple:800080,rebeccapurple:663399,red:ff0000,rosybrown:bc8f8f,royalblue:4169e1,saddlebrown:8b4513,salmon:fa8072,sandybrown:f4a460,seagreen:2e8b57,seashell:fff5ee,sienna:a0522d,silver:c0c0c0,skyblue:87ceeb,slateblue:6a5acd,slategray:708090,slategrey:708090,snow:fffafa,springgreen:00ff7f,steelblue:4682b4,tan:d2b48c,teal:008080,thistle:d8bfd8,tomato:ff6347,turquoise:40e0d0,violet:ee82ee,wheat:f5deb3,white:ffffff,whitesmoke:f5f5f5,yellow:ffff00,yellowgreen:9acd32".split(",")
+}
+RGB_FN_RE = re.compile(r"^rgba?\(\s*(\d{1,3})\s*[, ]\s*(\d{1,3})\s*[, ]\s*(\d{1,3})\s*(?:[,/]\s*[\d.]+%?\s*)?\)$", re.I)
+HSL_FN_RE = re.compile(r"^hsla?\(\s*(-?[\d.]+)(?:deg)?\s*[, ]\s*([\d.]+)%\s*[, ]\s*([\d.]+)%\s*(?:[,/]\s*[\d.]+%?\s*)?\)$", re.I)
+SEMANTIC_NAMES = ("primary", "secondary", "success", "danger", "warning", "info", "light", "dark")
+
+
+def _hsl_to_hex(h, s, l):
+    import colorsys
+    r, g, b = colorsys.hls_to_rgb((h % 360) / 360.0, max(0, min(1, l)), max(0, min(1, s)))
+    return "#%02x%02x%02x" % (round(r * 255), round(g * 255), round(b * 255))
+
+
+def parse_color(value, default=None):
+    """
+    Aksepte TOUT sa admin ka tape pou yon koulè epi retounen yon hex #rrggbb:
+      #fff, #ffffff, #ffffff80, blue, Red, rgb(0,0,255), rgba(0 0 255 / .5), hsl(220 90% 50%).
+    Retounen `default` si pa konprann (jamè pa janm voye valè brut nan CSS).
+    """
+    v = (value or "").strip().rstrip(";").strip().lower()
+    if not v:
+        return default
+    if v.startswith("#"):
+        h = v[1:]
+        if re.fullmatch(r"[0-9a-f]{3}", h):
+            return "#" + "".join(ch * 2 for ch in h)
+        if re.fullmatch(r"[0-9a-f]{6}", h):
+            return "#" + h
+        if re.fullmatch(r"[0-9a-f]{8}", h):
+            return "#" + h[:6]          # inyore alfa
+        if re.fullmatch(r"[0-9a-f]{4}", h):
+            return "#" + "".join(ch * 2 for ch in h[:3])
+        return default
+    if v in NAMED_COLORS:
+        return NAMED_COLORS[v]
+    m = RGB_FN_RE.match(v)
+    if m:
+        r, g, b = (min(255, int(x)) for x in m.groups())
+        return "#%02x%02x%02x" % (r, g, b)
+    m = HSL_FN_RE.match(v)
+    if m:
+        return _hsl_to_hex(float(m.group(1)), float(m.group(2)) / 100, float(m.group(3)) / 100)
+    return default
+
+
 def safe_color(value, default=None):
-    """Retounen koulè a si se yon hex valid (#rgb/#rrggbb), sinon default."""
-    value = (value or "").strip()
-    return value if HEX_RE.match(value) else default
+    """Konpatib ak ansyen kòd: retounen hex valid la (kounye a aksepte tou non koulè)."""
+    return parse_color(value, default)
+
+
+def css_color(value):
+    """
+    Pou chan tankou 'Feature 1 - Couleur' kote admin ka mete 'primary', 'success'... OSWA yon koulè.
+    Retounen yon valè CSS ki pa danjere: var(--primary) | #rrggbb | ''.
+    """
+    v = (value or "").strip().rstrip(";").strip().lower()
+    if v in SEMANTIC_NAMES:
+        return f"var(--{v})"
+    return parse_color(v, "") or ""
 
 
 def _to_rgb(color):
@@ -123,7 +180,7 @@ def google_font_url(font_family):
     Retounen "" si se yon font sistèm oswa si non an pa sou.
     Se sa ki fè font admin chwazi a CHAJE pou tout bon (anvan, li te rete 'Inter' san chaje).
     """
-    first = (font_family or "").split(",")[0].strip().strip("'\"")
+    first = (font_family or "").strip().rstrip(";").split(",")[0].strip().strip("'\"")
     if not _FONT_NAME_RE.match(first) or first.lower() in GENERIC_FONTS:
         return ""
     family = first.replace(" ", "+")
@@ -215,13 +272,13 @@ def build_css(theme):
         return "/* no active theme */\n"
 
     shared = []
-    font = (theme.font_family or "").strip()
+    font = (theme.font_family or "").strip().rstrip(";").strip()
     if FONT_RE.match(font):
         shared += [f"--font-family: {font};", f"--font-body: {font};", f"--bs-body-font-family: {font};"]
-    radius = (theme.border_radius or "").strip()
+    radius = (theme.border_radius or "").strip().rstrip(";").strip()
     if LENGTH_RE.match(radius):
         shared += [f"--radius: {radius};", f"--bs-border-radius: {radius};"]
-    shadow = (theme.box_shadow or "").strip()
+    shadow = (theme.box_shadow or "").strip().rstrip(";").strip()
     if SHADOW_RE.match(shadow):
         shared += [f"--shadow: {shadow};"]
 
