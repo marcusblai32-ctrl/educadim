@@ -4,119 +4,227 @@
 {% block title %}{% trans "Cours disponibles" %} - {{ theme.site_name|default:'EducaDim' }}{% endblock %}
 
 {% block content %}
-<div class="courses-container container-fluid">
-    <header class="courses-header d-flex justify-content-between align-items-md-end flex-wrap gap-3">
+<div class="container-xxl py-4 py-lg-5">
+
+    {# ===== HEADER ===== #}
+    <header class="d-flex justify-content-between align-items-md-end flex-wrap gap-3 mb-4">
         <div>
-            <span class="section-tag">{% trans "Apprendre à votre rythme" %}</span>
-            <h1>{% trans "Cours disponibles" %}</h1>
-            <p class="text-muted mb-0">{% trans "Trouvez un cours adapté à vos objectifs, votre niveau et votre budget." %}</p>
+            <span class="badge text-bg-primary-subtle text-primary-emphasis rounded-pill mb-2">
+                {% trans "Apprendre à votre rythme" %}
+            </span>
+            <h1 class="h2 fw-bold mb-2">{% trans "Cours disponibles" %}</h1>
+            <p class="text-body-secondary mb-0">
+                {% trans "Trouvez un cours adapté à vos objectifs, votre niveau et votre budget." %}
+            </p>
         </div>
         {% if user.is_staff %}
         <a href="{% url 'courses:course_add' %}" class="btn btn-primary">
-            <i class="fas fa-plus" aria-hidden="true"></i> {% trans "Ajouter un cours" %}
+            <i class="fas fa-plus me-1" aria-hidden="true"></i> {% trans "Ajouter un cours" %}
         </a>
         {% endif %}
     </header>
 
-    <section class="filters-container" aria-label="{% trans 'Filtres des cours' %}">
-        <form method="get" class="filters-form row g-2">
-            <div class="col-12 col-lg-4 search-box">
-                <label class="form-label" for="courseSearch">{% trans "Rechercher" %}</label>
-                <div class="input-group">
-                    <input id="courseSearch" class="form-control" type="search" name="search" placeholder="{% trans 'Rechercher un cours...' %}" value="{{ search_query }}">
-                    <button class="btn btn-primary" type="submit" aria-label="{% trans 'Lancer la recherche' %}"><i class="fas fa-search" aria-hidden="true"></i></button>
+    {# ===== FILTRES ===== #}
+    <section class="card border-0 shadow-sm mb-4" aria-label="{% trans 'Filtres des cours' %}">
+        <div class="card-body p-3 p-lg-4">
+            <form method="get" class="row g-3 align-items-end">
+
+                {# Recherche #}
+                <div class="col-12 col-lg-4">
+                    <label class="form-label small fw-semibold" for="courseSearch">{% trans "Rechercher" %}</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-body-tertiary border-end-0">
+                            <i class="fas fa-search text-body-secondary" aria-hidden="true"></i>
+                        </span>
+                        <input id="courseSearch" class="form-control border-start-0" type="search"
+                               name="search" placeholder="{% trans 'Rechercher un cours...' %}"
+                               value="{{ search_query }}">
+                    </div>
                 </div>
-            </div>
-            <div class="col-12 col-sm-6 col-lg filter-group">
-                <label class="form-label" for="courseCategory">{% trans "Catégorie" %}</label>
-                <select id="courseCategory" class="form-select" name="category" data-submit-on-change>
-                    <option value="">{% trans "Toutes les catégories" %}</option>
-                    {% for cat in categories %}
-                    <option value="{{ cat.id }}" {% if selected_category == cat.id|stringformat:'s' %}selected{% endif %}>{{ cat.nom }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-12 col-sm-6 col-lg filter-group">
-                <label class="form-label" for="courseLevel">{% trans "Niveau" %}</label>
-                <select id="courseLevel" class="form-select" name="niveau" data-submit-on-change>
-                    <option value="">{% trans "Tous les niveaux" %}</option>
-                    {% for niv in niveaux %}
-                    <option value="{{ niv.id }}" {% if selected_niveau == niv.id|stringformat:'s' %}selected{% endif %}>{{ niv.get_nom_display }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-12 col-sm-6 col-lg filter-group">
-                <label class="form-label" for="coursePath">{% trans "Parcours" %}</label>
-                <select id="coursePath" class="form-select" name="learning_path" data-submit-on-change>
-                    <option value="">{% trans "Tous les Learning Paths" %}</option>
-                    {% for lp in learning_paths %}
-                    <option value="{{ lp.id }}" {% if selected_learning_path == lp.id|stringformat:'s' %}selected{% endif %}>{{ lp.nom }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-12 col-sm-6 col-lg filter-group">
-                <label class="form-label" for="coursePrice">{% trans "Prix" %}</label>
-                <select id="coursePrice" class="form-select" name="prix" data-submit-on-change>
-                    <option value="">{% trans "Tous les prix" %}</option>
-                    <option value="gratuit" {% if selected_prix == 'gratuit' %}selected{% endif %}>{% trans "Gratuit" %}</option>
-                    <option value="payant" {% if selected_prix == 'payant' %}selected{% endif %}>{% trans "Payant" %}</option>
-                </select>
-            </div>
-            {% if search_query or selected_category or selected_niveau or selected_prix or selected_learning_path %}
-            <div class="col-12 col-lg-auto d-flex align-items-end">
-                <a href="{% url 'courses:course_list' %}" class="btn btn-outline-secondary w-100">
-                    <i class="fas fa-rotate-left" aria-hidden="true"></i> {% trans "Réinitialiser" %}
-                </a>
-            </div>
-            {% endif %}
-        </form>
+
+                {# Catégorie #}
+                <div class="col-12 col-sm-6 col-lg">
+                    <label class="form-label small fw-semibold" for="courseCategory">{% trans "Catégorie" %}</label>
+                    <select id="courseCategory" class="form-select" name="category" data-submit-on-change>
+                        <option value="">{% trans "Toutes les catégories" %}</option>
+                        {% for cat in categories %}
+                        <option value="{{ cat.id }}" {% if selected_category == cat.id|stringformat:'s' %}selected{% endif %}>{{ cat.nom }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                {# Niveau #}
+                <div class="col-12 col-sm-6 col-lg">
+                    <label class="form-label small fw-semibold" for="courseLevel">{% trans "Niveau" %}</label>
+                    <select id="courseLevel" class="form-select" name="niveau" data-submit-on-change>
+                        <option value="">{% trans "Tous les niveaux" %}</option>
+                        {% for niv in niveaux %}
+                        <option value="{{ niv.id }}" {% if selected_niveau == niv.id|stringformat:'s' %}selected{% endif %}>{{ niv.get_nom_display }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                {# Parcours #}
+                <div class="col-12 col-sm-6 col-lg">
+                    <label class="form-label small fw-semibold" for="coursePath">{% trans "Parcours" %}</label>
+                    <select id="coursePath" class="form-select" name="learning_path" data-submit-on-change>
+                        <option value="">{% trans "Tous les parcours" %}</option>
+                        {% for lp in learning_paths %}
+                        <option value="{{ lp.id }}" {% if selected_learning_path == lp.id|stringformat:'s' %}selected{% endif %}>{{ lp.nom }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                {# Prix #}
+                <div class="col-12 col-sm-6 col-lg">
+                    <label class="form-label small fw-semibold" for="coursePrice">{% trans "Prix" %}</label>
+                    <select id="coursePrice" class="form-select" name="prix" data-submit-on-change>
+                        <option value="">{% trans "Tous les prix" %}</option>
+                        <option value="gratuit" {% if selected_prix == 'gratuit' %}selected{% endif %}>{% trans "Gratuit" %}</option>
+                        <option value="payant" {% if selected_prix == 'payant' %}selected{% endif %}>{% trans "Payant" %}</option>
+                    </select>
+                </div>
+
+                {# Boutons #}
+                <div class="col-12 col-lg-auto d-flex gap-2">
+                    <button type="submit" class="btn btn-primary flex-grow-1 flex-lg-grow-0">
+                        <i class="fas fa-filter me-1" aria-hidden="true"></i> {% trans "Filtrer" %}
+                    </button>
+                    {% if search_query or selected_category or selected_niveau or selected_prix or selected_learning_path %}
+                    <a href="{% url 'courses:course_list' %}" class="btn btn-outline-secondary flex-grow-1 flex-lg-grow-0">
+                        <i class="fas fa-rotate-left" aria-hidden="true"></i>
+                    </a>
+                    {% endif %}
+                </div>
+
+            </form>
+        </div>
     </section>
 
-    <div class="course-grid row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+    {# ===== GRILLE DE COURS ===== #}
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
         {% for item in cours %}
         <div class="col">
-            <article class="course-card card h-100">
-                {% with img=item.cours.get_image %}
-                {% if img %}
-                <img src="{{ img }}" alt="{{ item.cours.display_titre }}" class="course-img card-img-top">
-                {% else %}
-                <div class="no-image" aria-hidden="true"><i class="fas fa-book-open"></i></div>
-                {% endif %}
-                {% endwith %}
-                <div class="course-body card-body">
-                    <div class="course-badges">
-                        {% if item.cours.nivo %}<span class="badge badge-secondary">{{ item.cours.nivo.get_nom_display }}</span>{% endif %}
-                        {% if item.cours.categorie %}<span class="badge badge-primary">{{ item.cours.categorie.nom }}</span>{% endif %}
-                        {% if item.cours.est_payant %}<span class="badge badge-warning">{% trans "Payant" %}</span>{% else %}<span class="badge badge-success">{% trans "Gratuit" %}</span>{% endif %}
-                        {% if item.a_acces %}<span class="badge badge-success"><i class="fas fa-check-circle" aria-hidden="true"></i> {% trans "Accès" %}</span>{% endif %}
-                        {% if item.cours.learning_path %}<span class="badge badge-secondary"><i class="fas fa-road" aria-hidden="true"></i> {{ item.cours.learning_path.nom }}</span>{% endif %}
+            <article class="card h-100 border-0 shadow-sm overflow-hidden">
+
+                {# ===== IMAGE ===== #}
+                <div class="position-relative">
+                    {% with img=item.cours.get_image %}
+                    {% if img %}
+                        <img src="{{ img }}" alt="{{ item.cours.display_titre }}"
+                             class="card-img-top object-fit-cover" style="height: 200px;">
+                    {% else %}
+                        <div class="card-img-top bg-body-secondary d-flex align-items-center justify-content-center text-body-secondary"
+                             style="height: 200px;">
+                            <i class="fas fa-book-open fs-1" aria-hidden="true"></i>
+                        </div>
+                    {% endif %}
+                    {% endwith %}
+
+                    {# Badges flottants (Prix + Accès) #}
+                    <div class="position-absolute top-0 end-0 m-3 d-flex gap-2">
+                        {% if item.cours.est_payant %}
+                            <span class="badge text-bg-warning">{% trans "Payant" %}</span>
+                        {% else %}
+                            <span class="badge text-bg-success">{% trans "Gratuit" %}</span>
+                        {% endif %}
+                        {% if item.a_acces %}
+                            <span class="badge text-bg-primary">
+                                <i class="fas fa-check-circle me-1" aria-hidden="true"></i>{% trans "Accès" %}
+                            </span>
+                        {% endif %}
                     </div>
-                    <h2 class="h5"><a href="{% url 'courses:course_detail' item.cours.pk %}">{{ item.cours.display_titre }}</a></h2>
-                    <p class="course-description">{{ item.cours.display_description|truncatechars:120 }}</p>
-                    <div class="course-meta">
-                        <span class="price {% if not item.cours.est_payant %}free{% endif %}">
-                            {% if item.cours.est_payant %}{{ item.cours.prix }} HTG{% else %}{% trans "Gratuit" %}{% endif %}
-                        </span>
-                        <span class="duration"><i class="fas fa-clock" aria-hidden="true"></i> {{ item.cours.duree }}h</span>
-                        <a href="{% url 'courses:course_detail' item.cours.pk %}" class="btn btn-primary btn-sm">
-                            {% if item.a_acces %}<i class="fas fa-unlock" aria-hidden="true"></i> {% trans "Accéder" %}{% else %}{% trans "Voir" %}{% endif %}
+                </div>
+
+                {# ===== CORPS ===== #}
+                <div class="card-body d-flex flex-column p-4">
+
+                    {# Niveau + Catégorie #}
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+                        {% if item.cours.nivo %}
+                            <span class="badge rounded-pill text-bg-secondary-subtle text-secondary-emphasis fw-normal">
+                                {{ item.cours.nivo.get_nom_display }}
+                            </span>
+                        {% endif %}
+                        {% if item.cours.categorie %}
+                            <span class="badge rounded-pill text-bg-primary-subtle text-primary-emphasis fw-normal">
+                                {{ item.cours.categorie.nom }}
+                            </span>
+                        {% endif %}
+                    </div>
+
+                    {# Titre #}
+                    <h2 class="h5 fw-bold mb-2">
+                        <a href="{% url 'courses:course_detail' item.cours.pk %}"
+                           class="text-body text-decoration-none stretched-link">
+                            {{ item.cours.display_titre }}
                         </a>
+                    </h2>
+
+                    {# Description #}
+                    <p class="text-body-secondary small mb-3 flex-grow-1">
+                        {{ item.cours.display_description|truncatechars:120 }}
+                    </p>
+
+                    {# Parcours (tag) #}
+                    {% if item.cours.learning_path %}
+                    <div class="mb-3">
+                        <span class="badge rounded-pill text-bg-light border text-body-secondary fw-normal">
+                            <i class="fas fa-road me-1" aria-hidden="true"></i>{{ item.cours.learning_path.nom }}
+                        </span>
+                    </div>
+                    {% endif %}
+
+                    {# ===== SÉPARATEUR + FOOTER ===== #}
+                    <div class="border-top pt-3 mt-auto d-flex justify-content-between align-items-center">
+
+                        {# Infos : durée + prix #}
+                        <div class="d-flex flex-column gap-1">
+                            <span class="small text-body-secondary">
+                                <i class="fas fa-clock me-1" aria-hidden="true"></i>
+                                {{ item.cours.duree }}h
+                            </span>
+                            <span class="fw-bold {% if not item.cours.est_payant %}text-success{% else %}text-primary{% endif %}">
+                                {% if item.cours.est_payant %}{{ item.cours.prix }} HTG{% else %}{% trans "Gratuit" %}{% endif %}
+                            </span>
+                        </div>
+
+                        {# Bouton #}
+                        <a href="{% url 'courses:course_detail' item.cours.pk %}"
+                           class="btn btn-primary position-relative z-1">
+                            {% if item.a_acces %}
+                                <i class="fas fa-unlock me-1" aria-hidden="true"></i>{% trans "Accéder" %}
+                            {% else %}
+                                {% trans "Commencer" %}
+                            {% endif %}
+                        </a>
+
                     </div>
                 </div>
             </article>
         </div>
+
         {% empty %}
-        <div class="col-12 w-100">
-            <div class="empty-courses">
-                <i class="fas fa-book-open" aria-hidden="true"></i>
-                <h2 class="h4">{% trans "Aucun cours disponible" %}</h2>
-                <p>{% trans "Revenez plus tard, de nouveaux cours seront bientôt disponibles." %}</p>
-                {% if search_query or selected_category or selected_niveau or selected_prix or selected_learning_path %}
-                <a class="btn btn-outline-primary" href="{% url 'courses:course_list' %}">{% trans "Voir tous les cours" %}</a>
-                {% endif %}
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center py-5">
+                    <div class="mb-3 text-body-secondary">
+                        <i class="fas fa-book-open fs-1" aria-hidden="true"></i>
+                    </div>
+                    <h2 class="h4 fw-bold mb-2">{% trans "Aucun cours disponible" %}</h2>
+                    <p class="text-body-secondary mb-4">
+                        {% trans "Revenez plus tard, de nouveaux cours seront bientôt disponibles." %}
+                    </p>
+                    {% if search_query or selected_category or selected_niveau or selected_prix or selected_learning_path %}
+                    <a class="btn btn-outline-primary" href="{% url 'courses:course_list' %}">
+                        <i class="fas fa-rotate-left me-1" aria-hidden="true"></i>{% trans "Voir tous les cours" %}
+                    </a>
+                    {% endif %}
+                </div>
             </div>
         </div>
         {% endfor %}
     </div>
+
 </div>
 {% endblock %}
