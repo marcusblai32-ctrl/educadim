@@ -242,6 +242,11 @@ def _surface_vars(theme):
                   f"--bs-body-bg: {v};", f"--bs-body-bg-rgb: {rgb_triplet(v)};",
                   f"--light-tint-1: {mix(v, safe_color(getattr(theme, 'primary', None), '#176b91'), 0.08)};",
                   f"--light-tint-2: {mix(v, safe_color(getattr(theme, 'secondary', None), '#45b7c7'), 0.06)};"]
+        _p = safe_color(getattr(theme, "primary", None), "#176b91")
+        _box = mix(v, _p, 0.06)          # fon bwat yo (kat, hero-card, feature, temwayaj)
+        _foot = mix(v, _p, 0.12)         # fon footer
+        lines += [f"--box-bg: {_box};", f"--footer-bg: {_foot};",
+                  f"--bs-tertiary-bg: {_foot};", f"--bs-tertiary-bg-rgb: {rgb_triplet(_foot)};"]
     if c["text_color"]:
         v = c["text_color"]
         lines += [f"--text: {v};", f"--bs-body-color: {v};", f"--bs-body-color-rgb: {rgb_triplet(v)};",
@@ -254,8 +259,7 @@ def _surface_vars(theme):
     if c["white"]:
         v = c["white"]
         lines += [f"--white: {v};", f"--bg-card: {v};", f"--card-bg: {v};", f"--glass-2: {v};",
-                  f"--glass: rgba({rgb_triplet(v)}, 0.92);", f"--bs-card-bg: {v};",
-                  f"--bs-tertiary-bg: {v};"]
+                  f"--glass: rgba({rgb_triplet(v)}, 0.92);", f"--bs-card-bg: {v};"]
     if c["light"]:
         v = c["light"]
         lines += [f"--light: {v};", f"--glass-soft: rgba({rgb_triplet(v)}, 0.72);",
@@ -296,6 +300,13 @@ def _dark_surface_vars(theme):
         f"--dark-tint-1: {mix(dark, primary, 0.22)};",
         f"--dark-tint-2: {mix(dark, secondary, 0.16)};",
         f"--dark-tint-footer: {mix(dark, primary, 0.10)};",
+        f"--box-bg: {mix(dark, primary, 0.14)};",
+        f"--footer-bg: {mix(dark, '#000000', 0.30)};",
+        f"--bs-tertiary-bg: {mix(dark, '#000000', 0.30)};",
+        f"--bs-tertiary-bg-rgb: {rgb_triplet(mix(dark, '#000000', 0.30))};",
+        "--bs-body-color: #e7ecfb;", "--bs-body-color-rgb: 231, 236, 251;",
+        "--bs-secondary-color: #9aa6c8;", "--bs-emphasis-color: #ffffff;",
+        "--bs-heading-color: #f4f7ff;",
     ]
 
 
