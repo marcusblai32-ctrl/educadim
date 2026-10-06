@@ -32,7 +32,7 @@
     <meta name="twitter:title" content="{% block twitter_title %}{% if theme %}{{ theme.site_name|default:'EducaDim' }}{% else %}EducaDim{% endif %}{% endblock %}">
     <meta name="twitter:description" content="{% block twitter_description %}{% if meta_description %}{{ meta_description }}{% elif theme and theme.site_description %}{{ theme.site_description }}{% else %}EducaDim — plateforme e-learning.{% endif %}{% endblock %}">
 
-    {# ===== JSON-LD (site-wide, real data only) ===== #}
+    {# ===== JSON-LD ===== #}
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -54,25 +54,23 @@
         <link rel="shortcut icon" type="image/x-icon" href="{{ theme.favicon.url }}">
     {% endif %}
 
-    {# ===== CSS (partial partagé avec base_chat) ===== #}
+    {# ===== CSS ===== #}
     {% include "partials/head_assets.html" %}
 
-    {# ===== HEADER / SEARCH OVERRIDES ===== #}
+    {# ===== HEADER / FOOTER OVERRIDES ===== #}
     <style>
-        /* ===== Barre de recherche du header : taille raisonnable ===== */
+        /* ===== Barre de recherche du header ===== */
         .header-search {
             flex: 1 1 auto;
             min-width: 0;
             max-width: 460px;
         }
-
         .header-search .form-control {
             height: 42px;
             font-size: 0.9rem;
             border-radius: 10px 0 0 10px;
             padding: 0.4rem 0.9rem;
         }
-
         .header-search .btn {
             height: 42px;
             padding: 0 0.9rem;
@@ -81,22 +79,24 @@
             color: #fff;
             border: 1px solid var(--primary, #5b76f7);
         }
-
         .header-search .btn:hover {
             background: var(--primary-dark, #3f56c9);
             border-color: var(--primary-dark, #3f56c9);
         }
-
-        /* Mobile : pleine largeur mais hauteur contrôlée */
         @media (max-width: 991.98px) {
-            .header-search {
-                max-width: 100%;
-            }
+            .header-search { max-width: 100%; }
         }
+        .auth-page .header-search { display: none !important; }
 
-        /* Pages auth : la recherche du header ne doit jamais s'afficher */
-        .auth-page .header-search {
-            display: none !important;
+        /* ===== FOOTER : liens sans icônes sur grands écrans ===== */
+        @media (min-width: 992px) {
+            .ed-footer-link i,
+            .ed-footer-bottom i {
+                display: none !important;
+            }
+            .ed-footer-link {
+                padding-left: 0;
+            }
         }
     </style>
 
@@ -115,7 +115,6 @@
         <nav class="navbar navbar-expand-lg" aria-label="{% trans 'Navigation principale' %}">
             <div class="container-xxl">
 
-                {# Logo / nom du site (données de theme_manager) #}
                 <a class="navbar-brand d-flex align-items-center gap-2 me-auto me-lg-3" href="{% url 'home' %}">
                     {% if theme and theme.get_logo %}
                         <img class="navbar-logo" src="{{ theme.get_logo }}" alt="" width="32" height="32">
@@ -123,7 +122,6 @@
                     <span class="navbar-site-name text-truncate">{{ site_name }}</span>
                 </a>
 
-                {# Outils toujours visibles, même sur le plus petit écran #}
                 <div class="d-flex align-items-center gap-2 order-lg-last ms-2 ms-lg-3">
                     <button type="button" class="theme-toggle btn btn-sm" id="themeToggle"
                             aria-label="{% trans 'Basculer le thème clair/sombre' %}"
@@ -137,7 +135,6 @@
                     </button>
                 </div>
 
-                {# Menu : barre horizontale (>= lg) / panneau latéral (< lg) — géré par Bootstrap #}
                 <div class="offcanvas offcanvas-end" tabindex="-1" id="mainNav" aria-labelledby="mainNavLabel">
                     <div class="offcanvas-header">
                         <h2 class="offcanvas-title h5" id="mainNavLabel">{{ site_name }}</h2>
@@ -147,7 +144,6 @@
 
                     <div class="offcanvas-body align-items-lg-center">
 
-                        {# ===== RECHERCHE (bloc surchargeable) ===== #}
                         {% block header_search %}
                         <form class="header-search input-group mb-3 mb-lg-0 me-lg-auto" action="{% url 'courses:course_list' %}" method="get" role="search">
                             <label class="visually-hidden" for="navSearch">{% trans "Rechercher un cours" %}</label>
@@ -370,29 +366,105 @@
     </div>
     {% endif %}
 
-    <footer>
-        <div class="footer-container container-xxl">
-            <nav class="d-flex flex-wrap">
-                <a href="{% url 'about' %}">
-                    <i class="fas fa-info-circle"></i> {% trans "À propos" %}
-                </a>
-                <a href="{% url 'contact' %}">
-                    <i class="fas fa-envelope"></i> {% trans "Contact" %}
-                </a>
-                <a href="{% url 'privacy' %}">
-                    <i class="fas fa-shield-alt"></i> {% trans "Confidentialité" %}
-                </a>
-                <a href="{% url 'conditions' %}">
-                    <i class="fas fa-file-contract"></i> {% trans "Conditions" %}
-                </a>
-                <a href="{% url 'faq' %}">
-                    <i class="fas fa-question-circle"></i> {% trans "FAQ" %}
-                </a>
-            </nav>
-            <p>
-                &copy; {% if theme %}{{ theme.site_name|default:'EducaDim' }}{% else %}EducaDim{% endif %} -
-                {% if theme %}{{ theme.footer_text|default:_('Tous droits réservés') }}{% else %}{% trans "Tous droits réservés" %}{% endif %}
-            </p>
+    {# ===== FOOTER ===== #}
+    <footer class="ed-footer">
+        <div class="container-xxl ed-footer-top">
+            <div class="row g-4">
+
+                {# Brand + réseaux sociaux #}
+                <div class="col-12 col-lg-5">
+                    <a href="{% url 'home' %}" class="ed-footer-brand">
+                        {% if theme and theme.get_logo %}
+                            <img src="{{ theme.get_logo }}" alt="" width="40" height="40">
+                        {% endif %}
+                        <span>{% if theme %}{{ theme.site_name|default:'EducaDim' }}{% else %}EducaDim{% endif %}</span>
+                    </a>
+
+                    <div class="mt-3">
+                        {% if theme and theme.facebook_url %}
+                            <a href="{{ theme.facebook_url }}" class="ed-social" target="_blank" rel="noopener" aria-label="Facebook">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                        {% endif %}
+                        {% if theme and theme.twitter_url %}
+                            <a href="{{ theme.twitter_url }}" class="ed-social" target="_blank" rel="noopener" aria-label="Twitter / X">
+                                <i class="fab fa-x-twitter"></i>
+                            </a>
+                        {% endif %}
+                        {% if theme and theme.instagram_url %}
+                            <a href="{{ theme.instagram_url }}" class="ed-social" target="_blank" rel="noopener" aria-label="Instagram">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                        {% endif %}
+                        {% if theme and theme.youtube_url %}
+                            <a href="{{ theme.youtube_url }}" class="ed-social" target="_blank" rel="noopener" aria-label="YouTube">
+                                <i class="fab fa-youtube"></i>
+                            </a>
+                        {% endif %}
+                        {% if theme and theme.contact_email %}
+                            <a href="mailto:{{ theme.contact_email }}" class="ed-social" aria-label="Email">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {# Plateforme #}
+                <div class="col-6 col-lg-2">
+                    <h6>{% trans "Plateforme" %}</h6>
+                    <ul class="list-unstyled mb-0">
+                        <li><a class="ed-footer-link" href="{% url 'courses:course_list' %}"><i class="fas fa-book"></i>{% trans "Cours" %}</a></li>
+                        {% if user.is_authenticated %}
+                            <li><a class="ed-footer-link" href="{% url 'progress:dashboard' %}"><i class="fas fa-chart-line"></i>{% trans "Progression" %}</a></li>
+                            <li><a class="ed-footer-link" href="{% url 'badges:my_badges' %}"><i class="fas fa-medal"></i>{% trans "Badges" %}</a></li>
+                            <li><a class="ed-footer-link" href="{% url 'ranking:my_rank' %}"><i class="fas fa-trophy"></i>{% trans "Classement" %}</a></li>
+                        {% else %}
+                            <li><a class="ed-footer-link" href="{% url 'accounts:login' %}"><i class="fas fa-sign-in-alt"></i>{% trans "Connexion" %}</a></li>
+                            <li><a class="ed-footer-link" href="{% url 'accounts:signup' %}"><i class="fas fa-user-plus"></i>{% trans "Inscription" %}</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+
+                {# Informations #}
+                <div class="col-6 col-lg-2">
+                    <h6>{% trans "Informations" %}</h6>
+                    <ul class="list-unstyled mb-0">
+                        <li><a class="ed-footer-link" href="{% url 'about' %}"><i class="fas fa-info-circle"></i>{% trans "À propos" %}</a></li>
+                        <li><a class="ed-footer-link" href="{% url 'faq' %}"><i class="fas fa-question-circle"></i>{% trans "FAQ" %}</a></li>
+                    </ul>
+                </div>
+
+                {# Légal #}
+                <div class="col-6 col-lg-3">
+                    <h6>{% trans "Légal" %}</h6>
+                    <ul class="list-unstyled mb-0">
+                        <li><a class="ed-footer-link" href="{% url 'privacy' %}"><i class="fas fa-shield-alt"></i>{% trans "Confidentialité" %}</a></li>
+                        <li><a class="ed-footer-link" href="{% url 'conditions' %}"><i class="fas fa-file-contract"></i>{% trans "Conditions" %}</a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+        {# ===== BAS DU FOOTER : description + copyright centrés ===== #}
+        <div class="ed-footer-bottom">
+            <div class="container-xxl text-center">
+
+                <p class="ed-footer-desc mx-auto mb-3">
+                    {% if theme and theme.site_description %}
+                        {{ theme.site_description }}
+                    {% else %}
+                        {% trans "Apprenez à votre rythme, en français ou en kreyòl. Des cours concrets, des quiz et un suivi de progression clair." %}
+                    {% endif %}
+                </p>
+
+                <span class="ed-footer-copy d-block">
+                    &copy; {% now "Y" %}
+                    {% if theme %}{{ theme.site_name|default:'EducaDim' }}{% else %}EducaDim{% endif %} —
+                    {% if theme %}{{ theme.footer_text|default:_('Tous droits réservés') }}{% else %}{% trans "Tous droits réservés" %}{% endif %}
+                </span>
+
+            </div>
         </div>
     </footer>
 
