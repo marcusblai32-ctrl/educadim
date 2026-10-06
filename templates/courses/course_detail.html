@@ -94,16 +94,16 @@ body.page-courses-course-detail .course-detail-position {
     flex-wrap: wrap;
     gap: .5rem;
     margin: 0 auto 1.5rem;
-    color: var(--text-muted, #6b7280);
+    color: var(--text-muted, var(--text-muted));
     font-size: 1.1rem;
     line-height: 1.6;
     text-align: center;
 }
 body.page-courses-course-detail .course-detail-position i {
-    color: var(--primary, #5624d0);
+    color: var(--primary, var(--primary));
 }
 body.page-courses-course-detail .course-detail-link {
-    color: var(--primary, #5624d0);
+    color: var(--primary, var(--primary));
     font-weight: 700;
     text-decoration: none;
     font-size: 1.1rem;
@@ -154,7 +154,7 @@ body.page-courses-course-detail .prerequisites-box h4 {
     color: var(--text, #222);
 }
 body.page-courses-course-detail .prerequisites-box h4 i {
-    color: var(--primary, #5624d0);
+    color: var(--primary, var(--primary));
 }
 body.page-courses-course-detail .prerequisites-list {
     list-style: none;
@@ -175,13 +175,13 @@ body.page-courses-course-detail .prerequisites-list li {
 body.page-courses-course-detail .prerequisites-list li:last-child {
     margin-bottom: 0;
 }
-body.page-courses-course-detail .prereq-missing { color: var(--danger, #dc3545); font-size: 1.05rem; }
+body.page-courses-course-detail .prereq-missing { color: var(--danger, var(--danger)); font-size: 1.05rem; }
 body.page-courses-course-detail .prereq-success { color: var(--success, #198754); font-size: 1.05rem; }
 body.page-courses-course-detail .prereq-title { color: var(--text, #222); font-weight: 600; font-size: 1.05rem; }
 body.page-courses-course-detail .prereq-title-muted { color: var(--text-muted, #777); font-size: 1.05rem; }
 body.page-courses-course-detail .prereq-link {
     margin-left: auto;
-    color: var(--primary, #5624d0);
+    color: var(--primary, var(--primary));
     font-size: .95rem;
     font-weight: 700;
     text-decoration: none;
@@ -262,7 +262,7 @@ body.page-courses-course-detail .section-card-title {
     color: var(--text, #222);
 }
 body.page-courses-course-detail .section-card-title i {
-    color: var(--primary, #5624d0);
+    color: var(--primary, var(--primary));
 }
 
 /* ============================================================
@@ -309,10 +309,10 @@ body.page-courses-course-detail .unit-card h3 a {
     text-decoration: none;
     font-size: 1.25rem;
 }
-body.page-courses-course-detail .unit-card h3 a:hover { color: var(--primary, #5624d0); }
+body.page-courses-course-detail .unit-card h3 a:hover { color: var(--primary, var(--primary)); }
 body.page-courses-course-detail .unit-card p {
     margin: 0 0 .7rem;
-    color: var(--text-muted, #6b7280);
+    color: var(--text-muted, var(--text-muted));
     font-size: 1.05rem;
     line-height: 1.8;
 }
@@ -320,11 +320,11 @@ body.page-courses-course-detail .unit-modules {
     display: inline-flex;
     align-items: center;
     gap: .4rem;
-    color: var(--text-muted, #6b7280);
+    color: var(--text-muted, var(--text-muted));
     font-size: .95rem;
     font-weight: 600;
 }
-body.page-courses-course-detail .unit-modules i { color: var(--primary, #5624d0); }
+body.page-courses-course-detail .unit-modules i { color: var(--primary, var(--primary)); }
 
 /* ============================================================
    EMPTY UNITS
@@ -334,7 +334,7 @@ body.page-courses-course-detail .empty-units {
     margin: 0 auto;
     padding: 2rem 1rem;
     text-align: center;
-    color: var(--text-muted, #6b7280);
+    color: var(--text-muted, var(--text-muted));
     border: 1px dashed var(--glass-brd, rgba(0,0,0,.15));
     border-radius: 14px;
     font-size: 1.05rem;
@@ -352,7 +352,7 @@ body.page-courses-course-detail .course-actions-bottom {
     max-width: 900px;
     margin: 1.5rem auto 0;
     padding: 1.2rem;
-    border: 1px solid var(--primary, #5624d0);
+    border: 1px solid var(--primary, var(--primary));
     border-radius: 14px;
     background: rgba(86, 36, 208, 0.03);
 }
@@ -399,31 +399,31 @@ body.page-courses-course-detail .course-actions-bottom .btn:hover::after {
 }
 
 body.page-courses-course-detail .course-actions-bottom .btn-success {
-    background: var(--primary, #5624d0);
+    background: var(--primary, var(--primary));
     color: #fff;
     box-shadow: 0 4px 12px rgba(86, 36, 208, 0.25);
 }
 body.page-courses-course-detail .course-actions-bottom .btn-success:hover {
-    background: #4520a8;
+    background: var(--primary-hover);
     box-shadow: 0 6px 16px rgba(86, 36, 208, 0.35);
     transform: translateY(-2px);
 }
 
 body.page-courses-course-detail .course-actions-bottom .btn-primary {
-    background: var(--primary, #5624d0);
+    background: var(--primary, var(--primary));
     color: #fff;
     box-shadow: 0 4px 12px rgba(86, 36, 208, 0.25);
 }
 body.page-courses-course-detail .course-actions-bottom .btn-primary:hover {
-    background: #4520a8;
+    background: var(--primary-hover);
     box-shadow: 0 6px 16px rgba(86, 36, 208, 0.35);
     transform: translateY(-2px);
 }
 
 body.page-courses-course-detail .course-actions-bottom .btn-secondary:disabled {
     background: #e9ecef;
-    color: #6c757d;
-    border: 1px solid #dee2e6;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
     box-shadow: none;
     transform: none;
     cursor: not-allowed;
@@ -470,10 +470,10 @@ body.page-courses-course-detail .quiz-card h3 a {
     text-decoration: none;
     font-size: 1.35rem;
 }
-body.page-courses-course-detail .quiz-card h3 a:hover { color: var(--primary, #5624d0); }
+body.page-courses-course-detail .quiz-card h3 a:hover { color: var(--primary, var(--primary)); }
 body.page-courses-course-detail .quiz-card p {
     margin: 0 0 1rem;
-    color: var(--text-muted, #6b7280);
+    color: var(--text-muted, var(--text-muted));
     font-size: 1.05rem;
     line-height: 1.8;
 }
@@ -489,11 +489,11 @@ body.page-courses-course-detail .quiz-percent {
     display: inline-flex;
     align-items: center;
     gap: .4rem;
-    color: var(--text-muted, #6b7280);
+    color: var(--text-muted, var(--text-muted));
     font-size: 1rem;
     font-weight: 650;
 }
-body.page-courses-course-detail .quiz-percent i { color: var(--primary, #5624d0); }
+body.page-courses-course-detail .quiz-percent i { color: var(--primary, var(--primary)); }
 
 /* ============================================================
    BUTTONS - AUGMENTE TAILLE
@@ -718,21 +718,21 @@ html[data-theme="dark"] body.page-courses-course-detail .course-actions-bottom .
 }
 
 html[data-theme="dark"] body.page-courses-course-detail .course-actions-bottom .btn-success {
-    background: #5624d0;
+    background: var(--primary);
     color: #fff;
 }
 
 html[data-theme="dark"] body.page-courses-course-detail .course-actions-bottom .btn-success:hover {
-    background: #4520a8;
+    background: var(--primary-hover);
 }
 
 html[data-theme="dark"] body.page-courses-course-detail .course-actions-bottom .btn-primary {
-    background: #5624d0;
+    background: var(--primary);
     color: #fff;
 }
 
 html[data-theme="dark"] body.page-courses-course-detail .course-actions-bottom .btn-primary:hover {
-    background: #4520a8;
+    background: var(--primary-hover);
 }
 
 html[data-theme="dark"] body.page-courses-course-detail .course-actions-top {

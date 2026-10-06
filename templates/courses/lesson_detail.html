@@ -21,12 +21,12 @@
         padding: 0.6rem 0;
         margin-bottom: 1.5rem;
         font-size: 0.85rem;
-        color: var(--text-muted, #6c757d);
-        border-bottom: 1px solid var(--border, #dee2e6);
+        color: var(--text-muted, var(--text-muted));
+        border-bottom: 1px solid var(--border, var(--border));
     }
 
     body.page-courses-lesson-detail .breadcrumb-lesson a {
-        color: var(--primary, #1a1a2e);
+        color: var(--primary, var(--text));
         text-decoration: none;
         transition: var(--transition);
     }
@@ -36,12 +36,12 @@
     }
 
     body.page-courses-lesson-detail .breadcrumb-lesson .separator {
-        color: var(--text-muted, #6c757d);
+        color: var(--text-muted, var(--text-muted));
         margin: 0 0.2rem;
     }
 
     body.page-courses-lesson-detail .breadcrumb-lesson .current {
-        color: var(--text, #212529);
+        color: var(--text, var(--text));
         font-weight: 500;
     }
 
@@ -59,7 +59,7 @@
         font-size: 1.8rem;
         font-weight: 700;
         margin: 0;
-        color: var(--text, #212529);
+        color: var(--text, var(--text));
         font-family: var(--font-display);
     }
 
@@ -72,11 +72,11 @@
         font-size: 0.75rem;
         font-weight: 600;
         color: #fff;
-        background: var(--primary, #1a1a2e);
+        background: var(--primary, var(--primary));
     }
 
     body.page-courses-lesson-detail .lesson-description {
-        color: var(--text-muted, #6c757d);
+        color: var(--text-muted, var(--text-muted));
         margin-bottom: 1.5rem;
         line-height: 1.6;
     }
@@ -89,7 +89,7 @@
         border-radius: var(--radius, 8px);
         border: 1px solid var(--glass-brd-soft);
         line-height: 1.8;
-        color: var(--text, #212529);
+        color: var(--text, var(--text));
     }
 
     body.page-courses-lesson-detail .lesson-content p {
@@ -129,12 +129,12 @@
         display: flex;
         align-items: center;
         gap: 0.5rem;
-        color: var(--text, #212529);
+        color: var(--text, var(--text));
         font-family: var(--font-display);
     }
 
     body.page-courses-lesson-detail .sections-section h2 i {
-        color: var(--primary, #1a1a2e);
+        color: var(--primary, var(--text));
     }
 
     body.page-courses-lesson-detail .section-list {
@@ -145,7 +145,7 @@
 
     body.page-courses-lesson-detail .section-list li {
         padding: 0.6rem 0.8rem;
-        border-bottom: 1px solid var(--border, #dee2e6);
+        border-bottom: 1px solid var(--border, var(--border));
         transition: var(--transition);
     }
 
@@ -163,24 +163,24 @@
         display: flex;
         align-items: center;
         gap: 0.5rem;
-        color: var(--text, #212529);
+        color: var(--text, var(--text));
         text-decoration: none;
         transition: var(--transition);
     }
 
     body.page-courses-lesson-detail .section-list li a i {
-        color: var(--primary, #1a1a2e);
+        color: var(--primary, var(--text));
         width: 20px;
         text-align: center;
     }
 
     body.page-courses-lesson-detail .section-list li a:hover {
-        color: var(--primary, #1a1a2e);
+        color: var(--primary, var(--text));
     }
 
     body.page-courses-lesson-detail .section-list .empty-sections {
         padding: 0.6rem 0.8rem;
-        color: var(--text-muted, #6c757d);
+        color: var(--text-muted, var(--text-muted));
         font-style: italic;
     }
 
@@ -188,7 +188,7 @@
     body.page-courses-lesson-detail .quiz-section-lesson {
         margin-top: 2rem;
         padding-top: 1.5rem;
-        border-top: 1px solid var(--border, #dee2e6);
+        border-top: 1px solid var(--border, var(--border));
     }
 
     body.page-courses-lesson-detail .quiz-section-lesson h2 {
@@ -198,12 +198,12 @@
         display: flex;
         align-items: center;
         gap: 0.5rem;
-        color: var(--text, #212529);
+        color: var(--text, var(--text));
         font-family: var(--font-display);
     }
 
     body.page-courses-lesson-detail .quiz-section-lesson h2 i {
-        color: var(--primary, #1a1a2e);
+        color: var(--primary, var(--text));
     }
 
     body.page-courses-lesson-detail .quiz-grid-lesson {
@@ -229,7 +229,7 @@
     body.page-courses-lesson-detail .quiz-card-lesson h3 {
         font-size: 1rem;
         margin: 0 0 0.3rem;
-        color: var(--text, #212529);
+        color: var(--text, var(--text));
     }
 
     body.page-courses-lesson-detail .quiz-card-lesson h3 a {
@@ -239,11 +239,11 @@
     }
 
     body.page-courses-lesson-detail .quiz-card-lesson h3 a:hover {
-        color: var(--primary, #1a1a2e);
+        color: var(--primary, var(--text));
     }
 
     body.page-courses-lesson-detail .quiz-card-lesson .quiz-desc {
-        color: var(--text-muted, #6c757d);
+        color: var(--text-muted, var(--text-muted));
         font-size: 0.85rem;
         margin: 0 0 0.5rem;
     }
@@ -258,7 +258,7 @@
     }
 
     body.page-courses-lesson-detail .quiz-card-lesson .quiz-percent {
-        color: var(--text-muted, #6c757d);
+        color: var(--text-muted, var(--text-muted));
         font-size: 0.75rem;
         display: flex;
         align-items: center;
@@ -266,13 +266,13 @@
     }
 
     body.page-courses-lesson-detail .quiz-card-lesson .quiz-percent i {
-        color: var(--primary, #1a1a2e);
+        color: var(--primary, var(--text));
     }
 
     body.page-courses-lesson-detail .quiz-card-lesson .btn-sm {
         padding: 0.3rem 0.8rem;
         font-size: 0.75rem;
-        background: var(--primary, #1a1a2e);
+        background: var(--primary, var(--primary));
         color: #fff;
         border-radius: var(--radius-sm, 4px);
         text-decoration: none;
@@ -293,7 +293,7 @@
     body.page-courses-lesson-detail .lesson-actions {
         margin-top: 2rem;
         padding-top: 1.5rem;
-        border-top: 1px solid var(--border, #dee2e6);
+        border-top: 1px solid var(--border, var(--border));
         display: flex;
         gap: 1rem;
         flex-wrap: wrap;
@@ -314,7 +314,7 @@
     }
 
     body.page-courses-lesson-detail .lesson-actions .btn-success {
-        background: var(--success, #28a745);
+        background: var(--success, var(--success));
         color: #fff;
     }
 
@@ -325,7 +325,7 @@
     }
 
     body.page-courses-lesson-detail .lesson-actions .btn-secondary {
-        background: var(--secondary, #6c757d);
+        background: var(--secondary, var(--text-muted));
         color: #fff;
     }
 
@@ -336,14 +336,14 @@
 
     body.page-courses-lesson-detail .lesson-actions .btn-outline {
         background: transparent;
-        color: var(--text, #212529);
-        border: 1px solid var(--border, #dee2e6);
+        color: var(--text, var(--text));
+        border: 1px solid var(--border, var(--border));
     }
 
     body.page-courses-lesson-detail .lesson-actions .btn-outline:hover {
         background: var(--glass-soft);
-        border-color: var(--primary, #1a1a2e);
-        color: var(--primary, #1a1a2e);
+        border-color: var(--primary, var(--primary));
+        color: var(--primary, var(--text));
     }
 
     /* ===== RESPONSIVE ===== */
