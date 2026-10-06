@@ -8,7 +8,7 @@
 <div class="card" style="max-width: 900px; margin: 0 auto; padding: 2rem;">
     <div class="course-progress-header" style="margin-bottom: 2rem;">
         <h1 style="font-size: 2rem; font-weight: 700; color: var(--text, var(--text));">
-            <i class="fas fa-chart-line" style="color: var(--primary, #1a1a2e);"></i>
+            <i class="fas fa-chart-line" style="color: var(--primary, var(--text));"></i>
             {{ cours.display_titre }}
         </h1>
         <p style="color: var(--text-muted, var(--text-muted));">
@@ -29,7 +29,7 @@
                     {{ progres_cours.pourcentage|floatformat:0 }}% {% trans "terminé" %}
                 </span>
             </div>
-            <span style="font-size: 2rem; font-weight: 700; color: var(--primary, #1a1a2e);">
+            <span style="font-size: 2rem; font-weight: 700; color: var(--primary, var(--text));">
                 {{ progres_cours.pourcentage|floatformat:0 }}%
             </span>
         </div>
@@ -42,7 +42,7 @@
 
     <!-- ===== LISTE LECONS ===== -->
     <h2 style="font-size: 1.3rem; font-weight: 600; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-        <i class="fas fa-list-ul" style="color: var(--primary, #1a1a2e);"></i>
+        <i class="fas fa-list-ul" style="color: var(--primary, var(--text));"></i>
         {% trans "Leçons" %}
         <span style="font-size: 0.8rem; font-weight: 400; color: var(--text-muted, var(--text-muted));">
             ({{ lecons_data|length }})
