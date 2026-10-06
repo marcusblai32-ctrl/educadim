@@ -69,11 +69,11 @@
 
     {# ===== HEADER ===== #}
     <header class="site-header" id="mainHeader">
-        <nav class="navbar navbar-expand-xl" aria-label="{% trans 'Navigation principale' %}">
+        <nav class="navbar navbar-expand-lg" aria-label="{% trans 'Navigation principale' %}">
             <div class="container-xxl">
 
                 {# Logo / nom du site (données de theme_manager) #}
-                <a class="navbar-brand d-flex align-items-center gap-2 me-auto me-xl-3" href="{% url 'home' %}">
+                <a class="navbar-brand d-flex align-items-center gap-2 me-auto me-lg-3" href="{% url 'home' %}">
                     {% if theme and theme.get_logo %}
                         <img class="navbar-logo" src="{{ theme.get_logo }}" alt="" width="32" height="32">
                     {% endif %}
@@ -81,7 +81,7 @@
                 </a>
 
                 {# Outils toujours visibles, même sur le plus petit écran #}
-                <div class="d-flex align-items-center gap-2 order-xl-last ms-2 ms-xl-3">
+                <div class="d-flex align-items-center gap-2 order-lg-last ms-2 ms-lg-3">
                     <button type="button" class="theme-toggle btn btn-sm" id="themeToggle"
                             aria-label="{% trans 'Basculer le thème clair/sombre' %}"
                             title="{% trans 'Basculer le thème clair/sombre' %}" aria-pressed="false">
@@ -102,8 +102,8 @@
                                 aria-label="{% trans 'Fermer' %}"></button>
                     </div>
 
-                    <div class="offcanvas-body align-items-xl-center">
-                        <form class="header-search input-group mb-3 mb-xl-0 me-xl-auto" action="{% url 'courses:course_list' %}" method="get" role="search">
+                    <div class="offcanvas-body align-items-lg-center">
+                        <form class="header-search input-group mb-3 mb-lg-0 me-lg-auto" action="{% url 'courses:course_list' %}" method="get" role="search">
                             <label class="visually-hidden" for="navSearch">{% trans "Rechercher un cours" %}</label>
                             <input id="navSearch" name="search" type="search" class="form-control"
                                    placeholder="{% trans 'Rechercher un cours' %}" autocomplete="off">
@@ -112,7 +112,7 @@
                             </button>
                         </form>
 
-                        <ul class="navbar-nav align-items-xl-center gap-xl-1">
+                        <ul class="navbar-nav align-items-lg-center gap-lg-1">
                             <li class="nav-item">
                                 <a href="{% url 'courses:course_list' %}" class="nav-link">
                                     <i class="fas fa-book"></i><span>{% trans "Explorer" %}</span>
@@ -121,22 +121,22 @@
 
                             {% if user.is_authenticated %}
                             <li class="nav-item">
-                                <a href="{% url 'progress:dashboard' %}" class="nav-link">
-                                    <i class="fas fa-chart-line"></i><span>{% trans "Progression" %}</span>
+                                <a href="{% url 'progress:dashboard' %}" class="nav-link" title="{% trans 'Progression' %}">
+                                    <i class="fas fa-chart-line"></i><span class="nav-label">{% trans "Progression" %}</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="{% url 'todo:todo_list' %}" class="nav-link">
-                                    <i class="fas fa-list-check"></i><span>{% trans "Mes tâches" %}</span>
+                                <a href="{% url 'todo:todo_list' %}" class="nav-link" title="{% trans 'Mes tâches' %}">
+                                    <i class="fas fa-list-check"></i><span class="nav-label">{% trans "Mes tâches" %}</span>
                                 </a>
                             </li>
 
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="chatDropdownBtn" role="button"
+                                <a class="nav-link dropdown-toggle" href="#" id="chatDropdownBtn" role="button" title="{% trans 'Chat' %}"
                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fas fa-comments"></i><span>{% trans "Chat" %}</span>
+                                    <i class="fas fa-comments"></i><span class="nav-label">{% trans "Chat" %}</span>
                                 </a>
-                                <ul class="dropdown-menu dropdown-menu-xl-end" aria-labelledby="chatDropdownBtn">
+                                <ul class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="chatDropdownBtn">
                                     <li><a class="dropdown-item" href="{% url 'chat:liste_salons' %}">
                                         <i class="fas fa-comment-dots"></i>{% trans "Mes salons" %}</a></li>
                                     <li><a class="dropdown-item" href="{% url 'chat:liste_etudiants' %}">
@@ -145,8 +145,8 @@
                             </li>
 
                             <li class="nav-item">
-                                <a href="{% url 'notifications:list' %}" class="nav-link notification-link">
-                                    <i class="fas fa-bell"></i><span>{% trans "Notifications" %}</span>
+                                <a href="{% url 'notifications:list' %}" class="nav-link notification-link" title="{% trans 'Notifications' %}">
+                                    <i class="fas fa-bell"></i><span class="nav-label">{% trans "Notifications" %}</span>
                                     {% if unread_notifications > 0 %}
                                         <span class="badge rounded-pill bg-danger badge-pulse">{{ unread_notifications }}</span>
                                     {% endif %}
@@ -155,24 +155,24 @@
 
                             {% if user.is_staff %}
                             <li class="nav-item">
-                                <a href="{% url 'dashboard:admin_dashboard' %}" class="nav-link">
-                                    <i class="fas fa-chart-pie"></i><span>{% trans "Dashboard" %}</span>
+                                <a href="{% url 'dashboard:admin_dashboard' %}" class="nav-link" title="{% trans 'Dashboard' %}">
+                                    <i class="fas fa-chart-pie"></i><span class="nav-label">{% trans "Dashboard" %}</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="{% url 'admin:index' %}" class="nav-link">
-                                    <i class="fas fa-cog"></i><span>{% trans "Admin" %}</span>
+                                <a href="{% url 'admin:index' %}" class="nav-link" title="{% trans 'Admin' %}">
+                                    <i class="fas fa-cog"></i><span class="nav-label">{% trans "Admin" %}</span>
                                 </a>
                             </li>
                             {% endif %}
 
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="userDropdownBtn" role="button"
+                                <a class="nav-link dropdown-toggle" href="#" id="userDropdownBtn" role="button" title="{{ user.first_name|default:user.email }}"
                                    data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="fas fa-user-circle"></i>
-                                    <span class="text-truncate" style="max-width: 10rem;">{{ user.first_name|default:user.email }}</span>
+                                    <span class="nav-label text-truncate">{{ user.first_name|default:user.email }}</span>
                                 </a>
-                                <ul class="dropdown-menu dropdown-menu-xl-end" aria-labelledby="userDropdownBtn">
+                                <ul class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="userDropdownBtn">
                                     <li><a class="dropdown-item" href="{% url 'accounts:profile' %}"><i class="fas fa-id-card"></i>{% trans "Profil" %}</a></li>
                                     <li><a class="dropdown-item" href="{% url 'subscriptions:my_subscriptions' %}"><i class="fas fa-crown"></i>{% trans "Abonnements" %}</a></li>
                                     <li><a class="dropdown-item" href="{% url 'enrollments:list' %}"><i class="fas fa-list-check"></i>{% trans "Inscriptions" %}</a></li>
@@ -195,7 +195,7 @@
                                     <i class="fas fa-sign-in-alt"></i><span>{% trans "Connexion" %}</span>
                                 </a>
                             </li>
-                            <li class="nav-item mt-2 mt-xl-0">
+                            <li class="nav-item mt-2 mt-lg-0">
                                 <a href="{% url 'accounts:signup' %}" class="nav-link btn-nav-primary justify-content-center">
                                     <i class="fas fa-user-plus"></i><span>{% trans "S'inscrire" %}</span>
                                 </a>
@@ -205,7 +205,7 @@
 
                         {# Langue #}
                         {% get_current_language as CURRENT_LANGUAGE %}
-                        <form class="lang-switcher mt-3 mt-xl-0 ms-xl-2" action="{% url 'set_language' %}" method="post">
+                        <form class="lang-switcher mt-3 mt-lg-0 ms-lg-2" action="{% url 'set_language' %}" method="post">
                             {% csrf_token %}
                             <input name="next" type="hidden" value="{{ request.path }}">
                             <label class="visually-hidden" for="langSelect">{% trans "Langue" %}</label>
