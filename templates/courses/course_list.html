@@ -100,21 +100,24 @@
         {% for item in cours %}
         <div class="col">
 
-            {# ===== CARTE ===== #}
+            {# ===== CARTE : border-radius + overflow hidden ===== #}
             <article class="card border-0 shadow-sm h-100 overflow-hidden"
                      style="border-radius: 14px;">
 
-                {# ===== IMAGE : pleine largeur, ratio 3:2, remplit le cadre ===== #}
-                <div class="w-100 position-relative m-0 p-0" style="aspect-ratio: 3 / 2;">
+                {# ===== IMAGE : width 100%, collée aux bords, aucun espace ===== #}
+                <div class="position-relative m-0 p-0"
+                     style="width: 100%; aspect-ratio: 3 / 2; line-height: 0;">
 
                     {% with img=item.cours.get_image %}
                     {% if img %}
                         <img src="{{ img }}"
                              alt="{{ item.cours.display_titre }}"
-                             class="w-100 h-100 d-block m-0 p-0"
-                             style="object-fit: cover;">
+                             style="width: 100%; height: 100%; object-fit: cover;
+                                    display: block; margin: 0; padding: 0; border: 0;
+                                    border-radius: 0;">
                     {% else %}
-                        <div class="w-100 h-100 d-flex align-items-center justify-content-center bg-body-secondary text-body-secondary">
+                        <div class="bg-body-secondary d-flex align-items-center justify-content-center text-body-secondary"
+                             style="width: 100%; height: 100%;">
                             <i class="fas fa-book-open fs-2" aria-hidden="true"></i>
                         </div>
                     {% endif %}
@@ -146,7 +149,7 @@
                         </a>
                     </h2>
 
-                    {# Auteur / Instructeur (si dispo, sinon catégorie) #}
+                    {# Auteur / Catégorie #}
                     <p class="text-body-secondary mb-2" style="font-size: .82rem;">
                         {% if item.cours.instructeur %}
                             {{ item.cours.instructeur.get_full_name|default:item.cours.instructeur.username }}
@@ -161,23 +164,6 @@
                     <p class="text-body-secondary mb-3" style="font-size: .82rem; line-height: 1.45;">
                         {{ item.cours.display_description|truncatechars:90 }}
                     </p>
-
-                    {# ===== RATING ===== #}
-                    <div class="d-flex align-items-center gap-1 mb-3 flex-wrap">
-                        <span class="fw-bold" style="font-size: .85rem;">
-                            {% if item.cours.note_moyenne %}{{ item.cours.note_moyenne|floatformat:1 }}{% else %}4.5{% endif %}
-                        </span>
-                        <span class="text-warning" style="font-size: .8rem; letter-spacing: -.05em;">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                        </span>
-                        <span class="text-body-secondary" style="font-size: .75rem;">
-                            ({% if item.cours.nb_avis %}{{ item.cours.nb_avis }}{% else %}1,465{% endif %})
-                        </span>
-                    </div>
 
                     {# ===== PRIX ===== #}
                     <div class="mt-auto">
