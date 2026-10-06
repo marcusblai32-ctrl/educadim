@@ -99,17 +99,20 @@
     <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
         {% for item in cours %}
         <div class="col">
-            <article class="card h-100 border-0 shadow-sm overflow-hidden d-flex flex-column"
-                     style="min-height: 480px;">
+            <article class="card h-100 border-0 shadow-sm overflow-hidden d-flex flex-column">
 
-                {# ===== IMAGE : 50% de la hauteur, pleine largeur ===== #}
-                <div class="position-relative" style="flex: 0 0 50%;">
+                {# ===== IMAGE : ratio 3:2, pleine largeur, sans bordure/margin/padding ===== #}
+                <div class="position-relative w-100 bg-body-secondary p-0 m-0"
+                     style="aspect-ratio: 3 / 2;">
+
                     {% with img=item.cours.get_image %}
                     {% if img %}
-                        <img src="{{ img }}" alt="{{ item.cours.display_titre }}"
-                             class="w-100 h-100 object-fit-cover d-block">
+                        <img src="{{ img }}"
+                             alt="{{ item.cours.display_titre }}"
+                             class="w-100 h-100 d-block m-0 p-0 border-0"
+                             style="object-fit: contain;">
                     {% else %}
-                        <div class="w-100 h-100 bg-body-secondary d-flex align-items-center justify-content-center text-body-secondary">
+                        <div class="w-100 h-100 d-flex align-items-center justify-content-center text-body-secondary">
                             <i class="fas fa-book-open fs-1" aria-hidden="true"></i>
                         </div>
                     {% endif %}
@@ -130,8 +133,8 @@
                     </div>
                 </div>
 
-                {# ===== CORPS : 50% de la hauteur ===== #}
-                <div class="card-body d-flex flex-column p-4" style="flex: 1 1 50%; overflow: hidden;">
+                {# ===== CORPS DE CARTE ===== #}
+                <div class="card-body d-flex flex-column p-4 flex-grow-1">
 
                     {# Niveau + Catégorie #}
                     <div class="d-flex flex-wrap gap-2 mb-2">
@@ -156,7 +159,7 @@
                     </h2>
 
                     {# Description #}
-                    <p class="text-body-secondary small mb-3 flex-grow-1" style="overflow: hidden;">
+                    <p class="text-body-secondary small mb-3 flex-grow-1">
                         {{ item.cours.display_description|truncatechars:110 }}
                     </p>
 
