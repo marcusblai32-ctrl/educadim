@@ -234,16 +234,20 @@ def _surface_vars(theme):
     c = {f: safe_color(getattr(theme, f, None)) for f in
          ("body_bg", "text_color", "text_muted", "white", "light", "dark", "border")}
     lines = []
-    if c["body_bg"]:
-        v = c["body_bg"]
+    # Fon paj nan mòd KLÈ = koulè "Clair" nan theme manager (si li pa valid -> "Fond de page")
+    page_bg = c["light"] or c["body_bg"]
+    if page_bg:
+        v = page_bg
         lines += [f"--bg: {v};", f"--bg-body: {v};", f"--body-bg: {v};",
-                  f"--bs-body-bg: {v};", f"--bs-body-bg-rgb: {rgb_triplet(v)};"]
+                  f"--bs-body-bg: {v};", f"--bs-body-bg-rgb: {rgb_triplet(v)};",
+                  f"--light-tint-1: {mix(v, safe_color(getattr(theme, 'primary', None), '#176b91'), 0.08)};",
+                  f"--light-tint-2: {mix(v, safe_color(getattr(theme, 'secondary', None), '#45b7c7'), 0.06)};"]
     if c["text_color"]:
         v = c["text_color"]
         lines += [f"--text: {v};", f"--bs-body-color: {v};", f"--bs-body-color-rgb: {rgb_triplet(v)};",
                   f"--bs-heading-color: {v};"]
-        if c["body_bg"]:
-            lines.append(f"--text-secondary: {mix(v, c['body_bg'], 0.2)};")
+        if page_bg:
+            lines.append(f"--text-secondary: {mix(v, page_bg, 0.2)};")
     if c["text_muted"]:
         v = c["text_muted"]
         lines += [f"--text-muted: {v};", f"--bs-secondary-color: {v};"]
@@ -264,6 +268,35 @@ def _surface_vars(theme):
         lines += [f"--border: {v};", f"--glass-brd: {v};", f"--glass-brd-soft: {mix(v, '#ffffff', 0.35)};",
                   f"--bs-border-color: {v};"]
     return lines
+
+
+def _dark_surface_vars(theme):
+    """
+    Mòd FONSE : fon paj = koulè "Foncé" (dark) nan theme manager.
+    Kat, bordi ak nuans (hero, footer) kalkile ladan l ak primary/secondary,
+    pou yo swiv admin lan olye de koulè fiks yo nan brand.css.
+    """
+    dark = safe_color(getattr(theme, "dark", None))
+    if not dark:
+        return []
+    primary = safe_color(getattr(theme, "primary", None), "#176b91")
+    secondary = safe_color(getattr(theme, "secondary", None), "#45b7c7")
+    card = mix(dark, "#ffffff", 0.06)
+    soft = mix(dark, "#ffffff", 0.10)
+    border = mix(dark, "#ffffff", 0.16)
+    return [
+        f"--bg: {dark};", f"--bg-body: {dark};", f"--body-bg: {dark};",
+        f"--bs-body-bg: {dark};", f"--bs-body-bg-rgb: {rgb_triplet(dark)};",
+        f"--bg-card: {card};", f"--card-bg: {card};", f"--bs-card-bg: {card};",
+        f"--bs-tertiary-bg: {card};", f"--glass-2: {card};",
+        f"--glass: rgba({rgb_triplet(card)}, 0.85);",
+        f"--glass-soft: rgba({rgb_triplet(soft)}, 0.65);",
+        f"--border: {border};", f"--glass-brd: {border};", f"--glass-brd-soft: {border};",
+        f"--bs-border-color: {border};",
+        f"--dark-tint-1: {mix(dark, primary, 0.22)};",
+        f"--dark-tint-2: {mix(dark, secondary, 0.16)};",
+        f"--dark-tint-footer: {mix(dark, primary, 0.10)};",
+    ]
 
 
 def build_css(theme):
@@ -297,6 +330,7 @@ def build_css(theme):
     # Mòd fonse: menm koulè mak yo, men pi klè (sinon brand.css fonse a ta rete ak koulè default li)
     css += ['html[data-theme="dark"], html[data-bs-theme="dark"], html.dark {']
     css += [f"  {line}" for line in _brand_vars(theme, dark=True)]
+    css += [f"  {line}" for line in _dark_surface_vars(theme)]
     css += ["}", ""]
     return "\n".join(css)
 
