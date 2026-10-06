@@ -10,7 +10,7 @@
     <div class="dashboard-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem;">
         <div>
             <h1 style="font-size: 2rem; font-weight: 700; color: var(--text, var(--text)); display: flex; align-items: center; gap: 0.75rem;">
-                <i class="fas fa-chart-line" style="color: var(--primary, #1a1a2e);"></i>
+                <i class="fas fa-chart-line" style="color: var(--primary, var(--text));"></i>
                 {% trans "Ma progression" %}
             </h1>
             <p style="color: var(--text-muted, var(--text-muted)); margin: 0;">
@@ -22,7 +22,7 @@
             <span style="background: var(--success, var(--success)); color: #fff; padding: 0.3rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">
                 <i class="fas fa-check"></i> {{ completed_cours }} {% trans "terminés" %}
             </span>
-            <span style="background: var(--primary, #1a1a2e); color: #fff; padding: 0.3rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">
+            <span style="background: var(--primary, var(--primary)); color: #fff; padding: 0.3rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">
                 <i class="fas fa-spinner"></i> {{ cours_en_cours|length }} {% trans "en cours" %}
             </span>
         </div>
@@ -31,7 +31,7 @@
     <!-- ===== STATISTIQUES ===== -->
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
         <div style="background: var(--light, #f8f9fa); padding: 1rem; border-radius: var(--radius, 8px); text-align: center;">
-            <div style="font-size: 1.8rem; font-weight: 700; color: var(--primary, #1a1a2e);">{{ total_cours }}</div>
+            <div style="font-size: 1.8rem; font-weight: 700; color: var(--primary, var(--text));">{{ total_cours }}</div>
             <div style="font-size: 0.85rem; color: var(--text-muted, var(--text-muted));">{% trans "Cours" %}</div>
         </div>
         <div style="background: var(--light, #f8f9fa); padding: 1rem; border-radius: var(--radius, 8px); text-align: center;">
@@ -43,7 +43,7 @@
             <div style="font-size: 0.85rem; color: var(--text-muted, var(--text-muted));">{% trans "Leçons en cours" %}</div>
         </div>
         <div style="background: var(--light, #f8f9fa); padding: 1rem; border-radius: var(--radius, 8px); text-align: center;">
-            <div style="font-size: 1.8rem; font-weight: 700; color: var(--info, #17a2b8);">{{ completed_cours }}</div>
+            <div style="font-size: 1.8rem; font-weight: 700; color: var(--info, var(--info));">{{ completed_cours }}</div>
             <div style="font-size: 0.85rem; color: var(--text-muted, var(--text-muted));">{% trans "Cours terminés" %}</div>
         </div>
     </div>
@@ -67,7 +67,7 @@
                     {% endif %}
                 </div>
                 <div style="display: flex; align-items: center; gap: 1rem;">
-                    <span style="font-weight: 700; color: var(--primary, #1a1a2e); font-size: 1.2rem;">
+                    <span style="font-weight: 700; color: var(--primary, var(--text)); font-size: 1.2rem;">
                         {{ pc.pourcentage|floatformat:0 }}%
                     </span>
                     {% if pc.est_termine %}
