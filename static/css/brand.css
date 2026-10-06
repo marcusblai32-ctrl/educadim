@@ -120,7 +120,7 @@ a:hover { color: var(--primary-dark); }
 .banner-container { width: min(100% - 2rem, 1320px); }
 .banner-container .banner { border-radius: .85rem; box-shadow: var(--shadow); }
 .banner-image { border-radius: inherit; }
-.evenement-banner { background: linear-gradient(110deg, #145b7a, #249caf); }
+.evenement-banner { background: linear-gradient(110deg, var(--primary-hover), #249caf); }
 
 .messages-container { margin-bottom: 1.25rem; }
 .alert { border-radius: .8rem; }
@@ -279,7 +279,7 @@ html[data-theme="dark"] .hero, html[data-bs-theme="dark"] .hero {
     margin: 0 auto clamp(3rem, 7vw, 6rem);
     padding: clamp(2rem, 6vw, 4.6rem);
     border-radius: 1.35rem;
-    background: linear-gradient(118deg, #145a78, #208da3);
+    background: linear-gradient(118deg, var(--primary-hover), #208da3);
     text-align: left;
     color: #f3fbfb;
     overflow: hidden;
@@ -288,7 +288,7 @@ html[data-theme="dark"] .hero, html[data-bs-theme="dark"] .hero {
 .cta-section h2 { color: #fff; font-size: clamp(1.8rem, 4vw, 3rem); letter-spacing: -.05em; }
 .cta-section p { color: rgba(243, 251, 251, .82); max-width: 590px; }
 .cta-highlight { color: #bcecf0; }
-.cta-button { color: #145a78; background: #f5fbf8; border-color: #f5fbf8; }
+.cta-button { color: var(--primary-hover); background: #f5fbf8; border-color: #f5fbf8; }
 .testimonials-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
 .testimonial-card { padding: 1.5rem; border: 1px solid var(--border); border-radius: 1rem; background: var(--bg-card); }
 .testimonial-card .stars { color: #bc8c35; }
