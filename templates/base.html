@@ -32,7 +32,7 @@
     <meta name="twitter:title" content="{% block twitter_title %}{% if theme %}{{ theme.site_name|default:'EducaDim' }}{% else %}EducaDim{% endif %}{% endblock %}">
     <meta name="twitter:description" content="{% block twitter_description %}{% if meta_description %}{{ meta_description }}{% elif theme and theme.site_description %}{{ theme.site_description }}{% else %}EducaDim — plateforme e-learning.{% endif %}{% endblock %}">
 
-    {# ===== JSON-LD (site-wide, real data only) ===== #}
+    {# ===== JSON-LD ===== #}
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -54,10 +54,353 @@
         <link rel="shortcut icon" type="image/x-icon" href="{{ theme.favicon.url }}">
     {% endif %}
 
-    {# ===== CSS (partial partagé avec base_chat) ===== #}
+    {# ===== CSS ===== #}
     {% include "partials/head_assets.html" %}
 
     {% block extra_head %}{% endblock %}
+
+    {# ===== HEADER + FOOTER STYLES (Bootstrap-friendly) ===== #}
+    <style>
+        /* =========================================================
+           VARIABLES
+        ========================================================= */
+        :root {
+            --ed-primary: #5b76f7;
+            --ed-primary-dark: #3f56c9;
+            --ed-surface: #ffffff;
+            --ed-surface-2: #f6f8ff;
+            --ed-border: rgba(15, 23, 42, 0.08);
+            --ed-text: #0f172a;
+            --ed-text-muted: #64748b;
+            --ed-header-h: 68px;
+            --ed-radius: 14px;
+            --ed-shadow-sm: 0 2px 6px rgba(15, 23, 42, 0.06);
+            --ed-shadow-md: 0 8px 24px rgba(15, 23, 42, 0.08);
+            --ed-shadow-lg: 0 20px 40px rgba(15, 23, 42, 0.12);
+        }
+
+        [data-theme="dark"] {
+            --ed-surface: #0f172a;
+            --ed-surface-2: #131a33;
+            --ed-border: rgba(255, 255, 255, 0.08);
+            --ed-text: #e2e8f0;
+            --ed-text-muted: #94a3b8;
+        }
+
+        /* =========================================================
+           HEADER
+        ========================================================= */
+        .ed-header {
+            position: sticky;
+            top: 0;
+            z-index: 1030;
+            background: var(--ed-surface);
+            border-bottom: 1px solid var(--ed-border);
+            box-shadow: var(--ed-shadow-sm);
+            backdrop-filter: saturate(180%) blur(8px);
+            transition: box-shadow .25s ease, background .25s ease;
+        }
+        .ed-header.is-scrolled {
+            box-shadow: var(--ed-shadow-md);
+        }
+
+        .ed-header .navbar {
+            padding: .5rem 0;
+            min-height: var(--ed-header-h);
+        }
+
+        .ed-brand {
+            display: inline-flex;
+            align-items: center;
+            gap: .65rem;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--ed-text) !important;
+            text-decoration: none;
+            letter-spacing: -.01em;
+            max-width: 60vw;
+        }
+        .ed-brand:hover { color: var(--ed-primary) !important; }
+        .ed-brand-logo {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            object-fit: cover;
+            box-shadow: var(--ed-shadow-sm);
+        }
+        .ed-brand-name {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Search */
+        .ed-search {
+            flex: 1 1 auto;
+            max-width: 420px;
+            min-width: 0;
+        }
+        .ed-search .form-control {
+            border-radius: 999px 0 0 999px;
+            border: 1px solid var(--ed-border);
+            background: var(--ed-surface-2);
+            padding: .55rem 1rem;
+            color: var(--ed-text);
+            font-size: .92rem;
+            box-shadow: none;
+        }
+        .ed-search .form-control:focus {
+            background: var(--ed-surface);
+            border-color: var(--ed-primary);
+            box-shadow: 0 0 0 .2rem rgba(91, 118, 247, .15);
+        }
+        .ed-search .btn {
+            border-radius: 0 999px 999px 0;
+            background: var(--ed-primary);
+            color: #fff;
+            border: 1px solid var(--ed-primary);
+            padding: .55rem 1rem;
+        }
+        .ed-search .btn:hover { background: var(--ed-primary-dark); border-color: var(--ed-primary-dark); }
+
+        /* Nav links */
+        .ed-nav .nav-link {
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+            padding: .55rem .85rem;
+            border-radius: 10px;
+            font-weight: 500;
+            color: var(--ed-text);
+            font-size: .93rem;
+            transition: background .2s ease, color .2s ease;
+            white-space: nowrap;
+        }
+        .ed-nav .nav-link:hover,
+        .ed-nav .nav-link:focus {
+            background: var(--ed-surface-2);
+            color: var(--ed-primary);
+        }
+        .ed-nav .nav-link i { color: var(--ed-primary); font-size: .95rem; }
+        .ed-nav .nav-link .badge { font-size: .68rem; }
+
+        .ed-nav .btn-nav-primary {
+            background: var(--ed-primary);
+            color: #fff !important;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+        .ed-nav .btn-nav-primary:hover {
+            background: var(--ed-primary-dark);
+            color: #fff !important;
+        }
+        .ed-nav .btn-nav-primary i { color: #fff; }
+
+        /* Theme toggle */
+        .ed-icon-btn {
+            width: 40px;
+            height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 1px solid var(--ed-border);
+            background: var(--ed-surface-2);
+            color: var(--ed-text);
+            transition: background .2s ease, color .2s ease, transform .2s ease;
+        }
+        .ed-icon-btn:hover {
+            background: var(--ed-primary);
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        /* Language select */
+        .ed-lang .form-select {
+            border-radius: 10px;
+            border: 1px solid var(--ed-border);
+            background-color: var(--ed-surface-2);
+            color: var(--ed-text);
+            font-size: .85rem;
+            padding: .4rem 2rem .4rem .75rem;
+            min-width: 110px;
+        }
+        .ed-lang .form-select:focus {
+            border-color: var(--ed-primary);
+            box-shadow: 0 0 0 .2rem rgba(91, 118, 247, .15);
+        }
+
+        /* User avatar */
+        .ed-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--ed-primary), var(--ed-primary-dark));
+            color: #fff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .8rem;
+            font-weight: 600;
+            flex: 0 0 auto;
+        }
+
+        /* Dropdown polish */
+        .ed-header .dropdown-menu {
+            border: 1px solid var(--ed-border);
+            border-radius: 12px;
+            box-shadow: var(--ed-shadow-md);
+            padding: .4rem;
+            min-width: 230px;
+            background: var(--ed-surface);
+        }
+        .ed-header .dropdown-item {
+            border-radius: 8px;
+            padding: .55rem .75rem;
+            font-size: .9rem;
+            color: var(--ed-text);
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+        }
+        .ed-header .dropdown-item:hover {
+            background: var(--ed-surface-2);
+            color: var(--ed-primary);
+        }
+        .ed-header .dropdown-item i { width: 1.1rem; text-align: center; color: var(--ed-primary); }
+        .ed-header .dropdown-item.text-danger i { color: inherit; }
+
+        /* Offcanvas (mobile menu) */
+        .ed-offcanvas {
+            width: min(360px, 90vw);
+            background: var(--ed-surface);
+            color: var(--ed-text);
+        }
+        .ed-offcanvas .offcanvas-header {
+            border-bottom: 1px solid var(--ed-border);
+            padding: 1rem 1.25rem;
+        }
+        .ed-offcanvas .offcanvas-title {
+            font-weight: 700;
+            letter-spacing: -.01em;
+            display: flex;
+            align-items: center;
+            gap: .55rem;
+        }
+        .ed-offcanvas .offcanvas-body {
+            padding: 1rem 1.25rem 1.5rem;
+        }
+
+        /* =========================================================
+           FOOTER
+        ========================================================= */
+        .ed-footer {
+            background: linear-gradient(180deg, var(--ed-surface) 0%, var(--ed-surface-2) 100%);
+            border-top: 1px solid var(--ed-border);
+            color: var(--ed-text);
+            margin-top: 4rem;
+        }
+        .ed-footer-top {
+            padding: 3.5rem 0 2.5rem;
+        }
+        .ed-footer h6 {
+            font-weight: 700;
+            font-size: .78rem;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: var(--ed-text-muted);
+            margin-bottom: 1rem;
+        }
+        .ed-footer-link {
+            display: inline-flex;
+            align-items: center;
+            gap: .55rem;
+            color: var(--ed-text);
+            text-decoration: none;
+            padding: .35rem 0;
+            font-size: .93rem;
+            transition: color .2s ease, transform .2s ease;
+        }
+        .ed-footer-link:hover {
+            color: var(--ed-primary);
+            transform: translateX(3px);
+        }
+        .ed-footer-link i { color: var(--ed-primary); width: 1.1rem; text-align: center; }
+
+        .ed-footer-brand {
+            display: inline-flex;
+            align-items: center;
+            gap: .65rem;
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: var(--ed-text);
+            text-decoration: none;
+            margin-bottom: .85rem;
+        }
+        .ed-footer-brand img {
+            width: 40px; height: 40px; border-radius: 10px; object-fit: cover;
+        }
+        .ed-footer-desc {
+            color: var(--ed-text-muted);
+            font-size: .92rem;
+            line-height: 1.6;
+            max-width: 420px;
+        }
+
+        .ed-social {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px; height: 38px;
+            border-radius: 10px;
+            background: var(--ed-surface);
+            border: 1px solid var(--ed-border);
+            color: var(--ed-text);
+            margin-right: .4rem;
+            transition: all .2s ease;
+        }
+        .ed-social:hover {
+            background: var(--ed-primary);
+            border-color: var(--ed-primary);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .ed-footer-bottom {
+            border-top: 1px solid var(--ed-border);
+            padding: 1.25rem 0;
+            font-size: .85rem;
+            color: var(--ed-text-muted);
+        }
+        .ed-footer-bottom a {
+            color: var(--ed-text-muted);
+            text-decoration: none;
+        }
+        .ed-footer-bottom a:hover { color: var(--ed-primary); }
+
+        /* Responsive tweaks */
+        @media (max-width: 991.98px) {
+            .ed-search {
+                width: 100%;
+                max-width: 100%;
+                margin: .5rem 0 .75rem;
+            }
+            .ed-nav .nav-link {
+                padding: .65rem .75rem;
+                width: 100%;
+                justify-content: flex-start;
+                border-radius: 10px;
+            }
+            .ed-nav .nav-item { width: 100%; }
+            .ed-nav .btn-nav-primary { justify-content: center !important; }
+        }
+
+        @media (max-width: 575.98px) {
+            .ed-brand-name { font-size: 1rem; }
+            .ed-footer-top { padding: 2.5rem 0 1.75rem; }
+        }
+    </style>
+
     {% block extra_css %}{% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}">
@@ -68,163 +411,284 @@
     </div>
 
     {# ===== HEADER ===== #}
-    <header class="site-header" id="mainHeader">
-        <nav class="navbar navbar-expand-lg" aria-label="{% trans 'Navigation principale' %}">
+    <header class="ed-header" id="mainHeader">
+        <nav class="navbar navbar-expand-xl" aria-label="{% trans 'Navigation principale' %}">
             <div class="container-xxl">
 
-                {# Logo / nom du site (données de theme_manager) #}
-                <a class="navbar-brand d-flex align-items-center gap-2 me-auto me-lg-3" href="{% url 'home' %}">
+                {# Brand #}
+                <a class="ed-brand navbar-brand me-2 me-lg-3" href="{% url 'home' %}">
                     {% if theme and theme.get_logo %}
-                        <img class="navbar-logo" src="{{ theme.get_logo }}" alt="" width="32" height="32">
+                        <img class="ed-brand-logo" src="{{ theme.get_logo }}" alt="" width="38" height="38">
                     {% endif %}
-                    <span class="navbar-site-name text-truncate">{{ site_name }}</span>
+                    <span class="ed-brand-name">{{ site_name }}</span>
                 </a>
 
-                {# Outils toujours visibles, même sur le plus petit écran #}
-                <div class="d-flex align-items-center gap-2 order-lg-last ms-2 ms-lg-3">
-                    <button type="button" class="theme-toggle btn btn-sm" id="themeToggle"
+                {# Desktop search (>= xl) #}
+                <form class="ed-search d-none d-xl-flex input-group mx-3" action="{% url 'courses:course_list' %}" method="get" role="search">
+                    <label class="visually-hidden" for="navSearchDesktop">{% trans "Rechercher un cours" %}</label>
+                    <input id="navSearchDesktop" name="search" type="search" class="form-control"
+                           placeholder="{% trans 'Rechercher un cours' %}" autocomplete="off">
+                    <button class="btn" type="submit" aria-label="{% trans 'Lancer la recherche' %}">
+                        <i class="fas fa-search" aria-hidden="true"></i>
+                    </button>
+                </form>
+
+                {# Right tools #}
+                <div class="d-flex align-items-center gap-2 ms-auto order-xl-last">
+                    {# Language (desktop) #}
+                    {% get_current_language as CURRENT_LANGUAGE %}
+                    <form class="ed-lang d-none d-xl-block" action="{% url 'set_language' %}" method="post">
+                        {% csrf_token %}
+                        <input name="next" type="hidden" value="{{ request.path }}">
+                        <label class="visually-hidden" for="langSelectDesktop">{% trans "Langue" %}</label>
+                        <select id="langSelectDesktop" class="form-select form-select-sm" name="language" data-submit-on-change>
+                            <option value="fr" {% if CURRENT_LANGUAGE == 'fr' %}selected{% endif %}>Français</option>
+                            <option value="ht" {% if CURRENT_LANGUAGE == 'ht' %}selected{% endif %}>Kreyòl</option>
+                        </select>
+                    </form>
+
+                    {# Theme toggle #}
+                    <button type="button" class="ed-icon-btn" id="themeToggle"
                             aria-label="{% trans 'Basculer le thème clair/sombre' %}"
                             title="{% trans 'Basculer le thème clair/sombre' %}" aria-pressed="false">
                         <i class="fas fa-moon" aria-hidden="true"></i>
                     </button>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
-                            data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false"
+
+                    {# Desktop nav (>= xl) #}
+                    <ul class="navbar-nav ed-nav d-none d-xl-flex flex-row align-items-center gap-1 mb-0 ms-1">
+                        <li class="nav-item">
+                            <a href="{% url 'courses:course_list' %}" class="nav-link">
+                                <i class="fas fa-book"></i><span>{% trans "Explorer" %}</span>
+                            </a>
+                        </li>
+
+                        {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a href="{% url 'progress:dashboard' %}" class="nav-link" title="{% trans 'Progression' %}">
+                                <i class="fas fa-chart-line"></i><span class="nav-label">{% trans "Progression" %}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'todo:todo_list' %}" class="nav-link" title="{% trans 'Mes tâches' %}">
+                                <i class="fas fa-list-check"></i><span class="nav-label">{% trans "Mes tâches" %}</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="chatDropdownBtnDesktop" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-comments"></i><span class="nav-label">{% trans "Chat" %}</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="chatDropdownBtnDesktop">
+                                <li><a class="dropdown-item" href="{% url 'chat:liste_salons' %}">
+                                    <i class="fas fa-comment-dots"></i>{% trans "Mes salons" %}</a></li>
+                                <li><a class="dropdown-item" href="{% url 'chat:liste_etudiants' %}">
+                                    <i class="fas fa-user-friends"></i>{% trans "Étudiants" %}</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{% url 'notifications:list' %}" class="nav-link position-relative" title="{% trans 'Notifications' %}">
+                                <i class="fas fa-bell"></i>
+                                {% if unread_notifications > 0 %}
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        {{ unread_notifications }}
+                                    </span>
+                                {% endif %}
+                            </a>
+                        </li>
+
+                        {% if user.is_staff %}
+                        <li class="nav-item">
+                            <a href="{% url 'dashboard:admin_dashboard' %}" class="nav-link" title="{% trans 'Dashboard' %}">
+                                <i class="fas fa-chart-pie"></i>
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#"
+                               id="userDropdownBtnDesktop" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="ed-avatar">{{ user.first_name|default:user.email|slice:":1"|upper }}</span>
+                                <span class="nav-label text-truncate d-none d-xxl-inline" style="max-width:120px;">
+                                    {{ user.first_name|default:user.email }}
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdownBtnDesktop">
+                                <li><a class="dropdown-item" href="{% url 'accounts:profile' %}"><i class="fas fa-id-card"></i>{% trans "Profil" %}</a></li>
+                                <li><a class="dropdown-item" href="{% url 'subscriptions:my_subscriptions' %}"><i class="fas fa-crown"></i>{% trans "Abonnements" %}</a></li>
+                                <li><a class="dropdown-item" href="{% url 'enrollments:list' %}"><i class="fas fa-list-check"></i>{% trans "Inscriptions" %}</a></li>
+                                <li><a class="dropdown-item" href="{% url 'ranking:my_rank' %}"><i class="fas fa-trophy"></i>{% trans "Classement" %}</a></li>
+                                <li><a class="dropdown-item" href="{% url 'badges:my_badges' %}"><i class="fas fa-medal"></i>{% trans "Badges" %}</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form method="post" action="{% url 'accounts:logout' %}" id="logoutFormDesktop">
+                                        {% csrf_token %}
+                                        <button type="submit" class="dropdown-item text-danger">
+                                            <i class="fas fa-sign-out-alt"></i>{% trans "Déconnexion" %}
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                        {% else %}
+                        <li class="nav-item">
+                            <a href="{% url 'accounts:login' %}" class="nav-link">
+                                <i class="fas fa-sign-in-alt"></i><span>{% trans "Connexion" %}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'accounts:signup' %}" class="nav-link btn-nav-primary">
+                                <i class="fas fa-user-plus"></i><span>{% trans "S'inscrire" %}</span>
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+
+                    {# Hamburger (mobile/tablet) #}
+                    <button class="navbar-toggler d-xl-none ed-icon-btn border-0" type="button"
+                            data-bs-toggle="offcanvas" data-bs-target="#mainNav"
+                            aria-controls="mainNav" aria-expanded="false"
                             aria-label="{% trans 'Ouvrir le menu' %}">
-                        <span class="navbar-toggler-icon"></span>
+                        <i class="fas fa-bars" aria-hidden="true"></i>
                     </button>
-                </div>
-
-                {# Menu : barre horizontale (>= xl) / panneau latéral (< xl) — géré par Bootstrap #}
-                <div class="offcanvas offcanvas-end" tabindex="-1" id="mainNav" aria-labelledby="mainNavLabel">
-                    <div class="offcanvas-header">
-                        <h2 class="offcanvas-title h5" id="mainNavLabel">{{ site_name }}</h2>
-                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
-                                aria-label="{% trans 'Fermer' %}"></button>
-                    </div>
-
-                    <div class="offcanvas-body align-items-lg-center">
-                        <form class="header-search input-group mb-3 mb-lg-0 me-lg-auto" action="{% url 'courses:course_list' %}" method="get" role="search">
-                            <label class="visually-hidden" for="navSearch">{% trans "Rechercher un cours" %}</label>
-                            <input id="navSearch" name="search" type="search" class="form-control"
-                                   placeholder="{% trans 'Rechercher un cours' %}" autocomplete="off">
-                            <button class="btn" type="submit" aria-label="{% trans 'Lancer la recherche' %}">
-                                <i class="fas fa-search" aria-hidden="true"></i>
-                            </button>
-                        </form>
-
-                        <ul class="navbar-nav align-items-lg-center gap-lg-1">
-                            <li class="nav-item">
-                                <a href="{% url 'courses:course_list' %}" class="nav-link">
-                                    <i class="fas fa-book"></i><span>{% trans "Explorer" %}</span>
-                                </a>
-                            </li>
-
-                            {% if user.is_authenticated %}
-                            <li class="nav-item">
-                                <a href="{% url 'progress:dashboard' %}" class="nav-link" title="{% trans 'Progression' %}">
-                                    <i class="fas fa-chart-line"></i><span class="nav-label">{% trans "Progression" %}</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{% url 'todo:todo_list' %}" class="nav-link" title="{% trans 'Mes tâches' %}">
-                                    <i class="fas fa-list-check"></i><span class="nav-label">{% trans "Mes tâches" %}</span>
-                                </a>
-                            </li>
-
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="chatDropdownBtn" role="button" title="{% trans 'Chat' %}"
-                                   data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fas fa-comments"></i><span class="nav-label">{% trans "Chat" %}</span>
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="chatDropdownBtn">
-                                    <li><a class="dropdown-item" href="{% url 'chat:liste_salons' %}">
-                                        <i class="fas fa-comment-dots"></i>{% trans "Mes salons" %}</a></li>
-                                    <li><a class="dropdown-item" href="{% url 'chat:liste_etudiants' %}">
-                                        <i class="fas fa-user-friends"></i>{% trans "Étudiants" %}</a></li>
-                                </ul>
-                            </li>
-
-                            <li class="nav-item">
-                                <a href="{% url 'notifications:list' %}" class="nav-link notification-link" title="{% trans 'Notifications' %}">
-                                    <i class="fas fa-bell"></i><span class="nav-label">{% trans "Notifications" %}</span>
-                                    {% if unread_notifications > 0 %}
-                                        <span class="badge rounded-pill bg-danger badge-pulse">{{ unread_notifications }}</span>
-                                    {% endif %}
-                                </a>
-                            </li>
-
-                            {% if user.is_staff %}
-                            <li class="nav-item">
-                                <a href="{% url 'dashboard:admin_dashboard' %}" class="nav-link" title="{% trans 'Dashboard' %}">
-                                    <i class="fas fa-chart-pie"></i><span class="nav-label">{% trans "Dashboard" %}</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{% url 'admin:index' %}" class="nav-link" title="{% trans 'Admin' %}">
-                                    <i class="fas fa-cog"></i><span class="nav-label">{% trans "Admin" %}</span>
-                                </a>
-                            </li>
-                            {% endif %}
-
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="userDropdownBtn" role="button" title="{{ user.first_name|default:user.email }}"
-                                   data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fas fa-user-circle"></i>
-                                    <span class="nav-label text-truncate">{{ user.first_name|default:user.email }}</span>
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="userDropdownBtn">
-                                    <li><a class="dropdown-item" href="{% url 'accounts:profile' %}"><i class="fas fa-id-card"></i>{% trans "Profil" %}</a></li>
-                                    <li><a class="dropdown-item" href="{% url 'subscriptions:my_subscriptions' %}"><i class="fas fa-crown"></i>{% trans "Abonnements" %}</a></li>
-                                    <li><a class="dropdown-item" href="{% url 'enrollments:list' %}"><i class="fas fa-list-check"></i>{% trans "Inscriptions" %}</a></li>
-                                    <li><a class="dropdown-item" href="{% url 'ranking:my_rank' %}"><i class="fas fa-trophy"></i>{% trans "Classement" %}</a></li>
-                                    <li><a class="dropdown-item" href="{% url 'badges:my_badges' %}"><i class="fas fa-medal"></i>{% trans "Badges" %}</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li>
-                                        <form method="post" action="{% url 'accounts:logout' %}" id="logoutForm">
-                                            {% csrf_token %}
-                                            <button type="submit" class="dropdown-item text-danger">
-                                                <i class="fas fa-sign-out-alt"></i>{% trans "Déconnexion" %}
-                                            </button>
-                                        </form>
-                                    </li>
-                                </ul>
-                            </li>
-                            {% else %}
-                            <li class="nav-item">
-                                <a href="{% url 'accounts:login' %}" class="nav-link">
-                                    <i class="fas fa-sign-in-alt"></i><span>{% trans "Connexion" %}</span>
-                                </a>
-                            </li>
-                            <li class="nav-item mt-2 mt-lg-0">
-                                <a href="{% url 'accounts:signup' %}" class="nav-link btn-nav-primary justify-content-center">
-                                    <i class="fas fa-user-plus"></i><span>{% trans "S'inscrire" %}</span>
-                                </a>
-                            </li>
-                            {% endif %}
-                        </ul>
-
-                        {# Langue #}
-                        {% get_current_language as CURRENT_LANGUAGE %}
-                        <form class="lang-switcher mt-3 mt-lg-0 ms-lg-2" action="{% url 'set_language' %}" method="post">
-                            {% csrf_token %}
-                            <input name="next" type="hidden" value="{{ request.path }}">
-                            <label class="visually-hidden" for="langSelect">{% trans "Langue" %}</label>
-                            <select id="langSelect" class="form-select form-select-sm" name="language" data-submit-on-change>
-                                <option value="fr" {% if CURRENT_LANGUAGE == 'fr' %}selected{% endif %}>Français</option>
-                                <option value="ht" {% if CURRENT_LANGUAGE == 'ht' %}selected{% endif %}>Kreyòl</option>
-                            </select>
-                        </form>
-                    </div>
                 </div>
             </div>
         </nav>
     </header>
 
+    {# ===== OFFCANVAS MOBILE MENU ===== #}
+    <div class="offcanvas offcanvas-end ed-offcanvas" tabindex="-1" id="mainNav" aria-labelledby="mainNavLabel">
+        <div class="offcanvas-header">
+            <h2 class="offcanvas-title h5" id="mainNavLabel">
+                {% if theme and theme.get_logo %}
+                    <img src="{{ theme.get_logo }}" alt="" width="28" height="28" style="border-radius:8px;">
+                {% endif %}
+                {{ site_name }}
+            </h2>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="{% trans 'Fermer' %}"></button>
+        </div>
+
+        <div class="offcanvas-body d-flex flex-column">
+
+            {# Mobile search #}
+            <form class="ed-search d-xl-none input-group mb-3" action="{% url 'courses:course_list' %}" method="get" role="search">
+                <label class="visually-hidden" for="navSearchMobile">{% trans "Rechercher un cours" %}</label>
+                <input id="navSearchMobile" name="search" type="search" class="form-control"
+                       placeholder="{% trans 'Rechercher un cours' %}" autocomplete="off">
+                <button class="btn" type="submit" aria-label="{% trans 'Lancer la recherche' %}">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                </button>
+            </form>
+
+            <ul class="navbar-nav ed-nav flex-column gap-1 mb-3">
+                <li class="nav-item">
+                    <a href="{% url 'courses:course_list' %}" class="nav-link">
+                        <i class="fas fa-book"></i><span>{% trans "Explorer" %}</span>
+                    </a>
+                </li>
+
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a href="{% url 'progress:dashboard' %}" class="nav-link">
+                        <i class="fas fa-chart-line"></i><span>{% trans "Progression" %}</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'todo:todo_list' %}" class="nav-link">
+                        <i class="fas fa-list-check"></i><span>{% trans "Mes tâches" %}</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'chat:liste_salons' %}" class="nav-link">
+                        <i class="fas fa-comments"></i><span>{% trans "Mes salons" %}</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'chat:liste_etudiants' %}" class="nav-link">
+                        <i class="fas fa-user-friends"></i><span>{% trans "Étudiants" %}</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'notifications:list' %}" class="nav-link d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-bell"></i>{% trans "Notifications" %}</span>
+                        {% if unread_notifications > 0 %}
+                            <span class="badge rounded-pill bg-danger">{{ unread_notifications }}</span>
+                        {% endif %}
+                    </a>
+                </li>
+
+                {% if user.is_staff %}
+                <li class="nav-item">
+                    <a href="{% url 'dashboard:admin_dashboard' %}" class="nav-link">
+                        <i class="fas fa-chart-pie"></i><span>{% trans "Dashboard" %}</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'admin:index' %}" class="nav-link">
+                        <i class="fas fa-cog"></i><span>{% trans "Admin" %}</span>
+                    </a>
+                </li>
+                {% endif %}
+                {% endif %}
+            </ul>
+
+            {# User section #}
+            <div class="mt-auto">
+                {% if user.is_authenticated %}
+                <div class="d-flex align-items-center gap-2 p-2 mb-2 rounded-3" style="background: var(--ed-surface-2);">
+                    <span class="ed-avatar" style="width:40px;height:40px;font-size:.95rem;">
+                        {{ user.first_name|default:user.email|slice:":1"|upper }}
+                    </span>
+                    <div class="text-truncate">
+                        <div class="fw-semibold text-truncate">{{ user.first_name|default:user.email }}</div>
+                        <small class="text-muted">{% trans "Connecté" %}</small>
+                    </div>
+                </div>
+                <div class="d-grid gap-2">
+                    <a href="{% url 'accounts:profile' %}" class="btn btn-outline-secondary btn-sm">
+                        <i class="fas fa-id-card me-1"></i>{% trans "Profil" %}
+                    </a>
+                    <a href="{% url 'badges:my_badges' %}" class="btn btn-outline-secondary btn-sm">
+                        <i class="fas fa-medal me-1"></i>{% trans "Mes badges" %}
+                    </a>
+                    <form method="post" action="{% url 'accounts:logout' %}" class="d-grid">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">
+                            <i class="fas fa-sign-out-alt me-1"></i>{% trans "Déconnexion" %}
+                        </button>
+                    </form>
+                </div>
+                {% else %}
+                <div class="d-grid gap-2">
+                    <a href="{% url 'accounts:login' %}" class="btn btn-outline-primary">
+                        <i class="fas fa-sign-in-alt me-1"></i>{% trans "Connexion" %}
+                    </a>
+                    <a href="{% url 'accounts:signup' %}" class="btn btn-primary">
+                        <i class="fas fa-user-plus me-1"></i>{% trans "S'inscrire" %}
+                    </a>
+                </div>
+                {% endif %}
+
+                {# Language (mobile) #}
+                <form class="ed-lang mt-3" action="{% url 'set_language' %}" method="post">
+                    {% csrf_token %}
+                    <input name="next" type="hidden" value="{{ request.path }}">
+                    <label class="visually-hidden" for="langSelectMobile">{% trans "Langue" %}</label>
+                    <select id="langSelectMobile" class="form-select form-select-sm" name="language" data-submit-on-change>
+                        <option value="fr" {% if CURRENT_LANGUAGE == 'fr' %}selected{% endif %}>Français</option>
+                        <option value="ht" {% if CURRENT_LANGUAGE == 'ht' %}selected{% endif %}>Kreyòl</option>
+                    </select>
+                </form>
+            </div>
+        </div>
+    </div>
+
     {# ===== BANNIERES HEADER ===== #}
     {% if banners_header %}
     <div class="banner-container banner-header">
         {% for banner in banners_header %}
-                <a href="{{ banner.lien }}" class="banner" {% if banner.lien %}target="_blank" rel="noopener noreferrer"{% endif %}>
+            <a href="{{ banner.lien }}" class="banner" {% if banner.lien %}target="_blank" rel="noopener noreferrer"{% endif %}>
                 <img src="{{ banner.image.url }}" alt="{{ banner.titre }}" class="banner-image">
             </a>
         {% endfor %}
@@ -246,22 +710,18 @@
         </h2>
 
         {% if theme.evenement_message %}
-        <p class="event-message">
-            {{ theme.evenement_message }}
-        </p>
+        <p class="event-message">{{ theme.evenement_message }}</p>
         {% endif %}
 
         {% if theme.evenement_hashtag %}
-            <div class="hashtag">
-                #{{ theme.evenement_hashtag }}
-            </div>
+            <div class="hashtag">#{{ theme.evenement_hashtag }}</div>
         {% endif %}
     </div>
     {% endif %}
 
     {# ===== BREADCRUMB ===== #}
     {% if request.path != '/' and request.path != '/fr/' and request.path != '/ht/' %}
-        <nav class="breadcrumb site-breadcrumb" aria-label="{% trans 'Fil d’Ariane' %}">
+        <nav class="breadcrumb site-breadcrumb container-xxl" aria-label="{% trans 'Fil d’Ariane' %}">
             <div class="d-flex flex-wrap align-items-center gap-2">
                 <a href="{% url 'home' %}"><i class="fas fa-home"></i> {% trans "Accueil" %}</a>
                 {% for crumb in breadcrumbs %}
@@ -323,36 +783,154 @@
     </div>
     {% endif %}
 
-    <footer>
-        <div class="footer-container container-xxl">
-            <nav class="d-flex flex-wrap">
-                <a href="{% url 'about' %}">
-                    <i class="fas fa-info-circle"></i> {% trans "À propos" %}
-                </a>
-                <a href="{% url 'contact' %}">
-                    <i class="fas fa-envelope"></i> {% trans "Contact" %}
-                </a>
-                <a href="{% url 'privacy' %}">
-                    <i class="fas fa-shield-alt"></i> {% trans "Confidentialité" %}
-                </a>
-                <a href="{% url 'conditions' %}">
-                    <i class="fas fa-file-contract"></i> {% trans "Conditions" %}
-                </a>
-                <a href="{% url 'faq' %}">
-                    <i class="fas fa-question-circle"></i> {% trans "FAQ" %}
-                </a>
-            </nav>
-            <p>
-                &copy; {% if theme %}{{ theme.site_name|default:'EducaDim' }}{% else %}EducaDim{% endif %} -
-                {% if theme %}{{ theme.footer_text|default:_('Tous droits réservés') }}{% else %}{% trans "Tous droits réservés" %}{% endif %}
-            </p>
+    {# ===== FOOTER ===== #}
+    <footer class="ed-footer">
+        <div class="container-xxl ed-footer-top">
+            <div class="row g-4">
+
+                {# Brand + description #}
+                <div class="col-12 col-lg-4">
+                    <a href="{% url 'home' %}" class="ed-footer-brand">
+                        {% if theme and theme.get_logo %}
+                            <img src="{{ theme.get_logo }}" alt="" width="40" height="40">
+                        {% endif %}
+                        <span>{% if theme %}{{ theme.site_name|default:'EducaDim' }}{% else %}EducaDim{% endif %}</span>
+                    </a>
+                    <p class="ed-footer-desc">
+                        {% if theme and theme.site_description %}
+                            {{ theme.site_description }}
+                        {% else %}
+                            {% trans "Apprenez à votre rythme, en français ou en kreyòl. Des cours concrets, des quiz et un suivi de progression clair." %}
+                        {% endif %}
+                    </p>
+
+                    <div class="mt-3">
+                        {% if theme and theme.facebook_url %}
+                            <a href="{{ theme.facebook_url }}" class="ed-social" target="_blank" rel="noopener" aria-label="Facebook">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                        {% endif %}
+                        {% if theme and theme.twitter_url %}
+                            <a href="{{ theme.twitter_url }}" class="ed-social" target="_blank" rel="noopener" aria-label="Twitter / X">
+                                <i class="fab fa-x-twitter"></i>
+                            </a>
+                        {% endif %}
+                        {% if theme and theme.instagram_url %}
+                            <a href="{{ theme.instagram_url }}" class="ed-social" target="_blank" rel="noopener" aria-label="Instagram">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                        {% endif %}
+                        {% if theme and theme.youtube_url %}
+                            <a href="{{ theme.youtube_url }}" class="ed-social" target="_blank" rel="noopener" aria-label="YouTube">
+                                <i class="fab fa-youtube"></i>
+                            </a>
+                        {% endif %}
+                        {% if theme and theme.contact_email %}
+                            <a href="mailto:{{ theme.contact_email }}" class="ed-social" aria-label="Email">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {# Navigation #}
+                <div class="col-6 col-lg-2">
+                    <h6>{% trans "Plateforme" %}</h6>
+                    <ul class="list-unstyled mb-0">
+                        <li><a class="ed-footer-link" href="{% url 'courses:course_list' %}"><i class="fas fa-book"></i>{% trans "Cours" %}</a></li>
+                        {% if user.is_authenticated %}
+                            <li><a class="ed-footer-link" href="{% url 'progress:dashboard' %}"><i class="fas fa-chart-line"></i>{% trans "Progression" %}</a></li>
+                            <li><a class="ed-footer-link" href="{% url 'badges:my_badges' %}"><i class="fas fa-medal"></i>{% trans "Badges" %}</a></li>
+                            <li><a class="ed-footer-link" href="{% url 'ranking:my_rank' %}"><i class="fas fa-trophy"></i>{% trans "Classement" %}</a></li>
+                        {% else %}
+                            <li><a class="ed-footer-link" href="{% url 'accounts:login' %}"><i class="fas fa-sign-in-alt"></i>{% trans "Connexion" %}</a></li>
+                            <li><a class="ed-footer-link" href="{% url 'accounts:signup' %}"><i class="fas fa-user-plus"></i>{% trans "Inscription" %}</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+
+                {# Informations #}
+                <div class="col-6 col-lg-2">
+                    <h6>{% trans "Informations" %}</h6>
+                    <ul class="list-unstyled mb-0">
+                        <li><a class="ed-footer-link" href="{% url 'about' %}"><i class="fas fa-info-circle"></i>{% trans "À propos" %}</a></li>
+                        <li><a class="ed-footer-link" href="{% url 'contact' %}"><i class="fas fa-envelope"></i>{% trans "Contact" %}</a></li>
+                        <li><a class="ed-footer-link" href="{% url 'faq' %}"><i class="fas fa-question-circle"></i>{% trans "FAQ" %}</a></li>
+                    </ul>
+                </div>
+
+                {# Légal #}
+                <div class="col-6 col-lg-2">
+                    <h6>{% trans "Légal" %}</h6>
+                    <ul class="list-unstyled mb-0">
+                        <li><a class="ed-footer-link" href="{% url 'privacy' %}"><i class="fas fa-shield-alt"></i>{% trans "Confidentialité" %}</a></li>
+                        <li><a class="ed-footer-link" href="{% url 'conditions' %}"><i class="fas fa-file-contract"></i>{% trans "Conditions" %}</a></li>
+                    </ul>
+                </div>
+
+                {# Contact #}
+                <div class="col-6 col-lg-2">
+                    <h6>{% trans "Contact" %}</h6>
+                    <ul class="list-unstyled mb-0">
+                        {% if theme and theme.contact_email %}
+                            <li>
+                                <a class="ed-footer-link" href="mailto:{{ theme.contact_email }}">
+                                    <i class="fas fa-envelope"></i>{{ theme.contact_email }}
+                                </a>
+                            </li>
+                        {% endif %}
+                        {% if theme and theme.contact_phone %}
+                            <li>
+                                <a class="ed-footer-link" href="tel:{{ theme.contact_phone }}">
+                                    <i class="fas fa-phone"></i>{{ theme.contact_phone }}
+                                </a>
+                            </li>
+                        {% endif %}
+                        {% if theme and theme.contact_address %}
+                            <li>
+                                <span class="ed-footer-link" style="cursor:default;">
+                                    <i class="fas fa-map-marker-alt"></i>{{ theme.contact_address }}
+                                </span>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="ed-footer-bottom">
+            <div class="container-xxl d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 text-center text-md-start">
+                <span>
+                    &copy; {% now "Y" %}
+                    {% if theme %}{{ theme.site_name|default:'EducaDim' }}{% else %}EducaDim{% endif %} —
+                    {% if theme %}{{ theme.footer_text|default:_('Tous droits réservés') }}{% else %}{% trans "Tous droits réservés" %}{% endif %}
+                </span>
+                <span class="d-flex gap-3 flex-wrap justify-content-center">
+                    <a href="{% url 'privacy' %}">{% trans "Confidentialité" %}</a>
+                    <a href="{% url 'conditions' %}">{% trans "Conditions" %}</a>
+                    <a href="{% url 'faq' %}">{% trans "FAQ" %}</a>
+                </span>
+            </div>
         </div>
     </footer>
 
+    {# ===== SCRIPTS ===== #}
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'js/main.js' %}"></script>
+
+    {# Header shadow on scroll #}
+    <script>
+        (function () {
+            const header = document.getElementById('mainHeader');
+            if (!header) return;
+            const onScroll = () => header.classList.toggle('is-scrolled', window.scrollY > 8);
+            onScroll();
+            window.addEventListener('scroll', onScroll, { passive: true });
+        })();
+    </script>
 
     {% block extra_js %}{% endblock %}
 </body>
