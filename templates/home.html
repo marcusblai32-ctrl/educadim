@@ -281,7 +281,7 @@
     <section class="testimonials-section" aria-labelledby="testimonials-title">
         <div class="section-header">
             <span class="section-tag">{% blocktrans with tag=theme.testimonials_tag|default:_("Paroles d’apprenants") %}{{ tag }}{% endblocktrans %}</span>
-            <h2 id="testimonials-title">{% blocktrans with title=theme.testimonials_title|default:_("Des expériences") %}{{ title }}{% endblocktrans %} <span class="highlight">{% blocktrans with highlight=theme.testimonials_highlight|default:_("partagées") %}{{ highlight }}{% endblocktrans %}</span></h2>
+            <h2 id="testimonials-title">{% blocktrans with title=theme.testimonials_title|default:_("Des expériences") %}{{ title }}{% endblocktrans %} <span class="highlight">{% blocktrans with highlight=theme.testimonials_highlight|default:_("partagées") %}{{ highlight }}{% endblocktrans %}</span>{% if theme.testimonials_end %} {{ theme.testimonials_end }}{% endif %}</h2>
         </div>
         <div class="testimonials-grid">
             {% if theme.testimonial1_text %}
