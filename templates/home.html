@@ -61,6 +61,24 @@
         width: 100%;
     }
 
+    /* ===== Section témoignages : header centré comme les autres ===== */
+    .testimonials-section .section-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .testimonials-section .section-header h2,
+    .testimonials-section .section-header .section-tag {
+        text-align: center;
+        width: 100%;
+    }
+
     /* ===== STATS : blocs qui prennent l'espace, contenu centré ===== */
     .hero-stats {
         display: flex;
@@ -103,12 +121,12 @@
     .cta-section .cta-content {
         display: flex;
         flex-direction: column;
-        align-items: center;      /* centre horizontalement */
-        justify-content: center;  /* centre verticalement */
+        align-items: center;
+        justify-content: center;
         text-align: center;
         width: 100%;
-        max-width: 800px;         /* largeur confortable */
-        margin-left: auto;        /* centre la boîte elle-même */
+        max-width: 800px;
+        margin-left: auto;
         margin-right: auto;
         padding-left: 1rem;
         padding-right: 1rem;
@@ -258,7 +276,7 @@
         </div>
     </section>
 
-    {# ===== SECTION TÉMOIGNAGES : inchangée ===== #}
+    {# ===== SECTION TÉMOIGNAGES : header centré comme les autres ===== #}
     {% if theme.testimonial1_text or theme.testimonial2_text %}
     <section class="testimonials-section" aria-labelledby="testimonials-title">
         <div class="section-header">
