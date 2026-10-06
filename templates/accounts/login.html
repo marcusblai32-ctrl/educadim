@@ -1,11 +1,16 @@
 {% extends 'base.html' %}
 {% load i18n %}
 
+{# ===== Masque la recherche du header sur cette page ===== #}
+{% block body_class %}auth-page{% endblock %}
+{% block header_search %}{% endblock %}
+
 {% block title %}{% trans "Connexion" %} - {{ theme.site_name }}{% endblock %}
 
 {% block content %}
 <div class="auth-container">
     <div class="card auth-card">
+
         <!-- ===== HEADER ===== -->
         <div class="auth-header">
             <div class="auth-logo"><i class="fas fa-sign-in-alt" aria-hidden="true"></i></div>
@@ -14,22 +19,26 @@
         </div>
 
         <!-- ===== FORM ===== -->
-        <form method="post">
+        <form method="post" novalidate>
             {% csrf_token %}
 
             <!-- Email -->
             <div class="form-group">
                 <label for="id_username">{% trans "Email ou ID utilisateur" %}</label>
-                <input type="text" name="username" id="id_username" placeholder="exemple@email.com" required>
+                <input type="text" name="username" id="id_username"
+                       placeholder="exemple@email.com" autocomplete="username" required>
             </div>
 
             <!-- Password -->
             <div class="form-group">
                 <label for="id_password">{% trans "Mot de passe" %}</label>
                 <div class="password-field">
-                    <input type="password" name="password" id="id_password" placeholder="{% trans 'Votre mot de passe' %}" required>
-                    <button type="button" class="toggle-password" id="togglePassword" aria-label="Afficher le mot de passe">
-                        <i class="fas fa-eye"></i>
+                    <input type="password" name="password" id="id_password"
+                           placeholder="{% trans 'Votre mot de passe' %}"
+                           autocomplete="current-password" required>
+                    <button type="button" class="toggle-password" id="togglePassword"
+                            aria-label="{% trans 'Afficher le mot de passe' %}">
+                        <i class="fas fa-eye" aria-hidden="true"></i>
                     </button>
                 </div>
             </div>
@@ -37,30 +46,43 @@
             <!-- Options -->
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:0.5rem;">
                 <label style="display:flex; align-items:center; gap:0.4rem; font-size:0.9rem; color:var(--text-muted); cursor:pointer;">
-                    <input type="checkbox" name="remember" style="width:16px; height:16px; accent-color:var(--primary); cursor:pointer;">
+                    <input type="checkbox" name="remember"
+                           style="width:16px; height:16px; accent-color:var(--primary); cursor:pointer;">
                     {% trans "Se souvenir de moi" %}
                 </label>
-                <a href="{% url 'accounts:password_reset' %}" style="font-size:0.85rem; color:var(--primary); text-decoration:none; font-weight:500;">
+                <a href="{% url 'accounts:password_reset' %}"
+                   style="font-size:0.85rem; color:var(--primary); text-decoration:none; font-weight:500;">
                     {% trans "Mot de passe oublie ?" %}
                 </a>
             </div>
 
             <!-- Errors -->
             {% if form.errors %}
-            <div style="background:rgba(var(--danger-rgb), 0.08); border:1px solid var(--danger, var(--danger)); color:var(--danger, var(--danger)); padding:0.7rem 1rem; border-radius:var(--radius-sm,8px); margin-bottom:1.2rem; display:flex; align-items:center; gap:0.5rem; font-size:0.9rem;">
-                <i class="fas fa-exclamation-circle"></i> {% trans "Email/ID ou mot de passe incorrect." %}
+            <div style="background:rgba(var(--danger-rgb, 220,53,69), 0.08);
+                        border:1px solid var(--danger, #dc3545);
+                        color:var(--danger, #dc3545);
+                        padding:0.7rem 1rem;
+                        border-radius:var(--radius-sm, 8px);
+                        margin-bottom:1.2rem;
+                        display:flex; align-items:center; gap:0.5rem; font-size:0.9rem;">
+                <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+                {% trans "Email/ID ou mot de passe incorrect." %}
             </div>
             {% endif %}
 
             <!-- Submit -->
             <button type="submit" class="btn btn-primary btn-block btn-lg">
-                <i class="fas fa-arrow-right"></i> {% trans "Se connecter" %}
+                <i class="fas fa-arrow-right" aria-hidden="true"></i> {% trans "Se connecter" %}
             </button>
         </form>
 
         <!-- ===== FOOTER ===== -->
         <div class="auth-links">
-            <p>{% trans "Pas encore de compte ?" %} <a href="{% url 'accounts:signup' %}"><i class="fas fa-user-plus"></i> {% trans "Creer un compte" %}</a></p>
+            <p>{% trans "Pas encore de compte ?" %}
+                <a href="{% url 'accounts:signup' %}">
+                    <i class="fas fa-user-plus" aria-hidden="true"></i> {% trans "Creer un compte" %}
+                </a>
+            </p>
         </div>
     </div>
 </div>
@@ -68,15 +90,15 @@
 <script>
     // Sèlman JavaScript ki nesesè pou ti je a
     // Rès la ap jere pa main.js
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const toggle = document.getElementById('togglePassword');
-        const input = document.getElementById('id_password');
-        
+        const input  = document.getElementById('id_password');
+
         if (toggle && input) {
-            toggle.addEventListener('click', function() {
+            toggle.addEventListener('click', function () {
                 const isPassword = input.getAttribute('type') === 'password';
                 input.setAttribute('type', isPassword ? 'text' : 'password');
-                
+
                 const icon = this.querySelector('i');
                 icon.classList.toggle('fa-eye');
                 icon.classList.toggle('fa-eye-slash');
