@@ -418,7 +418,9 @@
                 <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
 
                     <p class="text-body-secondary small mb-0">
-                        &copy; {% now "Y" %} - {% if theme %}{{ theme.site_name|default:'EducaDim' }}{% else %}EducaDim{% endif %} —
+                        &copy; {% now "Y" %} 
+
+                        {% if theme %}{{ theme.site_name|default:'EducaDim' }}{% else %}EducaDim{% endif %}
                         {% if theme %}{{ theme.footer_text|default:_('Tous droits réservés') }}{% else %}{% trans "Tous droits réservés" %}{% endif %}
                     </p>
 
