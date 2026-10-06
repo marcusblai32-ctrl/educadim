@@ -11,7 +11,7 @@ from django import template
 from django.utils.html import format_html, linebreaks
 from django.utils.safestring import mark_safe
 
-from theme_manager.services import safe_color
+from theme_manager.services import css_color as _css_color, safe_color
 
 register = template.Library()
 
@@ -148,5 +148,11 @@ def abs_url(value, request):
 
 @register.filter(name="hex_color")
 def hex_color(value):
-    """Retounen koulè a si valid (#rgb/#rrggbb), sinon vid. Pou style="--x: {{ ...|hex_color }}"."""
+    """Koulè (hex, non tankou 'blue', rgb(), hsl()) -> #rrggbb, sinon vid."""
     return safe_color(value, "")
+
+
+@register.filter(name="css_color")
+def css_color(value):
+    """'primary' | 'success' | 'blue' | '#0af' -> var(--primary) | var(--success) | #0000ff | #00aaff (sinon vid)."""
+    return _css_color(value)
