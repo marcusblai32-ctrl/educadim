@@ -100,16 +100,15 @@
         {% for item in cours %}
         <div class="col">
 
-            {# ===== CARTE : radius + overflow hidden ===== #}
+            {# ===== CARTE : on neutralise le padding/margin/max-width de .card ===== #}
             <article class="card border-0 shadow-sm h-100"
                      style="border-radius: 14px; padding: 0 !important; margin: 0 !important;
                             max-width: 100% !important; width: 100% !important;
                             overflow: hidden; background: var(--card-bg);">
 
-                {# ===== IMAGE : ratio 3:2, contain, fond neutre ===== #}
+                {# ===== IMAGE : collée aux bords, ratio 3:2 ===== #}
                 <div class="position-relative"
-                     style="width: 100%; aspect-ratio: 3 / 2; line-height: 0;
-                            background: var(--bs-secondary-bg, #e9ecef);">
+                     style="width: 100%; aspect-ratio: 3 / 2; line-height: 0; overflow: hidden;">
 
                     {% with img=item.cours.get_image %}
                     {% if img %}
@@ -121,7 +120,7 @@
                                     display: block; margin: 0; padding: 0; border: 0;
                                     border-radius: 0;">
                     {% else %}
-                        <div class="d-flex align-items-center justify-content-center text-body-secondary"
+                        <div class="d-flex align-items-center justify-content-center bg-body-secondary text-body-secondary"
                              style="width: 100%; height: 100%;">
                             <i class="fas fa-book-open fs-2" aria-hidden="true"></i>
                         </div>
@@ -170,7 +169,7 @@
                         {{ item.cours.display_description|truncatechars:90 }}
                     </p>
 
-                    {# ===== FOOTER : prix + bouton ===== #}
+                    {# ===== FOOTER : prix + bouton Commencer / Accéder ===== #}
                     <div class="border-top pt-3 mt-auto d-flex justify-content-between align-items-center gap-2">
 
                         <span class="fw-bold" style="font-size: 1rem;">
