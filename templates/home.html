@@ -43,6 +43,24 @@
         gap: 0.5rem;
     }
 
+    /* ===== Section features : titre + tag centrés sur TOUS les appareils ===== */
+    .features-section .section-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .features-section .section-header h2,
+    .features-section .section-header .section-tag {
+        text-align: center;
+        width: 100%;
+    }
+
     /* ===== STATS : blocs qui prennent l'espace, contenu centré ===== */
     .hero-stats {
         display: flex;
@@ -55,22 +73,17 @@
     }
 
     .stat-item {
-        flex: 1 1 0;              /* chaque stat prend une part égale */
-        min-width: 120px;         /* largeur minimale pour rester lisible */
+        flex: 1 1 0;
+        min-width: 120px;
         display: flex;
         flex-direction: column;
-        align-items: center;      /* centre horizontalement */
-        justify-content: center;  /* centre verticalement */
+        align-items: center;
+        justify-content: center;
         text-align: center;
         padding: 1rem 0.75rem;
     }
 
-    .stat-item .stat-number {
-        display: block;
-        width: 100%;
-        text-align: center;
-    }
-
+    .stat-item .stat-number,
     .stat-item .stat-label {
         display: block;
         width: 100%;
@@ -86,8 +99,35 @@
         gap: 1rem;
     }
 
-    .section-header {
+    /* ===== CTA : tout le contenu centré au milieu de la boîte ===== */
+    .cta-section .cta-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;      /* centre horizontalement */
+        justify-content: center;  /* centre verticalement */
         text-align: center;
+        width: 100%;
+        max-width: 800px;         /* largeur confortable */
+        margin-left: auto;        /* centre la boîte elle-même */
+        margin-right: auto;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .cta-section .cta-content h2,
+    .cta-section .cta-content p,
+    .cta-section .cta-content .section-tag,
+    .cta-section .cta-content .cta-button {
+        text-align: center;
+    }
+
+    .cta-section .cta-content .cta-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-left: auto;
+        margin-right: auto;
     }
 </style>
 {% endblock %}
@@ -218,7 +258,7 @@
         </div>
     </section>
 
-    {# ===== SECTION TÉMOIGNAGES : inchangée, comme avant ===== #}
+    {# ===== SECTION TÉMOIGNAGES : inchangée ===== #}
     {% if theme.testimonial1_text or theme.testimonial2_text %}
     <section class="testimonials-section" aria-labelledby="testimonials-title">
         <div class="section-header">
