@@ -7,6 +7,93 @@
     {% endblocktrans %}
 {% endblock %}
 
+{% block extra_css %}
+<style>
+    /* Centrage des éléments dans les boîtes */
+    .hero-card,
+    .feature-card,
+    .testimonial-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .hero-card-icon,
+    .feature-icon-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .hero-card h3,
+    .hero-card p,
+    .feature-card h3,
+    .feature-card p,
+    .testimonial-card p {
+        text-align: center;
+        width: 100%;
+    }
+
+    .feature-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .testimonial-author {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        text-align: left;
+    }
+
+    .testimonial-author > div {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .stars {
+        display: flex;
+        justify-content: center;
+        gap: 0.25rem;
+    }
+
+    .stat-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    .hero-stats {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 2rem;
+    }
+
+    .section-header {
+        text-align: center;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="home-page">
     <section class="hero container-xxl" aria-labelledby="home-title">
