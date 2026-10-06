@@ -423,11 +423,7 @@
                         {% if theme %}{{ theme.footer_text|default:_('Tous droits réservés') }}{% else %}{% trans "Tous droits réservés" %}{% endif %}
                     </p>
 
-                    <div class="d-flex gap-3">
-                        <a href="{% url 'privacy' %}" class="text-body-secondary text-decoration-none small">{% trans "Confidentialité" %}</a>
-                        <a href="{% url 'conditions' %}" class="text-body-secondary text-decoration-none small">{% trans "Conditions" %}</a>
-                    </div>
-
+                  
                 </div>
             </div>
         </div>
