@@ -50,7 +50,43 @@ html[data-theme="dark"] .course-detail-header,
 html[data-bs-theme="dark"] .course-detail-header {
     background: linear-gradient(135deg, var(--dark-tint-1, #193943), var(--dark-tint-2, #1a333b));
 }
-html[data-theme="dark"] footer,
-html[data-bs-theme="dark"] footer {
-    background: var(--dark-tint-footer, #172f38);
+
+/* ---------- 4) Footer : fond = couleur du thème (clair / sombre) ----------
+   `.bg-body-tertiary` de Bootstrap est en !important : on le surcharge explicitement. */
+footer,
+footer.bg-body-tertiary {
+    background-color: var(--footer-bg, var(--bg)) !important;
+    border-color: var(--border) !important;
+}
+footer .border-top { border-color: var(--border) !important; }
+
+/* ---------- 5) Page d'accueil : fond des boîtes + sections = couleurs du thème ---------- */
+.home-page .hero-card,
+.home-page .hero-visual .hero-card,
+.home-page .feature-card,
+.home-page .testimonial-card,
+.home-page .stat-item {
+    background: var(--box-bg, var(--bg-card));
+    border-color: var(--border);
+}
+
+/* Héro (clair) : dégradé construit avec "Clair" + primaire/secondaire */
+.home-page .hero {
+    background: linear-gradient(135deg, var(--light-tint-1, var(--bg)), var(--light-tint-2, var(--bg)));
+}
+html[data-theme="dark"] .home-page .hero,
+html[data-bs-theme="dark"] .home-page .hero {
+    background: linear-gradient(135deg, var(--dark-tint-1, #193943), var(--dark-tint-2, #18323b));
+}
+
+/* Pastilles (badge, icônes) : teinte du primaire au lieu de bleu-vert fixe */
+.home-page .hero-content .hero-badge,
+.home-page .hero-visual .hero-card-icon,
+.home-page .feature-icon-wrapper {
+    background: rgba(var(--primary-rgb), .12);
+}
+
+/* Bandeau d'appel à l'action : primaire → secondaire */
+.home-page .cta-section {
+    background: linear-gradient(118deg, var(--primary-hover, var(--primary)), var(--secondary));
 }
