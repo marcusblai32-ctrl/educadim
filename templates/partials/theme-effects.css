@@ -1,0 +1,92 @@
+/* ============================================================
+   THEME EFFECTS — chargé EN DERNIER (après le CSS dynamique du thème)
+   Tout vient de theme_manager :
+     --primary / --secondary          (Couleurs principales)
+     --bg                             (clair = "Clair", sombre = "Foncé")
+     --dark-tint-*                    (nuances sombres calculées par le backend)
+   ============================================================ */
+
+/* ---------- 1) Titre de l'en-tête : dégradé primaire → secondaire ---------- */
+.site-header .navbar-brand .navbar-site-name {
+    display: inline-block;
+    line-height: 1.3;
+    padding-bottom: .1em;               /* évite de couper les jambages (g, p, y) */
+    background: linear-gradient(120deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+}
+.site-header .navbar-brand:hover .navbar-site-name { filter: brightness(1.12); }
+
+/* ---------- 2) Fond de page : couleur du thème + halos primaire/secondaire ---------- */
+body {
+    background:
+        radial-gradient(60rem 38rem at 6% -8%,  rgba(var(--primary-rgb),   .11), transparent 62%),
+        radial-gradient(52rem 34rem at 104% 2%, rgba(var(--secondary-rgb), .09), transparent 60%),
+        radial-gradient(46rem 30rem at 50% 112%, rgba(var(--primary-rgb),  .06), transparent 62%),
+        var(--bg);
+    background-repeat: no-repeat;
+}
+
+/* ---------- 3) Mode sombre : fond = "Foncé" du thème, halos plus présents ---------- */
+html[data-theme="dark"] body,
+html[data-bs-theme="dark"] body,
+html.dark body {
+    background:
+        radial-gradient(60rem 38rem at 6% -8%,  rgba(var(--primary-rgb),   .22), transparent 62%),
+        radial-gradient(52rem 34rem at 104% 2%, rgba(var(--secondary-rgb), .15), transparent 60%),
+        radial-gradient(46rem 30rem at 50% 112%, rgba(var(--primary-rgb),  .10), transparent 62%),
+        var(--bg);
+    background-repeat: no-repeat;
+}
+
+/* Blocs sombres qui avaient des teintes fixes dans brand.css → suivent maintenant le thème */
+html[data-theme="dark"] .hero,
+html[data-bs-theme="dark"] .hero {
+    background: linear-gradient(135deg, var(--dark-tint-1, #193943), var(--dark-tint-2, #18323b));
+}
+html[data-theme="dark"] .course-detail-header,
+html[data-bs-theme="dark"] .course-detail-header {
+    background: linear-gradient(135deg, var(--dark-tint-1, #193943), var(--dark-tint-2, #1a333b));
+}
+
+/* ---------- 4) Footer : fond = couleur du thème (clair / sombre) ----------
+   `.bg-body-tertiary` de Bootstrap est en !important : on le surcharge explicitement. */
+footer,
+footer.bg-body-tertiary {
+    background-color: var(--footer-bg, var(--bg)) !important;
+    border-color: var(--border) !important;
+}
+footer .border-top { border-color: var(--border) !important; }
+
+/* ---------- 5) Page d'accueil : fond des boîtes + sections = couleurs du thème ---------- */
+/* (les stats : cours / étudiants / satisfaction gardent leur style d'origine) */
+.home-page .hero-card,
+.home-page .hero-visual .hero-card,
+.home-page .feature-card,
+.home-page .testimonial-card {
+    background: var(--box-bg, var(--bg-card));
+    border-color: var(--border);
+}
+
+/* Héro (clair) : dégradé construit avec "Clair" + primaire/secondaire */
+.home-page .hero {
+    background: linear-gradient(135deg, var(--light-tint-1, var(--bg)), var(--light-tint-2, var(--bg)));
+}
+html[data-theme="dark"] .home-page .hero,
+html[data-bs-theme="dark"] .home-page .hero {
+    background: linear-gradient(135deg, var(--dark-tint-1, #193943), var(--dark-tint-2, #18323b));
+}
+
+/* Pastilles (badge, icônes) : teinte du primaire au lieu de bleu-vert fixe */
+.home-page .hero-content .hero-badge,
+.home-page .hero-visual .hero-card-icon,
+.home-page .feature-icon-wrapper {
+    background: rgba(var(--primary-rgb), .12);
+}
+
+/* Bandeau d'appel à l'action : primaire → secondaire */
+.home-page .cta-section {
+    background: linear-gradient(118deg, var(--primary-hover, var(--primary)), var(--secondary));
+}
