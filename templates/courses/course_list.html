@@ -100,16 +100,16 @@
         {% for item in cours %}
         <div class="col">
 
-            {# ===== CARTE ===== #}
+            {# ===== CARTE : radius + overflow hidden ===== #}
             <article class="card border-0 shadow-sm h-100"
                      style="border-radius: 14px; padding: 0 !important; margin: 0 !important;
                             max-width: 100% !important; width: 100% !important;
                             overflow: hidden; background: var(--card-bg);">
 
-                {# ===== IMAGE : ratio 3:2, contain, fond neutre, collée aux bords ===== #}
+                {# ===== IMAGE : ratio 3:2, contain, fond neutre ===== #}
                 <div class="position-relative"
                      style="width: 100%; aspect-ratio: 3 / 2; line-height: 0;
-                            overflow: hidden; background: var(--bs-secondary-bg, #e9ecef);">
+                            background: var(--bs-secondary-bg, #e9ecef);">
 
                     {% with img=item.cours.get_image %}
                     {% if img %}
