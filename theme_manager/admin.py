@@ -1,108 +1,567 @@
-from django.contrib import admin
-from django.utils.html import format_html
-from .models import Theme
+{% extends 'base.html' %}
+{% load i18n static theme_tags %}
 
+{% block title %}
+    {% blocktrans with site_name=theme.site_name|default:'EducaDim' %}
+        Accueil - {{ site_name }}
+    {% endblocktrans %}
+{% endblock %}
 
-@admin.register(Theme)
-class ThemeAdmin(admin.ModelAdmin):
-    list_display = ('nom', 'actif', 'maintenance_mode', 'evenement_actif')
-    list_filter = ('actif', 'maintenance_mode', 'evenement_actif')
-    search_fields = ('nom', 'site_name', 'meta_description')
+{% block extra_css %}
+<style>
+    /* ============================================================
+       BACKGROUND DINAMIK
+       ============================================================ */
+    .home-page {
+        position: relative;
+        min-height: 100vh;
+        padding-bottom: 2rem;
+        background:
+            radial-gradient(circle at 15% 20%, color-mix(in srgb, var(--primary, #5b76f7) 12%, transparent) 0%, transparent 45%),
+            radial-gradient(circle at 85% 15%, color-mix(in srgb, var(--secondary, #22d3ee) 10%, transparent) 0%, transparent 45%),
+            radial-gradient(circle at 70% 90%, color-mix(in srgb, var(--primary, #5b76f7) 8%, transparent) 0%, transparent 50%),
+            var(--body-bg, var(--bg, #eef1fb));
+    }
+    html[data-bs-theme="dark"] .home-page,
+    html[data-theme="dark"] .home-page {
+        background:
+            radial-gradient(circle at 15% 20%, color-mix(in srgb, var(--primary, #5b76f7) 18%, transparent) 0%, transparent 45%),
+            radial-gradient(circle at 85% 15%, color-mix(in srgb, var(--secondary, #22d3ee) 14%, transparent) 0%, transparent 45%),
+            radial-gradient(circle at 70% 90%, color-mix(in srgb, var(--primary, #5b76f7) 12%, transparent) 0%, transparent 50%),
+            var(--body-bg, var(--bg, #0a0f22));
+    }
 
-    fieldsets = (
-        ('Informations générales', {
-            'fields': ('nom', 'site_name', 'site_description', 'actif')
-        }),
-        ('Logo & Favicon', {
-            'fields': ('logo', 'logo_url', 'favicon', 'favicon_url')
-        }),
-        ('SEO', {
-            'fields': ('meta_description', 'meta_keywords'),
-            'classes': ('collapse',)
-        }),
-        ('Couleurs principales', {
-            'fields': ('primary', 'primary_hover', 'secondary', 'secondary_hover')
-        }),
-        ("Couleurs d'état", {
-            'fields': ('success', 'success_hover', 'danger', 'danger_hover', 
-                      'warning', 'warning_hover', 'info', 'info_hover')
-        }),
-        ('Fond et texte', {
-            'fields': ('body_bg', 'text_color', 'text_muted', 'white', 'light', 'dark', 'border')
-        }),
-        ('Typographie et style', {
-            'fields': ('font_family', 'border_radius', 'box_shadow')
-        }),
-        ('Section Hero', {
-            'fields': (
-                'hero_title', 'hero_subtitle', 'hero_badge', 'hero_subtitle_line2',
-                'btn_explore', 'btn_start', 'hero_image', 'hero_image_url',
-                'stats_etudiants', 'stats_cours', 'stats_satisfaction'
-            )
-        }),
-        ('Hero - Cartes', {
-            'fields': (
-                'hero_card1_title', 'hero_card1_desc', 'hero_card1_icon',
-                'hero_card2_title', 'hero_card2_desc', 'hero_card2_icon',
-                'hero_card3_title', 'hero_card3_desc', 'hero_card3_icon'
-            ),
-            'description': 'Personnalisez les cartes qui apparaissent à droite du Hero'
-        }),
-        ('Section Features', {
-            'fields': (
-                'features_tag', 'features_title', 'features_highlight',
-                'feature1_title', 'feature1_desc', 'feature1_icon', 'feature1_color',
-                'feature2_title', 'feature2_desc', 'feature2_icon', 'feature2_color',
-                'feature3_title', 'feature3_desc', 'feature3_icon', 'feature3_color',
-                'feature_link_text'
-            )
-        }),
-        ('Section CTA', {
-            'fields': ('cta_title', 'cta_highlight', 'cta_desc', 'cta_btn')
-        }),
-        ('Section Témoignages', {
-            'fields': (
-                'testimonials_tag', 'testimonials_title', 'testimonials_highlight', 'testimonials_end',
-                'testimonial1_text', 'testimonial1_name', 'testimonial1_job', 
-                'testimonial1_avatar', 'testimonial1_stars',
-                'testimonial2_text', 'testimonial2_name', 'testimonial2_job', 
-                'testimonial2_avatar', 'testimonial2_stars'
-            )
-        }),
-        ('Page - À propos', {
-            'fields': ('about_title', 'about_content', 'about_image', 'about_image_url'),
-            'classes': ('collapse',)
-        }),
-        ('Page - Contact', {
-            'fields': ('contact_page_title', 'contact_page_subtitle', 'contact_phone', 
-                      'contact_address', 'contact_hours', 'contact_map_embed'),
-            'classes': ('collapse',)
-        }),
-        ('Page - Conditions générales', {
-            'fields': ('conditions_title', 'conditions_content'),
-            'classes': ('collapse',)
-        }),
-        ('Page - Confidentialité', {
-            'fields': ('privacy_title', 'privacy_content'),
-            'classes': ('collapse',)
-        }),
-        ('Page - FAQ', {
-            'fields': ('faq_title', 'faq_content'),
-            'classes': ('collapse',)
-        }),
-        ('Pied de page', {
-            'fields': ('footer_text', 'about_text', 'contact_email')
-        }),
-        ('Événement spécial', {
-            'fields': (
-                'evenement_actif', 'evenement_banner', 'evenement_banner_url',
-                'evenement_nom', 'evenement_logo', 'evenement_logo_url',
-                'evenement_message', 'evenement_hashtag'
-            ),
-            'description': 'Activez un événement spécial pour afficher une bannière sur le site'
-        }),
-        ('Maintenance & WhatsApp', {
-            'fields': ('maintenance_mode', 'maintenance_message', 'whatsapp_group', 'whatsapp_contact'),
-            'classes': ('collapse',)
-        }),
-    )
+    /* ============================================================
+       HERO
+       ============================================================ */
+    .hero-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+    .hero-content h1 {
+        font-size: clamp(1.8rem, 4.5vw, 3.2rem);
+        line-height: 1.15;
+        font-weight: 800;
+        max-width: 820px;
+        margin: 0.5rem auto;
+    }
+    .hero-content .hero-description {
+        max-width: 620px;
+        margin: 0.5rem auto 1rem;
+        font-size: clamp(0.9rem, 2vw, 1.05rem);
+        color: var(--text-muted, #64748b);
+    }
+    .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        margin-top: 0.5rem;
+    }
+
+    /* ============================================================
+       3 STATS ANKADRE (primary transparan)
+       ============================================================ */
+    .hero-stats-row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+        width: 100%;
+        max-width: 720px;
+        margin: 2rem auto 0;
+    }
+    .hero-stats-row .stat-item {
+        flex: 1 1 0;
+        min-width: 140px;
+        text-align: center;
+        padding: 1.2rem 1rem;
+        border-radius: 16px;
+        background: color-mix(in srgb, var(--primary, #5b76f7) 10%, transparent);
+        border: 1px solid color-mix(in srgb, var(--primary, #5b76f7) 25%, transparent);
+        box-shadow: 0 6px 20px color-mix(in srgb, var(--primary, #5b76f7) 12%, transparent);
+        backdrop-filter: blur(10px) saturate(150%);
+        -webkit-backdrop-filter: blur(10px) saturate(150%);
+        transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    }
+    .hero-stats-row .stat-item:hover {
+        transform: translateY(-4px);
+        background: color-mix(in srgb, var(--primary, #5b76f7) 16%, transparent);
+        box-shadow: 0 12px 30px color-mix(in srgb, var(--primary, #5b76f7) 22%, transparent);
+    }
+    .hero-stats-row .stat-number {
+        font-size: 1.9rem;
+        font-weight: 800;
+        line-height: 1;
+        background: linear-gradient(135deg,
+            var(--primary, #5b76f7) 0%,
+            var(--secondary, #22d3ee) 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
+        font-family: var(--font-display, 'Manrope', sans-serif);
+        display: block;
+    }
+    .hero-stats-row .stat-label {
+        font-size: 0.85rem;
+        color: var(--text-muted, #64748b);
+        margin-top: 0.4rem;
+        font-weight: 500;
+        display: block;
+    }
+
+    /* ============================================================
+       3 KAT AN FÒM WON
+       ============================================================ */
+    .hero-cards-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        width: 100%;
+        max-width: 900px;
+        margin: 2.5rem auto 0;
+        justify-items: center;
+    }
+    @media (max-width: 991.98px) {
+        .hero-cards-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    @media (max-width: 575.98px) {
+        .hero-cards-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .hero-feature-circle-card {
+        width: 220px;
+        height: 220px;
+        border-radius: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 1.5rem;
+        position: relative;
+        overflow: hidden;
+
+        background: linear-gradient(135deg,
+            color-mix(in srgb, var(--primary, #5b76f7) 15%, transparent) 0%,
+            color-mix(in srgb, var(--secondary, #22d3ee) 10%, transparent) 100%);
+        backdrop-filter: blur(16px) saturate(160%);
+        -webkit-backdrop-filter: blur(16px) saturate(160%);
+        border: 1px solid color-mix(in srgb, var(--primary, #5b76f7) 22%, transparent);
+
+        box-shadow:
+            0 10px 30px color-mix(in srgb, var(--primary, #5b76f7) 15%, transparent),
+            inset 0 1px 0 color-mix(in srgb, var(--primary, #5b76f7) 25%, transparent);
+
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .hero-feature-circle-card::before {
+        content: "";
+        position: absolute;
+        top: 8%;
+        left: 18%;
+        width: 45%;
+        height: 30%;
+        border-radius: 50%;
+        background: radial-gradient(ellipse at center,
+            rgba(255,255,255,0.55) 0%,
+            rgba(255,255,255,0) 70%);
+        filter: blur(6px);
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .hero-feature-circle-card::after {
+        content: "";
+        position: absolute;
+        inset: -6px;
+        border-radius: 50%;
+        background: linear-gradient(135deg,
+            var(--primary, #5b76f7) 0%,
+            var(--secondary, #22d3ee) 100%);
+        opacity: 0.15;
+        z-index: -1;
+        filter: blur(12px);
+        transition: opacity 0.3s ease;
+    }
+
+    .hero-feature-circle-card:hover {
+        transform: translateY(-6px) scale(1.02);
+        box-shadow:
+            0 20px 45px color-mix(in srgb, var(--primary, #5b76f7) 28%, transparent),
+            inset 0 1px 0 color-mix(in srgb, var(--primary, #5b76f7) 35%, transparent);
+    }
+    .hero-feature-circle-card:hover::after {
+        opacity: 0.3;
+    }
+
+    .hero-feature-circle-card .ball-content {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .hero-feature-circle-card .feature-circle-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg,
+            var(--primary, #5b76f7) 0%,
+            var(--secondary, #22d3ee) 100%);
+        color: #fff;
+        box-shadow: 0 6px 16px color-mix(in srgb, var(--primary, #5b76f7) 40%, transparent);
+        margin-bottom: 0.6rem;
+        flex-shrink: 0;
+    }
+    .hero-feature-circle-card .feature-circle-icon i {
+        font-size: 1.25rem;
+        color: #fff;
+    }
+
+    .hero-feature-circle-card h3 {
+        font-size: 0.95rem;
+        font-weight: 700;
+        margin: 0 0 0.35rem;
+        line-height: 1.25;
+        color: var(--text, #0f172a);
+    }
+    .hero-feature-circle-card p {
+        font-size: 0.75rem;
+        color: var(--text-muted, #64748b);
+        margin: 0;
+        line-height: 1.4;
+    }
+
+    html[data-bs-theme="dark"] .hero-feature-circle-card,
+    html[data-theme="dark"] .hero-feature-circle-card {
+        background: linear-gradient(135deg,
+            color-mix(in srgb, var(--primary, #5b76f7) 20%, transparent) 0%,
+            color-mix(in srgb, var(--secondary, #22d3ee) 15%, transparent) 100%);
+        border-color: color-mix(in srgb, var(--primary, #5b76f7) 30%, transparent);
+    }
+    html[data-bs-theme="dark"] .hero-feature-circle-card::before,
+    html[data-theme="dark"] .hero-feature-circle-card::before {
+        background: radial-gradient(ellipse at center,
+            rgba(255,255,255,0.3) 0%,
+            rgba(255,255,255,0) 70%);
+    }
+    html[data-bs-theme="dark"] .hero-feature-circle-card h3,
+    html[data-theme="dark"] .hero-feature-circle-card h3 {
+        color: #e2e8f0;
+    }
+
+    @media (max-width: 575.98px) {
+        .hero-feature-circle-card {
+            width: 200px;
+            height: 200px;
+        }
+    }
+
+    /* ============================================================
+       Features : kat ki poukont li → santre nan mitan
+       ============================================================ */
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+        gap: 1.5rem;
+        justify-content: center;   /* santre lè gen espas */
+        justify-items: stretch;
+        align-items: stretch;
+    }
+
+    /* Lè gen yon sèl kat (dernye liy lan), fè l santre */
+    .features-grid > .feature-card:last-child:nth-child(odd) {
+        grid-column: 1 / -1;
+        max-width: 420px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    @media (min-width: 1024px) {
+        /* Sou 3 kolòn, si gen yon sèl kat nan dènye liy lan */
+        .features-grid > .feature-card:last-child:nth-child(3n + 1) {
+            grid-column: 2 / 3;
+            max-width: 100%;
+            margin-left: 0;
+            margin-right: 0;
+        }
+    }
+
+    .feature-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+    .feature-icon-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .feature-card h3,
+    .feature-card p { text-align: center; width: 100%; }
+    .feature-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .features-section .section-header,
+    .testimonials-section .section-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .features-section .section-header h2,
+    .features-section .section-header .section-tag,
+    .testimonials-section .section-header h2,
+    .testimonials-section .section-header .section-tag {
+        text-align: center;
+        width: 100%;
+    }
+
+    /* ============================================================
+       CTA : gradyan primary → secondary (PLEN, pa transparan)
+       ============================================================ */
+    .cta-section {
+        background: linear-gradient(135deg,
+            var(--primary, #5b76f7) 0%,
+            var(--secondary, #22d3ee) 100%) !important;
+    }
+    .cta-section .cta-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        width: 100%;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    .cta-section .cta-content h2,
+    .cta-section .cta-content p,
+    .cta-section .cta-content .section-tag,
+    .cta-section .cta-content .cta-button { text-align: center; }
+    .cta-section .cta-content .cta-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="home-page">
+
+    <section class="hero container-xxl" aria-labelledby="home-title">
+        <div class="row g-4 w-100 justify-content-center">
+
+            <div class="col-12 hero-content">
+                <span class="hero-badge">
+                    <i class="fas fa-book-open" aria-hidden="true"></i>
+                    {% blocktrans with badge=theme.hero_badge|default:_("Par Dimension Production") %}{{ badge }}{% endblocktrans %}
+                </span>
+                <h1 id="home-title">
+                    {% blocktrans with title=theme.hero_title|default:_("Apprenez aujourd'hui, construisez votre avenir.") %}{{ title }}{% endblocktrans %}
+                    <span class="highlight">
+                        {% blocktrans with sub=theme.hero_subtitle_line2|default:_("Accessible partout, à tout moment.") %}{{ sub }}{% endblocktrans %}
+                    </span>
+                </h1>
+
+                <p class="hero-description">
+                    {% blocktrans with desc=theme.hero_description|default:_("Des formations modernes, des évaluations interactives et un accompagnement conçu pour transformer vos connaissances en compétences.") %}{{ desc }}{% endblocktrans %}
+                </p>
+
+                <div class="hero-actions">
+                    <a href="{% url 'courses:course_list' %}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-compass" aria-hidden="true"></i>
+                        {% blocktrans with btn=theme.btn_explore|default:_("Explorer les formations") %}{{ btn }}{% endblocktrans %}
+                    </a>
+                    {% if not user.is_authenticated %}
+                    <a href="{% url 'accounts:signup' %}" class="btn btn-outline btn-lg">
+                        {% blocktrans with btn=theme.btn_start|default:_("Créer un compte") %}{{ btn }}{% endblocktrans %}
+                    </a>
+                    {% else %}
+                    <a href="{% url 'progress:dashboard' %}" class="btn btn-outline btn-lg">
+                        <i class="fas fa-chart-line" aria-hidden="true"></i> {% trans "Voir ma progression" %}
+                    </a>
+                    {% endif %}
+                </div>
+
+                {# ===== 3 STATS ANKADRE ===== #}
+                {% if theme.stats_cours or theme.stats_etudiants or theme.stats_satisfaction %}
+                <div class="hero-stats-row" aria-label="{% trans 'Repères de la plateforme' %}">
+                    {% if theme.stats_cours %}
+                    <div class="stat-item">
+                        <span class="stat-number">{{ theme.stats_cours }}+</span>
+                        <span class="stat-label">{% trans "Cours" %}</span>
+                    </div>
+                    {% endif %}
+                    {% if theme.stats_etudiants %}
+                    <div class="stat-item">
+                        <span class="stat-number">{{ theme.stats_etudiants }}+</span>
+                        <span class="stat-label">{% trans "Apprenants" %}</span>
+                    </div>
+                    {% endif %}
+                    {% if theme.stats_satisfaction %}
+                    <div class="stat-item">
+                        <span class="stat-number">{{ theme.stats_satisfaction }}%</span>
+                        <span class="stat-label">{% trans "Satisfaction" %}</span>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+
+                {# ===== 3 KAT AN FÒM WON ===== #}
+                {% if theme.get_hero_image %}
+                    <img src="{{ theme.get_hero_image }}" alt="{{ theme.hero_title }}" class="hero-main-image mt-4" style="max-width: 100%; border-radius: 16px;">
+                {% else %}
+                    <div class="hero-cards-grid">
+                        <article class="hero-feature-circle-card">
+                            <div class="ball-content">
+                                <div class="feature-circle-icon">
+                                    <i class="{{ theme.hero_card1_icon|default:'fas fa-graduation-cap' }}" aria-hidden="true"></i>
+                                </div>
+                                <h3>{% blocktrans with title=theme.hero_card1_title|default:_("Cours interactifs") %}{{ title }}{% endblocktrans %}</h3>
+                                <p>{% blocktrans with desc=theme.hero_card1_desc|default:_("Cours, communauté et évaluations") %}{{ desc }}{% endblocktrans %}</p>
+                            </div>
+                        </article>
+                        <article class="hero-feature-circle-card">
+                            <div class="ball-content">
+                                <div class="feature-circle-icon">
+                                    <i class="{{ theme.hero_card2_icon|default:'fas fa-certificate' }}" aria-hidden="true"></i>
+                                </div>
+                                <h3>{% blocktrans with title=theme.hero_card2_title|default:_("Certificats vérifiables") %}{{ title }}{% endblocktrans %}</h3>
+                                <p>{% blocktrans with desc=theme.hero_card2_desc|default:_("Validation par QR Code.") %}{{ desc }}{% endblocktrans %}</p>
+                            </div>
+                        </article>
+                        <article class="hero-feature-circle-card">
+                            <div class="ball-content">
+                                <div class="feature-circle-icon">
+                                    <i class="{{ theme.hero_card3_icon|default:'fas fa-chart-line' }}" aria-hidden="true"></i>
+                                </div>
+                                <h3>{% blocktrans with title=theme.hero_card3_title|default:_("Suivi personnalisé") %}{{ title }}{% endblocktrans %}</h3>
+                                <p>{% blocktrans with desc=theme.hero_card3_desc|default:_("Progressez à votre rythme.") %}{{ desc }}{% endblocktrans %}</p>
+                            </div>
+                        </article>
+                    </div>
+                {% endif %}
+            </div>
+
+        </div>
+    </section>
+
+    <section class="features-section" aria-labelledby="features-title">
+        <div class="section-header">
+            <span class="section-tag">{% blocktrans with tag=theme.features_tag|default:_("Un apprentissage qui vous ressemble") %}{{ tag }}{% endblocktrans %}</span>
+            <h2 id="features-title">
+                {% blocktrans with title=theme.features_title|default:_("Apprendre pour") %}{{ title }}{% endblocktrans %}
+                <span class="highlight">{% blocktrans with highlight=theme.features_highlight|default:_("avancer concrètement") %}{{ highlight }}{% endblocktrans %}</span>
+            </h2>
+        </div>
+        <div class="features-grid">
+            <article class="feature-card animate-on-scroll"{% if theme.feature1_color|css_color %} style="--feature-color: {{ theme.feature1_color|css_color }};"{% endif %}>
+                <div class="feature-icon-wrapper"><i class="{{ theme.feature1_icon|default:'fas fa-book-open' }} feature-icon" aria-hidden="true"></i></div>
+                <h3>{% blocktrans with title=theme.feature1_title|default:_("Des cours pratiques") %}{{ title }}{% endblocktrans %}</h3>
+                <p>{% blocktrans with desc=theme.feature1_desc|default:_("Des leçons structurées pour acquérir des compétences utiles, une étape à la fois.") %}{{ desc }}{% endblocktrans %}</p>
+                <a href="{% url 'courses:course_list' %}" class="feature-link">{% blocktrans with link=theme.feature_link_text|default:_("Voir les cours") %}{{ link }}{% endblocktrans %} <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+            </article>
+            <article class="feature-card animate-on-scroll delay-1"{% if theme.feature2_color|css_color %} style="--feature-color: {{ theme.feature2_color|css_color }};"{% endif %}>
+                <div class="feature-icon-wrapper"><i class="{{ theme.feature2_icon|default:'fas fa-language' }} feature-icon" aria-hidden="true"></i></div>
+                <h3>{% blocktrans with title=theme.feature2_title|default:_("Français ou kreyòl") %}{{ title }}{% endblocktrans %}</h3>
+                <p>{% blocktrans with desc=theme.feature2_desc|default:_("Étudiez dans la langue qui rend chaque notion plus claire.") %}{{ desc }}{% endblocktrans %}</p>
+                <a href="{% url 'courses:course_list' %}" class="feature-link">{% blocktrans with link=theme.feature_link_text|default:_("Trouver un cours") %}{{ link }}{% endblocktrans %} <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+            </article>
+            <article class="feature-card animate-on-scroll delay-2"{% if theme.feature3_color|css_color %} style="--feature-color: {{ theme.feature3_color|css_color }};"{% endif %}>
+                <div class="feature-icon-wrapper"><i class="{{ theme.feature3_icon|default:'fas fa-chart-line' }} feature-icon" aria-hidden="true"></i></div>
+                <h3>{% blocktrans with title=theme.feature3_title|default:_("Votre progression, visible") %}{{ title }}{% endblocktrans %}</h3>
+                <p>{% blocktrans with desc=theme.feature3_desc|default:_("Répondez aux quiz existants et retrouvez vos avancées dans votre espace.") %}{{ desc }}{% endblocktrans %}</p>
+                <a href="{% url 'courses:course_list' %}" class="feature-link">{% blocktrans with link=theme.feature_link_text|default:_("Commencer à étudier") %}{{ link }}{% endblocktrans %} <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+            </article>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="cta-content">
+            <span class="section-tag text-white">{% trans "Le prochain pas est le vôtre" %}</span>
+            <h2>
+                {% blocktrans with title=theme.cta_title|default:_("Une compétence à la fois,") %}{{ title }}{% endblocktrans %}
+                <span class="cta-highlight">{% blocktrans with highlight=theme.cta_highlight|default:_("vous avancez.") %}{{ highlight }}{% endblocktrans %}</span>
+            </h2>
+            <p>{% blocktrans with desc=theme.cta_desc|default:_("Choisissez un cours, apprenez avec des repères clairs et mesurez votre progression.") %}{{ desc }}{% endblocktrans %}</p>
+            {% if user.is_authenticated %}
+            <a href="{% url 'courses:course_list' %}" class="btn btn-lg cta-button"><i class="fas fa-compass" aria-hidden="true"></i> {% trans "Choisir un cours" %}</a>
+            {% else %}
+            <a href="{% url 'accounts:signup' %}" class="btn btn-lg cta-button"><i class="fas fa-user-plus" aria-hidden="true"></i> {% blocktrans with btn=theme.cta_btn|default:_("Créer un compte") %}{{ btn }}{% endblocktrans %}</a>
+            {% endif %}
+        </div>
+    </section>
+
+    {% if theme.testimonial1_text or theme.testimonial2_text %}
+    <section class="testimonials-section" aria-labelledby="testimonials-title">
+        <div class="section-header">
+            <span class="section-tag">{% blocktrans with tag=theme.testimonials_tag|default:_("Paroles d’apprenants") %}{{ tag }}{% endblocktrans %}</span>
+            <h2 id="testimonials-title">{% blocktrans with title=theme.testimonials_title|default:_("Des expériences") %}{{ title }}{% endblocktrans %} <span class="highlight">{% blocktrans with highlight=theme.testimonials_highlight|default:_("partagées") %}{{ highlight }}{% endblocktrans %}</span>{% if theme.testimonials_end %} {{ theme.testimonials_end }}{% endif %}</h2>
+        </div>
+        <div class="testimonials-grid">
+            {% if theme.testimonial1_text %}
+            <article class="testimonial-card">
+                {% if theme.testimonial1_stars %}<div class="stars" aria-label="{{ theme.testimonial1_stars }} {% trans 'étoiles' %}">{% for i in "12345"|make_list %}{% if forloop.counter <= theme.testimonial1_stars %}<i class="fas fa-star" aria-hidden="true"></i>{% endif %}{% endfor %}</div>{% endif %}
+                <p>“{{ theme.testimonial1_text }}”</p>
+                {% if theme.testimonial1_name or theme.testimonial1_job %}
+                <div class="testimonial-author">
+                    {% if theme.get_testimonial1_avatar %}<img src="{{ theme.get_testimonial1_avatar }}" alt="" loading="lazy">{% else %}<span class="testimonial-initials" aria-hidden="true">{{ theme.testimonial1_name|slice:":1" }}</span>{% endif %}
+                    <div>{% if theme.testimonial1_name %}<h4>{{ theme.testimonial1_name }}</h4>{% endif %}{% if theme.testimonial1_job %}<span>{{ theme.testimonial1_job }}</span>{% endif %}</div>
+                </div>
+                {% endif %}
+            </article>
+            {% endif %}
+            {% if theme.testimonial2_text %}
+            <article class="testimonial-card">
+                {% if theme.testimonial2_stars %}<div class="stars" aria-label="{{ theme.testimonial2_stars }} {% trans 'étoiles' %}">{% for i in "12345"|make_list %}{% if forloop.counter <= theme.testimonial2_stars %}<i class="fas fa-star" aria-hidden="true"></i>{% endif %}{% endfor %}</div>{% endif %}
+                <p>“{{ theme.testimonial2_text }}”</p>
+                {% if theme.testimonial2_name or theme.testimonial2_job %}
+                <div class="testimonial-author">
+                    {% if theme.get_testimonial2_avatar %}<img src="{{ theme.get_testimonial2_avatar }}" alt="" loading="lazy">{% else %}<span class="testimonial-initials" aria-hidden="true">{{ theme.testimonial2_name|slice:":1" }}</span>{% endif %}
+                    <div>{% if theme.testimonial2_name %}<h4>{{ theme.testimonial2_name }}</h4>{% endif %}{% if theme.testimonial2_job %}<span>{{ theme.testimonial2_job }}</span>{% endif %}</div>
+                </div>
+                {% endif %}
+            </article>
+            {% endif %}
+        </div>
+    </section>
+    {% endif %}
+</div>
+{% endblock %}
