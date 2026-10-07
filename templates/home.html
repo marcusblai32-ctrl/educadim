@@ -9,7 +9,7 @@
 
 {% block extra_css %}
 <style>
-    /* ===== Centrage des cartes héro et features uniquement ===== */
+    /* ===== Centrage des cartes héro et features ===== */
     .hero-card,
     .feature-card {
         display: flex;
@@ -43,7 +43,7 @@
         gap: 0.5rem;
     }
 
-    /* ===== Section features : titre + tag centrés ===== */
+    /* ===== Section features : header centré ===== */
     .features-section .section-header {
         display: flex;
         flex-direction: column;
@@ -108,7 +108,7 @@
         text-align: center;
     }
 
-    /* ===== Boutons héro centrés ===== */
+    /* ===== Boutons héro ===== */
     .hero-actions {
         display: flex;
         flex-wrap: wrap;
@@ -120,13 +120,13 @@
     /* ===== CTA : gradyan 100% dinamik (primary → secondary) ===== */
     .cta-section {
         background: linear-gradient(135deg,
-            var(--primary) 0%,
-            var(--secondary) 100%) !important;
+            var(--primary, #5b76f7) 0%,
+            var(--secondary, #22d3ee) 100%) !important;
         border-radius: var(--radius-lg, 28px);
         margin-top: 3rem;
         margin-bottom: 3rem;
         padding: 3rem 1.5rem;
-        box-shadow: 0 24px 60px color-mix(in srgb, var(--primary) 35%, transparent);
+        box-shadow: 0 24px 60px color-mix(in srgb, var(--primary, #5b76f7) 35%, transparent);
     }
 
     .cta-section .cta-content {
@@ -159,10 +159,10 @@
         margin-left: auto;
         margin-right: auto;
         background: #fff;
-        color: var(--primary);
+        color: var(--primary, #5b76f7);
     }
     .cta-section .cta-content .cta-button i {
-        color: var(--primary);
+        color: var(--primary, #5b76f7);
     }
 </style>
 {% endblock %}
@@ -279,16 +279,22 @@
 
     <section class="cta-section">
         <div class="cta-content">
-            <span class="section-tag text-white">{% trans "Le prochain pas est le vôtre" %}</span>
+            <span class="section-tag text-white">{% blocktrans with tag=theme.cta_title|default:_("Le prochain pas est le vôtre") %}{{ tag }}{% endblocktrans %}</span>
             <h2>
                 {% blocktrans with title=theme.cta_title|default:_("Une compétence à la fois,") %}{{ title }}{% endblocktrans %}
                 <span class="cta-highlight">{% blocktrans with highlight=theme.cta_highlight|default:_("vous avancez.") %}{{ highlight }}{% endblocktrans %}</span>
             </h2>
             <p>{% blocktrans with desc=theme.cta_desc|default:_("Choisissez un cours, apprenez avec des repères clairs et mesurez votre progression.") %}{{ desc }}{% endblocktrans %}</p>
             {% if user.is_authenticated %}
-            <a href="{% url 'courses:course_list' %}" class="btn btn-lg cta-button"><i class="fas fa-compass" aria-hidden="true"></i> {% trans "Choisir un cours" %}</a>
+            <a href="{% url 'courses:course_list' %}" class="btn btn-lg cta-button">
+                <i class="fas fa-compass" aria-hidden="true"></i>
+                {% blocktrans with btn=theme.cta_btn|default:_("Choisir un cours") %}{{ btn }}{% endblocktrans %}
+            </a>
             {% else %}
-            <a href="{% url 'accounts:signup' %}" class="btn btn-lg cta-button"><i class="fas fa-user-plus" aria-hidden="true"></i> {% blocktrans with btn=theme.cta_btn|default:_("Créer un compte") %}{{ btn }}{% endblocktrans %}</a>
+            <a href="{% url 'accounts:signup' %}" class="btn btn-lg cta-button">
+                <i class="fas fa-user-plus" aria-hidden="true"></i>
+                {% blocktrans with btn=theme.cta_btn|default:_("Créer un compte") %}{{ btn }}{% endblocktrans %}
+            </a>
             {% endif %}
         </div>
     </section>
