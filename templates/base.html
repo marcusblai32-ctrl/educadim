@@ -323,21 +323,20 @@
     </div>
     {% endif %}
 
-    {# ===== FOOTER (Bootstrap : 4 kolòn klè sou desktop) ===== #}
+    {# ===== FOOTER (Bootstrap : 3 ranje agoch/mitan/adwat + deskripsyon konplè) ===== #}
     <footer class="bg-body-tertiary border-top mt-5">
         <div class="container-xxl py-5">
-            <div class="row g-4">
 
-                {# ===== Kolòn 1 : Brand + deskripsyon + rezo ===== #}
-                <div class="col-12 col-lg-4">
+            {# ===== Deskripsyon konplè sit la (pran tout espas) ===== #}
+            <div class="row mb-4">
+                <div class="col-12">
                     <a href="{% url 'home' %}" class="d-inline-flex align-items-center gap-2 mb-3 text-body text-decoration-none fw-bold fs-4">
                         {% if theme and theme.get_logo %}
                             <img src="{{ theme.get_logo }}" alt="" width="42" height="42" class="rounded-3">
                         {% endif %}
                         <span>{% if theme %}{{ theme.site_name|default:'EducaDim' }}{% else %}EducaDim{% endif %}</span>
                     </a>
-
-                    <p class="text-body-secondary small lh-lg mb-3" style="max-width: 340px;">
+                    <p class="text-body-secondary small lh-lg mb-0">
                         {% if theme and theme.about_text %}
                             {{ theme.about_text }}
                         {% elif theme and theme.site_description %}
@@ -346,33 +345,14 @@
                             {% trans "Apprenez à votre rythme, en français ou en kreyòl. Des cours concrets, des quiz et un suivi de progression clair." %}
                         {% endif %}
                     </p>
-
-                    <div class="d-flex flex-wrap gap-2">
-                        {% if theme and theme.whatsapp_group %}
-                            <a href="{{ theme.whatsapp_group }}" class="btn btn-sm btn-outline-secondary rounded-circle d-inline-flex align-items-center justify-content-center" style="width:38px;height:38px;" target="_blank" rel="noopener noreferrer" aria-label="{% trans 'Groupe WhatsApp' %}" title="{% trans 'Groupe WhatsApp' %}">
-                                <i class="fa-brands fa-whatsapp fs-5"></i>
-                            </a>
-                        {% endif %}
-                        {% if theme and theme.whatsapp_contact %}
-                            <a href="{{ theme.whatsapp_contact }}" class="btn btn-sm btn-outline-secondary rounded-circle d-inline-flex align-items-center justify-content-center" style="width:38px;height:38px;" target="_blank" rel="noopener noreferrer" aria-label="{% trans 'Contact WhatsApp' %}" title="{% trans 'Contact WhatsApp' %}">
-                                <i class="fa-brands fa-whatsapp fs-5"></i>
-                            </a>
-                        {% endif %}
-                        {% if theme and theme.contact_phone %}
-                            <a href="tel:{{ theme.contact_phone|cut:' ' }}" class="btn btn-sm btn-outline-secondary rounded-circle d-inline-flex align-items-center justify-content-center" style="width:38px;height:38px;" aria-label="{% trans 'Téléphone' %}" title="{{ theme.contact_phone }}">
-                                <i class="fas fa-phone fs-5"></i>
-                            </a>
-                        {% endif %}
-                        {% if theme and theme.contact_email %}
-                            <a href="mailto:{{ theme.contact_email }}" class="btn btn-sm btn-outline-secondary rounded-circle d-inline-flex align-items-center justify-content-center" style="width:38px;height:38px;" aria-label="Email" title="{{ theme.contact_email }}">
-                                <i class="fas fa-envelope fs-5"></i>
-                            </a>
-                        {% endif %}
-                    </div>
                 </div>
+            </div>
 
-                {# ===== Kolòn 2 : Plateforme ===== #}
-                <div class="col-6 col-lg-3">
+            {# ===== 3 ranje : agoch / mitan / adwat ===== #}
+            <div class="row g-4">
+
+                {# ----- Kolòn goch : Plateforme ----- #}
+                <div class="col-12 col-md-4">
                     <h6 class="text-uppercase fw-bold small mb-3">{% trans "Plateforme" %}</h6>
                     <ul class="list-unstyled mb-0 d-flex flex-column gap-2">
                         <li><a class="text-body-secondary text-decoration-none small" href="{% url 'courses:course_list' %}">{% trans "Cours" %}</a></li>
@@ -387,8 +367,8 @@
                     </ul>
                 </div>
 
-                {# ===== Kolòn 3 : En savoir plus ===== #}
-                <div class="col-6 col-lg-2">
+                {# ----- Kolòn mitan : En savoir plus ----- #}
+                <div class="col-12 col-md-4">
                     <h6 class="text-uppercase fw-bold small mb-3">{% trans "En savoir plus" %}</h6>
                     <ul class="list-unstyled mb-0 d-flex flex-column gap-2">
                         <li><a class="text-body-secondary text-decoration-none small" href="{% url 'about' %}">{% trans "À propos" %}</a></li>
@@ -397,19 +377,42 @@
                     </ul>
                 </div>
 
-                {# ===== Kolòn 4 : Légal ===== #}
-                <div class="col-12 col-lg-3">
+                {# ----- Kolòn dwat : Légal + Rezo sosyal ----- #}
+                <div class="col-12 col-md-4">
                     <h6 class="text-uppercase fw-bold small mb-3">{% trans "Légal" %}</h6>
-                    <ul class="list-unstyled mb-0 d-flex flex-column gap-2">
+                    <ul class="list-unstyled mb-3 d-flex flex-column gap-2">
                         <li><a class="text-body-secondary text-decoration-none small" href="{% url 'privacy' %}">{% trans "Politique de confidentialité" %}</a></li>
                         <li><a class="text-body-secondary text-decoration-none small" href="{% url 'conditions' %}">{% trans "Conditions d'utilisation" %}</a></li>
                     </ul>
+
+                    <div class="d-flex flex-wrap gap-2 mt-3">
+                        {% if theme and theme.whatsapp_group %}
+                            <a href="{{ theme.whatsapp_group }}" class="btn btn-sm btn-outline-secondary rounded-circle d-inline-flex align-items-center justify-content-center" style="width:38px;height:38px;" target="_blank" rel="noopener noreferrer" aria-label="{% trans 'Groupe WhatsApp' %}" title="{% trans 'Groupe WhatsApp' %}">
+                                <i class="fa-brands fa-whatsapp"></i>
+                            </a>
+                        {% endif %}
+                        {% if theme and theme.whatsapp_contact %}
+                            <a href="{{ theme.whatsapp_contact }}" class="btn btn-sm btn-outline-secondary rounded-circle d-inline-flex align-items-center justify-content-center" style="width:38px;height:38px;" target="_blank" rel="noopener noreferrer" aria-label="{% trans 'Contact WhatsApp' %}" title="{% trans 'Contact WhatsApp' %}">
+                                <i class="fa-brands fa-whatsapp"></i>
+                            </a>
+                        {% endif %}
+                        {% if theme and theme.contact_phone %}
+                            <a href="tel:{{ theme.contact_phone|cut:' ' }}" class="btn btn-sm btn-outline-secondary rounded-circle d-inline-flex align-items-center justify-content-center" style="width:38px;height:38px;" aria-label="{% trans 'Téléphone' %}" title="{{ theme.contact_phone }}">
+                                <i class="fas fa-phone"></i>
+                            </a>
+                        {% endif %}
+                        {% if theme and theme.contact_email %}
+                            <a href="mailto:{{ theme.contact_email }}" class="btn btn-sm btn-outline-secondary rounded-circle d-inline-flex align-items-center justify-content-center" style="width:38px;height:38px;" aria-label="Email" title="{{ theme.contact_email }}">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                        {% endif %}
+                    </div>
                 </div>
 
             </div>
         </div>
 
-        {# ===== Barre inférieure : copyright centré ===== #}
+        {# ===== Barre inférieure : copyright santre ===== #}
         <div class="border-top">
             <div class="container-xxl py-3">
                 <p class="text-body-secondary small mb-0 text-center">
