@@ -90,82 +90,121 @@
     }
 
     /* ============================================================
-       3 KAT AK IKÒN NAN WON
+       4 KAT AN FÒM WON (pa gen ankadreman)
        ============================================================ */
     .hero-cards-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1.25rem;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.5rem;
         width: 100%;
-        max-width: 900px;
+        max-width: 1000px;
         margin: 2.5rem auto 0;
+        justify-items: center;
     }
-    @media (max-width: 767.98px) {
+    @media (max-width: 991.98px) {
+        .hero-cards-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    @media (max-width: 575.98px) {
         .hero-cards-grid {
             grid-template-columns: 1fr;
-            gap: 1rem;
         }
     }
 
-    .hero-feature-card {
+    /* Sèk la anvlope TOUT kontni an (ikòn + tit + deskripsyon) */
+    .hero-feature-circle-card {
+        width: 220px;
+        height: 220px;
+        border-radius: 50%;
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: center;
         text-align: center;
-        padding: 1.75rem 1.25rem 1.5rem;
+        padding: 1.5rem;
         background: var(--glass, rgba(255,255,255,0.7));
         backdrop-filter: blur(14px) saturate(150%);
         -webkit-backdrop-filter: blur(14px) saturate(150%);
-        border: 1px solid var(--glass-brd, rgba(91,118,247,0.15));
-        border-radius: 20px;
-        box-shadow: 0 10px 30px rgba(91,118,247,0.08);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 10px 30px rgba(91,118,247,0.12);
         position: relative;
-    }
-    .hero-feature-card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 20px 45px rgba(91,118,247,0.15);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
-    /* Ikòn nan WON */
-    .hero-feature-card .feature-circle {
-        width: 68px;
-        height: 68px;
+    /* Bòdi gradyan an won */
+    .hero-feature-circle-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        padding: 2px;
+        background: linear-gradient(135deg, #5b76f7 0%, #a855f7 50%, #ef4444 100%);
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        pointer-events: none;
+    }
+
+    /* Efè glou ozalantou sèk la */
+    .hero-feature-circle-card::after {
+        content: "";
+        position: absolute;
+        inset: -6px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #5b76f7, #a855f7, #ef4444);
+        opacity: 0.15;
+        z-index: -1;
+        filter: blur(12px);
+        transition: opacity 0.3s ease;
+    }
+
+    .hero-feature-circle-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 20px 45px rgba(91,118,247,0.2);
+    }
+    .hero-feature-circle-card:hover::after {
+        opacity: 0.3;
+    }
+
+    /* Ikòn nan mitan anwo a */
+    .hero-feature-circle-card .feature-circle-icon {
+        width: 52px;
+        height: 52px;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
         background: linear-gradient(135deg, #5b76f7 0%, #a855f7 50%, #ef4444 100%);
         color: #fff;
-        box-shadow: 0 8px 20px rgba(168,85,247,0.35);
-        margin-bottom: 1rem;
-        position: relative;
+        box-shadow: 0 6px 16px rgba(168,85,247,0.35);
+        margin-bottom: 0.6rem;
+        flex-shrink: 0;
     }
-    .hero-feature-card .feature-circle::after {
-        content: "";
-        position: absolute;
-        inset: -4px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #5b76f7, #a855f7, #ef4444);
-        opacity: 0.25;
-        z-index: -1;
-        filter: blur(6px);
-    }
-    .hero-feature-card .feature-circle i {
-        font-size: 1.6rem;
+    .hero-feature-circle-card .feature-circle-icon i {
+        font-size: 1.25rem;
         color: #fff;
     }
-    .hero-feature-card h3 {
-        font-size: 1.02rem;
+
+    .hero-feature-circle-card h3 {
+        font-size: 0.95rem;
         font-weight: 700;
-        margin: 0 0 0.4rem;
-        line-height: 1.3;
+        margin: 0 0 0.35rem;
+        line-height: 1.25;
+        color: var(--text, #0f172a);
     }
-    .hero-feature-card p {
-        font-size: 0.85rem;
+    .hero-feature-circle-card p {
+        font-size: 0.75rem;
         color: var(--text-muted, #64748b);
         margin: 0;
-        line-height: 1.5;
+        line-height: 1.4;
+    }
+
+    /* Sou mobil : sèk yo pi piti */
+    @media (max-width: 575.98px) {
+        .hero-feature-circle-card {
+            width: 200px;
+            height: 200px;
+        }
     }
 
     /* ============================================================
@@ -303,31 +342,38 @@
                 </div>
                 {% endif %}
 
-                {# ===== 3 KAT AK IKÒN NAN WON ===== #}
+                {# ===== 4 KAT AN FÒM WON ===== #}
                 {% if theme.get_hero_image %}
                     <img src="{{ theme.get_hero_image }}" alt="{{ theme.hero_title }}" class="hero-main-image mt-4" style="max-width: 100%; border-radius: 16px;">
                 {% else %}
                     <div class="hero-cards-grid">
-                        <article class="hero-feature-card">
-                            <div class="feature-circle">
+                        <article class="hero-feature-circle-card">
+                            <div class="feature-circle-icon">
                                 <i class="{{ theme.hero_card1_icon|default:'fas fa-graduation-cap' }}" aria-hidden="true"></i>
                             </div>
                             <h3>{% blocktrans with title=theme.hero_card1_title|default:_("Cours interactifs") %}{{ title }}{% endblocktrans %}</h3>
                             <p>{% blocktrans with desc=theme.hero_card1_desc|default:_("Cours, communauté et évaluations") %}{{ desc }}{% endblocktrans %}</p>
                         </article>
-                        <article class="hero-feature-card">
-                            <div class="feature-circle">
+                        <article class="hero-feature-circle-card">
+                            <div class="feature-circle-icon">
                                 <i class="{{ theme.hero_card2_icon|default:'fas fa-certificate' }}" aria-hidden="true"></i>
                             </div>
                             <h3>{% blocktrans with title=theme.hero_card2_title|default:_("Certificats vérifiables") %}{{ title }}{% endblocktrans %}</h3>
                             <p>{% blocktrans with desc=theme.hero_card2_desc|default:_("Validation par QR Code.") %}{{ desc }}{% endblocktrans %}</p>
                         </article>
-                        <article class="hero-feature-card">
-                            <div class="feature-circle">
+                        <article class="hero-feature-circle-card">
+                            <div class="feature-circle-icon">
                                 <i class="{{ theme.hero_card3_icon|default:'fas fa-chart-line' }}" aria-hidden="true"></i>
                             </div>
                             <h3>{% blocktrans with title=theme.hero_card3_title|default:_("Suivi personnalisé") %}{{ title }}{% endblocktrans %}</h3>
                             <p>{% blocktrans with desc=theme.hero_card3_desc|default:_("Progressez à votre rythme.") %}{{ desc }}{% endblocktrans %}</p>
+                        </article>
+                        <article class="hero-feature-circle-card">
+                            <div class="feature-circle-icon">
+                                <i class="{{ theme.hero_card4_icon|default:'fas fa-users' }}" aria-hidden="true"></i>
+                            </div>
+                            <h3>{% blocktrans with title=theme.hero_card4_title|default:_("Communauté active") %}{{ title }}{% endblocktrans %}</h3>
+                            <p>{% blocktrans with desc=theme.hero_card4_desc|default:_("Échangez avec d'autres apprenants.") %}{{ desc }}{% endblocktrans %}</p>
                         </article>
                     </div>
                 {% endif %}
