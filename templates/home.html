@@ -10,7 +10,7 @@
 {% block extra_css %}
 <style>
     /* ============================================================
-       BACKGROUND DINAMIK
+       BACKGROUND DINAMIK ak degradasyon dous
        ============================================================ */
     .home-page {
         position: relative;
@@ -65,7 +65,7 @@
     }
 
     /* ============================================================
-       3 STATS ANKADRE
+       3 STATS ANKADRE (primary transparan)
        ============================================================ */
     .hero-stats-row {
         display: flex;
@@ -117,7 +117,7 @@
     }
 
     /* ============================================================
-       3 KAT AN FÒM WON
+       3 KAT AN FÒM WON (gradyan transparan primary → secondary)
        ============================================================ */
     .hero-cards-grid {
         display: grid;
@@ -129,10 +129,14 @@
         justify-items: center;
     }
     @media (max-width: 991.98px) {
-        .hero-cards-grid { grid-template-columns: repeat(2, 1fr); }
+        .hero-cards-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
     }
     @media (max-width: 575.98px) {
-        .hero-cards-grid { grid-template-columns: 1fr; }
+        .hero-cards-grid {
+            grid-template-columns: 1fr;
+        }
     }
 
     .hero-feature-circle-card {
@@ -148,6 +152,7 @@
         position: relative;
         overflow: hidden;
 
+        /* Gradyan transparan ki soti nan primary + secondary */
         background: linear-gradient(135deg,
             color-mix(in srgb, var(--primary, #5b76f7) 15%, transparent) 0%,
             color-mix(in srgb, var(--secondary, #22d3ee) 10%, transparent) 100%);
@@ -162,6 +167,7 @@
         transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
+    /* Refleksyon limyè anlè a (boul kristal) */
     .hero-feature-circle-card::before {
         content: "";
         position: absolute;
@@ -178,6 +184,7 @@
         z-index: 1;
     }
 
+    /* Bòdi gradyan an won (primary → secondary) */
     .hero-feature-circle-card::after {
         content: "";
         position: absolute;
@@ -198,8 +205,11 @@
             0 20px 45px color-mix(in srgb, var(--primary, #5b76f7) 28%, transparent),
             inset 0 1px 0 color-mix(in srgb, var(--primary, #5b76f7) 35%, transparent);
     }
-    .hero-feature-circle-card:hover::after { opacity: 0.3; }
+    .hero-feature-circle-card:hover::after {
+        opacity: 0.3;
+    }
 
+    /* Kontni anndan boul la */
     .hero-feature-circle-card .ball-content {
         position: relative;
         z-index: 2;
@@ -210,6 +220,7 @@
         width: 100%;
     }
 
+    /* Ikòn nan yon ti won ak gradyan primary → secondary */
     .hero-feature-circle-card .feature-circle-icon {
         width: 52px;
         height: 52px;
@@ -244,6 +255,7 @@
         line-height: 1.4;
     }
 
+    /* Nan mòd sombre */
     html[data-bs-theme="dark"] .hero-feature-circle-card,
     html[data-theme="dark"] .hero-feature-circle-card {
         background: linear-gradient(135deg,
@@ -270,35 +282,8 @@
     }
 
     /* ============================================================
-       FEATURES : kat ki poukont li → santre, menm lajè ak lòt yo
+       Features / Headers / CTA
        ============================================================ */
-    .features-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
-        gap: 1.5rem;
-        justify-content: center;
-        justify-items: stretch;
-        align-items: stretch;
-    }
-
-    /* Kat ki poukont li nan yon liy : santre ak menm lajè */
-    .features-grid > .feature-card:last-child:nth-child(odd) {
-        grid-column: 1 / -1;
-        width: 100%;
-        max-width: 100%;
-        margin-left: auto;
-        margin-right: auto;
-        justify-self: center;
-    }
-    @media (min-width: 1024px) {
-        .features-grid > .feature-card:last-child:nth-child(3n + 1) {
-            grid-column: 2 / 3;
-            width: 100%;
-            max-width: 100%;
-            margin: 0;
-        }
-    }
-
     .feature-card {
         display: flex;
         flex-direction: column;
@@ -339,21 +324,6 @@
     .testimonials-section .section-header .section-tag {
         text-align: center;
         width: 100%;
-    }
-
-    /* ============================================================
-       CTA : background body_bg dinamik (pa gradyan)
-       ============================================================ */
-    .cta-section {
-        background: var(--body-bg, var(--bg, #eef1fb)) !important;
-        border-radius: var(--radius-lg, 28px);
-        margin-top: 3rem;
-        margin-bottom: 3rem;
-        padding: 3rem 1.5rem;
-    }
-    html[data-bs-theme="dark"] .cta-section,
-    html[data-theme="dark"] .cta-section {
-        background: var(--body-bg, var(--bg, #0a0f22)) !important;
     }
 
     .cta-section .cta-content {
@@ -422,7 +392,7 @@
                     {% endif %}
                 </div>
 
-                {# ===== 3 STATS ANKADRE ===== #}
+                {# ===== 3 STATS ANKADRE (primary transparan) ===== #}
                 {% if theme.stats_cours or theme.stats_etudiants or theme.stats_satisfaction %}
                 <div class="hero-stats-row" aria-label="{% trans 'Repères de la plateforme' %}">
                     {% if theme.stats_cours %}
@@ -446,7 +416,7 @@
                 </div>
                 {% endif %}
 
-                {# ===== 3 KAT AN FÒM WON ===== #}
+                {# ===== 3 KAT AN FÒM WON (primary → secondary gradyan) ===== #}
                 {% if theme.get_hero_image %}
                     <img src="{{ theme.get_hero_image }}" alt="{{ theme.hero_title }}" class="hero-main-image mt-4" style="max-width: 100%; border-radius: 16px;">
                 {% else %}
