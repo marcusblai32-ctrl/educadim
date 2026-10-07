@@ -323,12 +323,12 @@
     </div>
     {% endif %}
 
-    {# ===== FOOTER (100% Bootstrap) ===== #}
+    {# ===== FOOTER (Bootstrap : 4 kolòn klè sou desktop) ===== #}
     <footer class="bg-body-tertiary border-top mt-5">
         <div class="container-xxl py-5">
-            <div class="row g-4 g-lg-5">
+            <div class="row g-4">
 
-                {# ===== Colonne 1 : Brand + description + social ===== #}
+                {# ===== Kolòn 1 : Brand + deskripsyon + rezo ===== #}
                 <div class="col-12 col-lg-4">
                     <a href="{% url 'home' %}" class="d-inline-flex align-items-center gap-2 mb-3 text-body text-decoration-none fw-bold fs-4">
                         {% if theme and theme.get_logo %}
@@ -348,19 +348,16 @@
                     </p>
 
                     <div class="d-flex flex-wrap gap-2">
-                        <!-- ===== KOREKSYON 1: Groupe WhatsApp (FA 6) ===== -->
                         {% if theme and theme.whatsapp_group %}
                             <a href="{{ theme.whatsapp_group }}" class="btn btn-sm btn-outline-secondary rounded-circle d-inline-flex align-items-center justify-content-center" style="width:38px;height:38px;" target="_blank" rel="noopener noreferrer" aria-label="{% trans 'Groupe WhatsApp' %}" title="{% trans 'Groupe WhatsApp' %}">
                                 <i class="fa-brands fa-whatsapp fs-5"></i>
                             </a>
                         {% endif %}
-                        <!-- ===== KOREKSYON 2: Contact WhatsApp (FA 6) ===== -->
                         {% if theme and theme.whatsapp_contact %}
                             <a href="{{ theme.whatsapp_contact }}" class="btn btn-sm btn-outline-secondary rounded-circle d-inline-flex align-items-center justify-content-center" style="width:38px;height:38px;" target="_blank" rel="noopener noreferrer" aria-label="{% trans 'Contact WhatsApp' %}" title="{% trans 'Contact WhatsApp' %}">
                                 <i class="fa-brands fa-whatsapp fs-5"></i>
                             </a>
                         {% endif %}
-
                         {% if theme and theme.contact_phone %}
                             <a href="tel:{{ theme.contact_phone|cut:' ' }}" class="btn btn-sm btn-outline-secondary rounded-circle d-inline-flex align-items-center justify-content-center" style="width:38px;height:38px;" aria-label="{% trans 'Téléphone' %}" title="{{ theme.contact_phone }}">
                                 <i class="fas fa-phone fs-5"></i>
@@ -374,8 +371,8 @@
                     </div>
                 </div>
 
-                {# ===== Colonne 2 : Plateforme ===== #}
-                <div class="col-6 col-lg-2 offset-lg-1">
+                {# ===== Kolòn 2 : Plateforme ===== #}
+                <div class="col-6 col-lg-3">
                     <h6 class="text-uppercase fw-bold small mb-3">{% trans "Plateforme" %}</h6>
                     <ul class="list-unstyled mb-0 d-flex flex-column gap-2">
                         <li><a class="text-body-secondary text-decoration-none small" href="{% url 'courses:course_list' %}">{% trans "Cours" %}</a></li>
@@ -390,9 +387,9 @@
                     </ul>
                 </div>
 
-                {# ===== Colonne 3 : Informations ===== #}
+                {# ===== Kolòn 3 : En savoir plus ===== #}
                 <div class="col-6 col-lg-2">
-                    <h6 class="text-uppercase fw-bold small mb-3">{% trans "Informations" %}</h6>
+                    <h6 class="text-uppercase fw-bold small mb-3">{% trans "En savoir plus" %}</h6>
                     <ul class="list-unstyled mb-0 d-flex flex-column gap-2">
                         <li><a class="text-body-secondary text-decoration-none small" href="{% url 'about' %}">{% trans "À propos" %}</a></li>
                         <li><a class="text-body-secondary text-decoration-none small" href="{% url 'faq' %}">{% trans "FAQ" %}</a></li>
@@ -400,29 +397,24 @@
                     </ul>
                 </div>
 
-                {# ===== Colonne 4 : Légal ===== #}
-                <div class="col-6 col-lg-2">
+                {# ===== Kolòn 4 : Légal ===== #}
+                <div class="col-12 col-lg-3">
                     <h6 class="text-uppercase fw-bold small mb-3">{% trans "Légal" %}</h6>
                     <ul class="list-unstyled mb-0 d-flex flex-column gap-2">
-                        <li><a class="text-body-secondary text-decoration-none small" href="{% url 'privacy' %}">{% trans "Confidentialité" %}</a></li>
-                        <li><a class="text-body-secondary text-decoration-none small" href="{% url 'conditions' %}">{% trans "Conditions" %}</a></li>
+                        <li><a class="text-body-secondary text-decoration-none small" href="{% url 'privacy' %}">{% trans "Politique de confidentialité" %}</a></li>
+                        <li><a class="text-body-secondary text-decoration-none small" href="{% url 'conditions' %}">{% trans "Conditions d'utilisation" %}</a></li>
                     </ul>
                 </div>
 
             </div>
         </div>
 
-        {# ===== Barre inférieure ===== #}
+        {# ===== Barre inférieure : copyright centré ===== #}
         <div class="border-top">
             <div class="container-xxl py-3">
-                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
-
-                    <p class="text-body-secondary small mb-0">
-                        &copy; {% now "Y" %} - {% if theme %}{{ theme.site_name|default:'EducaDim' }}{% else %}EducaDim{% endif %} • {% if theme %}{{ theme.footer_text|default:_('Tous droits réservés') }}{% else %}{% trans "Tous droits réservés" %}{% endif %}
-                    </p>
-
-
-                </div>
+                <p class="text-body-secondary small mb-0 text-center">
+                    &copy; {% now "Y" %} - {% if theme %}{{ theme.site_name|default:'EducaDim' }}{% else %}EducaDim{% endif %} • {% if theme %}{{ theme.footer_text|default:_('Tous droits réservés') }}{% else %}{% trans "Tous droits réservés" %}{% endif %}
+                </p>
             </div>
         </div>
     </footer>
