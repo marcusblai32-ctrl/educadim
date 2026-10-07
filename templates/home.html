@@ -10,7 +10,7 @@
 {% block extra_css %}
 <style>
     /* ============================================================
-       HERO : sou desktop, tèks agoch + stats nan kolòn dwat
+       HERO : desktop = tèks agoch + stats bò dwat
        ============================================================ */
     @media (min-width: 992px) {
         .hero .row {
@@ -35,61 +35,100 @@
             align-items: stretch;
             justify-content: center;
         }
-
-        /* Blòk stats la vin yon gwo kad poukont li nan kolòn dwat la */
-        .hero-stats-box {
-            background: var(--glass, rgba(255,255,255,0.55));
-            backdrop-filter: blur(14px) saturate(150%);
-            -webkit-backdrop-filter: blur(14px) saturate(150%);
-            border: 1px solid var(--glass-brd, rgba(255,255,255,0.65));
-            border-radius: 24px;
-            padding: 2rem 1.5rem;
-            box-shadow: var(--glass-sh, 0 10px 34px rgba(30,41,89,0.12));
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-        .hero-stats-box .stat-item {
-            flex: none;
-            min-width: 0;
-            width: 100%;
-            padding: 1rem 1.25rem;
-            border-radius: 16px;
-            background: rgba(255,255,255,0.4);
-            border: 1px solid rgba(255,255,255,0.3);
-            flex-direction: row;
-            align-items: center;
-            justify-content: flex-start;
-            gap: 1rem;
-            text-align: left;
-        }
-        .hero-stats-box .stat-number {
-            font-size: 1.8rem;
-            min-width: 70px;
-            text-align: left;
-        }
-        .hero-stats-box .stat-label {
-            text-align: left;
-            font-size: 0.95rem;
-        }
     }
 
     /* ============================================================
-       SOU MOBIL : stats yo rete anba tèks la (jan li te ye a)
+       KAD STATS — bèl stil (desktop + mobile)
+       ============================================================ */
+    .hero-stats-box {
+        background: linear-gradient(135deg, rgba(91,118,247,0.08), rgba(34,211,238,0.06));
+        backdrop-filter: blur(16px) saturate(150%);
+        -webkit-backdrop-filter: blur(16px) saturate(150%);
+        border: 1px solid rgba(91,118,247,0.18);
+        border-radius: 24px;
+        padding: 2rem 1.5rem;
+        box-shadow: 0 12px 40px rgba(91,118,247,0.15);
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
+    }
+
+    .hero-stats-box .stat-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1.1rem 1.25rem;
+        border-radius: 16px;
+        background: rgba(255,255,255,0.55);
+        border: 1px solid rgba(91,118,247,0.12);
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .hero-stats-box .stat-item:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 24px rgba(91,118,247,0.18);
+    }
+    .hero-stats-box .stat-icon {
+        flex: 0 0 48px;
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, #5b76f7, #22d3ee);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 1.2rem;
+    }
+    .hero-stats-box .stat-text {
+        display: flex;
+        flex-direction: column;
+        text-align: left;
+    }
+    .hero-stats-box .stat-number {
+        font-size: 1.55rem;
+        font-weight: 800;
+        line-height: 1.1;
+        color: var(--primary, #5b76f7);
+        font-family: var(--font-display, 'Manrope', sans-serif);
+    }
+    .hero-stats-box .stat-label {
+        font-size: 0.85rem;
+        color: var(--text-muted, #64748b);
+        margin-top: 0.15rem;
+    }
+
+    /* ============================================================
+       SOU MOBIL : stats yo anba tèks la (blòk orizontal)
        ============================================================ */
     @media (max-width: 991.98px) {
         .hero-stats-mobile {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 1rem;
+            gap: 0.75rem;
             width: 100%;
             margin-top: 1.5rem;
         }
         .hero-stats-mobile .stat-item {
             flex: 1 1 0;
-            min-width: 90px;
+            min-width: 100px;
             text-align: center;
+            padding: 0.85rem 0.5rem;
+            border-radius: 14px;
+            background: rgba(91,118,247,0.08);
+            border: 1px solid rgba(91,118,247,0.15);
+        }
+        .hero-stats-mobile .stat-number {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--primary, #5b76f7);
+            display: block;
+        }
+        .hero-stats-mobile .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-muted, #64748b);
+            display: block;
         }
         .hero-stats-box { display: none; }
     }
@@ -98,7 +137,7 @@
     }
 
     /* ============================================================
-       Cartes héro & features (centrage)
+       Features / Headers / CTA
        ============================================================ */
     .feature-card {
         display: flex;
@@ -123,7 +162,6 @@
         gap: 0.5rem;
     }
 
-    /* Headers de section centrés */
     .features-section .section-header,
     .testimonials-section .section-header {
         display: flex;
@@ -143,7 +181,6 @@
         width: 100%;
     }
 
-    /* Boutons héro */
     .hero-actions {
         display: flex;
         flex-wrap: wrap;
@@ -152,7 +189,6 @@
         gap: 1rem;
     }
 
-    /* CTA */
     .cta-section .cta-content {
         display: flex;
         flex-direction: column;
@@ -178,54 +214,16 @@
         margin-left: auto;
         margin-right: auto;
     }
-
-    /* Hero visual (cartes héro) */
-    .hero-visual .hero-card {
-        width: 100% !important;
-        max-width: none !important;
-        padding: 1.1rem 1.3rem !important;
-        text-align: left !important;
-        display: flex !important;
-        flex-direction: row !important;
-        align-items: center !important;
-        gap: 1rem !important;
-        animation: none;
-    }
-    .hero-visual .hero-card .hero-card-icon {
-        flex: 0 0 52px;
-        width: 52px;
-        height: 52px;
-        margin: 0 !important;
-        border-radius: 14px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: var(--grad-brand, linear-gradient(135deg, #5b76f7, #22d3ee));
-    }
-    .hero-visual .hero-card .hero-card-icon i {
-        color: #fff !important;
-        font-size: 1.3rem !important;
-        margin: 0 !important;
-    }
-    .hero-visual .hero-card h3 {
-        text-align: left !important;
-        font-size: 1rem !important;
-        margin: 0 0 0.15rem !important;
-    }
-    .hero-visual .hero-card p {
-        text-align: left !important;
-        font-size: 0.85rem !important;
-        margin: 0 !important;
-    }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="home-page">
+
     <section class="hero container-xxl" aria-labelledby="home-title">
         <div class="row g-4 align-items-center w-100">
 
-            {# ===== Kolòn goch : tèks + bouton + stats (mobile) ===== #}
+            {# ===== Kolòn goch : tèks ===== #}
             <div class="col-12 col-lg-7 hero-content">
                 <span class="hero-badge">
                     <i class="fas fa-book-open" aria-hidden="true"></i>
@@ -256,7 +254,7 @@
                     {% endif %}
                 </div>
 
-                {# Stats yo : parèt SÈLMAN sou mobil (anba tèks la) #}
+                {# Stats MOBIL sèlman #}
                 {% if theme.stats_cours or theme.stats_etudiants or theme.stats_satisfaction %}
                 <div class="hero-stats-mobile" aria-label="{% trans 'Repères de la plateforme' %}">
                     {% if theme.stats_cours %}
@@ -281,31 +279,37 @@
                 {% endif %}
             </div>
 
-            {# ===== Kolòn dwat : kad ak stats (desktop) oswa imaj (si genyen) ===== #}
-            <div class="col-12 col-lg-5 hero-visual" aria-label="{% trans 'Repères de la plateforme' %}">
-
+            {# ===== Kolòn dwat : kad stats (desktop) oswa imaj ===== #}
+            <div class="col-12 col-lg-5 hero-visual">
                 {% if theme.get_hero_image %}
-                    {# Si gen yon imaj, montre l #}
                     <img src="{{ theme.get_hero_image }}" alt="{{ theme.hero_title }}" class="hero-main-image">
                 {% elif theme.stats_cours or theme.stats_etudiants or theme.stats_satisfaction %}
-                    {# Sinon, montre kad stats yo (sou desktop sèlman) #}
-                    <div class="hero-stats-box" aria-hidden="true">
+                    <div class="hero-stats-box" aria-label="{% trans 'Repères de la plateforme' %}">
                         {% if theme.stats_cours %}
                         <div class="stat-item">
-                            <span class="stat-number">{{ theme.stats_cours }}+</span>
-                            <span class="stat-label">{% trans "Cours" %}</span>
+                            <div class="stat-icon"><i class="fas fa-book-open" aria-hidden="true"></i></div>
+                            <div class="stat-text">
+                                <span class="stat-number">{{ theme.stats_cours }}+</span>
+                                <span class="stat-label">{% trans "Cours disponibles" %}</span>
+                            </div>
                         </div>
                         {% endif %}
                         {% if theme.stats_etudiants %}
                         <div class="stat-item">
-                            <span class="stat-number">{{ theme.stats_etudiants }}+</span>
-                            <span class="stat-label">{% trans "Apprenants" %}</span>
+                            <div class="stat-icon"><i class="fas fa-users" aria-hidden="true"></i></div>
+                            <div class="stat-text">
+                                <span class="stat-number">{{ theme.stats_etudiants }}+</span>
+                                <span class="stat-label">{% trans "Apprenants actifs" %}</span>
+                            </div>
                         </div>
                         {% endif %}
                         {% if theme.stats_satisfaction %}
                         <div class="stat-item">
-                            <span class="stat-number">{{ theme.stats_satisfaction }}%</span>
-                            <span class="stat-label">{% trans "Satisfaction" %}</span>
+                            <div class="stat-icon"><i class="fas fa-star" aria-hidden="true"></i></div>
+                            <div class="stat-text">
+                                <span class="stat-number">{{ theme.stats_satisfaction }}%</span>
+                                <span class="stat-label">{% trans "Satisfaction" %}</span>
+                            </div>
                         </div>
                         {% endif %}
                     </div>
