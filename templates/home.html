@@ -10,7 +10,7 @@
 {% block extra_css %}
 <style>
     /* ============================================================
-       HERO : tèks santre anlè, 3 kat yo anba (toupatou)
+       HERO : tèks santre + 3 won + bouton
        ============================================================ */
     .hero-content {
         display: flex;
@@ -29,7 +29,7 @@
     }
     .hero-content .hero-description {
         max-width: 620px;
-        margin: 0 auto 0.5rem;
+        margin: 0.5rem auto 1rem;
         font-size: clamp(0.9rem, 2vw, 1.05rem);
         color: var(--text-muted, #64748b);
     }
@@ -42,100 +42,82 @@
         margin-top: 0.5rem;
     }
 
-    /* ===== STATS : 3 kat orizontal ===== */
+    /* ============================================================
+       3 STATS AN FÒM WON (bèl design)
+       ============================================================ */
     .hero-stats-row {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        gap: 0.75rem;
+        gap: 1.5rem 2.5rem;
         width: 100%;
         max-width: 720px;
-        margin: 1.75rem auto 0;
+        margin: 2rem auto 0;
     }
     .hero-stats-row .stat-item {
-        flex: 1 1 0;
-        min-width: 100px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         text-align: center;
-        padding: 0.95rem 0.5rem;
-        border-radius: 14px;
-        background: rgba(91,118,247,0.08);
-        border: 1px solid rgba(91,118,247,0.15);
+        flex: 0 0 auto;
+    }
+    .hero-stats-row .stat-circle {
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, rgba(91,118,247,0.12), rgba(168,85,247,0.08));
+        border: 3px solid transparent;
+        background-clip: padding-box;
+        position: relative;
+        box-shadow: 0 10px 30px rgba(91,118,247,0.15);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .hero-stats-row .stat-circle::before {
+        content: "";
+        position: absolute;
+        inset: -3px;
+        border-radius: 50%;
+        padding: 3px;
+        background: linear-gradient(135deg, #5b76f7, #a855f7);
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        pointer-events: none;
+    }
+    .hero-stats-row .stat-item:hover .stat-circle {
+        transform: translateY(-4px);
+        box-shadow: 0 15px 40px rgba(91,118,247,0.25);
     }
     .hero-stats-row .stat-number {
-        font-size: 1.35rem;
+        font-size: 1.8rem;
         font-weight: 800;
-        color: var(--primary, #5b76f7);
-        display: block;
+        line-height: 1;
+        background: linear-gradient(135deg, #5b76f7, #a855f7);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
         font-family: var(--font-display, 'Manrope', sans-serif);
-        line-height: 1.1;
     }
     .hero-stats-row .stat-label {
-        font-size: 0.8rem;
+        font-size: 0.78rem;
         color: var(--text-muted, #64748b);
-        display: block;
-        margin-top: 0.15rem;
+        margin-top: 0.35rem;
+        font-weight: 500;
     }
 
     /* ============================================================
-       3 KAT YO : parèt anba stats yo (toupatou, mobil ak desktop)
+       SOU MOBIL : won yo pi piti
        ============================================================ */
-    .hero-cards-col {
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-        width: 100%;
-        max-width: 720px;
-        margin: 1.5rem auto 0;
-    }
-    .hero-cards-col .hero-card {
-        display: flex !important;
-        flex-direction: row !important;
-        align-items: center !important;
-        gap: 0.9rem !important;
-        padding: 1rem 1.15rem !important;
-        background: var(--glass, rgba(255,255,255,0.7));
-        backdrop-filter: blur(14px) saturate(150%);
-        -webkit-backdrop-filter: blur(14px) saturate(150%);
-        border: 1px solid var(--glass-brd, rgba(91,118,247,0.15));
-        border-radius: 16px;
-        box-shadow: 0 8px 24px rgba(91,118,247,0.08);
-        text-align: left !important;
-        width: 100% !important;
-        max-width: none !important;
-        animation: none !important;
-    }
-    /* Ikòn : gradyan ble-wouj */
-    .hero-cards-col .hero-card .hero-card-icon {
-        flex: 0 0 46px;
-        width: 46px;
-        height: 46px;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: linear-gradient(135deg, #5b76f7 0%, #a855f7 50%, #ef4444 100%);
-        color: #fff;
-        margin: 0 !important;
-        box-shadow: 0 4px 12px rgba(168,85,247,0.35);
-    }
-    .hero-cards-col .hero-card .hero-card-icon i {
-        font-size: 1.15rem !important;
-        color: #fff !important;
-        margin: 0 !important;
-    }
-    .hero-cards-col .hero-card h3 {
-        font-size: 0.98rem !important;
-        font-weight: 700;
-        margin: 0 0 0.15rem !important;
-        text-align: left !important;
-        line-height: 1.25;
-    }
-    .hero-cards-col .hero-card p {
-        font-size: 0.8rem !important;
-        color: var(--text-muted, #64748b);
-        margin: 0 !important;
-        text-align: left !important;
-        line-height: 1.35;
+    @media (max-width: 575.98px) {
+        .hero-stats-row { gap: 1rem 1.5rem; }
+        .hero-stats-row .stat-circle { width: 100px; height: 100px; }
+        .hero-stats-row .stat-number { font-size: 1.35rem; }
+        .hero-stats-row .stat-label { font-size: 0.7rem; }
     }
 
     /* ============================================================
@@ -208,17 +190,6 @@
         margin-left: auto;
         margin-right: auto;
     }
-
-    /* Sur desktop : hero a se yon sèl kolòn santre */
-    @media (min-width: 992px) {
-        .hero .row {
-            display: block;
-        }
-        .hero-content,
-        .hero-visual {
-            max-width: 100%;
-        }
-    }
 </style>
 {% endblock %}
 
@@ -226,21 +197,21 @@
 <div class="home-page">
 
     <section class="hero container-xxl" aria-labelledby="home-title">
-        <div class="row g-4 align-items-center w-100 justify-content-center">
+        <div class="row g-4 w-100 justify-content-center">
 
-            {# ===== Tèks + bouton + stats + 3 kat yo (tout nan yon sèl kolòn) ===== #}
             <div class="col-12 hero-content">
                 <span class="hero-badge">
                     <i class="fas fa-book-open" aria-hidden="true"></i>
                     {% blocktrans with badge=theme.hero_badge|default:_("Par Dimension Production") %}{{ badge }}{% endblocktrans %}
                 </span>
                 <h1 id="home-title">
-                    {% blocktrans with title=theme.hero_title|default:_("Apprenez aujourd'hui,") %}{{ title }}{% endblocktrans %}
-                    {% blocktrans with line2=theme.hero_subtitle_line2|default:_("construisez votre avenir.") %}{{ line2 }}{% endblocktrans %}
+                    {% blocktrans with title=theme.hero_title|default:_("Apprenez aujourd'hui, construisez votre avenir.") %}{{ title }}{% endblocktrans %}
                     <span class="highlight">
-                        {% blocktrans with sub=theme.hero_subtitle|default:_("Accessible partout, à tout moment.") %}{{ sub }}{% endblocktrans %}
+                        {% blocktrans with sub=theme.hero_subtitle_line2|default:_("Accessible partout, à tout moment.") %}{{ sub }}{% endblocktrans %}
                     </span>
                 </h1>
+
+                {# Deskripsyon sèlman (yo retire subtit ki te fè doub la) #}
                 <p class="hero-description">
                     {% blocktrans with desc=theme.hero_description|default:_("Des formations modernes, des évaluations interactives et un accompagnement conçu pour transformer vos connaissances en compétences.") %}{{ desc }}{% endblocktrans %}
                 </p>
@@ -261,57 +232,34 @@
                     {% endif %}
                 </div>
 
-                {# ===== Stats yo ===== #}
+                {# ===== 3 STATS AN FÒM WON ===== #}
                 {% if theme.stats_cours or theme.stats_etudiants or theme.stats_satisfaction %}
                 <div class="hero-stats-row" aria-label="{% trans 'Repères de la plateforme' %}">
                     {% if theme.stats_cours %}
                     <div class="stat-item">
-                        <span class="stat-number">{{ theme.stats_cours }}+</span>
-                        <span class="stat-label">{% trans "Cours" %}</span>
+                        <div class="stat-circle">
+                            <span class="stat-number">{{ theme.stats_cours }}+</span>
+                            <span class="stat-label">{% trans "Cours" %}</span>
+                        </div>
                     </div>
                     {% endif %}
                     {% if theme.stats_etudiants %}
                     <div class="stat-item">
-                        <span class="stat-number">{{ theme.stats_etudiants }}+</span>
-                        <span class="stat-label">{% trans "Apprenants" %}</span>
+                        <div class="stat-circle">
+                            <span class="stat-number">{{ theme.stats_etudiants }}+</span>
+                            <span class="stat-label">{% trans "Apprenants" %}</span>
+                        </div>
                     </div>
                     {% endif %}
                     {% if theme.stats_satisfaction %}
                     <div class="stat-item">
-                        <span class="stat-number">{{ theme.stats_satisfaction }}%</span>
-                        <span class="stat-label">{% trans "Satisfaction" %}</span>
+                        <div class="stat-circle">
+                            <span class="stat-number">{{ theme.stats_satisfaction }}%</span>
+                            <span class="stat-label">{% trans "Satisfaction" %}</span>
+                        </div>
                     </div>
                     {% endif %}
                 </div>
-                {% endif %}
-
-                {# ===== 3 kat yo ===== #}
-                {% if theme.get_hero_image %}
-                    <img src="{{ theme.get_hero_image }}" alt="{{ theme.hero_title }}" class="hero-main-image mt-4" style="max-width: 100%; border-radius: 16px;">
-                {% else %}
-                    <div class="hero-cards-col">
-                        <article class="hero-card">
-                            <div class="hero-card-icon"><i class="{{ theme.hero_card1_icon|default:'fas fa-graduation-cap' }}" aria-hidden="true"></i></div>
-                            <div>
-                                <h3>{% blocktrans with title=theme.hero_card1_title|default:_("Cours interactifs") %}{{ title }}{% endblocktrans %}</h3>
-                                <p>{% blocktrans with desc=theme.hero_card1_desc|default:_("Cours, communauté et évaluations") %}{{ desc }}{% endblocktrans %}</p>
-                            </div>
-                        </article>
-                        <article class="hero-card">
-                            <div class="hero-card-icon"><i class="{{ theme.hero_card2_icon|default:'fas fa-certificate' }}" aria-hidden="true"></i></div>
-                            <div>
-                                <h3>{% blocktrans with title=theme.hero_card2_title|default:_("Certificats vérifiables") %}{{ title }}{% endblocktrans %}</h3>
-                                <p>{% blocktrans with desc=theme.hero_card2_desc|default:_("Validation par QR Code.") %}{{ desc }}{% endblocktrans %}</p>
-                            </div>
-                        </article>
-                        <article class="hero-card">
-                            <div class="hero-card-icon"><i class="{{ theme.hero_card3_icon|default:'fas fa-chart-line' }}" aria-hidden="true"></i></div>
-                            <div>
-                                <h3>{% blocktrans with title=theme.hero_card3_title|default:_("Suivi personnalisé") %}{{ title }}{% endblocktrans %}</h3>
-                                <p>{% blocktrans with desc=theme.hero_card3_desc|default:_("Progressez à votre rythme.") %}{{ desc }}{% endblocktrans %}</p>
-                            </div>
-                        </article>
-                    </div>
                 {% endif %}
             </div>
 
