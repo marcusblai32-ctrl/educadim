@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE|default:'fr' }}">
 <head>
-    {# ===== THEME BOOT (avoid flash of wrong theme) ===== #}
+    {# ===== THEME BOOT ===== #}
     <script src="{% static 'js/theme-init.js' %}"></script>
 
     <meta charset="UTF-8">
@@ -12,13 +12,11 @@
     <meta name="description" content="{% if meta_description %}{{ meta_description }}{% elif theme and theme.site_description %}{{ theme.site_description }}{% else %}EducaDim — plateforme e-learning : cours en ligne, quiz, badges et suivi de progression.{% endif %}">
     <meta name="keywords" content="{{ meta_keywords|default:'e-learning, cours en ligne, éducation, EducaDim, formation, quiz' }}">
 
-    {# ===== TECHNICAL SEO ===== #}
     {% block meta_robots %}<meta name="robots" content="index, follow">{% endblock %}
     <link rel="canonical" href="{% block canonical_url %}{{ request.scheme }}://{{ request.get_host }}{{ request.path }}{% endblock %}">
-    <meta name="theme-color" content="{{ theme_color|default:'#5b76f7' }}" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#0a0f22" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="{{ theme.primary|default:'#5b76f7' }}" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="{{ theme.dark|default:'#0a0f22' }}" media="(prefers-color-scheme: dark)">
 
-    {# ===== OPEN GRAPH ===== #}
     <meta property="og:site_name" content="{% if theme %}{{ theme.site_name|default:'EducaDim' }}{% else %}EducaDim{% endif %}">
     <meta property="og:type" content="{% block og_type %}website{% endblock %}">
     <meta property="og:title" content="{% block og_title %}{% if theme %}{{ theme.site_name|default:'EducaDim' }}{% else %}EducaDim{% endif %}{% endblock %}">
@@ -27,12 +25,10 @@
     <meta property="og:locale" content="{{ LANGUAGE_CODE|default:'fr' }}">
     {% block og_image %}{% if theme and theme.get_logo %}<meta property="og:image" content="{{ theme.get_logo|abs_url:request }}">{% endif %}{% endblock %}
 
-    {# ===== TWITTER CARD ===== #}
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{% block twitter_title %}{% if theme %}{{ theme.site_name|default:'EducaDim' }}{% else %}EducaDim{% endif %}{% endblock %}">
     <meta name="twitter:description" content="{% block twitter_description %}{% if meta_description %}{{ meta_description }}{% elif theme and theme.site_description %}{{ theme.site_description }}{% else %}EducaDim — plateforme e-learning.{% endif %}{% endblock %}">
 
-    {# ===== JSON-LD ===== #}
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -45,7 +41,6 @@
     </script>
     {% block extra_jsonld %}{% endblock %}
 
-    {# ===== FAVICON ===== #}
     {% if theme and theme.get_favicon %}
         <link rel="icon" type="image/x-icon" href="{{ theme.get_favicon }}">
         <link rel="shortcut icon" type="image/x-icon" href="{{ theme.get_favicon }}">
@@ -54,8 +49,187 @@
         <link rel="shortcut icon" type="image/x-icon" href="{{ theme.favicon.url }}">
     {% endif %}
 
-    {# ===== CSS ===== #}
     {% include "partials/head_assets.html" %}
+
+    {# ===== OVERRIDE : koulè dinamik soti nan theme_manager ===== #}
+    <style>
+        :root {
+            /* Koulè prensipal */
+            --primary: {{ theme.primary|default:'#5b76f7' }};
+            --primary-hover: {{ theme.primary_hover|default:'#3f56c9' }};
+            --primary-dark: {{ theme.primary_hover|default:'#3f56c9' }};
+            --secondary: {{ theme.secondary|default:'#22d3ee' }};
+            --secondary-hover: {{ theme.secondary_hover|default:'#0fb9d6' }};
+            --secondary-dark: {{ theme.secondary_hover|default:'#0fb9d6' }};
+
+            /* Koulè eta */
+            --success: {{ theme.success|default:'#22c55e' }};
+            --success-hover: {{ theme.success_hover|default:'#16a34a' }};
+            --success-dark: {{ theme.success_hover|default:'#16a34a' }};
+            --danger: {{ theme.danger|default:'#f43f5e' }};
+            --danger-hover: {{ theme.danger_hover|default:'#e11d48' }};
+            --danger-dark: {{ theme.danger_hover|default:'#e11d48' }};
+            --warning: {{ theme.warning|default:'#f59e0b' }};
+            --warning-hover: {{ theme.warning_hover|default:'#d97706' }};
+            --warning-dark: {{ theme.warning_hover|default:'#d97706' }};
+            --info: {{ theme.info|default:'#38bdf8' }};
+            --info-hover: {{ theme.info_hover|default:'#0284c7' }};
+            --info-dark: {{ theme.info_hover|default:'#0284c7' }};
+
+            /* Sifas ak tèks */
+            --body-bg: {{ theme.body_bg|default:'#eef1fb' }};
+            --bg: {{ theme.body_bg|default:'#eef1fb' }};
+            --text: {{ theme.text_color|default:'#16203a' }};
+            --text-muted: {{ theme.text_muted|default:'#5a6784' }};
+            --white: {{ theme.white|default:'#ffffff' }};
+            --light: {{ theme.light|default:'#f4f6fc' }};
+            --dark: {{ theme.dark|default:'#171d33' }};
+            --border: {{ theme.border|default:'rgba(30, 41, 89, 0.14)' }};
+            --bg-card: {{ theme.white|default:'#ffffff' }};
+            --card-bg: {{ theme.white|default:'#ffffff' }};
+            --card-color: {{ theme.text_color|default:'#16203a' }};
+
+            /* Tipografi ak stil */
+            --font-family: {{ theme.font_family|default:"'Inter', sans-serif" }};
+            --radius: {{ theme.border_radius|default:'20px' }};
+            --radius-sm: {{ theme.border_radius|default:'12px' }};
+            --radius-lg: {{ theme.border_radius|default:'28px' }};
+            --shadow: {{ theme.box_shadow|default:'0 10px 34px rgba(30,41,89,0.12)' }};
+            --shadow-hover: {{ theme.box_shadow|default:'0 22px 60px rgba(30,41,89,0.2)' }};
+            --shadow-lg: {{ theme.box_shadow|default:'0 24px 60px rgba(30,41,89,0.22)' }};
+
+            /* Glass effect (pou navbar) */
+            --glass: color-mix(in srgb, var(--body-bg) 85%, transparent);
+            --glass-2: color-mix(in srgb, var(--body-bg) 92%, transparent);
+            --glass-soft: color-mix(in srgb, var(--body-bg) 75%, transparent);
+            --glass-brd: color-mix(in srgb, var(--primary) 18%, transparent);
+            --glass-brd-soft: color-mix(in srgb, var(--primary) 10%, transparent);
+            --glass-sh: 0 8px 24px color-mix(in srgb, var(--primary) 8%, transparent);
+
+            color-scheme: light;
+        }
+
+        /* ===== Fòse background body la pran koulè theme la ===== */
+        body {
+            background: var(--body-bg) !important;
+            color: var(--text) !important;
+            font-family: var(--font-family) !important;
+        }
+
+        /* ===== Deaktive pseudo-eleman aurora nan app.css ===== */
+        body::before,
+        body::after {
+            display: none !important;
+        }
+
+        /* ===== Navbar la pran koulè theme la ===== */
+        .site-header {
+            background: var(--body-bg);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 1030;
+        }
+        .site-header .navbar-brand,
+        .site-header .navbar-site-name {
+            color: var(--text) !important;
+        }
+        .site-header .nav-link {
+            color: var(--text) !important;
+        }
+        .site-header .nav-link:hover {
+            color: var(--primary) !important;
+        }
+        .site-header .nav-link i {
+            color: var(--primary) !important;
+        }
+        .site-header .offcanvas {
+            background: var(--bg-card);
+            color: var(--text);
+        }
+        .site-header .offcanvas-title {
+            color: var(--text);
+        }
+
+        /* ===== Bouton prensipal la ===== */
+        .btn-primary,
+        .btn-nav-primary {
+            background: var(--primary) !important;
+            border-color: var(--primary) !important;
+            color: #fff !important;
+        }
+        .btn-primary:hover,
+        .btn-nav-primary:hover {
+            background: var(--primary-hover) !important;
+            border-color: var(--primary-hover) !important;
+        }
+
+        /* ===== Footer la pran koulè theme la ===== */
+        footer.bg-body-tertiary {
+            background: var(--light) !important;
+            color: var(--text) !important;
+            border-top: 1px solid var(--border) !important;
+        }
+        footer .text-body-secondary {
+            color: var(--text-muted) !important;
+        }
+        footer a {
+            color: var(--text-muted);
+        }
+        footer a:hover {
+            color: var(--primary);
+        }
+        footer h6 {
+            color: var(--text);
+        }
+        footer .border-top {
+            border-color: var(--border) !important;
+        }
+
+        /* ===== Breadcrumb la ===== */
+        .breadcrumb {
+            background: var(--glass-soft);
+            border: 1px solid var(--glass-brd-soft);
+        }
+        .breadcrumb a {
+            color: var(--primary);
+        }
+
+        /* ===== Mòd sombre ===== */
+        html[data-bs-theme="dark"] body,
+        html[data-theme="dark"] body {
+            background: {{ theme.dark|default:'#0a0f22' }} !important;
+            color: #e7ecfb !important;
+        }
+        html[data-bs-theme="dark"] .site-header,
+        html[data-theme="dark"] .site-header {
+            background: {{ theme.dark|default:'#0a0f22' }};
+            border-bottom-color: rgba(255, 255, 255, 0.12);
+        }
+        html[data-bs-theme="dark"] .site-header .navbar-brand,
+        html[data-bs-theme="dark"] .site-header .navbar-site-name,
+        html[data-bs-theme="dark"] .site-header .nav-link,
+        html[data-theme="dark"] .site-header .navbar-brand,
+        html[data-theme="dark"] .site-header .navbar-site-name,
+        html[data-theme="dark"] .site-header .nav-link {
+            color: #e7ecfb !important;
+        }
+        html[data-bs-theme="dark"] footer.bg-body-tertiary,
+        html[data-theme="dark"] footer.bg-body-tertiary {
+            background: #141a33 !important;
+            color: #e7ecfb !important;
+            border-top-color: rgba(255, 255, 255, 0.12) !important;
+        }
+        html[data-bs-theme="dark"] footer .text-body-secondary,
+        html[data-theme="dark"] footer .text-body-secondary {
+            color: #9aa6c8 !important;
+        }
+        html[data-bs-theme="dark"] .site-header .offcanvas,
+        html[data-theme="dark"] .site-header .offcanvas {
+            background: #141a33;
+            color: #e7ecfb;
+        }
+    </style>
 
     {% block extra_head %}{% endblock %}
     {% block extra_css %}{% endblock %}
