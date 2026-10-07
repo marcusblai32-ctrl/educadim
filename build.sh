@@ -8,36 +8,30 @@ echo "============================================"
 
 cd "$(dirname "$0")"
 
-echo "[1/6] Enstale depandans..."
+echo "[1/6] Enstale depandans Python..."
 pip install -r requirements.txt
 
-echo "[2/6] Kreye dosye locale..."
+echo "[2/6] Prepare dosye locale..."
 mkdir -p locale
 
-echo "[3/6] Kreye nouvo messages..."
+echo "[3/6] Kreye/mete ajou messages..."
+
 python manage.py makemessages -l ht -l fr \
   --ignore=.venv \
-  --ignore=node_modules \
-  2>/dev/null || echo "Makemessages pa enpotan si pa gen chanjman"
-
-if [ -f "locale/ht/LC_MESSAGES/django.po" ]; then
-    sed -i 's/nplurals=INTEGER; plural=EXPRESSION;/nplurals=2; plural=(n != 1);/' locale/ht/LC_MESSAGES/django.po
-fi
-
-if [ -f "locale/fr/LC_MESSAGES/django.po" ]; then
-    sed -i 's/nplurals=INTEGER; plural=EXPRESSION;/nplurals=2; plural=(n > 1);/' locale/fr/LC_MESSAGES/django.po
-fi
+  --ignore=node_modules
 
 echo "[4/6] Konpile messages..."
+
 python manage.py compilemessages \
   --ignore=.venv \
-  --ignore=node_modules \
-  2>/dev/null || echo "Compilemessages pa enpotan"
+  --ignore=node_modules
 
 echo "[5/6] Kolekte fichye statik..."
+
 python manage.py collectstatic --noinput
 
-echo "[6/6] Migrasyon database..."
+echo "[6/6] Aplike migrasyon database..."
+
 python manage.py migrate --noinput
 
 echo "============================================"
