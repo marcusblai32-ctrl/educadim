@@ -10,7 +10,7 @@
 {% block extra_css %}
 <style>
     /* ============================================================
-       BACKGROUND DINAMIK ak degradasyon dous
+       BACKGROUND DINAMIK
        ============================================================ */
     .home-page {
         position: relative;
@@ -117,7 +117,7 @@
     }
 
     /* ============================================================
-       3 KAT AN FÒM WON (gradyan transparan primary → secondary)
+       3 KAT AN FÒM WON
        ============================================================ */
     .hero-cards-grid {
         display: grid;
@@ -152,7 +152,6 @@
         position: relative;
         overflow: hidden;
 
-        /* Gradyan transparan ki soti nan primary + secondary */
         background: linear-gradient(135deg,
             color-mix(in srgb, var(--primary, #5b76f7) 15%, transparent) 0%,
             color-mix(in srgb, var(--secondary, #22d3ee) 10%, transparent) 100%);
@@ -167,7 +166,6 @@
         transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
-    /* Refleksyon limyè anlè a (boul kristal) */
     .hero-feature-circle-card::before {
         content: "";
         position: absolute;
@@ -184,7 +182,6 @@
         z-index: 1;
     }
 
-    /* Bòdi gradyan an won (primary → secondary) */
     .hero-feature-circle-card::after {
         content: "";
         position: absolute;
@@ -209,7 +206,6 @@
         opacity: 0.3;
     }
 
-    /* Kontni anndan boul la */
     .hero-feature-circle-card .ball-content {
         position: relative;
         z-index: 2;
@@ -220,7 +216,6 @@
         width: 100%;
     }
 
-    /* Ikòn nan yon ti won ak gradyan primary → secondary */
     .hero-feature-circle-card .feature-circle-icon {
         width: 52px;
         height: 52px;
@@ -255,7 +250,6 @@
         line-height: 1.4;
     }
 
-    /* Nan mòd sombre */
     html[data-bs-theme="dark"] .hero-feature-circle-card,
     html[data-theme="dark"] .hero-feature-circle-card {
         background: linear-gradient(135deg,
@@ -282,8 +276,34 @@
     }
 
     /* ============================================================
-       Features / Headers / CTA
+       Features : kat ki poukont li → santre nan mitan
        ============================================================ */
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+        gap: 1.5rem;
+        justify-content: center;   /* santre lè gen espas */
+        justify-items: stretch;
+        align-items: stretch;
+    }
+
+    /* Lè gen yon sèl kat (dernye liy lan), fè l santre */
+    .features-grid > .feature-card:last-child:nth-child(odd) {
+        grid-column: 1 / -1;
+        max-width: 420px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    @media (min-width: 1024px) {
+        /* Sou 3 kolòn, si gen yon sèl kat nan dènye liy lan */
+        .features-grid > .feature-card:last-child:nth-child(3n + 1) {
+            grid-column: 2 / 3;
+            max-width: 100%;
+            margin-left: 0;
+            margin-right: 0;
+        }
+    }
+
     .feature-card {
         display: flex;
         flex-direction: column;
@@ -326,6 +346,14 @@
         width: 100%;
     }
 
+    /* ============================================================
+       CTA : gradyan primary → secondary (PLEN, pa transparan)
+       ============================================================ */
+    .cta-section {
+        background: linear-gradient(135deg,
+            var(--primary, #5b76f7) 0%,
+            var(--secondary, #22d3ee) 100%) !important;
+    }
     .cta-section .cta-content {
         display: flex;
         flex-direction: column;
@@ -392,7 +420,7 @@
                     {% endif %}
                 </div>
 
-                {# ===== 3 STATS ANKADRE (primary transparan) ===== #}
+                {# ===== 3 STATS ANKADRE ===== #}
                 {% if theme.stats_cours or theme.stats_etudiants or theme.stats_satisfaction %}
                 <div class="hero-stats-row" aria-label="{% trans 'Repères de la plateforme' %}">
                     {% if theme.stats_cours %}
@@ -416,7 +444,7 @@
                 </div>
                 {% endif %}
 
-                {# ===== 3 KAT AN FÒM WON (primary → secondary gradyan) ===== #}
+                {# ===== 3 KAT AN FÒM WON ===== #}
                 {% if theme.get_hero_image %}
                     <img src="{{ theme.get_hero_image }}" alt="{{ theme.hero_title }}" class="hero-main-image mt-4" style="max-width: 100%; border-radius: 16px;">
                 {% else %}
