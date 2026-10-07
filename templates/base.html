@@ -3,6 +3,7 @@
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE|default:'fr' }}">
 <head>
+    {# ===== THEME BOOT ===== #}
     <script src="{% static 'js/theme-init.js' %}"></script>
 
     <meta charset="UTF-8">
@@ -369,12 +370,12 @@
                     <div class="d-flex flex-wrap gap-2 mt-3">
                         {% if theme and theme.whatsapp_group %}
                             <a href="{{ theme.whatsapp_group }}" class="btn btn-sm btn-outline-secondary rounded-circle d-inline-flex align-items-center justify-content-center" style="width:38px;height:38px;" target="_blank" rel="noopener noreferrer" aria-label="{% trans 'Groupe WhatsApp' %}" title="{% trans 'Groupe WhatsApp' %}">
-                                <i class="fab fa-whatsapp"></i>
+                                <i class="fa-brands fa-whatsapp"></i>
                             </a>
                         {% endif %}
                         {% if theme and theme.whatsapp_contact %}
                             <a href="{{ theme.whatsapp_contact }}" class="btn btn-sm btn-outline-secondary rounded-circle d-inline-flex align-items-center justify-content-center" style="width:38px;height:38px;" target="_blank" rel="noopener noreferrer" aria-label="{% trans 'Contact WhatsApp' %}" title="{% trans 'Contact WhatsApp' %}">
-                                <i class="fas fa-comment-dots"></i>
+                                <i class="fa-brands fa-whatsapp"></i>
                             </a>
                         {% endif %}
                         {% if theme and theme.contact_phone %}
