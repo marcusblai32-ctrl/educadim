@@ -90,14 +90,14 @@
     }
 
     /* ============================================================
-       4 KAT AN FÒM WON (pa gen ankadreman)
+       3 KAT AN FÒM WON (pa gen ankadreman)
        ============================================================ */
     .hero-cards-grid {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         gap: 1.5rem;
         width: 100%;
-        max-width: 1000px;
+        max-width: 900px;
         margin: 2.5rem auto 0;
         justify-items: center;
     }
@@ -342,7 +342,7 @@
                 </div>
                 {% endif %}
 
-                {# ===== 4 KAT AN FÒM WON ===== #}
+                {# ===== 3 KAT AN FÒM WON ===== #}
                 {% if theme.get_hero_image %}
                     <img src="{{ theme.get_hero_image }}" alt="{{ theme.hero_title }}" class="hero-main-image mt-4" style="max-width: 100%; border-radius: 16px;">
                 {% else %}
@@ -367,13 +367,6 @@
                             </div>
                             <h3>{% blocktrans with title=theme.hero_card3_title|default:_("Suivi personnalisé") %}{{ title }}{% endblocktrans %}</h3>
                             <p>{% blocktrans with desc=theme.hero_card3_desc|default:_("Progressez à votre rythme.") %}{{ desc }}{% endblocktrans %}</p>
-                        </article>
-                        <article class="hero-feature-circle-card">
-                            <div class="feature-circle-icon">
-                                <i class="{{ theme.hero_card4_icon|default:'fas fa-users' }}" aria-hidden="true"></i>
-                            </div>
-                            <h3>{% blocktrans with title=theme.hero_card4_title|default:_("Communauté active") %}{{ title }}{% endblocktrans %}</h3>
-                            <p>{% blocktrans with desc=theme.hero_card4_desc|default:_("Échangez avec d'autres apprenants.") %}{{ desc }}{% endblocktrans %}</p>
                         </article>
                     </div>
                 {% endif %}
