@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE|default:'fr' }}">
 <head>
-    {# ===== THEME BOOT (avoid flash of wrong theme) ===== #}
+    {# ===== THEME BOOT ===== #}
     <script src="{% static 'js/theme-init.js' %}"></script>
 
     <meta charset="UTF-8">
@@ -12,13 +12,11 @@
     <meta name="description" content="{% if meta_description %}{{ meta_description }}{% elif theme and theme.site_description %}{{ theme.site_description }}{% else %}EducaDim — plateforme e-learning : cours en ligne, quiz, badges et suivi de progression.{% endif %}">
     <meta name="keywords" content="{{ meta_keywords|default:'e-learning, cours en ligne, éducation, EducaDim, formation, quiz' }}">
 
-    {# ===== TECHNICAL SEO ===== #}
     {% block meta_robots %}<meta name="robots" content="index, follow">{% endblock %}
     <link rel="canonical" href="{% block canonical_url %}{{ request.scheme }}://{{ request.get_host }}{{ request.path }}{% endblock %}">
     <meta name="theme-color" content="{{ theme_color|default:'#5b76f7' }}" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#0a0f22" media="(prefers-color-scheme: dark)">
 
-    {# ===== OPEN GRAPH ===== #}
     <meta property="og:site_name" content="{% if theme %}{{ theme.site_name|default:'EducaDim' }}{% else %}EducaDim{% endif %}">
     <meta property="og:type" content="{% block og_type %}website{% endblock %}">
     <meta property="og:title" content="{% block og_title %}{% if theme %}{{ theme.site_name|default:'EducaDim' }}{% else %}EducaDim{% endif %}{% endblock %}">
@@ -27,12 +25,10 @@
     <meta property="og:locale" content="{{ LANGUAGE_CODE|default:'fr' }}">
     {% block og_image %}{% if theme and theme.get_logo %}<meta property="og:image" content="{{ theme.get_logo|abs_url:request }}">{% endif %}{% endblock %}
 
-    {# ===== TWITTER CARD ===== #}
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{% block twitter_title %}{% if theme %}{{ theme.site_name|default:'EducaDim' }}{% else %}EducaDim{% endif %}{% endblock %}">
     <meta name="twitter:description" content="{% block twitter_description %}{% if meta_description %}{{ meta_description }}{% elif theme and theme.site_description %}{{ theme.site_description }}{% else %}EducaDim — plateforme e-learning.{% endif %}{% endblock %}">
 
-    {# ===== JSON-LD ===== #}
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -45,7 +41,6 @@
     </script>
     {% block extra_jsonld %}{% endblock %}
 
-    {# ===== FAVICON ===== #}
     {% if theme and theme.get_favicon %}
         <link rel="icon" type="image/x-icon" href="{{ theme.get_favicon }}">
         <link rel="shortcut icon" type="image/x-icon" href="{{ theme.get_favicon }}">
@@ -54,7 +49,6 @@
         <link rel="shortcut icon" type="image/x-icon" href="{{ theme.favicon.url }}">
     {% endif %}
 
-    {# ===== CSS ===== #}
     {% include "partials/head_assets.html" %}
 
     {% block extra_head %}{% endblock %}
@@ -62,7 +56,6 @@
 </head>
 <body class="{% block body_class %}{% endblock %}">
 
-    {# ===== LOADING OVERLAY ===== #}
     <div id="loadingOverlay" class="loading-overlay">
         <div class="loading-spinner"></div>
     </div>
@@ -203,7 +196,6 @@
                             {% endif %}
                         </ul>
 
-                        {# Langue #}
                         {% get_current_language as CURRENT_LANGUAGE %}
                         <form class="lang-switcher mt-3 mt-lg-0 ms-lg-2" action="{% url 'set_language' %}" method="post">
                             {% csrf_token %}
@@ -246,15 +238,11 @@
         </h2>
 
         {% if theme.evenement_message %}
-        <p class="event-message">
-            {{ theme.evenement_message }}
-        </p>
+        <p class="event-message">{{ theme.evenement_message }}</p>
         {% endif %}
 
         {% if theme.evenement_hashtag %}
-            <div class="hashtag">
-                #{{ theme.evenement_hashtag }}
-            </div>
+            <div class="hashtag">#{{ theme.evenement_hashtag }}</div>
         {% endif %}
     </div>
     {% endif %}
@@ -323,21 +311,19 @@
     </div>
     {% endif %}
 
-    {# ===== FOOTER (100% Bootstrap) ===== #}
+    {# ===== FOOTER (vèsyon anvan : 3 kolòn + copyright santre) ===== #}
     <footer class="bg-body-tertiary border-top mt-5">
         <div class="container-xxl py-5">
-            <div class="row g-4 g-lg-5">
 
-                {# ===== Colonne 1 : Brand + description + social ===== #}
-                <div class="col-12 col-lg-4">
+            <div class="row mb-4">
+                <div class="col-12">
                     <a href="{% url 'home' %}" class="d-inline-flex align-items-center gap-2 mb-3 text-body text-decoration-none fw-bold fs-4">
                         {% if theme and theme.get_logo %}
                             <img src="{{ theme.get_logo }}" alt="" width="42" height="42" class="rounded-3">
                         {% endif %}
                         <span>{% if theme %}{{ theme.site_name|default:'EducaDim' }}{% else %}EducaDim{% endif %}</span>
                     </a>
-
-                    <p class="text-body-secondary small lh-lg mb-3" style="max-width: 340px;">
+                    <p class="text-body-secondary small lh-lg mb-0">
                         {% if theme and theme.about_text %}
                             {{ theme.about_text }}
                         {% elif theme and theme.site_description %}
@@ -346,8 +332,42 @@
                             {% trans "Apprenez à votre rythme, en français ou en kreyòl. Des cours concrets, des quiz et un suivi de progression clair." %}
                         {% endif %}
                     </p>
+                </div>
+            </div>
 
-                    <div class="d-flex flex-wrap gap-2">
+            <div class="row g-4">
+                <div class="col-12 col-md-4">
+                    <h6 class="text-uppercase fw-bold small mb-3">{% trans "Plateforme" %}</h6>
+                    <ul class="list-unstyled mb-0 d-flex flex-column gap-2">
+                        <li><a class="text-body-secondary text-decoration-none small" href="{% url 'courses:course_list' %}">{% trans "Cours" %}</a></li>
+                        {% if user.is_authenticated %}
+                            <li><a class="text-body-secondary text-decoration-none small" href="{% url 'progress:dashboard' %}">{% trans "Progression" %}</a></li>
+                            <li><a class="text-body-secondary text-decoration-none small" href="{% url 'badges:my_badges' %}">{% trans "Badges" %}</a></li>
+                            <li><a class="text-body-secondary text-decoration-none small" href="{% url 'ranking:my_rank' %}">{% trans "Classement" %}</a></li>
+                        {% else %}
+                            <li><a class="text-body-secondary text-decoration-none small" href="{% url 'accounts:login' %}">{% trans "Connexion" %}</a></li>
+                            <li><a class="text-body-secondary text-decoration-none small" href="{% url 'accounts:signup' %}">{% trans "Inscription" %}</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+
+                <div class="col-12 col-md-4">
+                    <h6 class="text-uppercase fw-bold small mb-3">{% trans "En savoir plus" %}</h6>
+                    <ul class="list-unstyled mb-0 d-flex flex-column gap-2">
+                        <li><a class="text-body-secondary text-decoration-none small" href="{% url 'about' %}">{% trans "À propos" %}</a></li>
+                        <li><a class="text-body-secondary text-decoration-none small" href="{% url 'faq' %}">{% trans "FAQ" %}</a></li>
+                        <li><a class="text-body-secondary text-decoration-none small" href="{% url 'contact' %}">{% trans "Contact" %}</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-12 col-md-4">
+                    <h6 class="text-uppercase fw-bold small mb-3">{% trans "Légal" %}</h6>
+                    <ul class="list-unstyled mb-3 d-flex flex-column gap-2">
+                        <li><a class="text-body-secondary text-decoration-none small" href="{% url 'privacy' %}">{% trans "Politique de confidentialité" %}</a></li>
+                        <li><a class="text-body-secondary text-decoration-none small" href="{% url 'conditions' %}">{% trans "Conditions d'utilisation" %}</a></li>
+                    </ul>
+
+                    <div class="d-flex flex-wrap gap-2 mt-3">
                         {% if theme and theme.whatsapp_group %}
                             <a href="{{ theme.whatsapp_group }}" class="btn btn-sm btn-outline-secondary rounded-circle d-inline-flex align-items-center justify-content-center" style="width:38px;height:38px;" target="_blank" rel="noopener noreferrer" aria-label="{% trans 'Groupe WhatsApp' %}" title="{% trans 'Groupe WhatsApp' %}">
                                 <i class="fab fa-whatsapp"></i>
@@ -370,58 +390,14 @@
                         {% endif %}
                     </div>
                 </div>
-
-                {# ===== Colonne 2 : Plateforme ===== #}
-                <div class="col-6 col-lg-2 offset-lg-1">
-                    <h6 class="text-uppercase fw-bold small mb-3">{% trans "Plateforme" %}</h6>
-                    <ul class="list-unstyled mb-0 d-flex flex-column gap-2">
-                        <li><a class="text-body-secondary text-decoration-none small" href="{% url 'courses:course_list' %}">{% trans "Cours" %}</a></li>
-                        {% if user.is_authenticated %}
-                            <li><a class="text-body-secondary text-decoration-none small" href="{% url 'progress:dashboard' %}">{% trans "Progression" %}</a></li>
-                            <li><a class="text-body-secondary text-decoration-none small" href="{% url 'badges:my_badges' %}">{% trans "Badges" %}</a></li>
-                            <li><a class="text-body-secondary text-decoration-none small" href="{% url 'ranking:my_rank' %}">{% trans "Classement" %}</a></li>
-                        {% else %}
-                            <li><a class="text-body-secondary text-decoration-none small" href="{% url 'accounts:login' %}">{% trans "Connexion" %}</a></li>
-                            <li><a class="text-body-secondary text-decoration-none small" href="{% url 'accounts:signup' %}">{% trans "Inscription" %}</a></li>
-                        {% endif %}
-                    </ul>
-                </div>
-
-                {# ===== Colonne 3 : Informations ===== #}
-                <div class="col-6 col-lg-2">
-                    <h6 class="text-uppercase fw-bold small mb-3">{% trans "Informations" %}</h6>
-                    <ul class="list-unstyled mb-0 d-flex flex-column gap-2">
-                        <li><a class="text-body-secondary text-decoration-none small" href="{% url 'about' %}">{% trans "À propos" %}</a></li>
-                        <li><a class="text-body-secondary text-decoration-none small" href="{% url 'faq' %}">{% trans "FAQ" %}</a></li>
-                        <li><a class="text-body-secondary text-decoration-none small" href="{% url 'contact' %}">{% trans "Contact" %}</a></li>
-                    </ul>
-                </div>
-
-                {# ===== Colonne 4 : Légal ===== #}
-                <div class="col-6 col-lg-2">
-                    <h6 class="text-uppercase fw-bold small mb-3">{% trans "Légal" %}</h6>
-                    <ul class="list-unstyled mb-0 d-flex flex-column gap-2">
-                        <li><a class="text-body-secondary text-decoration-none small" href="{% url 'privacy' %}">{% trans "Confidentialité" %}</a></li>
-                        <li><a class="text-body-secondary text-decoration-none small" href="{% url 'conditions' %}">{% trans "Conditions" %}</a></li>
-                    </ul>
-                </div>
-
             </div>
         </div>
 
-        {# ===== Barre inférieure ===== #}
         <div class="border-top">
             <div class="container-xxl py-3">
-                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
-
-                    <p class="text-body-secondary small mb-0">
-                        &copy; {% now "Y" %}
-                        {% if theme %}{{ theme.site_name|default:'EducaDim' }}{% else %}EducaDim{% endif %} —
-                        {% if theme %}{{ theme.footer_text|default:_('Tous droits réservés') }}{% else %}{% trans "Tous droits réservés" %}{% endif %}
-                    </p>
-
-
-                </div>
+                <p class="text-body-secondary small mb-0 text-center">
+                    &copy; {% now "Y" %} - {% if theme %}{{ theme.site_name|default:'EducaDim' }}{% else %}EducaDim{% endif %} • {% if theme %}{{ theme.footer_text|default:_('Tous droits réservés') }}{% else %}{% trans "Tous droits réservés" %}{% endif %}
+                </p>
             </div>
         </div>
     </footer>
