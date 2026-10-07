@@ -43,7 +43,7 @@
         gap: 0.5rem;
     }
 
-    /* ===== Section features : titre + tag centrés sur TOUS les appareils ===== */
+    /* ===== Section features : titre + tag centrés ===== */
     .features-section .section-header {
         display: flex;
         flex-direction: column;
@@ -61,7 +61,7 @@
         width: 100%;
     }
 
-    /* ===== Section témoignages : header centré comme les autres ===== */
+    /* ===== Section témoignages : header centré ===== */
     .testimonials-section .section-header {
         display: flex;
         flex-direction: column;
@@ -79,7 +79,7 @@
         width: 100%;
     }
 
-    /* ===== STATS : blocs qui prennent l'espace, contenu centré ===== */
+    /* ===== STATS ===== */
     .hero-stats {
         display: flex;
         flex-wrap: wrap;
@@ -117,7 +117,18 @@
         gap: 1rem;
     }
 
-    /* ===== CTA : tout le contenu centré au milieu de la boîte ===== */
+    /* ===== CTA : gradyan 100% dinamik (primary → secondary) ===== */
+    .cta-section {
+        background: linear-gradient(135deg,
+            var(--primary) 0%,
+            var(--secondary) 100%) !important;
+        border-radius: var(--radius-lg, 28px);
+        margin-top: 3rem;
+        margin-bottom: 3rem;
+        padding: 3rem 1.5rem;
+        box-shadow: 0 24px 60px color-mix(in srgb, var(--primary) 35%, transparent);
+    }
+
     .cta-section .cta-content {
         display: flex;
         flex-direction: column;
@@ -137,6 +148,7 @@
     .cta-section .cta-content .section-tag,
     .cta-section .cta-content .cta-button {
         text-align: center;
+        color: #fff;
     }
 
     .cta-section .cta-content .cta-button {
@@ -146,6 +158,11 @@
         gap: 0.5rem;
         margin-left: auto;
         margin-right: auto;
+        background: #fff;
+        color: var(--primary);
+    }
+    .cta-section .cta-content .cta-button i {
+        color: var(--primary);
     }
 </style>
 {% endblock %}
@@ -276,7 +293,7 @@
         </div>
     </section>
 
-    {# ===== SECTION TÉMOIGNAGES : header centré comme les autres ===== #}
+    {# ===== SECTION TÉMOIGNAGES ===== #}
     {% if theme.testimonial1_text or theme.testimonial2_text %}
     <section class="testimonials-section" aria-labelledby="testimonials-title">
         <div class="section-header">
