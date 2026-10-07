@@ -59,7 +59,7 @@
         <div class="loading-spinner"></div>
     </div>
 
-    {# ===== HEADER : 100% Bootstrap 5 ===== #}
+    {# ===== HEADER 100% Bootstrap ===== #}
     <header class="site-header sticky-top border-bottom bg-body">
         <nav class="navbar navbar-expand-lg" aria-label="{% trans 'Navigation principale' %}">
             <div class="container-xxl">
@@ -72,14 +72,14 @@
                     <span class="fw-bold text-truncate">{{ site_name }}</span>
                 </a>
 
-                {# Toggler (mobil + tablette) #}
+                {# Toggler #}
                 <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
                         data-bs-target="#mainNav" aria-controls="mainNav"
                         aria-expanded="false" aria-label="{% trans 'Ouvrir le menu' %}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                {# Offcanvas : mobil/tablette = panneau latéral ; desktop = barre orizontal #}
+                {# Offcanvas : mobil/tablette = panneau latéral ; desktop = meni orizontal #}
                 <div class="offcanvas offcanvas-start offcanvas-lg" tabindex="-1" id="mainNav" aria-labelledby="mainNavLabel">
                     <div class="offcanvas-header">
                         <h5 class="offcanvas-title" id="mainNavLabel">{{ site_name }}</h5>
@@ -101,7 +101,7 @@
                         </form>
                         {% endblock %}
 
-                        {# Menu principal #}
+                        {# Menu #}
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'courses:course_list' %}">
@@ -195,7 +195,7 @@
                             {% endif %}
                         </ul>
 
-                        {# Theme toggle + langue #}
+                        {# Toggle thème + langue #}
                         <div class="d-flex align-items-center gap-2 mt-3 mt-lg-0">
                             <button type="button" class="btn btn-sm btn-outline-secondary" id="themeToggle"
                                     aria-label="{% trans 'Basculer le thème clair/sombre' %}"
@@ -312,7 +312,7 @@
     </div>
     {% endif %}
 
-    {# ===== FOOTER 100% Bootstrap ===== #}
+    {# ===== FOOTER ===== #}
     <footer class="bg-body-tertiary border-top mt-5">
         <div class="container-xxl py-5">
 
