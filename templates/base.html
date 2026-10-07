@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE|default:'fr' }}">
 <head>
-    {# ===== THEME BOOT (avoid flash of wrong theme) ===== #}
+    {# ===== THEME BOOT ===== #}
     <script src="{% static 'js/theme-init.js' %}"></script>
 
     <meta charset="UTF-8">
@@ -12,13 +12,11 @@
     <meta name="description" content="{% if meta_description %}{{ meta_description }}{% elif theme and theme.site_description %}{{ theme.site_description }}{% else %}EducaDim — plateforme e-learning : cours en ligne, quiz, badges et suivi de progression.{% endif %}">
     <meta name="keywords" content="{{ meta_keywords|default:'e-learning, cours en ligne, éducation, EducaDim, formation, quiz' }}">
 
-    {# ===== TECHNICAL SEO ===== #}
     {% block meta_robots %}<meta name="robots" content="index, follow">{% endblock %}
     <link rel="canonical" href="{% block canonical_url %}{{ request.scheme }}://{{ request.get_host }}{{ request.path }}{% endblock %}">
     <meta name="theme-color" content="{{ theme_color|default:'#5b76f7' }}" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#0a0f22" media="(prefers-color-scheme: dark)">
 
-    {# ===== OPEN GRAPH ===== #}
     <meta property="og:site_name" content="{% if theme %}{{ theme.site_name|default:'EducaDim' }}{% else %}EducaDim{% endif %}">
     <meta property="og:type" content="{% block og_type %}website{% endblock %}">
     <meta property="og:title" content="{% block og_title %}{% if theme %}{{ theme.site_name|default:'EducaDim' }}{% else %}EducaDim{% endif %}{% endblock %}">
@@ -27,12 +25,10 @@
     <meta property="og:locale" content="{{ LANGUAGE_CODE|default:'fr' }}">
     {% block og_image %}{% if theme and theme.get_logo %}<meta property="og:image" content="{{ theme.get_logo|abs_url:request }}">{% endif %}{% endblock %}
 
-    {# ===== TWITTER CARD ===== #}
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{% block twitter_title %}{% if theme %}{{ theme.site_name|default:'EducaDim' }}{% else %}EducaDim{% endif %}{% endblock %}">
     <meta name="twitter:description" content="{% block twitter_description %}{% if meta_description %}{{ meta_description }}{% elif theme and theme.site_description %}{{ theme.site_description }}{% else %}EducaDim — plateforme e-learning.{% endif %}{% endblock %}">
 
-    {# ===== JSON-LD ===== #}
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -45,7 +41,6 @@
     </script>
     {% block extra_jsonld %}{% endblock %}
 
-    {# ===== FAVICON ===== #}
     {% if theme and theme.get_favicon %}
         <link rel="icon" type="image/x-icon" href="{{ theme.get_favicon }}">
         <link rel="shortcut icon" type="image/x-icon" href="{{ theme.get_favicon }}">
@@ -54,15 +49,63 @@
         <link rel="shortcut icon" type="image/x-icon" href="{{ theme.favicon.url }}">
     {% endif %}
 
-    {# ===== CSS ===== #}
     {% include "partials/head_assets.html" %}
+
+    {# ===== NAVBAR RESPONSIVE STYLES (inspiré image 1) ===== #}
+    <style>
+        .site-header .navbar {
+            background: var(--glass, rgba(255,255,255,0.85));
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+        }
+
+        /* ===== MENU BURGER (mobile) — panneau plein écran ===== */
+        @media (max-width: 991.98px) {
+            .site-header .navbar-collapse-menu {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100vh;
+                background: var(--bg-card, #fff);
+                z-index: 1040;
+                padding: 1.25rem;
+                overflow-y: auto;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            .site-header .navbar-collapse-menu.show {
+                transform: translateX(0);
+            }
+            .site-header .navbar-collapse-menu .nav-link {
+                padding: 0.9rem 0.5rem;
+                font-size: 1.05rem;
+                border-bottom: 1px solid var(--border, #eee);
+                border-radius: 0;
+            }
+            .site-header .navbar-collapse-menu .dropdown-menu {
+                position: static !important;
+                border: 0;
+                box-shadow: none;
+                background: transparent;
+                padding-left: 1rem;
+            }
+        }
+
+        /* ===== MENU HORIZONTAL (desktop) ===== */
+        @media (min-width: 992px) {
+            .site-header .navbar-collapse-menu {
+                display: flex !important;
+                align-items: center;
+            }
+        }
+    </style>
 
     {% block extra_head %}{% endblock %}
     {% block extra_css %}{% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}">
 
-    {# ===== LOADING OVERLAY ===== #}
     <div id="loadingOverlay" class="loading-overlay">
         <div class="loading-spinner"></div>
     </div>
@@ -85,136 +128,128 @@
                             title="{% trans 'Basculer le thème clair/sombre' %}" aria-pressed="false">
                         <i class="fas fa-moon" aria-hidden="true"></i>
                     </button>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                             data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false"
                             aria-label="{% trans 'Ouvrir le menu' %}">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                 </div>
 
-                <div class="offcanvas offcanvas-end" tabindex="-1" id="mainNav" aria-labelledby="mainNavLabel">
-                    <div class="offcanvas-header">
-                        <h2 class="offcanvas-title h5" id="mainNavLabel">{{ site_name }}</h2>
-                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
-                                aria-label="{% trans 'Fermer' %}"></button>
-                    </div>
+                {# ===== MENU ===== #}
+                <div class="collapse navbar-collapse navbar-collapse-menu" id="mainNav">
 
-                    <div class="offcanvas-body align-items-lg-center">
+                    {% block header_search %}
+                    <form class="header-search input-group mb-3 mb-lg-0 me-lg-auto" action="{% url 'courses:course_list' %}" method="get" role="search">
+                        <label class="visually-hidden" for="navSearch">{% trans "Rechercher un cours" %}</label>
+                        <input id="navSearch" name="search" type="search" class="form-control"
+                               placeholder="{% trans 'Rechercher un cours' %}" autocomplete="off">
+                        <button class="btn" type="submit" aria-label="{% trans 'Lancer la recherche' %}">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </button>
+                    </form>
+                    {% endblock %}
 
-                        {% block header_search %}
-                        <form class="header-search input-group mb-3 mb-lg-0 me-lg-auto" action="{% url 'courses:course_list' %}" method="get" role="search">
-                            <label class="visually-hidden" for="navSearch">{% trans "Rechercher un cours" %}</label>
-                            <input id="navSearch" name="search" type="search" class="form-control"
-                                   placeholder="{% trans 'Rechercher un cours' %}" autocomplete="off">
-                            <button class="btn" type="submit" aria-label="{% trans 'Lancer la recherche' %}">
-                                <i class="fas fa-search" aria-hidden="true"></i>
-                            </button>
-                        </form>
-                        {% endblock %}
+                    <ul class="navbar-nav align-items-lg-center gap-lg-1">
+                        <li class="nav-item">
+                            <a href="{% url 'courses:course_list' %}" class="nav-link">
+                                <i class="fas fa-book"></i><span>{% trans "Explorer" %}</span>
+                            </a>
+                        </li>
 
-                        <ul class="navbar-nav align-items-lg-center gap-lg-1">
-                            <li class="nav-item">
-                                <a href="{% url 'courses:course_list' %}" class="nav-link">
-                                    <i class="fas fa-book"></i><span>{% trans "Explorer" %}</span>
-                                </a>
-                            </li>
+                        {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a href="{% url 'progress:dashboard' %}" class="nav-link" title="{% trans 'Progression' %}">
+                                <i class="fas fa-chart-line"></i><span class="nav-label">{% trans "Progression" %}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'todo:todo_list' %}" class="nav-link" title="{% trans 'Mes tâches' %}">
+                                <i class="fas fa-list-check"></i><span class="nav-label">{% trans "Mes tâches" %}</span>
+                            </a>
+                        </li>
 
-                            {% if user.is_authenticated %}
-                            <li class="nav-item">
-                                <a href="{% url 'progress:dashboard' %}" class="nav-link" title="{% trans 'Progression' %}">
-                                    <i class="fas fa-chart-line"></i><span class="nav-label">{% trans "Progression" %}</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{% url 'todo:todo_list' %}" class="nav-link" title="{% trans 'Mes tâches' %}">
-                                    <i class="fas fa-list-check"></i><span class="nav-label">{% trans "Mes tâches" %}</span>
-                                </a>
-                            </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="chatDropdownBtn" role="button" title="{% trans 'Chat' %}"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-comments"></i><span class="nav-label">{% trans "Chat" %}</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="chatDropdownBtn">
+                                <li><a class="dropdown-item" href="{% url 'chat:liste_salons' %}">
+                                    <i class="fas fa-comment-dots"></i>{% trans "Mes salons" %}</a></li>
+                                <li><a class="dropdown-item" href="{% url 'chat:liste_etudiants' %}">
+                                    <i class="fas fa-user-friends"></i>{% trans "Étudiants" %}</a></li>
+                            </ul>
+                        </li>
 
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="chatDropdownBtn" role="button" title="{% trans 'Chat' %}"
-                                   data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fas fa-comments"></i><span class="nav-label">{% trans "Chat" %}</span>
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="chatDropdownBtn">
-                                    <li><a class="dropdown-item" href="{% url 'chat:liste_salons' %}">
-                                        <i class="fas fa-comment-dots"></i>{% trans "Mes salons" %}</a></li>
-                                    <li><a class="dropdown-item" href="{% url 'chat:liste_etudiants' %}">
-                                        <i class="fas fa-user-friends"></i>{% trans "Étudiants" %}</a></li>
-                                </ul>
-                            </li>
+                        <li class="nav-item">
+                            <a href="{% url 'notifications:list' %}" class="nav-link notification-link" title="{% trans 'Notifications' %}">
+                                <i class="fas fa-bell"></i><span class="nav-label">{% trans "Notifications" %}</span>
+                                {% if unread_notifications > 0 %}
+                                    <span class="badge rounded-pill bg-danger badge-pulse">{{ unread_notifications }}</span>
+                                {% endif %}
+                            </a>
+                        </li>
 
-                            <li class="nav-item">
-                                <a href="{% url 'notifications:list' %}" class="nav-link notification-link" title="{% trans 'Notifications' %}">
-                                    <i class="fas fa-bell"></i><span class="nav-label">{% trans "Notifications" %}</span>
-                                    {% if unread_notifications > 0 %}
-                                        <span class="badge rounded-pill bg-danger badge-pulse">{{ unread_notifications }}</span>
-                                    {% endif %}
-                                </a>
-                            </li>
+                        {% if user.is_staff %}
+                        <li class="nav-item">
+                            <a href="{% url 'dashboard:admin_dashboard' %}" class="nav-link" title="{% trans 'Dashboard' %}">
+                                <i class="fas fa-chart-pie"></i><span class="nav-label">{% trans "Dashboard" %}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'admin:index' %}" class="nav-link" title="{% trans 'Admin' %}">
+                                <i class="fas fa-cog"></i><span class="nav-label">{% trans "Admin" %}</span>
+                            </a>
+                        </li>
+                        {% endif %}
 
-                            {% if user.is_staff %}
-                            <li class="nav-item">
-                                <a href="{% url 'dashboard:admin_dashboard' %}" class="nav-link" title="{% trans 'Dashboard' %}">
-                                    <i class="fas fa-chart-pie"></i><span class="nav-label">{% trans "Dashboard" %}</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{% url 'admin:index' %}" class="nav-link" title="{% trans 'Admin' %}">
-                                    <i class="fas fa-cog"></i><span class="nav-label">{% trans "Admin" %}</span>
-                                </a>
-                            </li>
-                            {% endif %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdownBtn" role="button" title="{{ user.first_name|default:user.email }}"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle"></i>
+                                <span class="nav-label text-truncate">{{ user.first_name|default:user.email }}</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="userDropdownBtn">
+                                <li><a class="dropdown-item" href="{% url 'accounts:profile' %}"><i class="fas fa-id-card"></i>{% trans "Profil" %}</a></li>
+                                <li><a class="dropdown-item" href="{% url 'subscriptions:my_subscriptions' %}"><i class="fas fa-crown"></i>{% trans "Abonnements" %}</a></li>
+                                <li><a class="dropdown-item" href="{% url 'enrollments:list' %}"><i class="fas fa-list-check"></i>{% trans "Inscriptions" %}</a></li>
+                                <li><a class="dropdown-item" href="{% url 'ranking:my_rank' %}"><i class="fas fa-trophy"></i>{% trans "Classement" %}</a></li>
+                                <li><a class="dropdown-item" href="{% url 'badges:my_badges' %}"><i class="fas fa-medal"></i>{% trans "Badges" %}</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form method="post" action="{% url 'accounts:logout' %}" id="logoutForm">
+                                        {% csrf_token %}
+                                        <button type="submit" class="dropdown-item text-danger">
+                                            <i class="fas fa-sign-out-alt"></i>{% trans "Déconnexion" %}
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                        {% else %}
+                        <li class="nav-item">
+                            <a href="{% url 'accounts:login' %}" class="nav-link">
+                                <i class="fas fa-sign-in-alt"></i><span>{% trans "Connexion" %}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item mt-2 mt-lg-0">
+                            <a href="{% url 'accounts:signup' %}" class="nav-link btn-nav-primary justify-content-center">
+                                <i class="fas fa-user-plus"></i><span>{% trans "S'inscrire" %}</span>
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
 
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="userDropdownBtn" role="button" title="{{ user.first_name|default:user.email }}"
-                                   data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fas fa-user-circle"></i>
-                                    <span class="nav-label text-truncate">{{ user.first_name|default:user.email }}</span>
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="userDropdownBtn">
-                                    <li><a class="dropdown-item" href="{% url 'accounts:profile' %}"><i class="fas fa-id-card"></i>{% trans "Profil" %}</a></li>
-                                    <li><a class="dropdown-item" href="{% url 'subscriptions:my_subscriptions' %}"><i class="fas fa-crown"></i>{% trans "Abonnements" %}</a></li>
-                                    <li><a class="dropdown-item" href="{% url 'enrollments:list' %}"><i class="fas fa-list-check"></i>{% trans "Inscriptions" %}</a></li>
-                                    <li><a class="dropdown-item" href="{% url 'ranking:my_rank' %}"><i class="fas fa-trophy"></i>{% trans "Classement" %}</a></li>
-                                    <li><a class="dropdown-item" href="{% url 'badges:my_badges' %}"><i class="fas fa-medal"></i>{% trans "Badges" %}</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li>
-                                        <form method="post" action="{% url 'accounts:logout' %}" id="logoutForm">
-                                            {% csrf_token %}
-                                            <button type="submit" class="dropdown-item text-danger">
-                                                <i class="fas fa-sign-out-alt"></i>{% trans "Déconnexion" %}
-                                            </button>
-                                        </form>
-                                    </li>
-                                </ul>
-                            </li>
-                            {% else %}
-                            <li class="nav-item">
-                                <a href="{% url 'accounts:login' %}" class="nav-link">
-                                    <i class="fas fa-sign-in-alt"></i><span>{% trans "Connexion" %}</span>
-                                </a>
-                            </li>
-                            <li class="nav-item mt-2 mt-lg-0">
-                                <a href="{% url 'accounts:signup' %}" class="nav-link btn-nav-primary justify-content-center">
-                                    <i class="fas fa-user-plus"></i><span>{% trans "S'inscrire" %}</span>
-                                </a>
-                            </li>
-                            {% endif %}
-                        </ul>
-
-                        {# Langue #}
-                        {% get_current_language as CURRENT_LANGUAGE %}
-                        <form class="lang-switcher mt-3 mt-lg-0 ms-lg-2" action="{% url 'set_language' %}" method="post">
-                            {% csrf_token %}
-                            <input name="next" type="hidden" value="{{ request.path }}">
-                            <label class="visually-hidden" for="langSelect">{% trans "Langue" %}</label>
-                            <select id="langSelect" class="form-select form-select-sm" name="language" data-submit-on-change>
-                                <option value="fr" {% if CURRENT_LANGUAGE == 'fr' %}selected{% endif %}>Français</option>
-                                <option value="ht" {% if CURRENT_LANGUAGE == 'ht' %}selected{% endif %}>Kreyòl</option>
-                            </select>
-                        </form>
-                    </div>
+                    {% get_current_language as CURRENT_LANGUAGE %}
+                    <form class="lang-switcher mt-3 mt-lg-0 ms-lg-2" action="{% url 'set_language' %}" method="post">
+                        {% csrf_token %}
+                        <input name="next" type="hidden" value="{{ request.path }}">
+                        <label class="visually-hidden" for="langSelect">{% trans "Langue" %}</label>
+                        <select id="langSelect" class="form-select form-select-sm" name="language" data-submit-on-change>
+                            <option value="fr" {% if CURRENT_LANGUAGE == 'fr' %}selected{% endif %}>Français</option>
+                            <option value="ht" {% if CURRENT_LANGUAGE == 'ht' %}selected{% endif %}>Kreyòl</option>
+                        </select>
+                    </form>
                 </div>
             </div>
         </nav>
@@ -246,15 +281,11 @@
         </h2>
 
         {% if theme.evenement_message %}
-        <p class="event-message">
-            {{ theme.evenement_message }}
-        </p>
+        <p class="event-message">{{ theme.evenement_message }}</p>
         {% endif %}
 
         {% if theme.evenement_hashtag %}
-            <div class="hashtag">
-                #{{ theme.evenement_hashtag }}
-            </div>
+            <div class="hashtag">#{{ theme.evenement_hashtag }}</div>
         {% endif %}
     </div>
     {% endif %}
@@ -276,7 +307,7 @@
         </nav>
     {% endif %}
 
-    {# ===== MAIN CONTENT WITH SIDEBAR ===== #}
+    {# ===== MAIN ===== #}
     <div class="main-with-sidebar container-xxl">
         <div class="row gy-3">
         {% if banners_sidebar %}
@@ -323,11 +354,9 @@
     </div>
     {% endif %}
 
-    {# ===== FOOTER (Bootstrap : 3 ranje agoch/mitan/adwat + deskripsyon konplè) ===== #}
+    {# ===== FOOTER ===== #}
     <footer class="bg-body-tertiary border-top mt-5">
         <div class="container-xxl py-5">
-
-            {# ===== Deskripsyon konplè sit la (pran tout espas) ===== #}
             <div class="row mb-4">
                 <div class="col-12">
                     <a href="{% url 'home' %}" class="d-inline-flex align-items-center gap-2 mb-3 text-body text-decoration-none fw-bold fs-4">
@@ -348,10 +377,7 @@
                 </div>
             </div>
 
-            {# ===== 3 ranje : agoch / mitan / adwat ===== #}
             <div class="row g-4">
-
-                {# ----- Kolòn goch : Plateforme ----- #}
                 <div class="col-12 col-md-4">
                     <h6 class="text-uppercase fw-bold small mb-3">{% trans "Plateforme" %}</h6>
                     <ul class="list-unstyled mb-0 d-flex flex-column gap-2">
@@ -367,7 +393,6 @@
                     </ul>
                 </div>
 
-                {# ----- Kolòn mitan : En savoir plus ----- #}
                 <div class="col-12 col-md-4">
                     <h6 class="text-uppercase fw-bold small mb-3">{% trans "En savoir plus" %}</h6>
                     <ul class="list-unstyled mb-0 d-flex flex-column gap-2">
@@ -377,7 +402,6 @@
                     </ul>
                 </div>
 
-                {# ----- Kolòn dwat : Légal + Rezo sosyal ----- #}
                 <div class="col-12 col-md-4">
                     <h6 class="text-uppercase fw-bold small mb-3">{% trans "Légal" %}</h6>
                     <ul class="list-unstyled mb-3 d-flex flex-column gap-2">
@@ -408,11 +432,9 @@
                         {% endif %}
                     </div>
                 </div>
-
             </div>
         </div>
 
-        {# ===== Barre inférieure : copyright santre ===== #}
         <div class="border-top">
             <div class="container-xxl py-3">
                 <p class="text-body-secondary small mb-0 text-center">
