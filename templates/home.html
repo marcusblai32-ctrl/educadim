@@ -10,7 +10,7 @@
 {% block extra_css %}
 <style>
     /* ============================================================
-       HERO : desktop = tèks agoch + stats bò dwat
+       HERO : desktop = 2 kolòn (tèks+stats agoch, kat adwat)
        ============================================================ */
     @media (min-width: 992px) {
         .hero .row {
@@ -38,106 +38,120 @@
     }
 
     /* ============================================================
-       KAD STATS — bèl stil (desktop + mobile)
+       KAD STATS : 3 ti kat orizontal (sou mobil)
        ============================================================ */
-    .hero-stats-box {
-        background: linear-gradient(135deg, rgba(91,118,247,0.08), rgba(34,211,238,0.06));
-        backdrop-filter: blur(16px) saturate(150%);
-        -webkit-backdrop-filter: blur(16px) saturate(150%);
-        border: 1px solid rgba(91,118,247,0.18);
-        border-radius: 24px;
-        padding: 2rem 1.5rem;
-        box-shadow: 0 12px 40px rgba(91,118,247,0.15);
+    .hero-stats-row {
         display: flex;
-        flex-direction: column;
-        gap: 1rem;
+        flex-wrap: wrap;
+        gap: 0.75rem;
         width: 100%;
+        margin-top: 1.5rem;
     }
-
-    .hero-stats-box .stat-item {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        padding: 1.1rem 1.25rem;
-        border-radius: 16px;
-        background: rgba(255,255,255,0.55);
-        border: 1px solid rgba(91,118,247,0.12);
-        transition: transform 0.25s ease, box-shadow 0.25s ease;
-    }
-    .hero-stats-box .stat-item:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 24px rgba(91,118,247,0.18);
-    }
-    .hero-stats-box .stat-icon {
-        flex: 0 0 48px;
-        width: 48px;
-        height: 48px;
+    .hero-stats-row .stat-item {
+        flex: 1 1 0;
+        min-width: 100px;
+        text-align: center;
+        padding: 0.9rem 0.5rem;
         border-radius: 14px;
-        background: linear-gradient(135deg, #5b76f7, #22d3ee);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #fff;
-        font-size: 1.2rem;
+        background: rgba(91,118,247,0.08);
+        border: 1px solid rgba(91,118,247,0.15);
     }
-    .hero-stats-box .stat-text {
-        display: flex;
-        flex-direction: column;
-        text-align: left;
-    }
-    .hero-stats-box .stat-number {
-        font-size: 1.55rem;
+    .hero-stats-row .stat-number {
+        font-size: 1.35rem;
         font-weight: 800;
-        line-height: 1.1;
         color: var(--primary, #5b76f7);
+        display: block;
         font-family: var(--font-display, 'Manrope', sans-serif);
+        line-height: 1.1;
     }
-    .hero-stats-box .stat-label {
-        font-size: 0.85rem;
+    .hero-stats-row .stat-label {
+        font-size: 0.8rem;
         color: var(--text-muted, #64748b);
+        display: block;
         margin-top: 0.15rem;
     }
 
     /* ============================================================
-       SOU MOBIL : stats yo anba tèks la (blòk orizontal)
+       3 KAT VÈTIKAL (Cours interactifs, etc.)
        ============================================================ */
-    @media (max-width: 991.98px) {
-        .hero-stats-mobile {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 0.75rem;
-            width: 100%;
-            margin-top: 1.5rem;
-        }
-        .hero-stats-mobile .stat-item {
-            flex: 1 1 0;
-            min-width: 100px;
-            text-align: center;
-            padding: 0.85rem 0.5rem;
-            border-radius: 14px;
-            background: rgba(91,118,247,0.08);
-            border: 1px solid rgba(91,118,247,0.15);
-        }
-        .hero-stats-mobile .stat-number {
-            font-size: 1.35rem;
-            font-weight: 800;
-            color: var(--primary, #5b76f7);
-            display: block;
-        }
-        .hero-stats-mobile .stat-label {
-            font-size: 0.8rem;
-            color: var(--text-muted, #64748b);
-            display: block;
-        }
-        .hero-stats-box { display: none; }
+    .hero-cards-col {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        width: 100%;
     }
-    @media (min-width: 992px) {
-        .hero-stats-mobile { display: none; }
+    .hero-cards-col .hero-card {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        gap: 0.85rem !important;
+        padding: 1rem 1.1rem !important;
+        background: var(--glass, rgba(255,255,255,0.7));
+        backdrop-filter: blur(14px) saturate(150%);
+        -webkit-backdrop-filter: blur(14px) saturate(150%);
+        border: 1px solid var(--glass-brd, rgba(91,118,247,0.15));
+        border-radius: 16px;
+        box-shadow: 0 8px 24px rgba(91,118,247,0.08);
+        text-align: left !important;
+        width: 100% !important;
+        max-width: none !important;
+        animation: none !important;
+    }
+    .hero-cards-col .hero-card .hero-card-icon {
+        flex: 0 0 44px;
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #5b76f7, #a855f7);
+        color: #fff;
+        margin: 0 !important;
+    }
+    .hero-cards-col .hero-card .hero-card-icon i {
+        font-size: 1.15rem !important;
+        color: #fff !important;
+        margin: 0 !important;
+    }
+    .hero-cards-col .hero-card h3 {
+        font-size: 0.95rem !important;
+        font-weight: 700;
+        margin: 0 0 0.15rem !important;
+        text-align: left !important;
+        line-height: 1.25;
+    }
+    .hero-cards-col .hero-card p {
+        font-size: 0.78rem !important;
+        color: var(--text-muted, #64748b);
+        margin: 0 !important;
+        text-align: left !important;
+        line-height: 1.35;
     }
 
     /* ============================================================
-       Features / Headers / CTA
+       SOU MOBIL : tout anpile (tèks → bouton → stats → kat yo)
+       ============================================================ */
+    @media (max-width: 991.98px) {
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .hero-content .hero-actions {
+            justify-content: center;
+        }
+        .hero-stats-row {
+            justify-content: center;
+        }
+        .hero-cards-col {
+            margin-top: 1rem;
+        }
+    }
+
+    /* ============================================================
+       Features / Headers / CTA (pa manyen)
        ============================================================ */
     .feature-card {
         display: flex;
@@ -223,7 +237,7 @@
     <section class="hero container-xxl" aria-labelledby="home-title">
         <div class="row g-4 align-items-center w-100">
 
-            {# ===== Kolòn goch : tèks ===== #}
+            {# ===== Kolòn goch : tèks + bouton + stats ===== #}
             <div class="col-12 col-lg-7 hero-content">
                 <span class="hero-badge">
                     <i class="fas fa-book-open" aria-hidden="true"></i>
@@ -238,6 +252,7 @@
                 <p class="hero-description">
                     {% blocktrans with subtitle=theme.hero_subtitle|default:_("Des cours concrets, en français ou en kreyòl. Apprenez depuis Haïti, à votre rythme.") %}{{ subtitle }}{% endblocktrans %}
                 </p>
+
                 <div class="hero-actions">
                     <a href="{% url 'courses:course_list' %}" class="btn btn-primary btn-lg">
                         <i class="fas fa-compass" aria-hidden="true"></i>
@@ -254,9 +269,9 @@
                     {% endif %}
                 </div>
 
-                {# Stats MOBIL sèlman #}
+                {# ===== Stats yo : 3 ti kat orizontal ===== #}
                 {% if theme.stats_cours or theme.stats_etudiants or theme.stats_satisfaction %}
-                <div class="hero-stats-mobile" aria-label="{% trans 'Repères de la plateforme' %}">
+                <div class="hero-stats-row" aria-label="{% trans 'Repères de la plateforme' %}">
                     {% if theme.stats_cours %}
                     <div class="stat-item">
                         <span class="stat-number">{{ theme.stats_cours }}+</span>
@@ -279,39 +294,33 @@
                 {% endif %}
             </div>
 
-            {# ===== Kolòn dwat : kad stats (desktop) oswa imaj ===== #}
+            {# ===== Kolòn dwat : 3 kat vètikal ===== #}
             <div class="col-12 col-lg-5 hero-visual">
                 {% if theme.get_hero_image %}
                     <img src="{{ theme.get_hero_image }}" alt="{{ theme.hero_title }}" class="hero-main-image">
-                {% elif theme.stats_cours or theme.stats_etudiants or theme.stats_satisfaction %}
-                    <div class="hero-stats-box" aria-label="{% trans 'Repères de la plateforme' %}">
-                        {% if theme.stats_cours %}
-                        <div class="stat-item">
-                            <div class="stat-icon"><i class="fas fa-book-open" aria-hidden="true"></i></div>
-                            <div class="stat-text">
-                                <span class="stat-number">{{ theme.stats_cours }}+</span>
-                                <span class="stat-label">{% trans "Cours disponibles" %}</span>
+                {% else %}
+                    <div class="hero-cards-col">
+                        <article class="hero-card">
+                            <div class="hero-card-icon"><i class="{{ theme.hero_card1_icon|default:'fas fa-book-reader' }}" aria-hidden="true"></i></div>
+                            <div>
+                                <h3>{% blocktrans with title=theme.hero_card1_title|default:_("Cours interactifs") %}{{ title }}{% endblocktrans %}</h3>
+                                <p>{% blocktrans with desc=theme.hero_card1_desc|default:_("Cours, communa et évaluations") %}{{ desc }}{% endblocktrans %}</p>
                             </div>
-                        </div>
-                        {% endif %}
-                        {% if theme.stats_etudiants %}
-                        <div class="stat-item">
-                            <div class="stat-icon"><i class="fas fa-users" aria-hidden="true"></i></div>
-                            <div class="stat-text">
-                                <span class="stat-number">{{ theme.stats_etudiants }}+</span>
-                                <span class="stat-label">{% trans "Apprenants actifs" %}</span>
+                        </article>
+                        <article class="hero-card">
+                            <div class="hero-card-icon"><i class="{{ theme.hero_card2_icon|default:'fas fa-certificate' }}" aria-hidden="true"></i></div>
+                            <div>
+                                <h3>{% blocktrans with title=theme.hero_card2_title|default:_("Certificats vérifiables") %}{{ title }}{% endblocktrans %}</h3>
+                                <p>{% blocktrans with desc=theme.hero_card2_desc|default:_("Validation par QR Code.") %}{{ desc }}{% endblocktrans %}</p>
                             </div>
-                        </div>
-                        {% endif %}
-                        {% if theme.stats_satisfaction %}
-                        <div class="stat-item">
-                            <div class="stat-icon"><i class="fas fa-star" aria-hidden="true"></i></div>
-                            <div class="stat-text">
-                                <span class="stat-number">{{ theme.stats_satisfaction }}%</span>
-                                <span class="stat-label">{% trans "Satisfaction" %}</span>
+                        </article>
+                        <article class="hero-card">
+                            <div class="hero-card-icon"><i class="{{ theme.hero_card3_icon|default:'fas fa-chart-line' }}" aria-hidden="true"></i></div>
+                            <div>
+                                <h3>{% blocktrans with title=theme.hero_card3_title|default:_("Suivi personnalisé") %}{{ title }}{% endblocktrans %}</h3>
+                                <p>{% blocktrans with desc=theme.hero_card3_desc|default:_("Progressez à votre rythme.") %}{{ desc }}{% endblocktrans %}</p>
                             </div>
-                        </div>
-                        {% endif %}
+                        </article>
                     </div>
                 {% endif %}
             </div>
