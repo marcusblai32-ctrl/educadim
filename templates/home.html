@@ -9,291 +9,8 @@
 
 {% block extra_css %}
 <style>
-    /* ============================================================
-       BACKGROUND DINAMIK ak degradasyon dous
-       ============================================================ */
-    .home-page {
-        position: relative;
-        min-height: 100vh;
-        padding-bottom: 2rem;
-        background:
-            radial-gradient(circle at 15% 20%, color-mix(in srgb, var(--primary, #5b76f7) 12%, transparent) 0%, transparent 45%),
-            radial-gradient(circle at 85% 15%, color-mix(in srgb, var(--secondary, #22d3ee) 10%, transparent) 0%, transparent 45%),
-            radial-gradient(circle at 70% 90%, color-mix(in srgb, var(--primary, #5b76f7) 8%, transparent) 0%, transparent 50%),
-            var(--body-bg, var(--bg, #eef1fb));
-    }
-    html[data-bs-theme="dark"] .home-page,
-    html[data-theme="dark"] .home-page {
-        background:
-            radial-gradient(circle at 15% 20%, color-mix(in srgb, var(--primary, #5b76f7) 18%, transparent) 0%, transparent 45%),
-            radial-gradient(circle at 85% 15%, color-mix(in srgb, var(--secondary, #22d3ee) 14%, transparent) 0%, transparent 45%),
-            radial-gradient(circle at 70% 90%, color-mix(in srgb, var(--primary, #5b76f7) 12%, transparent) 0%, transparent 50%),
-            var(--body-bg, var(--bg, #0a0f22));
-    }
-
-    /* ============================================================
-       HERO
-       ============================================================ */
-    .hero-content {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        max-width: 900px;
-        margin: 0 auto;
-    }
-    .hero-content h1 {
-        font-size: clamp(1.8rem, 4.5vw, 3.2rem);
-        line-height: 1.15;
-        font-weight: 800;
-        max-width: 820px;
-        margin: 0.5rem auto;
-        text-align: center;
-    }
-    .hero-content .hero-description {
-        max-width: 620px;
-        margin: 0.5rem auto 1rem;
-        font-size: clamp(0.9rem, 2vw, 1.05rem);
-        color: var(--text-muted, #64748b);
-        text-align: center;
-    }
-    .hero-actions {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: center;
-        gap: 0.75rem;
-        margin-top: 0.5rem;
-        text-align: center;
-    }
-
-    /* ============================================================
-       3 STATS ANKADRE (primary transparan) — text-align: center
-       ============================================================ */
-    .hero-stats-row {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 1rem;
-        width: 100%;
-        max-width: 720px;
-        margin: 2rem auto 0;
-        text-align: center;
-    }
-    .hero-stats-row .stat-item {
-        flex: 1 1 0;
-        min-width: 140px;
-        text-align: center;
-        padding: 1.2rem 1rem;
-        border-radius: 16px;
-        background: color-mix(in srgb, var(--primary, #5b76f7) 10%, transparent);
-        border: 1px solid color-mix(in srgb, var(--primary, #5b76f7) 25%, transparent);
-        box-shadow: 0 6px 20px color-mix(in srgb, var(--primary, #5b76f7) 12%, transparent);
-        backdrop-filter: blur(10px) saturate(150%);
-        -webkit-backdrop-filter: blur(10px) saturate(150%);
-        transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
-    }
-    .hero-stats-row .stat-item:hover {
-        transform: translateY(-4px);
-        background: color-mix(in srgb, var(--primary, #5b76f7) 16%, transparent);
-        box-shadow: 0 12px 30px color-mix(in srgb, var(--primary, #5b76f7) 22%, transparent);
-    }
-    .hero-stats-row .stat-number {
-        font-size: 1.9rem;
-        font-weight: 800;
-        line-height: 1;
-        background: linear-gradient(135deg,
-            var(--primary, #5b76f7) 0%,
-            var(--secondary, #22d3ee) 100%);
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-        color: transparent;
-        font-family: var(--font-display, 'Manrope', sans-serif);
-        display: block;
-        text-align: center;
-        width: 100%;
-    }
-    .hero-stats-row .stat-label {
-        font-size: 0.85rem;
-        color: var(--text-muted, #64748b);
-        margin-top: 0.4rem;
-        font-weight: 500;
-        display: block;
-        text-align: center;
-        width: 100%;
-    }
-
-    /* ============================================================
-       3 KAT AN FÒM WON — text-align: center
-       ============================================================ */
-    .hero-cards-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1.5rem;
-        width: 100%;
-        max-width: 900px;
-        margin: 2.5rem auto 0;
-        justify-items: center;
-        text-align: center;
-    }
-    @media (max-width: 991.98px) {
-        .hero-cards-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-    }
-    @media (max-width: 575.98px) {
-        .hero-cards-grid {
-            grid-template-columns: 1fr;
-        }
-    }
-
-    .hero-feature-circle-card {
-        width: 220px;
-        height: 220px;
-        border-radius: 50%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        padding: 1.5rem;
-        position: relative;
-        overflow: hidden;
-
-        background: linear-gradient(135deg,
-            color-mix(in srgb, var(--primary, #5b76f7) 15%, transparent) 0%,
-            color-mix(in srgb, var(--secondary, #22d3ee) 10%, transparent) 100%);
-        backdrop-filter: blur(16px) saturate(160%);
-        -webkit-backdrop-filter: blur(16px) saturate(160%);
-        border: 1px solid color-mix(in srgb, var(--primary, #5b76f7) 22%, transparent);
-
-        box-shadow:
-            0 10px 30px color-mix(in srgb, var(--primary, #5b76f7) 15%, transparent),
-            inset 0 1px 0 color-mix(in srgb, var(--primary, #5b76f7) 25%, transparent);
-
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .hero-feature-circle-card::before {
-        content: "";
-        position: absolute;
-        top: 8%;
-        left: 18%;
-        width: 45%;
-        height: 30%;
-        border-radius: 50%;
-        background: radial-gradient(ellipse at center,
-            rgba(255,255,255,0.55) 0%,
-            rgba(255,255,255,0) 70%);
-        filter: blur(6px);
-        pointer-events: none;
-        z-index: 1;
-    }
-
-    .hero-feature-circle-card::after {
-        content: "";
-        position: absolute;
-        inset: -6px;
-        border-radius: 50%;
-        background: linear-gradient(135deg,
-            var(--primary, #5b76f7) 0%,
-            var(--secondary, #22d3ee) 100%);
-        opacity: 0.15;
-        z-index: -1;
-        filter: blur(12px);
-        transition: opacity 0.3s ease;
-    }
-
-    .hero-feature-circle-card:hover {
-        transform: translateY(-6px) scale(1.02);
-        box-shadow:
-            0 20px 45px color-mix(in srgb, var(--primary, #5b76f7) 28%, transparent),
-            inset 0 1px 0 color-mix(in srgb, var(--primary, #5b76f7) 35%, transparent);
-    }
-    .hero-feature-circle-card:hover::after {
-        opacity: 0.3;
-    }
-
-    .hero-feature-circle-card .ball-content {
-        position: relative;
-        z-index: 2;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        text-align: center;
-    }
-
-    .hero-feature-circle-card .feature-circle-icon {
-        width: 52px;
-        height: 52px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: linear-gradient(135deg,
-            var(--primary, #5b76f7) 0%,
-            var(--secondary, #22d3ee) 100%);
-        color: #fff;
-        box-shadow: 0 6px 16px color-mix(in srgb, var(--primary, #5b76f7) 40%, transparent);
-        margin-bottom: 0.6rem;
-        flex-shrink: 0;
-        margin-left: auto;
-        margin-right: auto;
-    }
-    .hero-feature-circle-card .feature-circle-icon i {
-        font-size: 1.25rem;
-        color: #fff;
-    }
-
-    .hero-feature-circle-card h3 {
-        font-size: 0.95rem;
-        font-weight: 700;
-        margin: 0 0 0.35rem;
-        line-height: 1.25;
-        color: var(--text, #0f172a);
-        text-align: center;
-        width: 100%;
-    }
-    .hero-feature-circle-card p {
-        font-size: 0.75rem;
-        color: var(--text-muted, #64748b);
-        margin: 0;
-        line-height: 1.4;
-        text-align: center;
-        width: 100%;
-    }
-
-    html[data-bs-theme="dark"] .hero-feature-circle-card,
-    html[data-theme="dark"] .hero-feature-circle-card {
-        background: linear-gradient(135deg,
-            color-mix(in srgb, var(--primary, #5b76f7) 20%, transparent) 0%,
-            color-mix(in srgb, var(--secondary, #22d3ee) 15%, transparent) 100%);
-        border-color: color-mix(in srgb, var(--primary, #5b76f7) 30%, transparent);
-    }
-    html[data-bs-theme="dark"] .hero-feature-circle-card::before,
-    html[data-theme="dark"] .hero-feature-circle-card::before {
-        background: radial-gradient(ellipse at center,
-            rgba(255,255,255,0.3) 0%,
-            rgba(255,255,255,0) 70%);
-    }
-    html[data-bs-theme="dark"] .hero-feature-circle-card h3,
-    html[data-theme="dark"] .hero-feature-circle-card h3 {
-        color: #e2e8f0;
-    }
-
-    @media (max-width: 575.98px) {
-        .hero-feature-circle-card {
-            width: 200px;
-            height: 200px;
-        }
-    }
-
-    /* ============================================================
-       Features / Headers / CTA
-       ============================================================ */
+    /* ===== Centrage des cartes héro et features uniquement ===== */
+    .hero-card,
     .feature-card {
         display: flex;
         flex-direction: column;
@@ -301,6 +18,8 @@
         justify-content: center;
         text-align: center;
     }
+
+    .hero-card-icon,
     .feature-icon-wrapper {
         display: flex;
         align-items: center;
@@ -308,8 +27,15 @@
         margin-left: auto;
         margin-right: auto;
     }
+
+    .hero-card h3,
+    .hero-card p,
     .feature-card h3,
-    .feature-card p { text-align: center; width: 100%; }
+    .feature-card p {
+        text-align: center;
+        width: 100%;
+    }
+
     .feature-link {
         display: inline-flex;
         align-items: center;
@@ -317,7 +43,25 @@
         gap: 0.5rem;
     }
 
-    .features-section .section-header,
+    /* ===== Section features : titre + tag centrés sur TOUS les appareils ===== */
+    .features-section .section-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .features-section .section-header h2,
+    .features-section .section-header .section-tag {
+        text-align: center;
+        width: 100%;
+    }
+
+    /* ===== Section témoignages : header centré comme les autres ===== */
     .testimonials-section .section-header {
         display: flex;
         flex-direction: column;
@@ -328,26 +72,52 @@
         margin-left: auto;
         margin-right: auto;
     }
-    .features-section .section-header h2,
-    .features-section .section-header .section-tag,
+
     .testimonials-section .section-header h2,
     .testimonials-section .section-header .section-tag {
         text-align: center;
         width: 100%;
     }
 
-    .cta-section {
-        background: var(--body-bg, var(--bg, #eef1fb)) !important;
-        border-radius: var(--radius-lg, 28px);
-        margin-top: 3rem;
-        margin-bottom: 3rem;
-        padding: 3rem 1.5rem;
-    }
-    html[data-bs-theme="dark"] .cta-section,
-    html[data-theme="dark"] .cta-section {
-        background: var(--body-bg, var(--bg, #0a0f22)) !important;
+    /* ===== STATS : blocs qui prennent l'espace, contenu centré ===== */
+    .hero-stats {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: stretch;
+        justify-content: center;
+        gap: 1rem;
+        width: 100%;
+        margin-top: 1.5rem;
     }
 
+    .stat-item {
+        flex: 1 1 0;
+        min-width: 120px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 1rem 0.75rem;
+    }
+
+    .stat-item .stat-number,
+    .stat-item .stat-label {
+        display: block;
+        width: 100%;
+        text-align: center;
+    }
+
+    /* ===== Boutons héro centrés ===== */
+    .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    /* ===== CTA : tout le contenu centré au milieu de la boîte ===== */
     .cta-section .cta-content {
         display: flex;
         flex-direction: column;
@@ -361,10 +131,14 @@
         padding-left: 1rem;
         padding-right: 1rem;
     }
+
     .cta-section .cta-content h2,
     .cta-section .cta-content p,
     .cta-section .cta-content .section-tag,
-    .cta-section .cta-content .cta-button { text-align: center; }
+    .cta-section .cta-content .cta-button {
+        text-align: center;
+    }
+
     .cta-section .cta-content .cta-button {
         display: inline-flex;
         align-items: center;
@@ -378,30 +152,26 @@
 
 {% block content %}
 <div class="home-page">
-
     <section class="hero container-xxl" aria-labelledby="home-title">
-        <div class="row g-4 w-100 justify-content-center">
-
-            <div class="col-12 hero-content">
+        <div class="row g-4 align-items-center w-100">
+            <div class="col-12 col-lg-7 hero-content">
                 <span class="hero-badge">
                     <i class="fas fa-book-open" aria-hidden="true"></i>
-                    {% blocktrans with badge=theme.hero_badge|default:_("Par Dimension Production") %}{{ badge }}{% endblocktrans %}
+                    {% blocktrans with badge=theme.hero_badge|default:_("Apprendre à son rythme") %}{{ badge }}{% endblocktrans %}
                 </span>
                 <h1 id="home-title">
-                    {% blocktrans with title=theme.hero_title|default:_("Apprenez aujourd'hui, construisez votre avenir.") %}{{ title }}{% endblocktrans %}
+                    {% blocktrans with title=theme.hero_title|default:_("Des savoirs utiles,") %}{{ title }}{% endblocktrans %}
                     <span class="highlight">
-                        {% blocktrans with sub=theme.hero_subtitle_line2|default:_("Accessible partout, à tout moment.") %}{{ sub }}{% endblocktrans %}
+                        {% blocktrans with subtitle=theme.hero_subtitle_line2|default:_("pour ouvrir de nouvelles voies.") %}{{ subtitle }}{% endblocktrans %}
                     </span>
                 </h1>
-
                 <p class="hero-description">
-                    {% blocktrans with desc=theme.hero_description|default:_("Des formations modernes, des évaluations interactives et un accompagnement conçu pour transformer vos connaissances en compétences.") %}{{ desc }}{% endblocktrans %}
+                    {% blocktrans with subtitle=theme.hero_subtitle|default:_("Des cours concrets, en français ou en kreyòl. Apprenez depuis Haïti, à votre rythme.") %}{{ subtitle }}{% endblocktrans %}
                 </p>
-
                 <div class="hero-actions">
                     <a href="{% url 'courses:course_list' %}" class="btn btn-primary btn-lg">
                         <i class="fas fa-compass" aria-hidden="true"></i>
-                        {% blocktrans with btn=theme.btn_explore|default:_("Explorer les formations") %}{{ btn }}{% endblocktrans %}
+                        {% blocktrans with btn=theme.btn_explore|default:_("Explorer les cours") %}{{ btn }}{% endblocktrans %}
                     </a>
                     {% if not user.is_authenticated %}
                     <a href="{% url 'accounts:signup' %}" class="btn btn-outline btn-lg">
@@ -413,10 +183,8 @@
                     </a>
                     {% endif %}
                 </div>
-
-                {# ===== 3 STATS ANKADRE (primary transparan) ===== #}
                 {% if theme.stats_cours or theme.stats_etudiants or theme.stats_satisfaction %}
-                <div class="hero-stats-row" aria-label="{% trans 'Repères de la plateforme' %}">
+                <div class="hero-stats" aria-label="{% trans 'Repères de la plateforme' %}">
                     {% if theme.stats_cours %}
                     <div class="stat-item">
                         <span class="stat-number">{{ theme.stats_cours }}+</span>
@@ -437,43 +205,28 @@
                     {% endif %}
                 </div>
                 {% endif %}
-
-                {# ===== 3 KAT AN FÒM WON ===== #}
+            </div>
+            <div class="col-12 col-lg-5 hero-visual" aria-label="{% trans 'Façons d’apprendre sur EducaDim' %}">
                 {% if theme.get_hero_image %}
-                    <img src="{{ theme.get_hero_image }}" alt="{{ theme.hero_title }}" class="hero-main-image mt-4" style="max-width: 100%; border-radius: 16px;">
+                    <img src="{{ theme.get_hero_image }}" alt="{{ theme.hero_title }}" class="hero-main-image">
                 {% else %}
-                    <div class="hero-cards-grid">
-                        <article class="hero-feature-circle-card">
-                            <div class="ball-content">
-                                <div class="feature-circle-icon">
-                                    <i class="{{ theme.hero_card1_icon|default:'fas fa-graduation-cap' }}" aria-hidden="true"></i>
-                                </div>
-                                <h3>{% blocktrans with title=theme.hero_card1_title|default:_("Cours interactifs") %}{{ title }}{% endblocktrans %}</h3>
-                                <p>{% blocktrans with desc=theme.hero_card1_desc|default:_("Cours, communauté et évaluations") %}{{ desc }}{% endblocktrans %}</p>
-                            </div>
-                        </article>
-                        <article class="hero-feature-circle-card">
-                            <div class="ball-content">
-                                <div class="feature-circle-icon">
-                                    <i class="{{ theme.hero_card2_icon|default:'fas fa-certificate' }}" aria-hidden="true"></i>
-                                </div>
-                                <h3>{% blocktrans with title=theme.hero_card2_title|default:_("Certificats vérifiables") %}{{ title }}{% endblocktrans %}</h3>
-                                <p>{% blocktrans with desc=theme.hero_card2_desc|default:_("Validation par QR Code.") %}{{ desc }}{% endblocktrans %}</p>
-                            </div>
-                        </article>
-                        <article class="hero-feature-circle-card">
-                            <div class="ball-content">
-                                <div class="feature-circle-icon">
-                                    <i class="{{ theme.hero_card3_icon|default:'fas fa-chart-line' }}" aria-hidden="true"></i>
-                                </div>
-                                <h3>{% blocktrans with title=theme.hero_card3_title|default:_("Suivi personnalisé") %}{{ title }}{% endblocktrans %}</h3>
-                                <p>{% blocktrans with desc=theme.hero_card3_desc|default:_("Progressez à votre rythme.") %}{{ desc }}{% endblocktrans %}</p>
-                            </div>
-                        </article>
-                    </div>
+                    <article class="hero-card animate-float">
+                        <div class="hero-card-icon"><i class="{{ theme.hero_card1_icon|default:'fas fa-book-reader' }}" aria-hidden="true"></i></div>
+                        <h3>{% blocktrans with title=theme.hero_card1_title|default:_("À votre rythme") %}{{ title }}{% endblocktrans %}</h3>
+                        <p>{% blocktrans with desc=theme.hero_card1_desc|default:_("Des leçons accessibles, où que vous soyez.") %}{{ desc }}{% endblocktrans %}</p>
+                    </article>
+                    <article class="hero-card animate-float delay-1">
+                        <div class="hero-card-icon"><i class="{{ theme.hero_card2_icon|default:'fas fa-language' }}" aria-hidden="true"></i></div>
+                        <h3>{% blocktrans with title=theme.hero_card2_title|default:_("Français et kreyòl") %}{{ title }}{% endblocktrans %}</h3>
+                        <p>{% blocktrans with desc=theme.hero_card2_desc|default:_("Choisissez la langue qui vous accompagne.") %}{{ desc }}{% endblocktrans %}</p>
+                    </article>
+                    <article class="hero-card animate-float delay-2">
+                        <div class="hero-card-icon"><i class="{{ theme.hero_card3_icon|default:'fas fa-chart-line' }}" aria-hidden="true"></i></div>
+                        <h3>{% blocktrans with title=theme.hero_card3_title|default:_("Quiz et progression") %}{{ title }}{% endblocktrans %}</h3>
+                        <p>{% blocktrans with desc=theme.hero_card3_desc|default:_("Pratiquez, puis voyez le chemin parcouru.") %}{{ desc }}{% endblocktrans %}</p>
+                    </article>
                 {% endif %}
             </div>
-
         </div>
     </section>
 
@@ -523,6 +276,7 @@
         </div>
     </section>
 
+    {# ===== SECTION TÉMOIGNAGES : header centré comme les autres ===== #}
     {% if theme.testimonial1_text or theme.testimonial2_text %}
     <section class="testimonials-section" aria-labelledby="testimonials-title">
         <div class="section-header">
