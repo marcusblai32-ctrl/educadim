@@ -9,8 +9,9 @@
 
 {% block extra_css %}
 <style>
-    /* ===== Centrage des cartes héro et features uniquement ===== */
-    .hero-card,
+    /* ============================================================
+       SECTION 1 : Centrage cartes héro & features
+       ============================================================ */
     .feature-card {
         display: flex;
         flex-direction: column;
@@ -19,7 +20,6 @@
         text-align: center;
     }
 
-    .hero-card-icon,
     .feature-icon-wrapper {
         display: flex;
         align-items: center;
@@ -28,8 +28,6 @@
         margin-right: auto;
     }
 
-    .hero-card h3,
-    .hero-card p,
     .feature-card h3,
     .feature-card p {
         text-align: center;
@@ -43,25 +41,10 @@
         gap: 0.5rem;
     }
 
-    /* ===== Section features : titre + tag centrés sur TOUS les appareils ===== */
-    .features-section .section-header {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        width: 100%;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .features-section .section-header h2,
-    .features-section .section-header .section-tag {
-        text-align: center;
-        width: 100%;
-    }
-
-    /* ===== Section témoignages : header centré comme les autres ===== */
+    /* ============================================================
+       SECTION 2 : Headers (features + témoignages) centrés
+       ============================================================ */
+    .features-section .section-header,
     .testimonials-section .section-header {
         display: flex;
         flex-direction: column;
@@ -73,13 +56,111 @@
         margin-right: auto;
     }
 
+    .features-section .section-header h2,
+    .features-section .section-header .section-tag,
     .testimonials-section .section-header h2,
     .testimonials-section .section-header .section-tag {
         text-align: center;
         width: 100%;
     }
 
-    /* ===== STATS : blocs qui prennent l'espace, contenu centré ===== */
+    /* ============================================================
+       SECTION 3 : HERO — Desktop propre (2 colonnes)
+       ============================================================ */
+    /* Colonne gauche (texte) : aligné à gauche sur desktop */
+    @media (min-width: 992px) {
+        .hero-content {
+            align-items: flex-start !important;
+            text-align: left !important;
+        }
+        .hero-content .hero-actions,
+        .hero-content .hero-stats {
+            justify-content: flex-start !important;
+        }
+        .hero-content .hero-stats .stat-item {
+            text-align: left !important;
+        }
+    }
+
+    /* Colonne droite (cartes) : pleine largeur + alignées */
+    .hero-visual {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+        justify-content: center;
+        width: 100%;
+    }
+
+    /* Chaque carte prend TOUTE la largeur de sa colonne */
+    .hero-visual .hero-card {
+        width: 100% !important;
+        max-width: none !important;
+        padding: 1.1rem 1.3rem !important;
+        text-align: left !important;
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        gap: 1rem !important;
+        animation: none; /* pas de float sur desktop pour un rendu pro */
+    }
+
+    /* Icône : à gauche, taille fixe, fond dégradé */
+    .hero-visual .hero-card .hero-card-icon {
+        flex: 0 0 52px;
+        width: 52px;
+        height: 52px;
+        margin: 0 !important;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--grad-brand, linear-gradient(135deg, #5b76f7, #22d3ee));
+    }
+    .hero-visual .hero-card .hero-card-icon i {
+        color: #fff !important;
+        font-size: 1.3rem !important;
+        margin: 0 !important;
+    }
+
+    /* Textes : alignés à gauche */
+    .hero-visual .hero-card h3 {
+        text-align: left !important;
+        font-size: 1rem !important;
+        margin: 0 0 0.15rem !important;
+        line-height: 1.3;
+    }
+    .hero-visual .hero-card p {
+        text-align: left !important;
+        font-size: 0.85rem !important;
+        margin: 0 !important;
+        line-height: 1.4;
+    }
+
+    /* Empêche le h3 et le p de se mettre côte à côte avec l'icône */
+    .hero-visual .hero-card h3,
+    .hero-visual .hero-card p {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+    .hero-visual .hero-card h3 { order: 1; }
+    .hero-visual .hero-card p  { order: 2; flex-basis: 100%; }
+
+    /* Sur mobile : on cache la colonne visuelle (déjà le cas dans app.css) */
+    @media (max-width: 991.98px) {
+        .hero-visual .hero-card {
+            text-align: center !important;
+            flex-direction: column !important;
+        }
+        .hero-visual .hero-card h3,
+        .hero-visual .hero-card p {
+            text-align: center !important;
+        }
+    }
+
+    /* ============================================================
+       SECTION 4 : STATS — blocs qui prennent l'espace
+       ============================================================ */
     .hero-stats {
         display: flex;
         flex-wrap: wrap;
@@ -92,13 +173,13 @@
 
     .stat-item {
         flex: 1 1 0;
-        min-width: 120px;
+        min-width: 110px;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         text-align: center;
-        padding: 1rem 0.75rem;
+        padding: 0.75rem 0.5rem;
     }
 
     .stat-item .stat-number,
@@ -108,7 +189,9 @@
         text-align: center;
     }
 
-    /* ===== Boutons héro centrés ===== */
+    /* ============================================================
+       SECTION 5 : Boutons héro centrés
+       ============================================================ */
     .hero-actions {
         display: flex;
         flex-wrap: wrap;
@@ -117,7 +200,9 @@
         gap: 1rem;
     }
 
-    /* ===== CTA : tout le contenu centré au milieu de la boîte ===== */
+    /* ============================================================
+       SECTION 6 : CTA — contenu centré au milieu
+       ============================================================ */
     .cta-section .cta-content {
         display: flex;
         flex-direction: column;
@@ -210,17 +295,17 @@
                 {% if theme.get_hero_image %}
                     <img src="{{ theme.get_hero_image }}" alt="{{ theme.hero_title }}" class="hero-main-image">
                 {% else %}
-                    <article class="hero-card animate-float">
+                    <article class="hero-card">
                         <div class="hero-card-icon"><i class="{{ theme.hero_card1_icon|default:'fas fa-book-reader' }}" aria-hidden="true"></i></div>
                         <h3>{% blocktrans with title=theme.hero_card1_title|default:_("À votre rythme") %}{{ title }}{% endblocktrans %}</h3>
                         <p>{% blocktrans with desc=theme.hero_card1_desc|default:_("Des leçons accessibles, où que vous soyez.") %}{{ desc }}{% endblocktrans %}</p>
                     </article>
-                    <article class="hero-card animate-float delay-1">
+                    <article class="hero-card">
                         <div class="hero-card-icon"><i class="{{ theme.hero_card2_icon|default:'fas fa-language' }}" aria-hidden="true"></i></div>
                         <h3>{% blocktrans with title=theme.hero_card2_title|default:_("Français et kreyòl") %}{{ title }}{% endblocktrans %}</h3>
                         <p>{% blocktrans with desc=theme.hero_card2_desc|default:_("Choisissez la langue qui vous accompagne.") %}{{ desc }}{% endblocktrans %}</p>
                     </article>
-                    <article class="hero-card animate-float delay-2">
+                    <article class="hero-card">
                         <div class="hero-card-icon"><i class="{{ theme.hero_card3_icon|default:'fas fa-chart-line' }}" aria-hidden="true"></i></div>
                         <h3>{% blocktrans with title=theme.hero_card3_title|default:_("Quiz et progression") %}{{ title }}{% endblocktrans %}</h3>
                         <p>{% blocktrans with desc=theme.hero_card3_desc|default:_("Pratiquez, puis voyez le chemin parcouru.") %}{{ desc }}{% endblocktrans %}</p>
@@ -276,7 +361,7 @@
         </div>
     </section>
 
-    {# ===== SECTION TÉMOIGNAGES : header centré comme les autres ===== #}
+    {# ===== SECTION TÉMOIGNAGES ===== #}
     {% if theme.testimonial1_text or theme.testimonial2_text %}
     <section class="testimonials-section" aria-labelledby="testimonials-title">
         <div class="section-header">
