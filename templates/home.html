@@ -65,7 +65,7 @@
     }
 
     /* ============================================================
-       3 STATS ANKADRE (primary transparan)
+       3 STATS ANKADRE
        ============================================================ */
     .hero-stats-row {
         display: flex;
@@ -129,14 +129,10 @@
         justify-items: center;
     }
     @media (max-width: 991.98px) {
-        .hero-cards-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
+        .hero-cards-grid { grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 575.98px) {
-        .hero-cards-grid {
-            grid-template-columns: 1fr;
-        }
+        .hero-cards-grid { grid-template-columns: 1fr; }
     }
 
     .hero-feature-circle-card {
@@ -202,9 +198,7 @@
             0 20px 45px color-mix(in srgb, var(--primary, #5b76f7) 28%, transparent),
             inset 0 1px 0 color-mix(in srgb, var(--primary, #5b76f7) 35%, transparent);
     }
-    .hero-feature-circle-card:hover::after {
-        opacity: 0.3;
-    }
+    .hero-feature-circle-card:hover::after { opacity: 0.3; }
 
     .hero-feature-circle-card .ball-content {
         position: relative;
@@ -276,31 +270,32 @@
     }
 
     /* ============================================================
-       Features : kat ki poukont li → santre nan mitan
+       FEATURES : kat ki poukont li → santre, menm lajè ak lòt yo
        ============================================================ */
     .features-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
         gap: 1.5rem;
-        justify-content: center;   /* santre lè gen espas */
+        justify-content: center;
         justify-items: stretch;
         align-items: stretch;
     }
 
-    /* Lè gen yon sèl kat (dernye liy lan), fè l santre */
+    /* Kat ki poukont li nan yon liy : santre ak menm lajè */
     .features-grid > .feature-card:last-child:nth-child(odd) {
         grid-column: 1 / -1;
-        max-width: 420px;
+        width: 100%;
+        max-width: 100%;
         margin-left: auto;
         margin-right: auto;
+        justify-self: center;
     }
     @media (min-width: 1024px) {
-        /* Sou 3 kolòn, si gen yon sèl kat nan dènye liy lan */
         .features-grid > .feature-card:last-child:nth-child(3n + 1) {
             grid-column: 2 / 3;
+            width: 100%;
             max-width: 100%;
-            margin-left: 0;
-            margin-right: 0;
+            margin: 0;
         }
     }
 
@@ -347,13 +342,20 @@
     }
 
     /* ============================================================
-       CTA : gradyan primary → secondary (PLEN, pa transparan)
+       CTA : background body_bg dinamik (pa gradyan)
        ============================================================ */
     .cta-section {
-        background: linear-gradient(135deg,
-            var(--primary, #5b76f7) 0%,
-            var(--secondary, #22d3ee) 100%) !important;
+        background: var(--body-bg, var(--bg, #eef1fb)) !important;
+        border-radius: var(--radius-lg, 28px);
+        margin-top: 3rem;
+        margin-bottom: 3rem;
+        padding: 3rem 1.5rem;
     }
+    html[data-bs-theme="dark"] .cta-section,
+    html[data-theme="dark"] .cta-section {
+        background: var(--body-bg, var(--bg, #0a0f22)) !important;
+    }
+
     .cta-section .cta-content {
         display: flex;
         flex-direction: column;
