@@ -10,25 +10,23 @@
 {% block extra_css %}
 <style>
     /* ============================================================
-       BACKGROUND DINAMIK ak degradasyon dous
+       BACKGROUND DINAMIK : gradyan primary → secondary
        ============================================================ */
     .home-page {
         position: relative;
         min-height: 100vh;
         padding-bottom: 2rem;
-        background:
-            radial-gradient(circle at 15% 20%, color-mix(in srgb, var(--primary, #5b76f7) 12%, transparent) 0%, transparent 45%),
-            radial-gradient(circle at 85% 15%, color-mix(in srgb, var(--secondary, #22d3ee) 10%, transparent) 0%, transparent 45%),
-            radial-gradient(circle at 70% 90%, color-mix(in srgb, var(--primary, #5b76f7) 8%, transparent) 0%, transparent 50%),
-            var(--body-bg, var(--bg, #eef1fb));
+        background: linear-gradient(135deg,
+            color-mix(in srgb, var(--primary, #5b76f7) 12%, var(--body-bg, var(--bg, #eef1fb))) 0%,
+            color-mix(in srgb, var(--secondary, #22d3ee) 10%, var(--body-bg, var(--bg, #eef1fb))) 50%,
+            color-mix(in srgb, var(--primary, #5b76f7) 8%, var(--body-bg, var(--bg, #eef1fb))) 100%);
     }
     html[data-bs-theme="dark"] .home-page,
     html[data-theme="dark"] .home-page {
-        background:
-            radial-gradient(circle at 15% 20%, color-mix(in srgb, var(--primary, #5b76f7) 18%, transparent) 0%, transparent 45%),
-            radial-gradient(circle at 85% 15%, color-mix(in srgb, var(--secondary, #22d3ee) 14%, transparent) 0%, transparent 45%),
-            radial-gradient(circle at 70% 90%, color-mix(in srgb, var(--primary, #5b76f7) 12%, transparent) 0%, transparent 50%),
-            var(--body-bg, var(--bg, #0a0f22));
+        background: linear-gradient(135deg,
+            color-mix(in srgb, var(--primary, #5b76f7) 25%, var(--body-bg, var(--bg, #0a0f22))) 0%,
+            color-mix(in srgb, var(--secondary, #22d3ee) 18%, var(--body-bg, var(--bg, #0a0f22))) 50%,
+            color-mix(in srgb, var(--primary, #5b76f7) 15%, var(--body-bg, var(--bg, #0a0f22))) 100%);
     }
 
     /* ============================================================
@@ -64,11 +62,10 @@
         justify-content: center;
         gap: 0.75rem;
         margin-top: 0.5rem;
-        text-align: center;
     }
 
     /* ============================================================
-       3 STATS ANKADRE (primary transparan) — text-align: center
+       3 STATS ANKADRE — kontni santre
        ============================================================ */
     .hero-stats-row {
         display: flex;
@@ -83,6 +80,10 @@
     .hero-stats-row .stat-item {
         flex: 1 1 0;
         min-width: 140px;
+        display: flex;              /* pou santre kontni an */
+        flex-direction: column;     /* anpile vètikal */
+        align-items: center;        /* santre orizontal */
+        justify-content: center;    /* santre vètikal */
         text-align: center;
         padding: 1.2rem 1rem;
         border-radius: 16px;
@@ -125,7 +126,7 @@
     }
 
     /* ============================================================
-       3 KAT AN FÒM WON — text-align: center
+       3 KAT AN FÒM WON — kontni santre
        ============================================================ */
     .hero-cards-grid {
         display: grid;
@@ -154,8 +155,8 @@
         border-radius: 50%;
         display: flex;
         flex-direction: column;
-        align-items: center;
-        justify-content: center;
+        align-items: center;        /* santre orizontal */
+        justify-content: center;    /* santre vètikal */
         text-align: center;
         padding: 1.5rem;
         position: relative;
@@ -220,8 +221,8 @@
         z-index: 2;
         display: flex;
         flex-direction: column;
-        align-items: center;
-        justify-content: center;
+        align-items: center;        /* santre orizontal */
+        justify-content: center;    /* santre vètikal */
         width: 100%;
         text-align: center;
     }
@@ -239,9 +240,9 @@
         color: #fff;
         box-shadow: 0 6px 16px color-mix(in srgb, var(--primary, #5b76f7) 40%, transparent);
         margin-bottom: 0.6rem;
-        flex-shrink: 0;
         margin-left: auto;
         margin-right: auto;
+        flex-shrink: 0;
     }
     .hero-feature-circle-card .feature-circle-icon i {
         font-size: 1.25rem;
