@@ -10,7 +10,95 @@
 {% block extra_css %}
 <style>
     /* ============================================================
-       SECTION 1 : Centrage cartes héro & features
+       HERO : sou desktop, tèks agoch + stats nan kolòn dwat
+       ============================================================ */
+    @media (min-width: 992px) {
+        .hero .row {
+            display: flex;
+            flex-wrap: nowrap;
+            align-items: center;
+        }
+        .hero-content {
+            flex: 0 0 58.33333%;
+            max-width: 58.33333%;
+            align-items: flex-start !important;
+            text-align: left !important;
+        }
+        .hero-content .hero-actions {
+            justify-content: flex-start !important;
+        }
+        .hero-visual {
+            flex: 0 0 41.66667%;
+            max-width: 41.66667%;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            justify-content: center;
+        }
+
+        /* Blòk stats la vin yon gwo kad poukont li nan kolòn dwat la */
+        .hero-stats-box {
+            background: var(--glass, rgba(255,255,255,0.55));
+            backdrop-filter: blur(14px) saturate(150%);
+            -webkit-backdrop-filter: blur(14px) saturate(150%);
+            border: 1px solid var(--glass-brd, rgba(255,255,255,0.65));
+            border-radius: 24px;
+            padding: 2rem 1.5rem;
+            box-shadow: var(--glass-sh, 0 10px 34px rgba(30,41,89,0.12));
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .hero-stats-box .stat-item {
+            flex: none;
+            min-width: 0;
+            width: 100%;
+            padding: 1rem 1.25rem;
+            border-radius: 16px;
+            background: rgba(255,255,255,0.4);
+            border: 1px solid rgba(255,255,255,0.3);
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 1rem;
+            text-align: left;
+        }
+        .hero-stats-box .stat-number {
+            font-size: 1.8rem;
+            min-width: 70px;
+            text-align: left;
+        }
+        .hero-stats-box .stat-label {
+            text-align: left;
+            font-size: 0.95rem;
+        }
+    }
+
+    /* ============================================================
+       SOU MOBIL : stats yo rete anba tèks la (jan li te ye a)
+       ============================================================ */
+    @media (max-width: 991.98px) {
+        .hero-stats-mobile {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            width: 100%;
+            margin-top: 1.5rem;
+        }
+        .hero-stats-mobile .stat-item {
+            flex: 1 1 0;
+            min-width: 90px;
+            text-align: center;
+        }
+        .hero-stats-box { display: none; }
+    }
+    @media (min-width: 992px) {
+        .hero-stats-mobile { display: none; }
+    }
+
+    /* ============================================================
+       Cartes héro & features (centrage)
        ============================================================ */
     .feature-card {
         display: flex;
@@ -19,7 +107,6 @@
         justify-content: center;
         text-align: center;
     }
-
     .feature-icon-wrapper {
         display: flex;
         align-items: center;
@@ -27,13 +114,8 @@
         margin-left: auto;
         margin-right: auto;
     }
-
     .feature-card h3,
-    .feature-card p {
-        text-align: center;
-        width: 100%;
-    }
-
+    .feature-card p { text-align: center; width: 100%; }
     .feature-link {
         display: inline-flex;
         align-items: center;
@@ -41,9 +123,7 @@
         gap: 0.5rem;
     }
 
-    /* ============================================================
-       SECTION 2 : Headers (features + témoignages) centrés
-       ============================================================ */
+    /* Headers de section centrés */
     .features-section .section-header,
     .testimonials-section .section-header {
         display: flex;
@@ -55,7 +135,6 @@
         margin-left: auto;
         margin-right: auto;
     }
-
     .features-section .section-header h2,
     .features-section .section-header .section-tag,
     .testimonials-section .section-header h2,
@@ -64,35 +143,43 @@
         width: 100%;
     }
 
-    /* ============================================================
-       SECTION 3 : HERO — Desktop propre (2 colonnes)
-       ============================================================ */
-    /* Colonne gauche (texte) : aligné à gauche sur desktop */
-    @media (min-width: 992px) {
-        .hero-content {
-            align-items: flex-start !important;
-            text-align: left !important;
-        }
-        .hero-content .hero-actions,
-        .hero-content .hero-stats {
-            justify-content: flex-start !important;
-        }
-        .hero-content .hero-stats .stat-item {
-            text-align: left !important;
-        }
+    /* Boutons héro */
+    .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
     }
 
-    /* Colonne droite (cartes) : pleine largeur + alignées */
-    .hero-visual {
+    /* CTA */
+    .cta-section .cta-content {
         display: flex;
         flex-direction: column;
-        gap: 1rem;
-        align-items: stretch;
+        align-items: center;
         justify-content: center;
+        text-align: center;
         width: 100%;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    .cta-section .cta-content h2,
+    .cta-section .cta-content p,
+    .cta-section .cta-content .section-tag,
+    .cta-section .cta-content .cta-button { text-align: center; }
+    .cta-section .cta-content .cta-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-left: auto;
+        margin-right: auto;
     }
 
-    /* Chaque carte prend TOUTE la largeur de sa colonne */
+    /* Hero visual (cartes héro) */
     .hero-visual .hero-card {
         width: 100% !important;
         max-width: none !important;
@@ -102,10 +189,8 @@
         flex-direction: row !important;
         align-items: center !important;
         gap: 1rem !important;
-        animation: none; /* pas de float sur desktop pour un rendu pro */
+        animation: none;
     }
-
-    /* Icône : à gauche, taille fixe, fond dégradé */
     .hero-visual .hero-card .hero-card-icon {
         flex: 0 0 52px;
         width: 52px;
@@ -122,115 +207,15 @@
         font-size: 1.3rem !important;
         margin: 0 !important;
     }
-
-    /* Textes : alignés à gauche */
     .hero-visual .hero-card h3 {
         text-align: left !important;
         font-size: 1rem !important;
         margin: 0 0 0.15rem !important;
-        line-height: 1.3;
     }
     .hero-visual .hero-card p {
         text-align: left !important;
         font-size: 0.85rem !important;
         margin: 0 !important;
-        line-height: 1.4;
-    }
-
-    /* Empêche le h3 et le p de se mettre côte à côte avec l'icône */
-    .hero-visual .hero-card h3,
-    .hero-visual .hero-card p {
-        flex: 1 1 auto;
-        min-width: 0;
-    }
-    .hero-visual .hero-card h3 { order: 1; }
-    .hero-visual .hero-card p  { order: 2; flex-basis: 100%; }
-
-    /* Sur mobile : on cache la colonne visuelle (déjà le cas dans app.css) */
-    @media (max-width: 991.98px) {
-        .hero-visual .hero-card {
-            text-align: center !important;
-            flex-direction: column !important;
-        }
-        .hero-visual .hero-card h3,
-        .hero-visual .hero-card p {
-            text-align: center !important;
-        }
-    }
-
-    /* ============================================================
-       SECTION 4 : STATS — blocs qui prennent l'espace
-       ============================================================ */
-    .hero-stats {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: stretch;
-        justify-content: center;
-        gap: 1rem;
-        width: 100%;
-        margin-top: 1.5rem;
-    }
-
-    .stat-item {
-        flex: 1 1 0;
-        min-width: 110px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        padding: 0.75rem 0.5rem;
-    }
-
-    .stat-item .stat-number,
-    .stat-item .stat-label {
-        display: block;
-        width: 100%;
-        text-align: center;
-    }
-
-    /* ============================================================
-       SECTION 5 : Boutons héro centrés
-       ============================================================ */
-    .hero-actions {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: center;
-        gap: 1rem;
-    }
-
-    /* ============================================================
-       SECTION 6 : CTA — contenu centré au milieu
-       ============================================================ */
-    .cta-section .cta-content {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        width: 100%;
-        max-width: 800px;
-        margin-left: auto;
-        margin-right: auto;
-        padding-left: 1rem;
-        padding-right: 1rem;
-    }
-
-    .cta-section .cta-content h2,
-    .cta-section .cta-content p,
-    .cta-section .cta-content .section-tag,
-    .cta-section .cta-content .cta-button {
-        text-align: center;
-    }
-
-    .cta-section .cta-content .cta-button {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        margin-left: auto;
-        margin-right: auto;
     }
 </style>
 {% endblock %}
@@ -239,6 +224,8 @@
 <div class="home-page">
     <section class="hero container-xxl" aria-labelledby="home-title">
         <div class="row g-4 align-items-center w-100">
+
+            {# ===== Kolòn goch : tèks + bouton + stats (mobile) ===== #}
             <div class="col-12 col-lg-7 hero-content">
                 <span class="hero-badge">
                     <i class="fas fa-book-open" aria-hidden="true"></i>
@@ -268,8 +255,10 @@
                     </a>
                     {% endif %}
                 </div>
+
+                {# Stats yo : parèt SÈLMAN sou mobil (anba tèks la) #}
                 {% if theme.stats_cours or theme.stats_etudiants or theme.stats_satisfaction %}
-                <div class="hero-stats" aria-label="{% trans 'Repères de la plateforme' %}">
+                <div class="hero-stats-mobile" aria-label="{% trans 'Repères de la plateforme' %}">
                     {% if theme.stats_cours %}
                     <div class="stat-item">
                         <span class="stat-number">{{ theme.stats_cours }}+</span>
@@ -291,27 +280,38 @@
                 </div>
                 {% endif %}
             </div>
-            <div class="col-12 col-lg-5 hero-visual" aria-label="{% trans 'Façons d’apprendre sur EducaDim' %}">
+
+            {# ===== Kolòn dwat : kad ak stats (desktop) oswa imaj (si genyen) ===== #}
+            <div class="col-12 col-lg-5 hero-visual" aria-label="{% trans 'Repères de la plateforme' %}">
+
                 {% if theme.get_hero_image %}
+                    {# Si gen yon imaj, montre l #}
                     <img src="{{ theme.get_hero_image }}" alt="{{ theme.hero_title }}" class="hero-main-image">
-                {% else %}
-                    <article class="hero-card">
-                        <div class="hero-card-icon"><i class="{{ theme.hero_card1_icon|default:'fas fa-book-reader' }}" aria-hidden="true"></i></div>
-                        <h3>{% blocktrans with title=theme.hero_card1_title|default:_("À votre rythme") %}{{ title }}{% endblocktrans %}</h3>
-                        <p>{% blocktrans with desc=theme.hero_card1_desc|default:_("Des leçons accessibles, où que vous soyez.") %}{{ desc }}{% endblocktrans %}</p>
-                    </article>
-                    <article class="hero-card">
-                        <div class="hero-card-icon"><i class="{{ theme.hero_card2_icon|default:'fas fa-language' }}" aria-hidden="true"></i></div>
-                        <h3>{% blocktrans with title=theme.hero_card2_title|default:_("Français et kreyòl") %}{{ title }}{% endblocktrans %}</h3>
-                        <p>{% blocktrans with desc=theme.hero_card2_desc|default:_("Choisissez la langue qui vous accompagne.") %}{{ desc }}{% endblocktrans %}</p>
-                    </article>
-                    <article class="hero-card">
-                        <div class="hero-card-icon"><i class="{{ theme.hero_card3_icon|default:'fas fa-chart-line' }}" aria-hidden="true"></i></div>
-                        <h3>{% blocktrans with title=theme.hero_card3_title|default:_("Quiz et progression") %}{{ title }}{% endblocktrans %}</h3>
-                        <p>{% blocktrans with desc=theme.hero_card3_desc|default:_("Pratiquez, puis voyez le chemin parcouru.") %}{{ desc }}{% endblocktrans %}</p>
-                    </article>
+                {% elif theme.stats_cours or theme.stats_etudiants or theme.stats_satisfaction %}
+                    {# Sinon, montre kad stats yo (sou desktop sèlman) #}
+                    <div class="hero-stats-box" aria-hidden="true">
+                        {% if theme.stats_cours %}
+                        <div class="stat-item">
+                            <span class="stat-number">{{ theme.stats_cours }}+</span>
+                            <span class="stat-label">{% trans "Cours" %}</span>
+                        </div>
+                        {% endif %}
+                        {% if theme.stats_etudiants %}
+                        <div class="stat-item">
+                            <span class="stat-number">{{ theme.stats_etudiants }}+</span>
+                            <span class="stat-label">{% trans "Apprenants" %}</span>
+                        </div>
+                        {% endif %}
+                        {% if theme.stats_satisfaction %}
+                        <div class="stat-item">
+                            <span class="stat-number">{{ theme.stats_satisfaction }}%</span>
+                            <span class="stat-label">{% trans "Satisfaction" %}</span>
+                        </div>
+                        {% endif %}
+                    </div>
                 {% endif %}
             </div>
+
         </div>
     </section>
 
@@ -361,7 +361,6 @@
         </div>
     </section>
 
-    {# ===== SECTION TÉMOIGNAGES ===== #}
     {% if theme.testimonial1_text or theme.testimonial2_text %}
     <section class="testimonials-section" aria-labelledby="testimonials-title">
         <div class="section-header">
