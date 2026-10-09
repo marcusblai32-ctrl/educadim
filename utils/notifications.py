@@ -3,569 +3,599 @@ import logging
 import sib_api_v3_sdk
 from sib_api_v3_sdk.rest import ApiException
 
+logger = logging.getLogger(name)
+
+try:
+# SDK Telerivet a ekspoze klas la kòm telerivet.API
+from telerivet import API as APIClient
+except ImportError:
+APIClient = None
+
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+from django.urls import reverse
+from django.utils import timezone
 
-logger = logging.getLogger(__name__)
+============================================
 
-# Telerivet se opsyonèl. Si li pa enstale, imel yo ka toujou fonksyone.
-try:
-    from telerivet import API as APIClient
-except ImportError:
-    APIClient = None
+BREVO - EMAIL
 
+============================================
 
-def send_brevo_email(
-    subject,
-    to_email,
-    template_name=None,
-    context=None,
-    plain_message=None,
-):
-    """
-    Voye yon imel atravè Brevo.
+def send_brevo_email(to_email, subject, template_name, context=None, from_email=None):
+if context is None:
+context = {}
 
-    Ou ka itilize yon template HTML oswa yon mesaj tèks senp.
-    """
-    if not to_email:
-        logger.warning("Imel la pa voye: adrès moun k ap resevwa a manke.")
-        return False
+if not to_email:  
+    return {'success': False, 'error_code': 'missing_recipient', 'error': 'Recipient email is required.'}  
 
-    api_key = getattr(settings, "BREVO_API_KEY", None)
+if not settings.BREVO_API_KEY:  
+    logger.error("Brevo delivery skipped: BREVO_API_KEY is not configured.")  
+    return {  
+        'success': False,  
+        'error_code': 'brevo_not_configured',  
+        'error': 'Email delivery is not configured.',  
+    }  
 
-    if not api_key:
-        logger.error("BREVO_API_KEY pa defini nan settings yo.")
-        return False
+context.update({  
+    'site_name': settings.SITE_NAME,  
+    'site_url': settings.SITE_URL,  
+})  
 
-    context = context or {}
+try:  
+    configuration = sib_api_v3_sdk.Configuration()  
+    configuration.api_key['api-key'] = settings.BREVO_API_KEY  
 
-    try:
-        configuration = sib_api_v3_sdk.Configuration()
-        configuration.api_key["api-key"] = api_key
+    api_instance = sib_api_v3_sdk.TransactionalEmailsApi(  
+        sib_api_v3_sdk.ApiClient(configuration)  
+    )  
 
-        api_instance = sib_api_v3_sdk.TransactionalEmailsApi(
-            sib_api_v3_sdk.ApiClient(configuration)
-        )
+    sender = {  
+        "email": from_email or settings.BREVO_SENDER_EMAIL,  
+        "name": settings.BREVO_SENDER_NAME  
+    }  
 
-        sender_email = getattr(
-            settings,
-            "DEFAULT_FROM_EMAIL",
-            None,
-        )
+    recipient = [{"email": to_email}]  
 
-        sender_name = getattr(
-            settings,
-            "SITE_NAME",
-            "EducaDim",
-        )
+    html_content = render_to_string(f'emails/{template_name}', context)  
+    plain_text = strip_tags(html_content)  
 
-        if not sender_email:
-            logger.error("DEFAULT_FROM_EMAIL pa defini.")
-            return False
+    send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(  
+        to=recipient,  
+        sender=sender,  
+        subject=subject,  
+        html_content=html_content,  
+        text_content=plain_text  
+    )  
 
-        if template_name:
-            html_content = render_to_string(
-                f"emails/{template_name}",
-                context,
-            )
-            text_content = strip_tags(html_content)
-        else:
-            text_content = plain_message or ""
-            html_content = None
+    api_response = api_instance.send_transac_email(send_smtp_email)  
+    message_id = getattr(api_response, 'message_id', None)  
+    logger.info("Brevo email delivered template=%s message_id=%s", template_name, message_id)  
 
-        email = sib_api_v3_sdk.SendSmtpEmail(
-            to=[{"email": to_email}],
-            sender={
-                "email": sender_email,
-                "name": sender_name,
-            },
-            subject=subject,
-            text_content=text_content,
-            html_content=html_content,
-        )
+    return {  
+        'success': True,  
+        'message_id': message_id,  
+        'response': api_response  
+    }  
 
-        api_instance.send_transac_email(email)
+except ApiException as e:  
+    logger.exception("Brevo API delivery failed template=%s status=%s", template_name, getattr(e, 'status', None))  
+    return {  
+        'success': False,  
+        'error_code': 'brevo_api_error',  
+        'error': 'Email provider rejected the message.',  
+    }  
+except Exception as e:  
+    logger.exception("Brevo email delivery failed template=%s", template_name)  
+    return {  
+        'success': False,  
+        'error_code': 'brevo_delivery_error',  
+        'error': 'Email delivery failed.',  
+    }
 
-        logger.info("Imel voye avèk siksè bay %s", to_email)
-        return True
+============================================
 
-    except ApiException as exc:
-        logger.exception("Erè Brevo pandan voye imel la: %s", exc)
-        return False
+TELERIVET - SMS
 
-    except Exception as exc:
-        logger.exception("Erè pandan voye imel la: %s", exc)
-        return False
+============================================
 
+def normalize_phone_number(raw, default_country_code='509'):
+"""
+Mete nimewo a nan fòma entènasyonal (+509XXXXXXXX pou Ayiti).
+Aksepte: '37 12 3456', '509 3712 3456', '+50937123456', '0050937123456'.
+Retounen None si nimewo a pa valid.
+"""
+if not raw:
+return None
+raw = str(raw).strip()
+digits = ''.join(ch for ch in raw if ch.isdigit())
+if not digits:
+return None
+if raw.startswith('+'):
+number = digits
+elif digits.startswith('00'):
+number = digits[2:]
+elif len(digits) == 8:
+number = default_country_code + digits
+else:
+number = digits
+if not (8 <= len(number) <= 15):
+return None
+return '+' + number
 
-def normalize_phone_number(phone_number):
-    """
-    Netwaye nimewo telefòn nan san nou pa devine kòd peyi a.
-    """
-    if not phone_number:
-        return None
+def get_sms_number(user, source=None):
+"""
+Jwenn nimewo SMS pou itilizatè a:
+1. user.phone_number (pwofil)  — souvan vid, paske pa gen fòm ki mande l
+2. source.telephone (nimewo peman an sou Enrollment/Subscription la)
+Retounen nimewo fòma entènasyonal la, oswa None si pa gen okenn nimewo valid.
+"""
+for candidate in (getattr(user, 'phone_number', None), getattr(source, 'telephone', None)):
+number = normalize_phone_number(candidate)
+if number:
+return number
+return None
 
-    phone_number = str(phone_number).strip()
+def send_telerivet_sms(to_number, message_text):
+if not to_number:
+return {'success': False, 'error_code': 'missing_recipient', 'error': 'Recipient phone number is required.'}
 
-    # Konsève siy + la si li prezan, epi retire lòt karaktè
-    # ki pa chif.
-    has_plus = phone_number.startswith("+")
-    digits = "".join(
-        character
-        for character in phone_number
-        if character.isdigit()
-    )
+if not settings.TELERIVET_API_KEY or not settings.TELERIVET_PROJECT_ID:  
+    logger.error("Telerivet delivery skipped: required settings are not configured.")  
+    return {  
+        'success': False,  
+        'error_code': 'telerivet_not_configured',  
+        'error': 'SMS delivery is not configured.',  
+    }  
 
-    if not digits:
-        return None
+if APIClient is None:  
+    logger.error("Telerivet delivery skipped: SDK is not installed.")  
+    return {  
+        'success': False,  
+        'error_code': 'telerivet_sdk_missing',  
+        'error': 'SMS delivery is unavailable.',  
+    }  
 
-    if has_plus:
-        return f"+{digits}"
+try:  
+    client = APIClient(settings.TELERIVET_API_KEY)  
+    project = client.init_project_by_id(settings.TELERIVET_PROJECT_ID)  
 
-    return digits
+    to_number = normalize_phone_number(to_number)  
+    if not to_number:  
+        return {'success': False, 'error_code': 'invalid_phone_number', 'error': 'Invalid phone number.'}  
 
+    result = project.send_message(  
+        to_number=to_number,  
+        content=message_text  
+    )  
+    message_id = getattr(result, 'id', None)  
+    logger.info("Telerivet SMS delivered message_id=%s", message_id)  
 
-def get_sms_number():
-    """
-    Retounen nimewo Telerivet ki defini nan Django settings yo.
-    """
-    return (
-        getattr(settings, "TELERIVET_PHONE_ID", None)
-        or getattr(settings, "TELERIVET_NUMBER_ID", None)
-    )
+    return {  
+        'success': True,  
+        'message_id': message_id,  
+        'response': result  
+    }  
 
+except Exception as e:  
+    logger.exception("Telerivet SMS delivery failed")  
+    return {  
+        'success': False,  
+        'error_code': 'telerivet_delivery_error',  
+        'error': 'SMS delivery failed.',  
+    }
 
-def send_telerivet_sms(phone_number, message):
-    """
-    Voye yon SMS atravè Telerivet.
+============================================
 
-    Asire w Telerivet enstale epi varyab anviwònman yo defini.
-    """
-    if not APIClient:
-        logger.warning(
-            "Telerivet pa disponib. Verifye depandans telerivet la."
-        )
-        return False
+FONKSYON POU JWENN NON ITILIZATÈ
 
-    api_key = getattr(settings, "TELERIVET_API_KEY", None)
-    project_id = getattr(settings, "TELERIVET_PROJECT_ID", None)
-
-    normalized_number = normalize_phone_number(phone_number)
-
-    if not api_key or not project_id:
-        logger.error(
-            "TELERIVET_API_KEY oswa TELERIVET_PROJECT_ID manke."
-        )
-        return False
-
-    if not normalized_number:
-        logger.warning("SMS la pa voye: nimewo telefòn nan pa valab.")
-        return False
-
-    if not message:
-        logger.warning("SMS la pa voye: mesaj la vid.")
-        return False
-
-    try:
-        client = APIClient(api_key)
-        project = client.initProjectById(project_id)
-
-        project.sendMessage(
-            to_number=normalized_number,
-            content=message,
-        )
-
-        logger.info("SMS voye avèk siksè bay %s", normalized_number)
-        return True
-
-    except Exception as exc:
-        logger.exception("Erè Telerivet pandan voye SMS la: %s", exc)
-        return False
-
+============================================
 
 def get_user_full_name(user):
-    """
-    Retounen non konplè itilizatè a.
-    """
-    if not user:
-        return ""
+return user.get_full_name() or user.first_name or user.email
 
-    full_name = ""
+def get_user_first_name(user):
+return user.first_name or user.email.split('@')[0]
 
-    if hasattr(user, "get_full_name"):
-        full_name = user.get_full_name()
+def get_user_display_name(user):
+return user.get_full_name() or user.first_name or user.email
 
-    if full_name:
-        return full_name.strip()
+============================================
 
-    return (
-        getattr(user, "first_name", "")
-        or getattr(user, "username", "")
-        or getattr(user, "email", "")
-        or ""
-    )
+1. NOTIFIKASYON POU ENSKRIPSYON (Enrollment)
 
+============================================
 
-def get_user_email(user):
-    """
-    Retounen adrès imel itilizatè a.
-    """
-    if not user:
-        return None
+def send_enrollment_confirmation_email(user, enrollment, course_details=None):
+if course_details is None:
+course_details = {}
 
-    return getattr(user, "email", None)
+course_name = enrollment.cours.get_titre()  
+subject = f"Inscription confirmée - {course_name}"  
 
+context = {  
+    'user': user,  
+    'first_name': get_user_first_name(user),  
+    'full_name': get_user_full_name(user),  
+    'email': user.email,  
+    'username': user.email,  
+    'user_id': user.user_id,  
+    'enrollment': enrollment,  
+    'course_name': course_name,  
+    'course_link': course_details.get('course_link', ''),  
+    'course_id': enrollment.cours.pk,  
+    'instructor': enrollment.cours.instructor.get_full_name() if hasattr(enrollment.cours, 'instructor') and enrollment.cours.instructor else 'Notre équipe',  
+    'start_date': enrollment.cours.start_date.strftime('%d/%m/%Y') if hasattr(enrollment.cours, 'start_date') and enrollment.cours.start_date else 'Immédiat',  
+    'enrollment_date': enrollment.date_demande.strftime('%d/%m/%Y à %H:%M'),  
+    'status': enrollment.get_statut_display(),  
+    'payment_method': enrollment.get_methode_paiement_display(),  
+    'is_paid': enrollment.methode_paiement not in ['manual', 'subscription'] and enrollment.methode_paiement != '',  
+}  
 
-def get_user_phone(user):
-    """
-    Chèche nimewo telefòn itilizatè a sou kèk non chan komen.
-    """
-    if not user:
-        return None
+if enrollment.methode_paiement == 'subscription':  
+    template_name = 'enrollment_subscription.html'  
+elif enrollment.methode_paiement in ['moncash', 'natcash']:  
+    template_name = 'enrollment_paid.html'  
+else:  
+    template_name = 'enrollment_free.html'  
 
-    possible_fields = (
-        "phone_number",
-        "telephone",
-        "phone",
-        "numero_telephone",
-    )
+return send_brevo_email(  
+    to_email=user.email,  
+    subject=subject,  
+    template_name=template_name,  
+    context=context  
+)
 
-    for field_name in possible_fields:
-        value = getattr(user, field_name, None)
+def send_enrollment_confirmation_sms(user, enrollment):
+first_name = get_user_first_name(user)
+course_name = enrollment.cours.get_titre()
 
-        if value:
-            return normalize_phone_number(value)
+if enrollment.methode_paiement == 'subscription':  
+    message = f"{settings.SITE_NAME}: {first_name}, votre abonnement vous donne accès à {course_name}. Bon apprentissage!"  
+elif enrollment.methode_paiement in ['moncash', 'natcash']:  
+    message = f"{settings.SITE_NAME}: {first_name}, inscription confirmée pour {course_name}. Paiement reçu. Merci!"  
+else:  
+    message = f"{settings.SITE_NAME}: {first_name}, inscription confirmée pour {course_name}. Bon apprentissage!"  
 
-    return None
+return send_telerivet_sms(  
+    to_number=get_sms_number(user, enrollment),  
+    message_text=message  
+)
 
+def send_enrollment_confirmation(user, enrollment, course_details=None, send_email=True, send_sms=False):
+results = {}
 
-def send_user_notification(
-    user,
-    subject,
-    message,
-    template_name=None,
-    context=None,
-    send_email=True,
-    send_sms=False,
-):
-    """
-    Voye notifikasyon bay yon itilizatè pa imel, SMS, oswa toude.
+if send_email and user.email:  
+    results['email'] = send_enrollment_confirmation_email(user, enrollment, course_details)  
 
-    Fonksyon an retounen True si omwen youn nan metòd yo reyisi.
-    """
-    if not user:
-        logger.warning("Notifikasyon an pa voye: itilizatè a manke.")
-        return False
+if send_sms and get_sms_number(user, enrollment):  
+    results['sms'] = send_enrollment_confirmation_sms(user, enrollment)  
 
-    context = context or {}
-    context.setdefault("user", user)
-    context.setdefault("user_name", get_user_full_name(user))
-    context.setdefault("subject", subject)
-    context.setdefault("message", message)
+return results
 
-    success = False
+============================================
 
-    if send_email:
-        email_address = get_user_email(user)
+2. NOTIFIKASYON POU APROBA ENSKRIPSYON
 
-        if email_address:
-            email_success = send_brevo_email(
-                subject=subject,
-                to_email=email_address,
-                template_name=template_name,
-                context=context,
-                plain_message=message,
-            )
+============================================
 
-            success = success or email_success
+def send_enrollment_approved_email(user, enrollment, admin_note=None):
+course_name = enrollment.cours.get_titre()
+subject = f"Inscription approuvée - {course_name}"
 
-    if send_sms:
-        phone_number = get_user_phone(user)
+context = {  
+    'user': user,  
+    'first_name': get_user_first_name(user),  
+    'full_name': get_user_full_name(user),  
+    'email': user.email,  
+    'username': user.email,  
+    'user_id': user.user_id,  
+    'enrollment': enrollment,  
+    'course_name': course_name,  
+    'course_link': '',  
+    'instructor': enrollment.cours.instructor.get_full_name() if hasattr(enrollment.cours, 'instructor') and enrollment.cours.instructor else 'Notre équipe',  
+    'start_date': enrollment.cours.start_date.strftime('%d/%m/%Y') if hasattr(enrollment.cours, 'start_date') and enrollment.cours.start_date else 'Immédiat',  
+    'enrollment_date': enrollment.date_demande.strftime('%d/%m/%Y à %H:%M'),  
+    'verification_date': enrollment.date_verification.strftime('%d/%m/%Y à %H:%M') if enrollment.date_verification else '',  
+    'verified_by': enrollment.verifie_par.get_full_name() if enrollment.verifie_par else 'Admin',  
+    'admin_note': admin_note or enrollment.note_admin,  
+    'payment_method': enrollment.get_methode_paiement_display(),  
+    'is_paid': enrollment.methode_paiement not in ['manual', 'subscription'] and enrollment.methode_paiement != '',  
+}  
 
-        if phone_number:
-            sms_success = send_telerivet_sms(
-                phone_number=phone_number,
-                message=message,
-            )
+return send_brevo_email(  
+    to_email=user.email,  
+    subject=subject,  
+    template_name='enrollment_approved.html',  
+    context=context  
+)
 
-            success = success or sms_success
+def send_enrollment_approved_sms(user, enrollment):
+first_name = get_user_first_name(user)
+course_name = enrollment.cours.get_titre()
+message = f"{settings.SITE_NAME}: {first_name}, votre inscription pour {course_name} a été approuvée. Accédez au cours maintenant!"
+return send_telerivet_sms(
+to_number=get_sms_number(user, enrollment),
+message_text=message
+)
 
-    return success
+def send_enrollment_approved(user, enrollment, admin_note=None, send_email=True, send_sms=False):
+results = {}
 
+if send_email and user.email:  
+    results['email'] = send_enrollment_approved_email(user, enrollment, admin_note)  
 
-# ---------------------------------------------------------
-# ENROLLMENT: ENSKRIPSYON NAN YON KOU
-# ---------------------------------------------------------
+if send_sms and get_sms_number(user, enrollment):  
+    results['sms'] = send_enrollment_approved_sms(user, enrollment)  
 
-def send_enrollment_confirmation_email(user, course):
-    """
-    Konfime resepsyon demann enskripsyon yon elèv.
-    """
-    user_name = get_user_full_name(user)
-    course_title = getattr(course, "titre_ht", None) or str(course)
+return results
 
-    context = {
-        "user": user,
-        "user_name": user_name,
-        "course": course,
-        "course_title": course_title,
-    }
+============================================
 
-    return send_user_notification(
-        user=user,
-        subject="Konfimasyon enskripsyon — EducaDim",
-        message=(
-            f"Bonjou {user_name}, nou resevwa demann enskripsyon ou "
-            f"pou kou {course_title}. N ap enfòme w sou pwochen etap yo."
-        ),
-        template_name="enrollment_confirmation.html",
-        context=context,
-        send_email=True,
-        send_sms=False,
-    )
+3. NOTIFIKASYON POU REJEKSYON ENSKRIPSYON
 
+============================================
 
-def send_enrollment_approved_email(user, course):
-    """
-    Enfòme elèv la yo apwouve enskripsyon li.
-    """
-    user_name = get_user_full_name(user)
-    course_title = getattr(course, "titre_ht", None) or str(course)
+def send_enrollment_rejected_email(user, enrollment, admin_note=None):
+course_name = enrollment.cours.get_titre()
+subject = f"Inscription refusée - {course_name}"
 
-    context = {
-        "user": user,
-        "user_name": user_name,
-        "course": course,
-        "course_title": course_title,
-    }
+context = {  
+    'user': user,  
+    'first_name': get_user_first_name(user),  
+    'full_name': get_user_full_name(user),  
+    'email': user.email,  
+    'username': user.email,  
+    'user_id': user.user_id,  
+    'enrollment': enrollment,  
+    'course_name': course_name,  
+    'enrollment_date': enrollment.date_demande.strftime('%d/%m/%Y à %H:%M'),  
+    'verification_date': enrollment.date_verification.strftime('%d/%m/%Y à %H:%M') if enrollment.date_verification else '',  
+    'verified_by': enrollment.verifie_par.get_full_name() if enrollment.verifie_par else 'Admin',  
+    'admin_note': admin_note or enrollment.note_admin or 'Veuillez vérifier vos informations et réessayer.',  
+    'payment_method': enrollment.get_methode_paiement_display(),  
+}  
 
-    return send_user_notification(
-        user=user,
-        subject="Enskripsyon ou apwouve — EducaDim",
-        message=(
-            f"Bonjou {user_name}, enskripsyon ou nan kou "
-            f"{course_title} apwouve. Ou kapab konekte sou EducaDim "
-            "pou jwenn aksè ak kou a."
-        ),
-        template_name="enrollment_approved.html",
-        context=context,
-        send_email=True,
-        send_sms=False,
-    )
+return send_brevo_email(  
+    to_email=user.email,  
+    subject=subject,  
+    template_name='enrollment_rejected.html',  
+    context=context  
+)
 
+def send_enrollment_rejected_sms(user, enrollment):
+first_name = get_user_first_name(user)
+course_name = enrollment.cours.get_titre()
+message = f"{settings.SITE_NAME}: {first_name}, votre inscription pour {course_name} a été refusée. Consultez vos emails pour plus d'informations."
+return send_telerivet_sms(
+to_number=get_sms_number(user, enrollment),
+message_text=message
+)
 
-def send_enrollment_rejected_email(user, course, reason=None):
-    """
-    Enfòme elèv la yo pa apwouve enskripsyon li.
-    """
-    user_name = get_user_full_name(user)
-    course_title = getattr(course, "titre_ht", None) or str(course)
+def send_enrollment_rejected(user, enrollment, admin_note=None, send_email=True, send_sms=False):
+results = {}
 
-    context = {
-        "user": user,
-        "user_name": user_name,
-        "course": course,
-        "course_title": course_title,
-        "reason": reason or "",
-    }
+if send_email and user.email:  
+    results['email'] = send_enrollment_rejected_email(user, enrollment, admin_note)  
 
-    message = (
-        f"Bonjou {user_name}, demann enskripsyon ou pou kou "
-        f"{course_title} pa apwouve pou kounye a."
-    )
+if send_sms and get_sms_number(user, enrollment):  
+    results['sms'] = send_enrollment_rejected_sms(user, enrollment)  
 
-    if reason:
-        message += f" Rezon: {reason}"
+return results
 
-    return send_user_notification(
-        user=user,
-        subject="Enskripsyon — EducaDim",
-        message=message,
-        template_name="enrollment_rejected.html",
-        context=context,
-        send_email=True,
-        send_sms=False,
-    )
+============================================
 
+4. NOTIFIKASYON POU ABONNMAN (Subscription)
 
-# ---------------------------------------------------------
-# SUBSCRIPTION: ABÒNMAN
-# ---------------------------------------------------------
+============================================
 
-def send_subscription_confirmation_email(user, subscription=None):
-    """
-    Konfime resepsyon yon demann abònman.
-    """
-    user_name = get_user_full_name(user)
+def send_subscription_confirmation_email(user, subscription):
+subject = f"Abonnement confirmé - {subscription.plan.nom}"
 
-    context = {
-        "user": user,
-        "user_name": user_name,
-        "subscription": subscription,
-    }
+context = {  
+    'user': user,  
+    'first_name': get_user_first_name(user),  
+    'full_name': get_user_full_name(user),  
+    'email': user.email,  
+    'username': user.email,  
+    'user_id': user.user_id,  
+    'subscription': subscription,  
+    'plan_name': subscription.plan.nom,  
+    'plan_description': subscription.plan.description,  
+    'plan_price': subscription.plan.prix,  
+    'plan_duration': subscription.plan.duree_jours,  
+    'start_date': subscription.date_debut.strftime('%d/%m/%Y') if subscription.date_debut else 'En attente',  
+    'end_date': subscription.date_fin.strftime('%d/%m/%Y') if subscription.date_fin else 'Non spécifiée',  
+    'status': subscription.get_statut_display(),  
+    'payment_method': subscription.get_methode_paiement_display(),  
+    'courses': subscription.plan.cours.all(),  
+}  
 
-    return send_user_notification(
-        user=user,
-        subject="Konfimasyon demann abònman — EducaDim",
-        message=(
-            f"Bonjou {user_name}, nou resevwa demann abònman ou "
-            "an. N ap enfòme w lè gen yon mizajou."
-        ),
-        template_name="subscription_confirmation.html",
-        context=context,
-        send_email=True,
-        send_sms=False,
-    )
+return send_brevo_email(  
+    to_email=user.email,  
+    subject=subject,  
+    template_name='subscription_confirmed.html',  
+    context=context  
+)
 
+def send_subscription_confirmation_sms(user, subscription):
+first_name = get_user_first_name(user)
+plan_name = subscription.plan.nom
+message = f"{settings.SITE_NAME}: {first_name}, votre abonnement {plan_name} est confirmé. Profitez de vos cours!"
+return send_telerivet_sms(
+to_number=get_sms_number(user, subscription),
+message_text=message
+)
 
-def send_subscription_approved_email(user, subscription=None):
-    """
-    Enfòme itilizatè a abònman li apwouve.
-    """
-    user_name = get_user_full_name(user)
+def send_subscription_confirmation(user, subscription, send_email=True, send_sms=False):
+results = {}
 
-    context = {
-        "user": user,
-        "user_name": user_name,
-        "subscription": subscription,
-    }
+if send_email and user.email:  
+    results['email'] = send_subscription_confirmation_email(user, subscription)  
 
-    return send_user_notification(
-        user=user,
-        subject="Abònman ou apwouve — EducaDim",
-        message=(
-            f"Bonjou {user_name}, abònman ou apwouve. "
-            "Ou kapab konekte sou EducaDim pou jwenn aksè "
-            "ak sèvis ki disponib pou kont ou."
-        ),
-        template_name="subscription_approved.html",
-        context=context,
-        send_email=True,
-        send_sms=False,
-    )
+if send_sms and get_sms_number(user, subscription):  
+    results['sms'] = send_subscription_confirmation_sms(user, subscription)  
 
+return results
 
-# ---------------------------------------------------------
-# PASSWORD RESET: REYINITIALIZASYON MODPAS
-# ---------------------------------------------------------
+============================================
+
+5. NOTIFIKASYON POU APROBA ABONNMAN
+
+============================================
+
+def send_subscription_approved_email(user, subscription, admin_note=None):
+subject = f"Abonnement approuvé - {subscription.plan.nom}"
+
+context = {  
+    'user': user,  
+    'first_name': get_user_first_name(user),  
+    'full_name': get_user_full_name(user),  
+    'email': user.email,  
+    'username': user.email,  
+    'user_id': user.user_id,  
+    'subscription': subscription,  
+    'plan_name': subscription.plan.nom,  
+    'plan_description': subscription.plan.description,  
+    'plan_price': subscription.plan.prix,  
+    'plan_duration': subscription.plan.duree_jours,  
+    'start_date': subscription.date_debut.strftime('%d/%m/%Y') if subscription.date_debut else 'Aujourd\'hui',  
+    'end_date': subscription.date_fin.strftime('%d/%m/%Y') if subscription.date_fin else 'Non spécifiée',  
+    'status': subscription.get_statut_display(),  
+    'payment_method': subscription.get_methode_paiement_display(),  
+    'verification_date': subscription.date_verification.strftime('%d/%m/%Y à %H:%M') if subscription.date_verification else '',  
+    'verified_by': subscription.verifie_par.get_full_name() if subscription.verifie_par else 'Admin',  
+    'admin_note': admin_note or subscription.note_admin,  
+    'courses': subscription.plan.cours.all(),  
+}  
+
+return send_brevo_email(  
+    to_email=user.email,  
+    subject=subject,  
+    template_name='subscription_approved.html',  
+    context=context  
+)
+
+def send_subscription_approved_sms(user, subscription):
+first_name = get_user_first_name(user)
+plan_name = subscription.plan.nom
+message = f"{settings.SITE_NAME}: {first_name}, votre abonnement {plan_name} a été approuvé. Commencez à apprendre!"
+return send_telerivet_sms(
+to_number=get_sms_number(user, subscription),
+message_text=message
+)
+
+def send_subscription_approved(user, subscription, admin_note=None, send_email=True, send_sms=False):
+results = {}
+
+if send_email and user.email:  
+    results['email'] = send_subscription_approved_email(user, subscription, admin_note)  
+
+if send_sms and get_sms_number(user, subscription):  
+    results['sms'] = send_subscription_approved_sms(user, subscription)  
+
+return results
+
+============================================
+
+6. REYINISYALIZE MODPAS
+
+============================================
 
 def send_password_reset_email(user, reset_link):
-    """
-    Voye imel ki gen lyen pou reyinisyalize modpas la.
-
-    Template a dwe egziste nan:
-    templates/emails/password_reset_email.html
-    """
-    user_name = get_user_full_name(user)
-
-    context = {
-        "user": user,
-        "user_name": user_name,
-        "reset_link": reset_link,
-    }
-
-    return send_user_notification(
-        user=user,
-        subject="Reyinisyalize modpas ou — EducaDim",
-        message=(
-            f"Bonjou {user_name}, sèvi ak lyen sa a pou "
-            f"reyinisyalize modpas ou: {reset_link}"
-        ),
-        template_name="password_reset_email.html",
-        context=context,
-        send_email=True,
-        send_sms=False,
-    )
-
+subject = f"Réinitialisation de votre mot de passe - {settings.SITE_NAME}"
+context = {
+'user': user,
+'reset_link': reset_link,
+'first_name': get_user_first_name(user),
+'full_name': get_user_full_name(user),
+'email': user.email,
+'username': user.email,
+'user_id': user.user_id,
+}
+return send_brevo_email(
+to_email=user.email,
+subject=subject,
+template_name='password_reset.html',
+context=context
+)
 
 def send_password_reset_sms(user, reset_link):
-    """
-    Voye yon SMS ki bay lyen reyinisyalizasyon an.
-    """
-    user_name = get_user_full_name(user)
-    phone_number = get_user_phone(user)
+first_name = get_user_first_name(user)
+message = f"{settings.SITE_NAME}: {first_name}, réinitialisez votre mot de passe ici: {reset_link}"
+return send_telerivet_sms(
+to_number=get_sms_number(user),
+message_text=message
+)
 
-    if not phone_number:
-        logger.warning(
-            "Pa gen nimewo telefòn pou reyinisyalizasyon modpas la."
-        )
-        return False
+def send_password_reset(user, reset_link, send_email=True, send_sms=False):
+results = {}
 
-    message = (
-        f"Bonjou {user_name}, itilize lyen sa a pou "
-        f"reyinisyalize modpas EducaDim ou: {reset_link}"
-    )
+if send_email and user.email:  
+    results['email'] = send_password_reset_email(user, reset_link)  
 
-    return send_telerivet_sms(phone_number, message)
+if send_sms and get_sms_number(user):  
+    results['sms'] = send_password_reset_sms(user, reset_link)  
 
+return results
 
-# ---------------------------------------------------------
-# NOTIFIKASYON JENERIK
-# ---------------------------------------------------------
+============================================
 
-def send_notification_email(
-    user,
-    subject,
-    message,
-    template_name=None,
-    context=None,
-):
-    """
-    Voye yon notifikasyon imel jeneral.
-    """
-    return send_user_notification(
-        user=user,
-        subject=subject,
-        message=message,
-        template_name=template_name,
-        context=context,
-        send_email=True,
-        send_sms=False,
-    )
+7. NOTIFIKASYON JENERAL
 
+============================================
+
+def send_notification_email(user, subject, message, link=None):
+context = {
+'user': user,
+'first_name': get_user_first_name(user),
+'full_name': get_user_full_name(user),
+'email': user.email,
+'username': user.email,
+'user_id': user.user_id,
+'message': message,
+'link': link,
+}
+return send_brevo_email(
+to_email=user.email,
+subject=subject,
+template_name='notification.html',
+context=context
+)
 
 def send_notification_sms(user, message):
-    """
-    Voye yon notifikasyon SMS jeneral.
-    """
-    phone_number = get_user_phone(user)
+first_name = get_user_first_name(user)
+sms_message = f"{settings.SITE_NAME}: {first_name}, {message}"
+return send_telerivet_sms(
+to_number=get_sms_number(user),
+message_text=sms_message
+)
 
-    if not phone_number:
-        logger.warning(
-            "Pa gen nimewo telefòn pou notifikasyon SMS la."
-        )
-        return False
+def send_notification(user, subject, message, link=None, send_email=True, send_sms=False):
+results = {}
 
-    return send_telerivet_sms(phone_number, message)
+if send_email and user.email:  
+    results['email'] = send_notification_email(user, subject, message, link)  
 
+if send_sms and get_sms_number(user):  
+    results['sms'] = send_notification_sms(user, message)  
 
-def notify_safely(
-    user,
-    subject,
-    message,
-    template_name=None,
-    context=None,
-    send_email=True,
-    send_sms=False,
-):
-    """
-    Eseye voye notifikasyon an san yon erè notifikasyon
-    pa fè aplikasyon an sispann fonksyone.
-    """
-    try:
-        return send_user_notification(
-            user=user,
-            subject=subject,
-            message=message,
-            template_name=template_name,
-            context=context,
-            send_email=send_email,
-            send_sms=send_sms,
-        )
+return results
 
-    except Exception:
-        logger.exception(
-            "Erè inatandi pandan voye notifikasyon pou itilizatè a."
-        )
-        return False
+============================================
+
+ITILITE: ANVWAYE SAN KASE FLOW PRENSIPAL LA
+
+============================================
+
+def notify_safely(func, *args, *kwargs):
+"""
+Rele yon fonksyon send_ san janm kite yon erè email/SMS kase aprobasyon an.
+Retounen rezilta a, oswa {} si gen erè (li anrejistre nan log).
+"""
+try:
+return func(*args, **kwargs)
+except Exception:
+logger.exception("Notification failed func=%s", getattr(func, 'name', func))
+return {}
