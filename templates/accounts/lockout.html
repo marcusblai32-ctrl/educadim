@@ -1,8 +1,65 @@
-{% extends 'base.html' %} {% load i18n %} {% block title %}{% trans "Compte temporairement bloqué" %} - {{ theme.site_name }}{% endblock %} {% block meta_robots %}{% endblock %} {% block content %}
-{% trans "Compte temporairement bloqué" %}
-{% blocktrans %}Trop de tentatives de connexion échouées. Réessayez dans environ 1 heure.{% endblocktrans %}
+{% extends 'base.html' %}
+{% load i18n %}
 
-{% trans "Si vous avez oublié votre mot de passe, vous pouvez le réinitialiser." %}
+{% block title %}{% trans "Compte temporairement bloqué" %} - {{ theme.site_name }}{% endblock %}
 
-{% trans "Mot de passe oublié ?" %}
+{% block meta_robots %}{% endblock %}
+
+{% block content %}
+<div class="container-xxl py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+
+            <div class="card border-0 shadow-sm text-center"
+                 style="border-radius: 20px; padding: 2.5rem 2rem; background: var(--glass, rgba(255,255,255,0.85)); backdrop-filter: blur(14px);">
+
+                {# ===== ICÔNE (cercle) ===== #}
+                <div class="mx-auto mb-4 d-flex align-items-center justify-content-center"
+                     style="width: 72px; height: 72px; border-radius: 50%;
+                            background: linear-gradient(135deg, #ef4444 0%, #f59e0b 100%);
+                            color: #fff; font-size: 1.8rem;">
+                    <i class="fas fa-lock" aria-hidden="true"></i>
+                </div>
+
+                {# ===== TITRE ===== #}
+                <h1 class="fw-bold mb-3" style="font-size: clamp(1.3rem, 3vw, 1.75rem); color: var(--text, #1a1a2e);">
+                    {% trans "Compte temporairement bloqué" %}
+                </h1>
+
+                {# ===== MESSAGE PRINCIPAL ===== #}
+                <p class="text-body-secondary mb-4" style="font-size: 1rem; line-height: 1.7;">
+                    {% blocktrans %}Trop de tentatives de connexion échouées. Réessayez dans environ 1 heure.{% endblocktrans %}
+                </p>
+
+                {# ===== SÉPARATEUR ===== #}
+                <hr class="my-4" style="border-color: var(--border, #e5e7eb);">
+
+                {# ===== MESSAGE SECONDAIRE ===== #}
+                <p class="text-body-secondary mb-4" style="font-size: 0.95rem; line-height: 1.7;">
+                    {% trans "Si vous avez oublié votre mot de passe, vous pouvez le réinitialiser." %}
+                </p>
+
+                {# ===== BOUTON ===== #}
+                <a href="{% url 'accounts:password_reset' %}"
+                   class="btn btn-primary btn-lg"
+                   style="border-radius: 12px; padding: 0.75rem 2rem; font-weight: 600;">
+                    <i class="fas fa-key me-2" aria-hidden="true"></i>
+                    {% trans "Mot de passe oublié ?" %}
+                </a>
+
+                {# ===== LIEN RETOUR ===== #}
+                <p class="mt-4 mb-0">
+                    <a href="{% url 'accounts:login' %}"
+                       class="text-decoration-none"
+                       style="color: var(--primary); font-size: 0.9rem;">
+                        <i class="fas fa-arrow-left me-1" aria-hidden="true"></i>
+                        {% trans "Retour à la connexion" %}
+                    </a>
+                </p>
+
+            </div>
+
+        </div>
+    </div>
+</div>
 {% endblock %}
