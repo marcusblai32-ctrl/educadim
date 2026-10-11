@@ -77,6 +77,16 @@ class CertificateWorkflowTests(TestCase):
         )
         self.assertEqual(self.client.get(url).status_code, 404)
 
+    @override_settings(DEBUG=False)
+    def test_unknown_qr_404_does_not_expose_debug_url_patterns(self):
+        url = reverse(
+            "certificates:verify",
+            kwargs={"public_id": "00000000-0000-4000-8000-000000000001"},
+        )
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
+        self.assertNotContains(response, "URLconf", status_code=404)
+
     def test_only_the_student_can_submit_name_corrections(self):
         other_student = CustomUser.objects.create_user(
             email="other@example.com",
