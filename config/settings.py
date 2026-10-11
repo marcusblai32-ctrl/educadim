@@ -292,6 +292,7 @@ INSTALLED_APPS = [
     "subscriptions.apps.SubscriptionsConfig",
     "dashboard.apps.DashboardConfig",
     "todo.apps.TodoConfig",
+    "certificates.apps.CertificatesConfig",
 ]
 
 

@@ -32,7 +32,7 @@ python manage.py collectstatic --noinput
 
 echo "[6/6] Aplike migrasyon database..."
 
-python manage.py migrate --noinput
+python manage.py migrate --noinput --run-syncdb
 
 echo "============================================"
 echo " BUILD FINI AVEC SUKSE!"
