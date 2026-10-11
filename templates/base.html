@@ -171,6 +171,7 @@
                                     <li><a class="dropdown-item" href="{% url 'enrollments:list' %}"><i class="fas fa-list-check"></i>{% trans "Inscriptions" %}</a></li>
                                     <li><a class="dropdown-item" href="{% url 'ranking:my_rank' %}"><i class="fas fa-trophy"></i>{% trans "Classement" %}</a></li>
                                     <li><a class="dropdown-item" href="{% url 'badges:my_badges' %}"><i class="fas fa-medal"></i>{% trans "Badges" %}</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'certificates:mine' %}"><i class="fas fa-award"></i>{% trans "Mes certificats" %}</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li>
                                         <form method="post" action="{% url 'accounts:logout' %}" id="logoutForm">

@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}Examiner le certificat — {{ site_name }}{% endblock %}
+
+{% block content %}
+<section class="container py-4" style="max-width: 940px;">
+    <a class="text-decoration-none small" href="{% url 'certificates:review_queue' %}"><i class="fas fa-arrow-left me-1"></i> Retour à la file</a>
+    <div class="my-3">
+        <p class="text-uppercase small fw-semibold text-secondary mb-1">Vérification par l'équipe</p>
+        <h1 class="h2 mb-2">{{ certificate.course.display_titre }}</h1>
+        <p class="text-secondary mb-0">Demande de {{ certificate.student.get_full_name|default:certificate.student.email }} · {{ certificate.student.email }}</p>
+    </div>
+
+    <div class="card border-0 shadow-sm mb-3">
+        <div class="card-body p-4">
+            <dl class="row mb-0">
+                <dt class="col-sm-4">Progression enregistrée</dt>
+                <dd class="col-sm-8">100 %</dd>
+                <dt class="col-sm-4">Fin du cours</dt>
+                <dd class="col-sm-8">{{ certificate.completed_at|date:"d/m/Y H:i" }}</dd>
+                <dt class="col-sm-4">Adresse destinataire</dt>
+                <dd class="col-sm-8">{{ certificate.student.email }}</dd>
+                <dt class="col-sm-4">Identifiant public</dt>
+                <dd class="col-sm-8"><code>{{ certificate.certificate_number }}</code></dd>
+                {% if certificate.student_note %}
+                <dt class="col-sm-4">Note de l'étudiant</dt>
+                <dd class="col-sm-8">{{ certificate.student_note|linebreaksbr }}</dd>
+                {% endif %}
+            </dl>
+        </div>
+    </div>
+
+    {% if certificate.status == "issued" %}
+    <div class="alert alert-success">Certificat délivré le {{ certificate.issued_at|date:"d/m/Y H:i" }}; e-mail envoyé le {{ certificate.email_sent_at|date:"d/m/Y H:i" }}.</div>
+    {% if revoke_form %}
+    <div class="card border-danger shadow-sm">
+        <div class="card-body p-4">
+            <h2 class="h5 text-danger">Révoquer ce certificat</h2>
+            <p class="small text-secondary">La page QR publique indiquera immédiatement que le certificat n'est plus valide.</p>
+            <form method="post">
+                {% csrf_token %}
+                {{ revoke_form.as_p }}
+                <button class="btn btn-danger" type="submit" name="decision" value="revoke">Révoquer le certificat</button>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+    {% else %}
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+            <h2 class="h5 mb-3">Décision</h2>
+            <p class="small text-secondary">Un PDF est créé et envoyé par e-mail uniquement après l'approbation. Le nom et les signataires choisis seront inclus dans ce PDF.</p>
+            {% if form.non_field_errors %}
+            <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+            {% endif %}
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    {{ form.student_name.label_tag }}
+                    {{ form.student_name }}
+                    {{ form.student_name.errors }}
+                </div>
+                <fieldset class="mb-3">
+                    <legend class="form-label">{{ form.signers.label }}</legend>
+                    {% if form.signers.field.queryset %}
+                        {{ form.signers }}
+                    {% else %}
+                        <p class="text-danger small mb-1">Aucun signataire actif. Ajoutez-en dans l'administration Django avant d'approuver.</p>
+                    {% endif %}
+                    {{ form.signers.errors }}
+                    <a class="small" href="{% url 'admin:certificates_certificatesigner_changelist' %}">Gérer les signatures dans l'administration</a>
+                </fieldset>
+                <div class="mb-3">
+                    {{ form.review_note.label_tag }}
+                    {{ form.review_note }}
+                    {{ form.review_note.errors }}
+                </div>
+                <fieldset class="mb-4">
+                    <legend class="form-label">{{ form.decision.label }}</legend>
+                    {{ form.decision }}
+                    {{ form.decision.errors }}
+                </fieldset>
+                <button class="btn btn-primary" type="submit"><i class="fas fa-check me-1"></i> Appliquer la décision</button>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

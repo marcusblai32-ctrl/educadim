@@ -89,6 +89,7 @@ urlpatterns += i18n_patterns(
     path("inscriptions/", include("enrollments.urls")),
     path("abonnements/", include("subscriptions.urls")),
     path("progression/", include("progress.urls")),
+    path("certificats/", include("certificates.urls")),
     path("todo/", include("todo.urls")),
     path("quiz/", include("quiz.urls")),
     path("presence/", include("attendance.urls")),

@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}Mes certificats — {{ site_name }}{% endblock %}
+
+{% block content %}
+<section class="container py-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+        <div>
+            <p class="text-uppercase small fw-semibold text-secondary mb-1">EducaDim</p>
+            <h1 class="h2 mb-2">Mes certificats</h1>
+            <p class="text-secondary mb-0">Vos certificats sont préparés après la vérification de vos informations par l'équipe.</p>
+        </div>
+        {% if user.is_staff %}
+        <a class="btn btn-primary" href="{% url 'certificates:review_queue' %}">
+            <i class="fas fa-clipboard-check me-1"></i> File de vérification
+        </a>
+        {% endif %}
+    </div>
+
+    {% if certificates %}
+    <div class="row g-3">
+        {% for certificate in certificates %}
+        <div class="col-12 col-xl-6">
+            <article class="card h-100 border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between gap-3 align-items-start">
+                        <div>
+                            <h2 class="h5 mb-1">{{ certificate.course.display_titre }}</h2>
+                            <p class="text-secondary small mb-3">Nom sur le certificat : {{ certificate.student_name }}</p>
+                        </div>
+                        {% if certificate.status == "issued" %}
+                        <span class="badge text-bg-success">Délivré</span>
+                        {% elif certificate.status == "correction" %}
+                        <span class="badge text-bg-warning">Correction demandée</span>
+                        {% elif certificate.status == "revoked" %}
+                        <span class="badge text-bg-danger">Révoqué</span>
+                        {% else %}
+                        <span class="badge text-bg-secondary">En vérification</span>
+                        {% endif %}
+                    </div>
+
+                    {% if certificate.review_note and certificate.status == "correction" %}
+                    <div class="alert alert-warning py-2">
+                        <strong>Message de l'équipe :</strong> {{ certificate.review_note }}
+                    </div>
+                    {% endif %}
+
+                    {% if certificate.status == "issued" %}
+                    <p class="small text-secondary mb-3">
+                        Délivré le {{ certificate.issued_at|date:"d/m/Y" }} · Nº {{ certificate.certificate_number }}
+                    </p>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a class="btn btn-primary" href="{% url 'certificates:download' certificate.public_id %}">
+                            <i class="fas fa-file-pdf me-1"></i> Télécharger le PDF
+                        </a>
+                        <a class="btn btn-outline-secondary" href="{% url 'certificates:verify' certificate.public_id %}">
+                            <i class="fas fa-qrcode me-1"></i> Vérifier
+                        </a>
+                    </div>
+                    {% elif certificate.status == "revoked" %}
+                    <p class="text-secondary small mb-0">Ce certificat n'est plus valide. Contactez l'équipe si vous pensez qu'il s'agit d'une erreur.</p>
+                    {% else %}
+                    <p class="small text-secondary">Progression du cours : 100 %. L'équipe vérifie le nom et les détails avant l'envoi du PDF.</p>
+                    <form method="post" action="{% url 'certificates:submit_details' certificate.public_id %}" class="border-top pt-3">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label" for="student-name-{{ certificate.public_id }}">Nom complet à imprimer</label>
+                            <input id="student-name-{{ certificate.public_id }}" class="form-control" type="text" name="student_name" maxlength="180" value="{{ certificate.student_name }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="student-note-{{ certificate.public_id }}">Précision ou correction (facultatif)</label>
+                            <textarea id="student-note-{{ certificate.public_id }}" class="form-control" name="student_note" rows="2" placeholder="Indiquez la bonne orthographe, le cas échéant.">{{ certificate.student_note }}</textarea>
+                        </div>
+                        <button class="btn btn-outline-primary" type="submit">
+                            <i class="fas fa-paper-plane me-1"></i> Envoyer pour vérification
+                        </button>
+                    </form>
+                    {% endif %}
+                </div>
+            </article>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="card border-0 shadow-sm">
+        <div class="card-body text-center py-5">
+            <i class="fas fa-award fa-3x text-secondary mb-3" aria-hidden="true"></i>
+            <h2 class="h4">Pas encore de certificat</h2>
+            <p class="text-secondary mb-3">Terminez toutes les leçons actives d'un cours. Une demande sera ensuite créée automatiquement.</p>
+            <a class="btn btn-primary" href="{% url 'courses:course_list' %}">Explorer les cours</a>
+        </div>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

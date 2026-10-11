@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Vérifier un certificat — {{ site_name }}{% endblock %}
+{% block meta_robots %}<meta name="robots" content="noindex, nofollow">{% endblock %}
+
+{% block content %}
+<section class="container py-5" style="max-width: 760px;">
+    <div class="card border-0 shadow-sm overflow-hidden">
+        <div class="card-body p-4 p-md-5">
+            {% if is_valid %}
+            <div class="d-flex align-items-center gap-3 mb-4">
+                <span class="d-inline-flex align-items-center justify-content-center rounded-circle bg-success-subtle text-success" style="width:54px;height:54px;">
+                    <i class="fas fa-check fa-lg" aria-hidden="true"></i>
+                </span>
+                <div>
+                    <p class="text-uppercase small fw-semibold text-success mb-1">Vérification réussie</p>
+                    <h1 class="h3 mb-0">Certificat valide</h1>
+                </div>
+            </div>
+            <p class="text-secondary">Ce certificat a été vérifié et délivré par {{ site_name }}.</p>
+            {% else %}
+            <div class="d-flex align-items-center gap-3 mb-4">
+                <span class="d-inline-flex align-items-center justify-content-center rounded-circle bg-danger-subtle text-danger" style="width:54px;height:54px;">
+                    <i class="fas fa-times fa-lg" aria-hidden="true"></i>
+                </span>
+                <div>
+                    <p class="text-uppercase small fw-semibold text-danger mb-1">Vérification</p>
+                    <h1 class="h3 mb-0">Certificat révoqué</h1>
+                </div>
+            </div>
+            <p class="text-secondary">Ce certificat n'est plus valide. Contactez {{ site_name }} si vous avez besoin de précisions.</p>
+            {% endif %}
+
+            <hr class="my-4">
+            <dl class="row mb-0">
+                <dt class="col-sm-4">Titulaire</dt>
+                <dd class="col-sm-8">{{ certificate.student_name }}</dd>
+                <dt class="col-sm-4">Cours</dt>
+                <dd class="col-sm-8">{{ certificate.course.display_titre }}</dd>
+                <dt class="col-sm-4">Numéro</dt>
+                <dd class="col-sm-8"><code>{{ certificate.certificate_number }}</code></dd>
+                <dt class="col-sm-4">Délivré le</dt>
+                <dd class="col-sm-8">{{ certificate.issued_at|date:"d/m/Y" }}</dd>
+            </dl>
+        </div>
+    </div>
+</section>
+{% endblock %}

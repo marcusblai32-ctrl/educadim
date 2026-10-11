@@ -19,6 +19,8 @@ polib==1.2.0
 psycopg2-binary==2.9.12
 PyJWT==2.13.0
 python-dateutil==2.9.0.post0
+qrcode>=8.0,<9
+reportlab>=4.2,<5
 requests==2.34.2
 sib-api-v3-sdk==7.6.0
 six==1.17.0
