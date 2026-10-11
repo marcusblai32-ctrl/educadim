@@ -4,97 +4,123 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ site_name }}</title>
-    <style>
-        body {
-            font-family: 'Inter', Arial, sans-serif;
-            background: #f4f4f4;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: #ffffff;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .header {
-            background: linear-gradient(135deg, #2563eb, #06b6d4);
-            padding: 20px 30px;
-            text-align: center;
-        }
-        .header h1 {
-            color: white;
-            margin: 0;
-            font-size: 24px;
-        }
-        .header h1 span {
-            color: #fcd34d;
-        }
-        .content {
-            padding: 30px;
-        }
-        .content p {
-            color: #333;
-            line-height: 1.6;
-            margin-bottom: 15px;
-        }
-        .btn {
-            display: inline-block;
-            padding: 12px 24px;
-            background: #2563eb;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            margin: 10px 0;
-        }
-        .btn:hover {
-            background: #1d4ed8;
-        }
-        .footer {
-            background: #f4f4f4;
-            padding: 15px 30px;
-            text-align: center;
-            font-size: 12px;
-            color: #888;
-        }
-        .footer a {
-            color: #2563eb;
-            text-decoration: none;
-        }
-        .user-info {
-            background: #f0f7ff;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-            border-left: 4px solid #2563eb;
-        }
-        .user-info p {
-            margin: 5px 0;
-            font-size: 14px;
-        }
-        .user-info strong {
-            color: #2563eb;
-        }
-    </style>
 </head>
-<body>
-<div class="container">
-    <div class="header">
-        <h1>{{ site_name }}</h1>
-    </div>
-    <div class="content">
-        <div class="user-info">
-            <p><strong>👤 Utilisateur:</strong> {{ full_name|default:username }}</p>
-            <p><strong>📧 Email:</strong> {{ email }}</p>
-        </div>
-        {% block content %}{% endblock %}
-    </div>
-    <div class="footer">
-        &copy; {{ site_name }} - Tous droits réservés<br>
-        <a href="{{ site_url }}">{{ site_url }}</a>
-    </div>
-</div>
+<body style="margin: 0; padding: 0; background-color: #f4f4f4; font-family: Arial, Helvetica, sans-serif;">
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f4f4f4; padding: 20px;">
+<tr>
+<td align="center">
+
+    {# ===== CONTAINER ===== #}
+    <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; width: 100%; background-color: #ffffff; border-radius: 12px; overflow: hidden;">
+
+        {# ===== HEADER BLAN : LOGO + NOM ===== #}
+        <tr>
+            <td align="center" valign="middle" style="background-color: #ffffff; padding: 24px 30px; border-bottom: 1px solid #e2e8f0;">
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin: 0 auto;">
+                    <tr>
+                        {# Logo agoch #}
+                        <td valign="middle" style="padding-right: 12px;">
+                            <img src="https://pub-437111b6bc034ae1b2bf26a405467fa5.r2.dev/1787080038422-removebg-preview.png"
+                                 alt="{{ site_name }}"
+                                 width="48"
+                                 height="48"
+                                 style="display: block; border: 0; max-width: 48px; height: auto;">
+                        </td>
+
+                        {# Non site adwat #}
+                        <td valign="middle">
+                            <span style="font-size: 24px; font-weight: bold; letter-spacing: -0.5px; font-family: Arial, Helvetica, sans-serif;">
+                                <span style="color: #dc2626;">Educa</span><span style="color: #2563eb;">Dim</span>
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        {# ===== CONTENT PWOFESYONÈL ===== #}
+        <tr>
+            <td style="padding: 40px 40px 32px;">
+
+                {# ===== BONJOU ===== #}
+                <p style="font-size: 16px; color: #0f172a; line-height: 1.6; margin: 0 0 8px; font-family: Arial, Helvetica, sans-serif; font-weight: bold;">
+                    Bonjour {{ full_name|default:username }},
+                </p>
+
+                {# ===== SEPARATEUR PITI ===== #}
+                <div style="height: 3px; width: 40px; background-color: #2563eb; margin: 0 0 24px; border-radius: 2px;"></div>
+
+                {# ===== KONTNI SPESIFIK CHAK IMÈL ===== #}
+                {% block content %}{% endblock %}
+
+            </td>
+        </tr>
+
+        {# ===== INFO ITILIZATÈ (anba kontni) ===== #}
+        <tr>
+            <td style="padding: 0 40px 32px;">
+
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f8fafc; border-radius: 8px; border-left: 4px solid #2563eb;">
+                    <tr>
+                        <td style="padding: 16px 20px;">
+
+                            <p style="margin: 0 0 8px; font-size: 11px; color: #2563eb; font-weight: bold; text-transform: uppercase; letter-spacing: 0.8px; font-family: Arial, Helvetica, sans-serif;">
+                                Détails du compte
+                            </p>
+
+                            <p style="margin: 0 0 6px; font-size: 13px; color: #475569; font-family: Arial, Helvetica, sans-serif;">
+                                <strong style="color: #0f172a;">Utilisateur :</strong> {{ full_name|default:username }}
+                            </p>
+
+                            <p style="margin: 0; font-size: 13px; color: #475569; font-family: Arial, Helvetica, sans-serif;">
+                                <strong style="color: #0f172a;">Email :</strong> {{ email }}
+                            </p>
+
+                        </td>
+                    </tr>
+                </table>
+
+            </td>
+        </tr>
+
+        {# ===== SIGNATURE ===== #}
+        <tr>
+            <td style="padding: 0 40px 40px;">
+
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                    <tr>
+                        <td style="border-top: 1px solid #e2e8f0; padding-top: 24px;">
+                            <p style="font-size: 14px; color: #475569; margin: 0 0 4px; font-family: Arial, Helvetica, sans-serif;">
+                                Cordialement,
+                            </p>
+                            <p style="font-size: 14px; color: #0f172a; margin: 0; font-family: Arial, Helvetica, sans-serif; font-weight: bold;">
+                                L'équipe <span style="color: #dc2626;">Educa</span><span style="color: #2563eb;">Dim</span>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+
+            </td>
+        </tr>
+
+        {# ===== FOOTER ===== #}
+        <tr>
+            <td align="center" style="background-color: #f4f4f4; padding: 20px 30px; text-align: center;">
+                <p style="font-size: 12px; color: #888; margin: 0 0 6px 0; font-family: Arial, Helvetica, sans-serif;">
+                    &copy; {{ site_name }} - Tous droits réservés
+                </p>
+                <p style="font-size: 12px; color: #888; margin: 0; font-family: Arial, Helvetica, sans-serif;">
+                    <a href="{{ site_url }}" style="color: #2563eb; text-decoration: none;">{{ site_url }}</a>
+                </p>
+            </td>
+        </tr>
+
+    </table>
+
+</td>
+</tr>
+</table>
+
 </body>
 </html>
