@@ -254,6 +254,11 @@ TIME_ZONE = "America/Port-au-Prince"
 USE_I18N = True
 USE_TZ = True
 
+# Optional automatic translation for rendered Haitian-Creole pages.
+# Setting this secret is the explicit opt-in: rendered page text is sent to
+# Google Cloud Translation and cached by source text.
+GOOGLE_TRANSLATE_API_KEY = env("GOOGLE_TRANSLATE_API_KEY", default="")
+
 
 # ============================================
 # INSTALLED APPS
@@ -305,6 +310,7 @@ MIDDLEWARE = [
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
+    "config.translation.DynamicTranslationMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
