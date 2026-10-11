@@ -9,6 +9,8 @@ permissions:
 jobs:
   create-locale:
     runs-on: ubuntu-latest
+    env:
+      DEBUG: "true"
     
     steps:
     - name: Checkout repository
