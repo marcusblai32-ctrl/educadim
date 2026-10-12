@@ -298,6 +298,15 @@
                 <p>{% blocktrans with desc=theme.feature3_desc|default:_("Répondez aux quiz existants et retrouvez vos avancées dans votre espace.") %}{{ desc }}{% endblocktrans %}</p>
                 <a href="{% url 'courses:course_list' %}" class="feature-link">{% blocktrans with link=theme.feature_link_text|default:_("Commencer à étudier") %}{{ link }}{% endblocktrans %} <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
             </article>
+            <article class="feature-card animate-on-scroll delay-3">
+                <div class="feature-icon-wrapper"><i class="fas fa-award feature-icon" aria-hidden="true"></i></div>
+                <h3>{% trans "Certificats vérifiables" %}</h3>
+                <p>{% trans "Retrouvez vos certificats après vérification de vos cours terminés et consultez le palmarès des apprenants." %}</p>
+                <a href="{% url 'certificates:mine' %}" class="feature-link">
+                    {% trans "Mes certificats et le palmarès" %}
+                    <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                </a>
+            </article>
         </div>
     </section>
 

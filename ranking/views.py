@@ -1,17 +1,35 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from .models import Niveau, PointsUtilisateur, HistoriquePoints
+from .services import get_ranked_users, normalize_period, render_palmares_pdf
 
 @login_required
 def leaderboard(request):
-    top_total = PointsUtilisateur.objects.order_by('-total')[:20]
-    top_semaine = PointsUtilisateur.objects.order_by('-semaine')[:20]
-    top_mois = PointsUtilisateur.objects.order_by('-mois')[:20]
+    top_total = get_ranked_users("total")
+    top_semaine = get_ranked_users("semaine")
+    top_mois = get_ranked_users("mois")
     return render(request, 'ranking/leaderboard.html', {
         'top_total': top_total,
         'top_semaine': top_semaine,
         'top_mois': top_mois,
     })
+
+
+@login_required
+def palmares_pdf(request):
+    period = normalize_period(request.GET.get("periode", "total"))
+    entries = get_ranked_users(period)
+    response = HttpResponse(
+        render_palmares_pdf(period, entries),
+        content_type="application/pdf",
+    )
+    response["Content-Disposition"] = (
+        f'attachment; filename="educadim-palmares-{period}.pdf"'
+    )
+    response["Cache-Control"] = "private, no-store"
+    return response
+
 
 @login_required
 def my_rank(request):
