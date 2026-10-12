@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Mes points" %}{% endblock %}
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+        <div><p class="text-body-secondary mb-1">{% trans "Récompenses EducaDim" %}</p><h1 class="h2 mb-0">{% trans "Mes points" %}</h1></div>
+        {% if flags.referral_system %}<a class="btn btn-outline-primary" href="{% url 'referrals:my_referrals' %}">{% trans "Mes invitations" %}</a>{% endif %}
+    </div>
+    <div class="row g-3 mb-4">
+        <div class="col-12 col-md-4"><div class="card h-100"><div class="card-body"><p class="text-body-secondary mb-1">{% trans "Solde actuel" %}</p><p class="display-5 fw-bold mb-0" style="color:var(--primary);">{{ points.balance }}</p></div></div></div>
+        <div class="col-6 col-md-4"><div class="card h-100"><div class="card-body"><p class="text-body-secondary mb-1">{% trans "Total gagné" %}</p><p class="h3 mb-0">{{ points.total_earned }}</p></div></div></div>
+        <div class="col-6 col-md-4"><div class="card h-100"><div class="card-body"><p class="text-body-secondary mb-1">{% trans "Points retirés" %}</p><p class="h3 mb-0">{{ points.total_withdrawn }}</p></div></div></div>
+        <div class="col-12 col-md-4"><div class="card h-100"><div class="card-body"><p class="text-body-secondary mb-1">{% trans "Solde en espèces" %}</p><p class="h3 mb-0">{{ points.cash_balance }} HTG</p></div></div></div>
+    </div>
+    {% if referral_url %}
+    <section class="card mb-4">
+        <div class="card-body">
+            <h2 class="h5">{% trans "Invitez un ami" %}</h2>
+            <p class="text-body-secondary">{% trans "Partagez votre lien; les récompenses suivent les règles configurées par l’équipe." %}</p>
+            <div class="input-group">
+                <input id="referralLink" class="form-control" value="{{ referral_url }}" readonly aria-label="{% trans 'Votre lien de parrainage' %}">
+                <button class="btn btn-primary" type="button" id="copyReferral">{% trans "Copier" %}</button>
+            </div>
+            <div class="d-flex flex-wrap gap-2 mt-3">
+                <a class="btn btn-outline-secondary" href="mailto:?subject={% trans 'Rejoignez-moi sur EducaDim'|urlencode %}&body={{ referral_url|urlencode }}">{% trans "Inviter par courriel" %}</a>
+                <a class="btn btn-outline-secondary" target="_blank" rel="noopener noreferrer" href="https://wa.me/?text={{ referral_url|urlencode }}">{% trans "Partager sur WhatsApp" %}</a>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+    {% if can_withdraw %}
+    <p><a class="btn btn-primary" href="{% url 'referrals:withdrawal' %}">{% trans "Demander un retrait" %}</a></p>
+    {% endif %}
+    <section class="card">
+        <div class="card-body">
+            <h2 class="h5">{% trans "Historique des transactions" %}</h2>
+            {% if transactions %}
+            <div class="table-responsive"><table class="table align-middle mb-0">
+                <thead><tr><th>{% trans "Date" %}</th><th>{% trans "Détail" %}</th><th>{% trans "Type" %}</th><th>{% trans "Points" %}</th><th>{% trans "Montant" %}</th></tr></thead>
+                <tbody>{% for transaction in transactions %}<tr><td>{{ transaction.created_at|date:"d/m/Y H:i" }}</td><td>{{ transaction.description|default:transaction.get_source_display }}</td><td>{{ transaction.get_type_display }}</td><td>{{ transaction.amount }}</td><td>{{ transaction.cash_amount }} HTG</td></tr>{% endfor %}</tbody>
+            </table></div>
+            {% else %}<p class="text-body-secondary mb-0">{% trans "Aucune transaction pour le moment." %}</p>{% endif %}
+        </div>
+    </section>
+</div>
+{% endblock %}
+{% block extra_js %}{{ block.super }}
+<script>
+document.getElementById("copyReferral")?.addEventListener("click", async function () {
+    const field = document.getElementById("referralLink");
+    await navigator.clipboard.writeText(field.value);
+    this.textContent = "{% trans 'Copié !' %}";
+});
+</script>
+{% endblock %}

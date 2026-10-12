@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Transactions de points" %}{% endblock %}
+{% block content %}
+<div class="container py-4">
+    <h1 class="h2 mb-3">{% trans "Transactions" %}</h1>
+    <div class="card"><div class="table-responsive"><table class="table mb-0">
+        <thead><tr><th>{% trans "Date" %}</th><th>{% trans "Utilisateur" %}</th><th>{% trans "Type" %}</th><th>{% trans "Source" %}</th><th>{% trans "Points" %}</th><th>{% trans "Montant" %}</th><th>{% trans "Description" %}</th></tr></thead>
+        <tbody>{% for tx in page_obj %}<tr><td>{{ tx.created_at|date:"d/m/Y H:i" }}</td><td>{{ tx.user.get_full_name }}</td><td>{{ tx.get_type_display }}</td><td>{{ tx.get_source_display }}</td><td>{{ tx.amount }}</td><td>{{ tx.cash_amount }} HTG</td><td>{{ tx.description|truncatechars:100 }}</td></tr>{% empty %}<tr><td colspan="7">{% trans "Aucune transaction." %}</td></tr>{% endfor %}</tbody>
+    </table></div>
+    {% if page_obj.has_other_pages %}<nav class="p-3 d-flex gap-2" aria-label="{% trans 'Pagination' %}">
+        {% if page_obj.has_previous %}<a class="btn btn-sm btn-outline-primary" href="?page={{ page_obj.previous_page_number }}">{% trans "Précédent" %}</a>{% endif %}
+        <span class="align-self-center">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}<a class="btn btn-sm btn-outline-primary" href="?page={{ page_obj.next_page_number }}">{% trans "Suivant" %}</a>{% endif %}
+    </nav>{% endif %}
+    </div>
+</div>
+{% endblock %}

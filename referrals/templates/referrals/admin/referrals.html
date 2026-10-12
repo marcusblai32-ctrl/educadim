@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Tous les parrainages" %}{% endblock %}
+{% block content %}
+<div class="container py-4">
+    <h1 class="h2 mb-3">{% trans "Tous les parrainages" %}</h1>
+    <form method="get" class="mb-3 d-flex gap-2">
+        <select class="form-select" name="status" aria-label="{% trans 'Filtrer par statut' %}">
+            <option value="">{% trans "Tous les statuts" %}</option>
+            {% for value,label in statuses %}<option value="{{ value }}" {% if request.GET.status == value %}selected{% endif %}>{{ label }}</option>{% endfor %}
+        </select>
+        <button class="btn btn-primary" type="submit">{% trans "Filtrer" %}</button>
+    </form>
+    <div class="card"><div class="table-responsive"><table class="table mb-0">
+        <thead><tr><th>{% trans "Parrain" %}</th><th>{% trans "Personne invitée" %}</th><th>{% trans "Code" %}</th><th>{% trans "Statut" %}</th><th>{% trans "Inscription" %}</th><th>{% trans "Premier achat" %}</th></tr></thead>
+        <tbody>{% for referral in page_obj %}<tr><td>{{ referral.referrer.get_full_name }}<br><small>{{ referral.referrer.email }}</small></td><td>{{ referral.referred.get_full_name }}<br><small>{{ referral.referred.email }}</small></td><td>{{ referral.code_used }}</td><td>{{ referral.get_status_display }}</td><td>{{ referral.signed_up_at|date:"d/m/Y" }}</td><td>{{ referral.first_purchase_at|date:"d/m/Y"|default:"—" }}</td></tr>{% empty %}<tr><td colspan="6">{% trans "Aucun parrainage." %}</td></tr>{% endfor %}</tbody>
+    </table></div>
+    {% if page_obj.has_other_pages %}<nav class="p-3 d-flex gap-2">
+        {% if page_obj.has_previous %}<a class="btn btn-sm btn-outline-primary" href="?page={{ page_obj.previous_page_number }}&status={{ request.GET.status|urlencode }}">{% trans "Précédent" %}</a>{% endif %}
+        <span class="align-self-center">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}<a class="btn btn-sm btn-outline-primary" href="?page={{ page_obj.next_page_number }}&status={{ request.GET.status|urlencode }}">{% trans "Suivant" %}</a>{% endif %}
+    </nav>{% endif %}
+    </div>
+</div>
+{% endblock %}

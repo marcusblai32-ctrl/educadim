@@ -108,6 +108,13 @@ def course_list(request):
 
     # Ajoute aksè pou chak kou
     cours_avec_acces = []
+    from referrals.services import calculate_discount, is_system_active
+    discount_active = (
+        request.user.is_authenticated
+        and is_system_active("discount_system")
+        and is_system_active("points_system")
+    )
+    user_discount = calculate_discount(request.user) if discount_active else 0
     for cours_item in cours:
         a_acces = False
         if request.user.is_authenticated:
@@ -117,6 +124,12 @@ def course_list(request):
         cours_avec_acces.append({
             'cours': cours_item,
             'a_acces': a_acces,
+            'discount_percent': user_discount if cours_item.est_payant else 0,
+            'discounted_price': (
+                cours_item.prix * (100 - user_discount) / 100
+                if cours_item.est_payant and user_discount
+                else cours_item.prix
+            ),
         })
 
     return render(request, 'courses/course_list.html', {

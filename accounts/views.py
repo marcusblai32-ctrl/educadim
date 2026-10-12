@@ -33,6 +33,10 @@ def signup_view(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
+            referral_code = request.session.pop("referral_code", None)
+            if referral_code:
+                from referrals.services import register_with_referral
+                register_with_referral(user, referral_code)
             messages.success(request, _("Compte cree avec succes ! Votre ID est : ") + user.user_id)
             return redirect('accounts:login')
     else:

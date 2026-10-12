@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Mes invitations" %}{% endblock %}
+{% block content %}
+<div class="container py-4">
+    <h1 class="h2 mb-3">{% trans "Mes invitations" %}</h1>
+    <div class="d-flex gap-4 flex-wrap mb-4 text-body-secondary">
+        <span>{% trans "Personnes invitées" %}: <strong>{{ stats.referral_count }}</strong></span>
+        <span>{% trans "Qui ont acheté" %}: <strong>{{ stats.purchased_count }}</strong></span>
+        {% if flags.points_system %}<span>{% trans "Points gagnés" %}: <strong>{{ stats.points_earned }}</strong></span>{% endif %}
+    </div>
+    <div class="card"><div class="card-body">
+        {% if referrals %}
+        <div class="table-responsive"><table class="table align-middle">
+            <thead><tr><th>{% trans "Personne" %}</th><th>{% trans "Date" %}</th><th>{% trans "Statut" %}</th><th>{% trans "Récompenses" %}</th></tr></thead>
+            <tbody>
+            {% for referral in referrals %}
+            <tr>
+                <td>{{ referral.referred.get_full_name }}</td>
+                <td>{{ referral.signed_up_at|date:"d/m/Y" }}</td>
+                <td>{{ referral.get_status_display }}</td>
+                <td>{% for reward in referral.rewards.all %}{% if flags.points_system or reward.cash_awarded %}<div>{% if flags.points_system %}{{ reward.points_awarded }} {% trans "points" %}{% endif %}{% if reward.cash_awarded %}{% if flags.points_system %} · {% endif %}{{ reward.cash_awarded }} HTG{% endif %}</div>{% endif %}{% empty %}<span class="text-body-secondary">—</span>{% endfor %}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table></div>
+        {% else %}<p class="text-body-secondary mb-0">{% trans "Vous n’avez pas encore d’invitations." %}</p>{% endif %}
+    </div></div>
+</div>
+{% endblock %}

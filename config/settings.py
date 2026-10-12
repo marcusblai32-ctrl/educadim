@@ -293,6 +293,7 @@ INSTALLED_APPS = [
     "dashboard.apps.DashboardConfig",
     "todo.apps.TodoConfig",
     "certificates.apps.CertificatesConfig",
+    "referrals.apps.ReferralsConfig",
 ]
 
 
@@ -346,6 +347,7 @@ TEMPLATES = [
                 "theme_manager.context_processors.breadcrumbs_processor",
                 "theme_manager.context_processors.seo_processor",
                 "ads.context_processors.banners_processor",
+                "referrals.context_processors.system_flags",
             ],
         },
     },

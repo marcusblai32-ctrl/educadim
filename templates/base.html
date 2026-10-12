@@ -118,6 +118,20 @@
                                     <i class="fas fa-chart-line"></i><span class="nav-label">{% trans "Progression" %}</span>
                                 </a>
                             </li>
+                            {% if flags.points_system %}
+                            <li class="nav-item">
+                                <a href="{% url 'referrals:my_points' %}" class="nav-link">
+                                    <i class="fas fa-coins"></i><span class="nav-label">{% trans "Pwen mwen" %}</span>
+                                </a>
+                            </li>
+                            {% endif %}
+                            {% if flags.referral_system %}
+                            <li class="nav-item">
+                                <a href="{% url 'referrals:my_referrals' %}" class="nav-link">
+                                    <i class="fas fa-user-plus"></i><span class="nav-label">{% trans "Envitasyon" %}</span>
+                                </a>
+                            </li>
+                            {% endif %}
                             <li class="nav-item">
                                 <a href="{% url 'todo:todo_list' %}" class="nav-link" title="{% trans 'Mes tâches' %}">
                                     <i class="fas fa-list-check"></i><span class="nav-label">{% trans "Mes tâches" %}</span>
@@ -155,6 +169,11 @@
                             <li class="nav-item">
                                 <a href="{% url 'admin:index' %}" class="nav-link" title="{% trans 'Admin' %}">
                                     <i class="fas fa-cog"></i><span class="nav-label">{% trans "Admin" %}</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{% url 'referrals:admin_flags' %}" class="nav-link">
+                                    <i class="fas fa-toggle-on"></i><span class="nav-label">{% trans "Récompenses" %}</span>
                                 </a>
                             </li>
                             {% endif %}
@@ -345,6 +364,9 @@
                             <li><a class="text-body-secondary text-decoration-none small" href="{% url 'progress:dashboard' %}">{% trans "Progression" %}</a></li>
                             <li><a class="text-body-secondary text-decoration-none small" href="{% url 'badges:my_badges' %}">{% trans "Badges" %}</a></li>
                             <li><a class="text-body-secondary text-decoration-none small" href="{% url 'ranking:my_rank' %}">{% trans "Classement" %}</a></li>
+                            {% if flags.points_system %}<li><a class="text-body-secondary text-decoration-none small" href="{% url 'referrals:my_points' %}">{% trans "Pwen mwen" %}</a></li>{% endif %}
+                            {% if flags.referral_system %}<li><a class="text-body-secondary text-decoration-none small" href="{% url 'referrals:my_referrals' %}">{% trans "Envitasyon mwen" %}</a></li>{% endif %}
+                            {% if flags.withdrawal_system %}<li><a class="text-body-secondary text-decoration-none small" href="{% url 'referrals:withdrawal' %}">{% trans "Mande retrè" %}</a></li>{% endif %}
                         {% else %}
                             <li><a class="text-body-secondary text-decoration-none small" href="{% url 'accounts:login' %}">{% trans "Connexion" %}</a></li>
                             <li><a class="text-body-secondary text-decoration-none small" href="{% url 'accounts:signup' %}">{% trans "Inscription" %}</a></li>
@@ -403,10 +425,69 @@
         </div>
     </footer>
 
+    {% if flags.rating_system and user.is_authenticated %}
+    <div class="modal fade" id="ratingPromptModal" tabindex="-1" aria-labelledby="ratingPromptTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-color:var(--accent);">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5" id="ratingPromptTitle">{% trans "Comment se passe votre apprentissage ?" %}</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{% trans 'Fermer' %}"></button>
+                </div>
+                <form method="post" action="{% url 'referrals:submit_rating' %}" id="ratingPromptForm">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <p class="text-body-secondary">{% trans "Votre avis sera publié après validation par notre équipe." %}</p>
+                        <div class="d-flex gap-3 mb-3" role="radiogroup" aria-label="{% trans 'Note sur cinq étoiles' %}">
+                            {% for star in "12345"|make_list %}
+                            <label class="form-check-label d-flex align-items-center gap-1">
+                                <input class="form-check-input mt-0" type="radio" name="stars" value="{{ star }}" required>
+                                <span>{{ star }}</span><i class="fas fa-star" style="color:var(--accent);"></i>
+                            </label>
+                            {% endfor %}
+                        </div>
+                        <label class="form-label" for="ratingComment">{% trans "Votre commentaire (facultatif)" %}</label>
+                        <textarea class="form-control" id="ratingComment" name="comment" rows="3" maxlength="1500"></textarea>
+                        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">{% trans "Plus tard" %}</button>
+                        <button type="submit" class="btn btn-primary">{% trans "Envoyer mon avis" %}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'js/main.js' %}"></script>
+    {% if flags.rating_system and user.is_authenticated %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const key = "educadim-rating-prompt-next";
+            const nextAt = Number(localStorage.getItem(key) || 0);
+            if (Date.now() < nextAt) return;
+            const modalElement = document.getElementById("ratingPromptModal");
+            if (!modalElement || !window.bootstrap) return;
+            const modal = new bootstrap.Modal(modalElement);
+            window.setTimeout(function () {
+                modal.show();
+                localStorage.setItem(key, String(Date.now() + 7 * 24 * 60 * 60 * 1000));
+                const csrf = modalElement.querySelector("[name=csrfmiddlewaretoken]")?.value;
+                const data = new FormData();
+                data.append("csrfmiddlewaretoken", csrf || "");
+                fetch("{% url 'referrals:mark_rating_prompt' %}", {
+                    method: "POST",
+                    headers: {"X-CSRFToken": csrf || ""},
+                    body: data,
+                    credentials: "same-origin"
+                }).catch(function () {});
+            }, 900);
+        });
+    </script>
+    {% endif %}
 
     {% block extra_js %}{% endblock %}
 </body>

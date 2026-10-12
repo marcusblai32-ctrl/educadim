@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Demandes de retrait" %}{% endblock %}
+{% block content %}
+<div class="container py-4">
+    <h1 class="h2 mb-3">{% trans "Demandes de retrait" %}</h1>
+    <div class="card"><div class="table-responsive"><table class="table align-middle mb-0">
+        <thead><tr><th>{% trans "Utilisateur" %}</th><th>{% trans "Points" %}</th><th>{% trans "Montant" %}</th><th>{% trans "Méthode / destination" %}</th><th>{% trans "Statut" %}</th><th>{% trans "Actions" %}</th></tr></thead>
+        <tbody>{% for item in withdrawals %}<tr>
+            <td>{{ item.user.get_full_name }}<br><small class="text-body-secondary">{{ item.created_at|date:"d/m/Y H:i" }}</small></td>
+            <td>{{ item.points_amount }}</td><td>{{ item.cash_amount }} HTG</td>
+            <td>{{ item.get_method_display }}<br><span class="text-body-secondary">{{ item.destination }}</span></td>
+            <td>{{ item.get_status_display }}</td>
+            <td>{% if item.status == "pending" %}
+                <form method="post" action="{% url 'referrals:admin_withdrawal_process' item.pk 'approve' %}" class="d-inline">{% csrf_token %}<button class="btn btn-sm btn-primary" type="submit">{% trans "Approuver" %}</button></form>
+                <form method="post" action="{% url 'referrals:admin_withdrawal_process' item.pk 'reject' %}" class="d-inline">{% csrf_token %}<button class="btn btn-sm btn-outline-secondary" type="submit">{% trans "Refuser" %}</button></form>
+            {% endif %}</td>
+        </tr>{% empty %}<tr><td colspan="6" class="text-body-secondary">{% trans "Aucune demande." %}</td></tr>{% endfor %}</tbody>
+    </table></div></div>
+</div>
+{% endblock %}

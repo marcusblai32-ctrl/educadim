@@ -134,6 +134,12 @@
                         {% else %}
                             <span class="badge text-bg-success" style="font-size:.65rem;">{% trans "Gratuit" %}</span>
                         {% endif %}
+                        {% if flags.discount_system and item.discount_percent %}
+                        <span class="badge rounded-pill"
+                              style="background:var(--accent);color:var(--on-accent,var(--text));font-size:.65rem;">
+                            -{{ item.discount_percent|floatformat:"-2" }}%
+                        </span>
+                        {% endif %}
                         {% if item.a_acces %}
                             <span class="badge text-bg-primary" style="font-size:.65rem;">
                                 <i class="fas fa-check-circle me-1" aria-hidden="true"></i>{% trans "Accès" %}
@@ -174,7 +180,12 @@
 
                         <span class="fw-bold" style="font-size: 1rem;">
                             {% if item.cours.est_payant %}
-                                {{ item.cours.prix }} HTG
+                                {% if flags.discount_system and item.discount_percent %}
+                                    <del class="text-body-secondary small">{{ item.cours.prix }} HTG</del>
+                                    <span>{{ item.discounted_price|floatformat:2 }} HTG</span>
+                                {% else %}
+                                    {{ item.cours.prix }} HTG
+                                {% endif %}
                             {% else %}
                                 {% trans "Gratuit" %}
                             {% endif %}

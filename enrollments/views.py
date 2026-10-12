@@ -11,6 +11,7 @@ from notifications.models import Notification
 from utils.notifications import notify_safely, send_enrollment_approved, send_enrollment_rejected
 from subscriptions.models import SubscriptionAccess, Subscription
 import os
+from decimal import Decimal
 
 
 @login_required
@@ -30,6 +31,11 @@ def enrollment_detail(request, pk):
 @login_required
 def enroll_course(request, cours_pk):
     cours = get_object_or_404(Course, pk=cours_pk)
+    from referrals.services import calculate_discount
+    discount_percent = calculate_discount(request.user, cours.prix)
+    payment_due = (cours.prix * (100 - discount_percent) / 100).quantize(
+        Decimal("0.01")
+    )
 
     # ===== 1. Tcheke si deja enskri =====
     existing = Enrollment.objects.filter(
@@ -132,7 +138,12 @@ def enroll_course(request, cours_pk):
     else:
         form = EnrollmentPaymentForm()
 
-    return render(request, 'enrollments/enroll_form.html', {'form': form, 'cours': cours})
+    return render(request, 'enrollments/enroll_form.html', {
+        'form': form,
+        'cours': cours,
+        'discount_percent': discount_percent,
+        'payment_due': payment_due,
+    })
 
 
 @user_passes_test(lambda u: u.is_staff)

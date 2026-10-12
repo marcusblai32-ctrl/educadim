@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Activation des fonctionnalités" %}{% endblock %}
+{% block content %}
+<div class="container py-4">
+    <h1 class="h2 mb-2">{% trans "Activation des fonctionnalités" %}</h1>
+    <p class="text-body-secondary">{% trans "Désactiver une fonction la masque et arrête ses opérations; ses données restent conservées." %}</p>
+    <form method="post" class="card"><div class="card-body">
+        {% csrf_token %}
+        {% for flag in system_flags %}
+        <div class="form-check form-switch py-2 border-bottom">
+            <input class="form-check-input" type="checkbox" role="switch" id="flag-{{ flag.key }}" name="flag_{{ flag.key }}" {% if flag.is_active %}checked{% endif %}>
+            <label class="form-check-label fw-semibold" for="flag-{{ flag.key }}">{{ flag.key|cut:"_"|title }}</label>
+        </div>
+        {% endfor %}
+        <button class="btn btn-primary mt-3" type="submit">{% trans "Enregistrer" %}</button>
+    </div></form>
+    <nav class="d-flex flex-wrap gap-2 mt-4" aria-label="{% trans 'Administration des récompenses' %}">
+        <a class="btn btn-outline-primary" href="{% url 'referrals:admin_config' %}">{% trans "Configuration" %}</a>
+        <a class="btn btn-outline-primary" href="{% url 'referrals:admin_tiers' %}">{% trans "Niveaux" %}</a>
+        <a class="btn btn-outline-primary" href="{% url 'referrals:admin_withdrawals' %}">{% trans "Retraits" %}</a>
+        <a class="btn btn-outline-primary" href="{% url 'referrals:admin_transactions' %}">{% trans "Transactions" %}</a>
+        <a class="btn btn-outline-primary" href="{% url 'referrals:admin_referrals' %}">{% trans "Parrainages" %}</a>
+        <a class="btn btn-outline-primary" href="{% url 'referrals:admin_staff' %}">{% trans "Équipe" %}</a>
+        <a class="btn btn-outline-primary" href="{% url 'admin:referrals_rating_changelist' %}">{% trans "Avis à modérer" %}</a>
+    </nav>
+</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Demande de retrait" %}{% endblock %}
+{% block content %}
+<div class="container py-4">
+    <div class="card mx-auto" style="max-width:640px;">
+        <div class="card-body p-4">
+            <h1 class="h3 mb-3">{% trans "Demander un retrait" %}</h1>
+            <p class="text-body-secondary">{% trans "Choisissez un montant de points à convertir ou un montant en espèces déjà crédité. Votre demande sera vérifiée par l’équipe." %}</p>
+            <div class="d-flex flex-wrap gap-4 mb-3">
+                {% if flags.points_system %}<span>{% trans "Points disponibles" %}: <strong>{{ available_points }}</strong></span>{% endif %}
+                {% if flags.referral_system %}<span>{% trans "Espèces disponibles" %}: <strong>{{ available_cash }} HTG</strong></span>{% endif %}
+            </div>
+            <form method="post">
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="mb-3">
+                    <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% for error in field.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                </div>
+                {% endfor %}
+                <button type="submit" class="btn btn-primary">{% trans "Envoyer la demande" %}</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block extra_js %}{{ block.super }}
+<script>
+(() => {
+    const type = document.getElementById("id_withdrawal_type");
+    const amount = document.getElementById("id_amount");
+    const syncAmountStep = () => {
+        if (type && amount) amount.step = type.value === "cash" ? "0.01" : "1";
+    };
+    type?.addEventListener("change", syncAmountStep);
+    syncAmountStep();
+})();
+</script>
+{% endblock %}

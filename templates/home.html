@@ -115,6 +115,51 @@
     .stat-item .stat-label {
         font-size: 0.85rem;
     }
+    .referral-carousel-card,
+    .staff-carousel-card {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: clamp(1.25rem, 4vw, 2.5rem);
+        border: 1px solid color-mix(in srgb, var(--primary) 22%, transparent);
+        border-radius: var(--radius-lg, 1rem);
+        background: var(--card-bg, var(--body-bg));
+        color: var(--text);
+        text-align: center;
+    }
+    .referral-stars { color: var(--accent); letter-spacing: .15em; }
+    .staff-photo {
+        width: 112px;
+        height: 112px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 3px solid var(--primary);
+    }
+    .staff-initial {
+        width: 112px;
+        height: 112px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--primary);
+        color: var(--on-primary, var(--text));
+        font-size: 2rem;
+    }
+    .home-dynamic-carousel .carousel-control-prev,
+    .home-dynamic-carousel .carousel-control-next {
+        width: 12%;
+        color: var(--primary);
+    }
+    .home-dynamic-carousel .carousel-control-prev-icon,
+    .home-dynamic-carousel .carousel-control-next-icon {
+        width: auto;
+        height: auto;
+        background-image: none;
+        font-size: 1.35rem;
+    }
+    .home-dynamic-carousel .carousel-indicators [data-bs-target] {
+        background-color: var(--primary);
+    }
 
     /* ===== Boutons héro ===== */
     .hero-actions {
@@ -326,36 +371,80 @@
         </div>
     </section>
 
-    {% if theme.testimonial1_text or theme.testimonial2_text %}
+    {% if flags.rating_system and approved_ratings %}
     <section class="testimonials-section" aria-labelledby="testimonials-title">
         <div class="section-header">
             <span class="section-tag">{% blocktrans with tag=theme.testimonials_tag|default:_("Paroles d’apprenants") %}{{ tag }}{% endblocktrans %}</span>
             <h2 id="testimonials-title">{% blocktrans with title=theme.testimonials_title|default:_("Des expériences") %}{{ title }}{% endblocktrans %} <span class="highlight">{% blocktrans with highlight=theme.testimonials_highlight|default:_("partagées") %}{{ highlight }}{% endblocktrans %}</span>{% if theme.testimonials_end %} {{ theme.testimonials_end }}{% endif %}</h2>
         </div>
-        <div class="testimonials-grid">
-            {% if theme.testimonial1_text %}
-            <article class="testimonial-card">
-                {% if theme.testimonial1_stars %}<div class="stars" aria-label="{{ theme.testimonial1_stars }} {% trans 'étoiles' %}">{% for i in "12345"|make_list %}{% if forloop.counter <= theme.testimonial1_stars %}<i class="fas fa-star" aria-hidden="true"></i>{% endif %}{% endfor %}</div>{% endif %}
-                <p>“{{ theme.testimonial1_text }}”</p>
-                {% if theme.testimonial1_name or theme.testimonial1_job %}
-                <div class="testimonial-author">
-                    {% if theme.get_testimonial1_avatar %}<img src="{{ theme.get_testimonial1_avatar }}" alt="" loading="lazy">{% else %}<span class="testimonial-initials" aria-hidden="true">{{ theme.testimonial1_name|slice:":1" }}</span>{% endif %}
-                    <div>{% if theme.testimonial1_name %}<h4>{{ theme.testimonial1_name }}</h4>{% endif %}{% if theme.testimonial1_job %}<span>{{ theme.testimonial1_job }}</span>{% endif %}</div>
-                </div>
-                {% endif %}
-            </article>
+        <div id="approvedRatingsCarousel" class="carousel slide home-dynamic-carousel" data-bs-ride="carousel" data-bs-interval="7000">
+            {% if approved_ratings|length > 1 %}
+            <div class="carousel-indicators">
+                {% for rating in approved_ratings %}
+                <button type="button" data-bs-target="#approvedRatingsCarousel" data-bs-slide-to="{{ forloop.counter0 }}" class="{% if forloop.first %}active{% endif %}" aria-label="{% trans 'Avis' %} {{ forloop.counter }}"></button>
+                {% endfor %}
+            </div>
             {% endif %}
-            {% if theme.testimonial2_text %}
-            <article class="testimonial-card">
-                {% if theme.testimonial2_stars %}<div class="stars" aria-label="{{ theme.testimonial2_stars }} {% trans 'étoiles' %}">{% for i in "12345"|make_list %}{% if forloop.counter <= theme.testimonial2_stars %}<i class="fas fa-star" aria-hidden="true"></i>{% endif %}{% endfor %}</div>{% endif %}
-                <p>“{{ theme.testimonial2_text }}”</p>
-                {% if theme.testimonial2_name or theme.testimonial2_job %}
-                <div class="testimonial-author">
-                    {% if theme.get_testimonial2_avatar %}<img src="{{ theme.get_testimonial2_avatar }}" alt="" loading="lazy">{% else %}<span class="testimonial-initials" aria-hidden="true">{{ theme.testimonial2_name|slice:":1" }}</span>{% endif %}
-                    <div>{% if theme.testimonial2_name %}<h4>{{ theme.testimonial2_name }}</h4>{% endif %}{% if theme.testimonial2_job %}<span>{{ theme.testimonial2_job }}</span>{% endif %}</div>
-                </div>
-                {% endif %}
-            </article>
+            <div class="carousel-inner">
+                {% for rating in approved_ratings %}
+                <article class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <div class="referral-carousel-card">
+                        <div class="referral-stars mb-3" aria-label="{{ rating.stars }} {% trans 'étoiles' %}">
+                            {% for star in "12345"|make_list %}{% if forloop.counter <= rating.stars %}<i class="fas fa-star" aria-hidden="true"></i>{% endif %}{% endfor %}
+                        </div>
+                        {% if rating.comment %}<blockquote class="mb-4">“{{ rating.comment }}”</blockquote>{% endif %}
+                        <h3 class="h5 mb-1">{{ rating.user.get_full_name }}</h3>
+                        {% if rating.course %}<p class="text-body-secondary mb-0">{{ rating.course.titre }}</p>{% endif %}
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+            {% if approved_ratings|length > 1 %}
+            <button class="carousel-control-prev" type="button" data-bs-target="#approvedRatingsCarousel" data-bs-slide="prev" aria-label="{% trans 'Précédent' %}">
+                <i class="carousel-control-prev-icon fas fa-chevron-left" aria-hidden="true"></i>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#approvedRatingsCarousel" data-bs-slide="next" aria-label="{% trans 'Suivant' %}">
+                <i class="carousel-control-next-icon fas fa-chevron-right" aria-hidden="true"></i>
+            </button>
+            {% endif %}
+        </div>
+    </section>
+    {% endif %}
+
+    {% if flags.staff_carousel and active_staff %}
+    <section class="staff-section py-5" aria-labelledby="staff-title">
+        <div class="section-header text-center mb-4">
+            <span class="section-tag">{% trans "Les personnes derrière vos cours" %}</span>
+            <h2 id="staff-title">{% trans "Notre équipe" %}</h2>
+        </div>
+        <div id="staffCarousel" class="carousel slide home-dynamic-carousel" data-bs-ride="carousel" data-bs-interval="7500">
+            {% if active_staff|length > 1 %}
+            <div class="carousel-indicators">
+                {% for member in active_staff %}
+                <button type="button" data-bs-target="#staffCarousel" data-bs-slide-to="{{ forloop.counter0 }}" class="{% if forloop.first %}active{% endif %}" aria-label="{% trans 'Membre' %} {{ forloop.counter }}"></button>
+                {% endfor %}
+            </div>
+            {% endif %}
+            <div class="carousel-inner">
+                {% for member in active_staff %}
+                <article class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <div class="staff-carousel-card">
+                        {% if member.photo %}<img class="staff-photo mb-3" src="{{ member.photo.url }}" alt="{{ member.name }}" loading="lazy">
+                        {% else %}<span class="staff-initial mb-3" aria-hidden="true">{{ member.name|slice:":1" }}</span>{% endif %}
+                        <h3 class="h5 mb-1">{{ member.name }}</h3>
+                        <p class="text-primary fw-semibold mb-2">{{ member.get_role_display }}</p>
+                        {% if member.bio %}<p class="text-body-secondary mb-0">{{ member.bio|linebreaksbr }}</p>{% endif %}
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+            {% if active_staff|length > 1 %}
+            <button class="carousel-control-prev" type="button" data-bs-target="#staffCarousel" data-bs-slide="prev" aria-label="{% trans 'Précédent' %}">
+                <i class="carousel-control-prev-icon fas fa-chevron-left" aria-hidden="true"></i>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#staffCarousel" data-bs-slide="next" aria-label="{% trans 'Suivant' %}">
+                <i class="carousel-control-next-icon fas fa-chevron-right" aria-hidden="true"></i>
+            </button>
             {% endif %}
         </div>
     </section>

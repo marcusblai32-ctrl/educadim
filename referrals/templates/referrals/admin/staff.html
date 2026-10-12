@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Gestion de l’équipe" %}{% endblock %}
+{% block content %}
+<div class="container py-4">
+    <h1 class="h2 mb-3">{% trans "Gestion de l’équipe" %}</h1>
+    <p class="text-body-secondary">{% trans "Ajoutez, modifiez, triez ou désactivez les profils depuis l’administration Django." %}</p>
+    <a class="btn btn-primary" href="{{ admin_url }}">{% trans "Gérer les profils de l’équipe" %}</a>
+    <div class="list-group mt-4">{% for member in staff_members %}<div class="list-group-item d-flex justify-content-between align-items-center"><span>{{ member.name }} · {{ member.get_role_display }}</span><span>{% if member.is_active %}{% trans "Visible" %}{% else %}{% trans "Masqué" %}{% endif %}</span></div>{% empty %}<div class="list-group-item text-body-secondary">{% trans "Aucun profil n’a encore été ajouté." %}</div>{% endfor %}</div>
+</div>
+{% endblock %}

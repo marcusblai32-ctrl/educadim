@@ -97,6 +97,7 @@ urlpatterns += i18n_patterns(
     path("classement/", include("ranking.urls")),
     path("chat/", include("chat.urls")),
     path("notifications/", include("notifications.urls")),
+    path("parrainage/", include("referrals.urls")),
     path("ads/", include("ads.urls")),
     path("dashboard/", include("dashboard.urls")),
     path("a-propos/", about_page, name="about"),

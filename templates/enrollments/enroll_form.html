@@ -10,13 +10,16 @@
     {% if cours.est_payant %}
     <div class="alert alert-info" style="background:rgba(6,182,212,0.1); color:var(--info); padding:1rem; border-radius:var(--radius); border-left:4px solid var(--info);">
         <i class="fas fa-info-circle"></i>
-        <strong>{% trans "Ce cours est payant" %} ({{ cours.prix }} HTG).</strong>
+        <strong>{% trans "Ce cours est payant" %} (
+            {% if discount_percent %}<del>{{ cours.prix }} HTG</del> {{ payment_due }} HTG{% else %}{{ cours.prix }} HTG{% endif %}
+        ).</strong>
+        {% if discount_percent %}<p class="mb-0 mt-2">{% trans "Votre remise fidélité" %} : {{ discount_percent }}%.</p>{% endif %}
         <p style="margin-top:0.5rem; color:var(--text-muted);">{% trans "Effectuez le paiement via MonCash ou NatCash, puis remplissez le formulaire ci-dessous." %}</p>
     </div>
     <div style="background:var(--body-bg); padding:1.5rem; border-radius:var(--radius); margin:1rem 0;">
         <h3 style="color:var(--text);"><i class="fas fa-list-ol" style="color:var(--primary);"></i> {% trans "Instructions" %} :</h3>
         <ol style="color:var(--text-muted); padding-left:1.5rem;">
-            <li>{% trans "Envoyez le montant exact" %} (<strong style="color:var(--primary);">{{ cours.prix }} HTG</strong>) {% trans "au numéro MonCash ou NatCash indiqué ci-dessous." %}</li>
+            <li>{% trans "Envoyez le montant exact" %} (<strong style="color:var(--primary);">{{ payment_due|default:cours.prix }} HTG</strong>) {% trans "au numéro MonCash ou NatCash indiqué ci-dessous." %}</li>
             <li>{% trans "Conservez l'ID de transaction qui vous sera fourni." %}</li>
             <li>{% trans "Remplissez le formulaire ci-dessous avec vos informations et l'ID de transaction." %}</li>
         </ol>
