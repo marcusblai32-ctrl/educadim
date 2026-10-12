@@ -6,6 +6,17 @@
 {% block content %}
 <div class="card">
     <h1>{% trans "Classement général" %}</h1>
+    <div class="d-flex flex-wrap gap-2 mb-3" aria-label="{% trans 'Télécharger le palmarès en PDF' %}">
+        <a class="btn btn-outline-primary btn-sm" href="{% url 'ranking:palmares_pdf' %}?periode=total">
+            <i class="fas fa-file-pdf me-1" aria-hidden="true"></i>{% trans "PDF général" %}
+        </a>
+        <a class="btn btn-outline-secondary btn-sm" href="{% url 'ranking:palmares_pdf' %}?periode=semaine">
+            <i class="fas fa-file-pdf me-1" aria-hidden="true"></i>{% trans "PDF de la semaine" %}
+        </a>
+        <a class="btn btn-outline-secondary btn-sm" href="{% url 'ranking:palmares_pdf' %}?periode=mois">
+            <i class="fas fa-file-pdf me-1" aria-hidden="true"></i>{% trans "PDF du mois" %}
+        </a>
+    </div>
     <div class="leaderboard-tabs">
         <button class="tab-btn active" onclick="showTab('total')">{% trans "Général" %}</button>
         <button class="tab-btn" onclick="showTab('semaine')">{% trans "Cette semaine" %}</button>

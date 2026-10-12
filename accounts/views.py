@@ -2,11 +2,28 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.urls import reverse_lazy
 from django.utils import timezone
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext as _
 from .forms import CustomUserCreationForm
 from .models import CustomUser
 from django.contrib.auth import authenticate
+
+
+_DEFAULT_LOGIN_REDIRECT_URL = reverse_lazy("courses:course_list")
+
+
+def _login_redirect_target(request):
+    """Return a safe same-site next URL or the configured default destination."""
+    next_url = request.POST.get("next") or request.GET.get("next")
+    if next_url and url_has_allowed_host_and_scheme(
+        next_url,
+        allowed_hosts={request.get_host()},
+        require_https=request.is_secure(),
+    ):
+        return next_url
+    return _DEFAULT_LOGIN_REDIRECT_URL
 
 
 def signup_view(request):
@@ -24,7 +41,7 @@ def signup_view(request):
 
 def login_view(request):
     if request.user.is_authenticated:
-        return redirect('courses:course_list')
+        return redirect(_login_redirect_target(request))
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -32,7 +49,7 @@ def login_view(request):
         if user is not None:
             user.update_activity()
             login(request, user)
-            return redirect('courses:course_list')
+            return redirect(_login_redirect_target(request))
         else:
             messages.error(request, _("Email/ID ou mot de passe incorrect."))
     return render(request, 'accounts/login.html')
