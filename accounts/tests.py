@@ -58,6 +58,27 @@ class LoginRedirectTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response["Location"], reverse("courses:course_list"))
 
+    def test_login_page_renders_when_next_is_missing(self):
+        response = self.client.get(reverse("accounts:login"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context["next_url"], "")
+
+    def test_failed_login_preserves_next_url_for_retry(self):
+        target = reverse("certificates:mine")
+        response = self.client.post(
+            reverse("accounts:login"),
+            {
+                "username": self.user.email,
+                "password": "incorrect-password",
+                "next": target,
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context["next_url"], target)
+        self.assertContains(response, f'value="{target}"')
+
     def test_authenticated_login_page_honors_safe_next_url(self):
         self.client.force_login(self.user)
         target = reverse("ranking:leaderboard")

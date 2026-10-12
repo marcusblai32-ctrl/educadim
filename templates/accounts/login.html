@@ -22,7 +22,7 @@
         <form method="post" novalidate>
             {% csrf_token %}
             <input type="hidden" name="next"
-                   value="{{ request.POST.next|default:request.GET.next }}">
+                   value="{{ next_url }}">
 
             <!-- Email -->
             <div class="form-group">

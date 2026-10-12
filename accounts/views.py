@@ -56,7 +56,8 @@ def login_view(request):
             return redirect(_login_redirect_target(request))
         else:
             messages.error(request, _("Email/ID ou mot de passe incorrect."))
-    return render(request, 'accounts/login.html')
+    next_url = request.POST.get("next") or request.GET.get("next", "")
+    return render(request, 'accounts/login.html', {'next_url': next_url})
 
 def logout_view(request):
     logout(request)
