@@ -11,6 +11,25 @@
 (function () {
   "use strict";
 
+  // The language selector is a POST form; submit it when the selection changes.
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll("[data-submit-on-change]").forEach(function (field) {
+      field.addEventListener("change", function () {
+        var form = field.form || field.closest("form");
+        if (!form) return;
+        if (typeof form.requestSubmit === "function") {
+          form.requestSubmit();
+        } else {
+          form.submit();
+        }
+      });
+    });
+  });
+})();
+
+(function () {
+  "use strict";
+
   var STORAGE_KEY = "educdim-theme";
   var root = document.documentElement;
 
