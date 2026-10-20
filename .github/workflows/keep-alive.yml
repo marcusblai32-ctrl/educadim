@@ -1,4 +1,4 @@
-name: Keep Render App Awake
+name: Check Render App
 
 on:
   schedule:
@@ -9,6 +9,9 @@ jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping Render app
+      - name: Check Render app
         run: |
-          curl -s https://educdim.onrender.com/health/ > /dev/null
+          curl --fail --silent --show-error \
+            --max-time 30 \
+            https://educadim.onrender.com/health/ \
+            --output /dev/null
